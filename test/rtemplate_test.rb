@@ -59,6 +59,14 @@ Well, $3, after taxes.
 end_simple
   end
 
+  def test_fileless_templates
+    view = Simple.new
+    view.template = 'Hi {{person}}!'
+    view[:person]  = 'mom'
+
+    assert_equal 'Hi mom!', view.to_html
+  end
+
   def test_view_partial
     assert_equal <<-end_partial.strip, ViewPartial.to_html
 <h1>Welcome</h1>

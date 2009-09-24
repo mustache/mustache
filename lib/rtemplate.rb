@@ -19,8 +19,17 @@ class RTemplate
   # Templates are self.class.name.downcase + '.html' -- a class of
   # Dashboard would have a template (relative to the path) of
   # dashboard.html
-  def template
+  def template_file
     self.class.path + '/' + underscore(self.class.to_s) + '.html'
+  end
+
+  # The template itself. You can override this if you'd like.
+  def template
+    @template ||= File.read(template_file)
+  end
+
+  def template=(template)
+    @template = template
   end
 
   # Pass a block to `debug` with your debug putses. Set the `DEBUG`
@@ -50,7 +59,7 @@ class RTemplate
 
   # How we turn a view object into HTML. The main method, if you will.
   def to_html
-    render File.read(template)
+    render template
   end
 
   # Partials are basically a way to render views from inside other views.

@@ -5,6 +5,7 @@ require 'simple'
 require 'complex'
 require 'escaped'
 require 'unescaped'
+require 'comments'
 
 class RTemplateTest < Test::Unit::TestCase
   def test_complex
@@ -24,6 +25,10 @@ Hello Chris
 You have just won $10000!
 Well, $6000.0, after taxes.
 end_simple
+  end
+
+  def test_comments
+    assert_equal "<h1>A Comedy of Errors</h1>\n", Comments.to_html
   end
 
   def test_escaped

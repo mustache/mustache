@@ -81,6 +81,9 @@ class RTemplate
     # Re-set the @context because our recursion probably overwrote it
     @context = context
 
+    # Comments are ignored
+    html = html.gsub(/\{\{(![^\/#]+?)\}\}/, '')
+
     # The triple mustache is unescaped.
     html = html.gsub(/\{\{\{([^\/#]+?)\}\}\}/) { find($1) }
 

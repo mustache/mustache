@@ -129,7 +129,7 @@ the database.
 
 ### Comments
 
-Comments begin with a bang are are ignored. The following template:
+Comments begin with a bang and are ignored. The following template:
 
     <h1>Today.</h1>{{! ignore me }}
     

@@ -74,6 +74,37 @@ Which returns the following:
 
 Simple.
 
+Dict-Style Views
+----------------
+
+ctemplate and friends want you to hand a dictionary to the template
+processor. Naturally rtemplate supports a similar concept. Feel free
+to mix the class-based and this more procedural style at your leisure.
+
+Given this template (dict.html):
+
+    Hello {{name}}
+    You have just won ${{value}}!
+
+We can fill in the values at will:
+    
+    dict = Dict.new
+    dict[:name] = 'George'
+    dict[:value] = 100
+    dict.to_html
+
+Which returns:
+    
+    Hello George
+    You have just won $100!
+
+We can re-use the same object, too:
+
+    dict[:name] = 'Tony'
+    dict.to_html
+    Hello Tony
+    You have just won $100!
+
 Helpers
 -------
 

@@ -1,5 +1,12 @@
 require 'test/unit'
 
+begin
+  # you know, for kids
+  require 'redgreen'
+rescue LoadError
+  nil
+end
+
 $LOAD_PATH.unshift File.dirname(__FILE__) + '/../examples'
 require 'simple'
 require 'complex'

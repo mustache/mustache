@@ -66,6 +66,73 @@ class RTemplate
     render template
   end
 
+  # Parses our fancy pants template HTML and returns normal HTML with
+  # all special {{tags}} and {{#sections}}replaced{{/sections}}.
+  def render(html, context = {})
+    # Set the context so #find and #context have access to it
+    @context = context = (@context || {}).merge(context)
+
+    html = render_sections(html)
+
+    # Re-set the @context because our recursion probably overwrote it
+    @context = context
+
+    render_tags(html)
+  end
+
+  # {{#sections}}okay{{/sections}}
+  #
+  # Sections can return true, false, or an enumerable.
+  # If true, the section is displayed.
+  # If false, the section is not displayed.
+  # If enumerable, the return value is iterated over (a for loop).
+  def render_sections(template)
+    template.gsub(/\{\{\#(.+)\}\}\s*(.+)\{\{\/\1\}\}\s*/m) do |s|
+      ret = find($1)
+
+      if ret.respond_to? :each
+        ret.map do |ctx|
+          render($2, ctx).to_s
+        end
+      elsif ret
+        # render the section with the present context
+        render($2, context).to_s
+      else
+        ''
+      end
+    end
+  end
+
+  # Find and replace all non-section tags.
+  # In particular we look for four types of tags:
+  # 1. Escaped variable tags - {{var}}
+  # 2. Unescaped variable tags - {{{var}}}
+  # 3. Comment variable tags - {{! comment}
+  # 4. Partial tags - {{< partial_name }}
+  def render_tags(template)
+    template.gsub(/\{\{(!|<|\{)?([^\/#]+?)\1?\}\}+/) do
+      case $1
+
+      when '!'
+        # Comments are ignored
+        ''
+
+      when '<'
+        # Partials are pulled in relative to `path`
+        partial($2)
+
+      when '{'
+        # The triple mustache is unescaped.
+        find($2)
+
+      else
+        # The double mustache is escaped.
+        escape find($2)
+
+      end
+    end
+  end
+
   # Partials are basically a way to render views from inside other views.
   def partial(name)
     # First we check if a partial's view class already exists
@@ -90,62 +157,6 @@ class RTemplate
     string = classified.dup
     string[0] = string[0].chr.downcase
     string.gsub(/[A-Z]/) { |s| "_#{s.downcase}"}
-  end
-
-  # Parses our fancy pants, template HTML and returns normal HTMl with
-  # all special {{tags}} and {{#sections}}replaced{{/sections}}.
-  def render(html, context = {})
-    # Set the context so #find and #context have access to it
-    @context = context = (@context || {}).merge(context)
-
-    debug do
-      puts "in:"
-      puts html.inspect
-      puts context.inspect
-    end
-
-    # {{#sections}}okay{{/sections}}
-    #
-    # Sections can return true, false, or an enumerable.
-    # If true, the section is displayed.
-    # If false, the section is not displayed.
-    # If enumerable, the return value is iterated over (a for loop).
-    html = html.gsub(/\{\{\#(.+)\}\}\s*(.+)\{\{\/\1\}\}\s*/m) do |s|
-      ret = find($1)
-
-      if ret.respond_to? :each
-        ret.map do |ctx|
-          render($2, ctx).to_s
-        end
-      elsif ret
-        # render the section with the present context
-        render($2, context).to_s
-      else
-        ''
-      end
-    end
-
-    # Re-set the @context because our recursion probably overwrote it
-    @context = context
-
-    # Comments are ignored
-    html = html.gsub(/\{\{(![^\/#]+?)\}\}/, '')
-
-    # Partials are pulled in relative to `path`
-    html = html.gsub(/\{\{<([^\/#]+?)\}\}/) { partial($1) }
-
-    # The triple mustache is unescaped.
-    html = html.gsub(/\{\{\{([^\/#]+?)\}\}\}/) { find($1) }
-
-    # The double mustache is escaped.
-    html = html.gsub(/\{\{([^\/#]+?)\}\}/) { escape find($1) }
-
-    debug do
-      puts "out:"
-      puts html.inspect
-    end
-
-    html
   end
 
   # Escape HTML.

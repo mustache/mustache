@@ -9,6 +9,7 @@ rtemplate is a framework agnostic way to render your views.
 It's not a markup language because there is no language. There is no
 logic.
 
+
 Overview
 --------
 
@@ -26,6 +27,7 @@ but reference methods in your view.
 
 This strict separation makes it easier to write clean templates,
 easier to test your views, and more fun to work on your app's front end.
+
 
 Usage
 -----
@@ -73,136 +75,6 @@ Which returns the following:
     Well, $6000.0, after taxes.
 
 Simple.
-
-Dict-Style Views
-----------------
-
-ctemplate and friends want you to hand a dictionary to the template
-processor. Naturally rtemplate supports a similar concept. Feel free
-to mix the class-based and this more procedural style at your leisure.
-
-Given this template (dict.html):
-
-    Hello {{name}}
-    You have just won ${{value}}!
-
-We can fill in the values at will:
-    
-    dict = Dict.new
-    dict[:name] = 'George'
-    dict[:value] = 100
-    dict.to_html
-
-Which returns:
-    
-    Hello George
-    You have just won $100!
-
-We can re-use the same object, too:
-
-    dict[:name] = 'Tony'
-    dict.to_html
-    Hello Tony
-    You have just won $100!
-
-Templates
----------
-
-A word on templates. By default, a view will try to find its template
-on disk by searching for an HTML file in the current directory that
-follows the classic Ruby naming convention.
-
-    TemplatePartial => ./template_partial.html
-    
-You can set the search path using `RTemplate.path`. It can be set on a
-class by class basis:
-
-    class Simple < RTemplate
-      self.path = File.dirname(__FILE__)
-      ... etc ...
-    end
-
-Now `Simple` will look for `simple.html` in the directory it resides
-in, no matter the cwd.
-
-If you want to just change what template is used you can set
-`RTemplate#template_file` directly:
-
-    Simple.new.template_file = './blah.html'
-    
-You can also go ahead and set the template directly:
-
-    Simple.new.template = 'Hi {{person}}!'
-
-Whatever works.
-
-Helpers
--------
-
-What about global helpers? Maybe you have a nifty `gravatar` function
-you want to use in all your views? No problem. 
-
-This is just Ruby, after all.
-
-    module ViewHelpers
-      def gravatar(email, size = 30)
-        gravatar_id = Digest::MD5.hexdigest(email.to_s.strip.downcase)
-        gravatar_for_id(gravatar_id, size)
-      end
-
-      def gravatar_for_id(gid, size = 30)
-        "#{gravatar_host}/avatar/#{gid}?s=#{size}"
-      end
-
-      def gravatar_host
-        @ssl ? 'https://secure.gravatar.com' : 'http://www.gravatar.com'
-      end
-    end
-
-Then just include it:    
-
-    class Simple < RTemplate
-      include ViewHelpers
-
-      def name
-        "Chris"
-      end
-
-      def value
-        10_000
-      end
-
-      def taxed_value
-        value - (value * 0.4)
-      end
-
-      def in_ca
-        true
-      end
-    end
-
-Great, but what about that `@ssl` ivar in `gravatar_host`? There are
-many ways we can go about setting it.
-
-Here's on example which illustrates a key feature of rtemplate: you
-are free to use the `initialize` method just as you would in any
-normal class.
-
-    class Simple < RTemplate
-      include ViewHelpers
-
-      def initialize(ssl = false)
-        @ssl = ssl
-      end
-
-      ... etc ...
-    end
-
-Now:
-
-    Simple.new(request.ssl?).to_html
-
-Convoluted but you get the idea.
 
 
 Tag Types
@@ -277,6 +149,139 @@ nothing is loaded we render the template directly using our current context.
 
 In this way partials can reference variables or sections the calling
 view defines.
+
+
+Dict-Style Views
+----------------
+
+ctemplate and friends want you to hand a dictionary to the template
+processor. Naturally rtemplate supports a similar concept. Feel free
+to mix the class-based and this more procedural style at your leisure.
+
+Given this template (dict.html):
+
+    Hello {{name}}
+    You have just won ${{value}}!
+
+We can fill in the values at will:
+    
+    dict = Dict.new
+    dict[:name] = 'George'
+    dict[:value] = 100
+    dict.to_html
+
+Which returns:
+    
+    Hello George
+    You have just won $100!
+
+We can re-use the same object, too:
+
+    dict[:name] = 'Tony'
+    dict.to_html
+    Hello Tony
+    You have just won $100!
+
+
+Templates
+---------
+
+A word on templates. By default, a view will try to find its template
+on disk by searching for an HTML file in the current directory that
+follows the classic Ruby naming convention.
+
+    TemplatePartial => ./template_partial.html
+    
+You can set the search path using `RTemplate.path`. It can be set on a
+class by class basis:
+
+    class Simple < RTemplate
+      self.path = File.dirname(__FILE__)
+      ... etc ...
+    end
+
+Now `Simple` will look for `simple.html` in the directory it resides
+in, no matter the cwd.
+
+If you want to just change what template is used you can set
+`RTemplate#template_file` directly:
+
+    Simple.new.template_file = './blah.html'
+    
+You can also go ahead and set the template directly:
+
+    Simple.new.template = 'Hi {{person}}!'
+
+Whatever works.
+
+
+Helpers
+-------
+
+What about global helpers? Maybe you have a nifty `gravatar` function
+you want to use in all your views? No problem. 
+
+This is just Ruby, after all.
+
+    module ViewHelpers
+      def gravatar(email, size = 30)
+        gravatar_id = Digest::MD5.hexdigest(email.to_s.strip.downcase)
+        gravatar_for_id(gravatar_id, size)
+      end
+
+      def gravatar_for_id(gid, size = 30)
+        "#{gravatar_host}/avatar/#{gid}?s=#{size}"
+      end
+
+      def gravatar_host
+        @ssl ? 'https://secure.gravatar.com' : 'http://www.gravatar.com'
+      end
+    end
+
+Then just include it:    
+
+    class Simple < RTemplate
+      include ViewHelpers
+
+      def name
+        "Chris"
+      end
+
+      def value
+        10_000
+      end
+
+      def taxed_value
+        value - (value * 0.4)
+      end
+
+      def in_ca
+        true
+      end
+    end
+
+Great, but what about that `@ssl` ivar in `gravatar_host`? There are
+many ways we can go about setting it.
+
+Here's on example which illustrates a key feature of rtemplate: you
+are free to use the `initialize` method just as you would in any
+normal class.
+
+    class Simple < RTemplate
+      include ViewHelpers
+
+      def initialize(ssl = false)
+        @ssl = ssl
+      end
+
+      ... etc ...
+    end
+
+Now:
+
+    Simple.new(request.ssl?).to_html
+
+Convoluted but you get the idea.
 
 
 Author

@@ -16,11 +16,15 @@ class RTemplate
     @path || '.'
   end
 
-  # Templates are self.class.name.downcase + '.html' -- a class of
+  # Templates are self.class.name.underscore + '.html' -- a class of
   # Dashboard would have a template (relative to the path) of
   # dashboard.html
   def template_file
-    self.class.path + '/' + underscore(self.class.to_s) + '.html'
+    @template_file ||= self.class.path + '/' + underscore(self.class.to_s) + '.html'
+  end
+
+  def template_file=(template_file)
+    @template_file = template_file
   end
 
   # The template itself. You can override this if you'd like.

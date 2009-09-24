@@ -105,6 +105,37 @@ We can re-use the same object, too:
     Hello Tony
     You have just won $100!
 
+Templates
+---------
+
+A word on templates. By default, a view will try to find its template
+on disk by searching for an HTML file in the current directory that
+follows the classic Ruby naming convention.
+
+    TemplatePartial => ./template_partial.html
+    
+You can set the search path using `RTemplate.path`. It can be set on a
+class by class basis:
+
+    class Simple < RTemplate
+      self.path = File.dirname(__FILE__)
+      ... etc ...
+    end
+
+Now `Simple` will look for `simple.html` in the directory it resides
+in, no matter the cwd.
+
+If you want to just change what template is used you can set
+`RTemplate#template_file` directly:
+
+    Simple.new.template_file = './blah.html'
+    
+You can also go ahead and set the template directly:
+
+    Simple.new.template = 'Hi {{person}}!'
+
+Whatever works.
+
 Helpers
 -------
 

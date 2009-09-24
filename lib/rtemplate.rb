@@ -1,3 +1,5 @@
+require 'cgi'
+
 class RTemplate
   # Helper method for quickly instantiating and rendering a view.
   def self.to_html
@@ -78,7 +80,7 @@ class RTemplate
 
     # Re-set the @context because our recursion probably overwrote it
     @context = context
-    html = html.gsub(/\{\{([^\/#]+?)\}\}/) { find($1) }
+    html = html.gsub(/\{\{([^\/#]+?)\}\}/) { escape find($1) }
 
     debug do
       puts "out:"
@@ -86,6 +88,11 @@ class RTemplate
     end
 
     html
+  end
+
+  # Escape HTML.
+  def escape(string)
+    CGI.escapeHTML(string.to_s)
   end
 
   # Given an atom, finds a value. We'll check the current context (for both

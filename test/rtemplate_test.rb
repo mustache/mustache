@@ -1,7 +1,9 @@
 require 'test/unit'
+
 $LOAD_PATH.unshift File.dirname(__FILE__) + '/../examples'
 require 'simple'
 require 'complex'
+require 'escaped'
 
 class RTemplateTest < Test::Unit::TestCase
   def test_complex
@@ -21,5 +23,9 @@ Hello Chris
 You have just won $10000!
 Well, $6000.0, after taxes.
 end_simple
+  end
+
+  def test_escaped
+    assert_equal '<h1>Bear &gt; Shark</h1>', Escaped.to_html
   end
 end

@@ -29,6 +29,36 @@ Well, $6000.0, after taxes.
 end_simple
   end
 
+  def test_hash_assignment
+    view = Simple.new
+    view[:name]  = 'Bob'
+    view[:value] = '4000'
+    view[:in_ca] = false
+
+    assert_equal <<-end_simple, view.to_html
+Hello Bob
+You have just won $4000!
+end_simple
+  end
+
+  def test_crazier_hash_assignment
+    view = Simple.new
+    view[:name]  = 'Crazy'
+    view[:in_ca] = [
+      { :taxed_value => 1 },
+      { :taxed_value => 2 },
+      { :taxed_value => 3 },
+    ]
+
+    assert_equal <<-end_simple, view.to_html
+Hello Crazy
+You have just won $10000!
+Well, $1, after taxes.
+Well, $2, after taxes.
+Well, $3, after taxes.
+end_simple
+  end
+
   def test_view_partial
     assert_equal <<-end_partial.strip, ViewPartial.to_html
 <h1>Welcome</h1>

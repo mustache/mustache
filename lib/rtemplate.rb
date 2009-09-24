@@ -36,7 +36,16 @@ class RTemplate
   # Kind of a hack for now, but useful when you're in an iterating section
   # and want access to the hash currently being iterated over.
   def context
-    @context
+    @context ||= {}
+  end
+
+  # Context accessors
+  def [](key)
+    context[key]
+  end
+
+  def []=(key, value)
+    context[key] = value
   end
 
   # How we turn a view object into HTML. The main method, if you will.
@@ -74,7 +83,7 @@ class RTemplate
   # all special {{tags}} and {{#sections}}replaced{{/sections}}.
   def render(html, context = {})
     # Set the context so #find and #context have access to it
-    @context = context
+    @context = context = (@context || {}).merge(context)
 
     debug do
       puts "in:"
@@ -93,8 +102,7 @@ class RTemplate
 
       if ret.respond_to? :each
         ret.map do |ctx|
-          # iterated sections inherit their parent context
-          render($2, context.merge(ctx)).to_s
+          render($2, ctx).to_s
         end
       elsif ret
         # render the section with the present context

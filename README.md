@@ -13,5 +13,3 @@ TODO
 ----
 
     [ ] Partials: {{<partial}}
-    [ ] Comments: {{!comment}}
-    [ ] Disable Escaping

@@ -87,16 +87,19 @@ class RTemplate
   # If false, the section is not displayed.
   # If enumerable, the return value is iterated over (a for loop).
   def render_sections(template)
+    # fail fast
+    return template unless template.include?('{{#')
+
     template.gsub(/\{\{\#(.+)\}\}\s*(.+)\{\{\/\1\}\}\s*/m) do |s|
       ret = find($1)
 
       if ret.respond_to? :each
         ret.map do |ctx|
-          render($2, ctx).to_s
+          render($2, ctx)
         end
       elsif ret
         # render the section with the present context
-        render($2, context).to_s
+        render($2, context)
       else
         ''
       end
@@ -110,6 +113,9 @@ class RTemplate
   # 3. Comment variable tags - {{! comment}
   # 4. Partial tags - {{< partial_name }}
   def render_tags(template)
+    # fail fast
+    return template unless template.include?('{{')
+
     template.gsub(/\{\{(!|<|\{)?([^\/#]+?)\1?\}\}+/) do
       case $1
 
@@ -167,7 +173,7 @@ class RTemplate
   # Given an atom, finds a value. We'll check the current context (for both
   # strings and symbols) then call methods on the view object.
   def find(name)
-    name = name.to_s.strip
+    name.strip!
     if @context.has_key? name
       @context[name]
     elsif @context.has_key? name.to_sym

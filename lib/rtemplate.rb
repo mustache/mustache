@@ -98,7 +98,6 @@ class RTemplate
           render($2, ctx)
         end
       elsif ret
-        # render the section with the present context
         render($2)
       else
         ''

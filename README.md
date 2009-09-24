@@ -74,6 +74,75 @@ Which returns the following:
 
 Simple.
 
+Helpers
+-------
+
+What about global helpers? Maybe you have a nifty `gravatar` function
+you want to use in all your views? No problem. 
+
+This is just Ruby, after all.
+
+    module ViewHelpers
+      def gravatar(email, size = 30)
+        gravatar_id = Digest::MD5.hexdigest(email.to_s.strip.downcase)
+        gravatar_for_id(gravatar_id, size)
+      end
+
+      def gravatar_for_id(gid, size = 30)
+        "#{gravatar_host}/avatar/#{gid}?s=#{size}"
+      end
+
+      def gravatar_host
+        @ssl ? 'https://secure.gravatar.com' : 'http://www.gravatar.com'
+      end
+    end
+
+Then just include it:    
+
+    class Simple < RTemplate
+      include ViewHelpers
+
+      def name
+        "Chris"
+      end
+
+      def value
+        10_000
+      end
+
+      def taxed_value
+        value - (value * 0.4)
+      end
+
+      def in_ca
+        true
+      end
+    end
+
+Great, but what about that `@ssl` ivar in `gravatar_host`? There are
+many ways we can go about setting it.
+
+Here's on example which illustrates a key feature of rtemplate: you
+are free to use the `initialize` method just as you would in any
+normal class.
+
+    class Simple < RTemplate
+      include ViewHelpers
+
+      def initialize(ssl = false)
+        @ssl = ssl
+      end
+
+      ... etc ...
+    end
+
+Now:
+
+    Simple.new(request.ssl?).to_html
+
+Convoluted but you get the idea.
+
+
 Tag Types
 ---------
 
@@ -131,7 +200,7 @@ the database.
 
 Comments begin with a bang and are ignored. The following template:
 
-    <h1>Today.</h1>{{! ignore me }}
+    <h1>Today{{! ignore me }}.</h1>
     
 Will render as follows:
 

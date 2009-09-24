@@ -111,4 +111,8 @@ end_partial
   def test_underscore
     assert_equal 'template_partial', RTemplate.new.underscore('TemplatePartial')
   end
+
+  def test_namespaced_underscore
+    assert_equal 'stat_stuff', RTemplate.new.underscore('Views::StatStuff')
+  end
 end

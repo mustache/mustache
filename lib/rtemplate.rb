@@ -159,7 +159,7 @@ class RTemplate
 
   # TemplatePartial => template_partial
   def underscore(classified)
-    string = classified.dup
+    string = classified.dup.split('::').last
     string[0] = string[0].chr.downcase
     string.gsub(/[A-Z]/) { |s| "_#{s.downcase}"}
   end

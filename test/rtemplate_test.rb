@@ -3,8 +3,8 @@ require 'test/unit'
 $LOAD_PATH.unshift File.dirname(__FILE__) + '/../examples'
 require 'simple'
 require 'complex'
-require 'partial'
-require 'templartial'
+require 'view_partial'
+require 'template_partial'
 require 'escaped'
 require 'unescaped'
 require 'comments'
@@ -30,7 +30,7 @@ end_simple
   end
 
   def test_view_partial
-    assert_equal <<-end_partial.strip, Partial.to_html
+    assert_equal <<-end_partial.strip, ViewPartial.to_html
 <h1>Welcome</h1>
 Hello Chris
 You have just won $10000!
@@ -41,7 +41,7 @@ end_partial
   end
 
   def test_template_partial
-    assert_equal <<-end_partial.strip, Templartial.to_html
+    assert_equal <<-end_partial.strip, TemplatePartial.to_html
 <h1>Welcome</h1>
 Again, Welcome!
 end_partial
@@ -57,5 +57,13 @@ end_partial
 
   def test_unescaped
     assert_equal '<h1>Bear > Shark</h1>', Unescaped.to_html
+  end
+
+  def test_classify
+    assert_equal 'TemplatePartial', RTemplate.new.classify('template_partial')
+  end
+
+  def test_underscore
+    assert_equal 'template_partial', RTemplate.new.underscore('TemplatePartial')
   end
 end

@@ -20,7 +20,7 @@ class RTemplate
   # Dashboard would have a template (relative to the path) of
   # dashboard.html
   def template
-    self.class.path + '/' + self.class.to_s.downcase + '.html'
+    self.class.path + '/' + underscore(self.class.to_s) + '.html'
   end
 
   # Pass a block to `debug` with your debug putses. Set the `DEBUG`
@@ -47,8 +47,7 @@ class RTemplate
   # Partials are basically a way to render views from inside other views.
   def partial(name)
     # First we check if a partial's view class already exists
-    klass = name.dup
-    klass[0] = klass[0].chr.upcase
+    klass = classify(name)
 
     if Object.const_defined? klass
       # If so we can cheat and render that
@@ -57,6 +56,18 @@ class RTemplate
       # If not we need to render the file directly.
       render File.read(self.class.path + '/' + name + '.html'), context
     end
+  end
+
+  # template_partial => TemplatePartial
+  def classify(underscored)
+    underscored.split(/[-_]/).map { |part| part[0] = part[0].chr.upcase; part }.join
+  end
+
+  # TemplatePartial => template_partial
+  def underscore(classified)
+    string = classified.dup
+    string[0] = string[0].chr.downcase
+    string.gsub(/[A-Z]/) { |s| "_#{s.downcase}"}
   end
 
   # Parses our fancy pants, template HTML and returns normal HTMl with

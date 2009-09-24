@@ -99,7 +99,7 @@ class RTemplate
         end
       elsif ret
         # render the section with the present context
-        render($2, context)
+        render($2)
       else
         ''
       end

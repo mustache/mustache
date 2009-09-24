@@ -1,7 +1,7 @@
 $LOAD_PATH.unshift File.dirname(__FILE__) + '/../lib'
 require 'rtemplate'
 
-class Partial < RTemplate
+class ViewPartial < RTemplate
   self.path = File.dirname(__FILE__)
 
   def greeting
@@ -14,5 +14,5 @@ class Partial < RTemplate
 end
 
 if $0 == __FILE__
-  puts Partial.to_html
+  puts ViewPartial.to_html
 end

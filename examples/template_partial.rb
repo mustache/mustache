@@ -1,7 +1,7 @@
 $LOAD_PATH.unshift File.dirname(__FILE__) + '/../lib'
 require 'rtemplate'
 
-class Templartial < RTemplate
+class TemplatePartial < RTemplate
   self.path = File.dirname(__FILE__)
 
   def title
@@ -10,5 +10,5 @@ class Templartial < RTemplate
 end
 
 if $0 == __FILE__
-  puts Templartial.to_html
+  puts TemplatePartial.to_html
 end

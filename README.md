@@ -137,7 +137,18 @@ Will render as follows:
 
     <h1>Today.</h1>
 
-TODO
-----
+### Partials
 
-    [ ] Partials: {{<partial}}
+Partials begin with a less than sign, like `{{< box}}`.
+
+If a partial's view is loaded, we use that to render the HTML. If
+nothing is loaded we render the template directly using our current context.
+
+In this way partials can reference variables (by way of tags) that the
+calling view is expected to take care of.
+
+
+Author
+------
+
+{{ Chris Wanstrath }} :: {{ chris@ozmm.org }}

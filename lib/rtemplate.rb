@@ -143,6 +143,7 @@ class RTemplate
   # Given an atom, finds a value. We'll check the current context (for both
   # strings and symbols) then call methods on the view object.
   def find(name)
+    name = name.to_s.strip
     if @context.has_key? name
       @context[name]
     elsif @context.has_key? name.to_sym

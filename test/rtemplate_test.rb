@@ -3,6 +3,7 @@ require 'test/unit'
 $LOAD_PATH.unshift File.dirname(__FILE__) + '/../examples'
 require 'simple'
 require 'complex'
+require 'partial'
 require 'escaped'
 require 'unescaped'
 require 'comments'
@@ -25,6 +26,17 @@ Hello Chris
 You have just won $10000!
 Well, $6000.0, after taxes.
 end_simple
+  end
+
+  def test_partials
+    assert_equal <<-end_partial.strip, Partial.to_html
+<h1>Welcome</h1>
+Hello Chris
+You have just won $10000!
+Well, $6000.0, after taxes.
+
+<h3>Fair enough, right?</h3>
+end_partial
   end
 
   def test_comments

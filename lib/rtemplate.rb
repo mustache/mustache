@@ -44,6 +44,21 @@ class RTemplate
     render File.read(template)
   end
 
+  # Partials are basically a way to render views from inside other views.
+  def partial(name)
+    # First we check if a partial's view class already exists
+    klass = name.dup
+    klass[0] = klass[0].chr.upcase
+
+    if Object.const_defined? klass
+      # If so we can cheat and render that
+      Object.const_get(klass).to_html
+    else
+      # If not we need to render the file directly.
+      render File.read(self.class.path + '/' + name + '.html'), context
+    end
+  end
+
   # Parses our fancy pants, template HTML and returns normal HTMl with
   # all special {{tags}} and {{#sections}}replaced{{/sections}}.
   def render(html, context = {})
@@ -83,6 +98,9 @@ class RTemplate
 
     # Comments are ignored
     html = html.gsub(/\{\{(![^\/#]+?)\}\}/, '')
+
+    # Partials are pulled in relative to `path`
+    html = html.gsub(/\{\{<([^\/#]+?)\}\}/) { partial($1) }
 
     # The triple mustache is unescaped.
     html = html.gsub(/\{\{\{([^\/#]+?)\}\}\}/) { find($1) }

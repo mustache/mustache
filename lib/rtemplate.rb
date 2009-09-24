@@ -3,11 +3,6 @@ class RTemplate
     new.to_html
   end
 
-  # duck typing
-  def self.to_s
-    to_html
-  end
-
   def debug
     yield if ENV['DEBUG']
   end

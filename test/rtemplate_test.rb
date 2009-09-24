@@ -4,6 +4,7 @@ $LOAD_PATH.unshift File.dirname(__FILE__) + '/../examples'
 require 'simple'
 require 'complex'
 require 'escaped'
+require 'unescaped'
 
 class RTemplateTest < Test::Unit::TestCase
   def test_complex
@@ -27,5 +28,9 @@ end_simple
 
   def test_escaped
     assert_equal '<h1>Bear &gt; Shark</h1>', Escaped.to_html
+  end
+
+  def test_unescaped
+    assert_equal '<h1>Bear > Shark</h1>', Unescaped.to_html
   end
 end

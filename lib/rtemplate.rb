@@ -80,6 +80,11 @@ class RTemplate
 
     # Re-set the @context because our recursion probably overwrote it
     @context = context
+
+    # The triple mustache is unescaped.
+    html = html.gsub(/\{\{\{([^\/#]+?)\}\}\}/) { find($1) }
+
+    # The double mustache is escaped.
     html = html.gsub(/\{\{([^\/#]+?)\}\}/) { escape find($1) }
 
     debug do

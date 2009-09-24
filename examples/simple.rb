@@ -2,6 +2,8 @@ $LOAD_PATH.unshift File.dirname(__FILE__) + '/../lib'
 require 'rtemplate'
 
 class Simple < RTemplate
+  self.path = File.dirname(__FILE__)
+
   def name
     "Chris"
   end

@@ -3,6 +3,14 @@ class RTemplate
     new.to_html
   end
 
+  def self.path=(path)
+    @path = File.expand_path(path)
+  end
+
+  def self.path
+    @path || '.'
+  end
+
   def debug
     yield if ENV['DEBUG']
   end
@@ -62,6 +70,6 @@ class RTemplate
   end
 
   def template
-    self.class.to_s.downcase + '.html'
+    self.class.path + '/' + self.class.to_s.downcase + '.html'
   end
 end

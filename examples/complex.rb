@@ -2,6 +2,8 @@ $LOAD_PATH.unshift File.dirname(__FILE__) + '/../lib'
 require 'rtemplate'
 
 class Complex < RTemplate
+  self.path = File.dirname(__FILE__)
+
   def header
     "Colors"
   end

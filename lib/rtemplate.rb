@@ -1,5 +1,7 @@
 require 'cgi'
 
+# Blah blah blah?
+# who knows.
 class RTemplate
   # Helper method for quickly instantiating and rendering a view.
   def self.to_html

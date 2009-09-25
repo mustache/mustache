@@ -29,6 +29,15 @@ This strict separation makes it easier to write clean templates,
 easier to test your views, and more fun to work on your app's front end.
 
 
+Why?
+----
+
+I like writing Ruby. I like writing HTML. I like writing JavaScript.
+
+I don't like writing ERB, Haml, Liquid, Django Templates, putting Ruby
+in my HTML, or putting JavaScript in my HTML.
+
+
 Usage
 -----
 

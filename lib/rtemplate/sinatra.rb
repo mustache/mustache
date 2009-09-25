@@ -18,10 +18,8 @@ class RTemplate
 
       if defined?(Views) && Views.const_defined?(name)
         instance = Views.const_get(name).new
-      elsif template == :layout
-        instance = RTemplate.new
       else
-        raise "Can't find Views::#{name}. Did you require it\?"
+        instance = RTemplate.new
       end
 
       locals.each do |local, value|

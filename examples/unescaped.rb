@@ -1,7 +1,7 @@
 $LOAD_PATH.unshift File.dirname(__FILE__) + '/../lib'
-require 'rtemplate'
+require 'mustache'
 
-class Unescaped < RTemplate
+class Unescaped < Mustache
   self.path = File.dirname(__FILE__)
 
   def title

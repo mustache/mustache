@@ -2,13 +2,13 @@ require 'cgi'
 
 # Blah blah blah?
 # who knows.
-class RTemplate
+class Mustache
   # Helper method for quickly instantiating and rendering a view.
   def self.to_html
     new.to_html
   end
 
-  # The path informs your RTemplate subclass where to look for its
+  # The path informs your Mustache subclass where to look for its
   # corresponding template.
   def self.path=(path)
     @path = File.expand_path(path)

@@ -16,7 +16,7 @@ require 'escaped'
 require 'unescaped'
 require 'comments'
 
-class RTemplateTest < Test::Unit::TestCase
+class MustacheTest < Test::Unit::TestCase
   def test_complex
     assert_equal <<-end_complex, Complex.to_html
 <h1>Colors</h1>
@@ -105,14 +105,14 @@ end_partial
   end
 
   def test_classify
-    assert_equal 'TemplatePartial', RTemplate.new.classify('template_partial')
+    assert_equal 'TemplatePartial', Mustache.new.classify('template_partial')
   end
 
   def test_underscore
-    assert_equal 'template_partial', RTemplate.new.underscore('TemplatePartial')
+    assert_equal 'template_partial', Mustache.new.underscore('TemplatePartial')
   end
 
   def test_namespaced_underscore
-    assert_equal 'stat_stuff', RTemplate.new.underscore('Views::StatStuff')
+    assert_equal 'stat_stuff', Mustache.new.underscore('Views::StatStuff')
   end
 end

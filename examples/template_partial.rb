@@ -1,7 +1,7 @@
 $LOAD_PATH.unshift File.dirname(__FILE__) + '/../lib'
-require 'rtemplate'
+require 'mustache'
 
-class TemplatePartial < RTemplate
+class TemplatePartial < Mustache
   self.path = File.dirname(__FILE__)
 
   def title

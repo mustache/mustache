@@ -1,7 +1,7 @@
 $LOAD_PATH.unshift File.dirname(__FILE__) + '/../lib'
-require 'rtemplate'
+require 'mustache'
 
-class Complex < RTemplate
+class Complex < Mustache
   self.path = File.dirname(__FILE__)
 
   def header

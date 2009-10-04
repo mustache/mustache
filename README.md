@@ -1,10 +1,10 @@
-rtemplate
+Mustache
 =========
 
 Inspired by [ctemplate](http://code.google.com/p/google-ctemplate/)
 and
 [et](http://www.ivan.fomichev.name/2008/05/erlang-template-engine-prototype.html),
-rtemplate is a framework-agnostic way to render logic-free viesw.
+Mustache is a framework-agnostic way to render logic-free viesw.
 
 It's not a markup language because there is no language. There is no
 logic.
@@ -13,7 +13,7 @@ logic.
 Overview
 --------
 
-Think of rtemplate as a replacement for your views. Instead of views
+Think of Mustache as a replacement for your views. Instead of views
 consisting of ERB or HAML with random helpers and arbitrary logic,
 your views are broken into two parts: a Ruby class and an HTML
 template.
@@ -43,7 +43,7 @@ Usage
 
 We've got an `examples` folder but here's the canonical one:
 
-    class Simple < RTemplate
+    class Simple < Mustache
       def name
         "Chris"
       end
@@ -164,7 +164,7 @@ Dict-Style Views
 ----------------
 
 ctemplate and friends want you to hand a dictionary to the template
-processor. Naturally rtemplate supports a similar concept. Feel free
+processor. Naturally Mustache supports a similar concept. Feel free
 to mix the class-based and this more procedural style at your leisure.
 
 Given this template (dict.html):
@@ -201,10 +201,10 @@ follows the classic Ruby naming convention.
 
     TemplatePartial => ./template_partial.html
     
-You can set the search path using `RTemplate.path`. It can be set on a
+You can set the search path using `Mustache.path`. It can be set on a
 class by class basis:
 
-    class Simple < RTemplate
+    class Simple < Mustache
       self.path = File.dirname(__FILE__)
       ... etc ...
     end
@@ -213,7 +213,7 @@ Now `Simple` will look for `simple.html` in the directory it resides
 in, no matter the cwd.
 
 If you want to just change what template is used you can set
-`RTemplate#template_file` directly:
+`Mustache#template_file` directly:
 
     Simple.new.template_file = './blah.html'
     
@@ -249,7 +249,7 @@ This is just Ruby, after all.
 
 Then just include it:    
 
-    class Simple < RTemplate
+    class Simple < Mustache
       include ViewHelpers
 
       def name
@@ -272,11 +272,11 @@ Then just include it:
 Great, but what about that `@ssl` ivar in `gravatar_host`? There are
 many ways we can go about setting it.
 
-Here's on example which illustrates a key feature of rtemplate: you
+Here's on example which illustrates a key feature of Mustache: you
 are free to use the `initialize` method just as you would in any
 normal class.
 
-    class Simple < RTemplate
+    class Simple < Mustache
       include ViewHelpers
 
       def initialize(ssl = false)

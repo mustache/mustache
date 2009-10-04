@@ -1,7 +1,7 @@
 $LOAD_PATH.unshift File.dirname(__FILE__) + '/../lib'
-require 'rtemplate'
+require 'mustache'
 
-class ViewPartial < RTemplate
+class ViewPartial < Mustache
   self.path = File.dirname(__FILE__)
 
   def greeting

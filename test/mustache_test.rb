@@ -9,7 +9,7 @@ end
 
 $LOAD_PATH.unshift File.dirname(__FILE__) + '/../examples'
 require 'simple'
-require 'complex'
+require 'complex_view'
 require 'view_partial'
 require 'template_partial'
 require 'escaped'
@@ -17,8 +17,8 @@ require 'unescaped'
 require 'comments'
 
 class MustacheTest < Test::Unit::TestCase
-  def test_complex
-    assert_equal <<-end_complex, Complex.to_html
+  def test_complex_view
+    assert_equal <<-end_complex, ComplexView.to_html
 <h1>Colors</h1>
 <ul>
   <li><strong>red</strong></li>

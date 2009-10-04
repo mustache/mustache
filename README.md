@@ -299,4 +299,5 @@ Meta
 * Code: `git clone git://github.com/defunkt/mustache.git`
 * Bugs: <http://github.com/defunkt/mustache/issues>
 * List: <http://groups.google.com/group/mustache-rb>
+* Test: <http://runcoderun.com/defunkt/mustache>
 * Boss: Chris Wanstrath :: <http://github.com/defunkt>

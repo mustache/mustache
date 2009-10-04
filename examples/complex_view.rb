@@ -1,7 +1,7 @@
 $LOAD_PATH.unshift File.dirname(__FILE__) + '/../lib'
 require 'mustache'
 
-class Complex < Mustache
+class ComplexView < Mustache
   self.path = File.dirname(__FILE__)
 
   def header
@@ -30,5 +30,5 @@ class Complex < Mustache
 end
 
 if $0 == __FILE__
-  puts Complex.to_html
+  puts ComplexView.to_html
 end

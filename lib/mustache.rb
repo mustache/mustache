@@ -98,7 +98,7 @@ class Mustache
       if ret.respond_to? :each
         ret.map do |ctx|
           render($2, ctx)
-        end
+        end.join
       elsif ret
         render($2)
       else

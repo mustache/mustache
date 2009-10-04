@@ -4,7 +4,7 @@ Support for Mustache in your Sinatra app.
   require 'mustache/sinatra'
 
   class App < Sinatra::Base
-    include Mustache::Sinatra
+    helpers Mustache::Sinatra
 
     get '/stats' do
       mustache :stats

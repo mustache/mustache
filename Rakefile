@@ -8,3 +8,7 @@ Rake::TestTask.new do |t|
   t.verbose = false
 end
 
+desc "Build sdoc documentation"
+task :doc do
+  exec "sdoc --main=README.md README.md LICENSE lib"
+end

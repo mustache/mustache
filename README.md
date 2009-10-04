@@ -293,7 +293,10 @@ Now:
 Convoluted but you get the idea.
 
 
-Author
-------
+Meta
+----
 
-{{ Chris Wanstrath }} :: {{ chris@ozmm.org }}
+* Code: `git clone git://github.com/defunkt/mustache.git`
+* Bugs: <http://github.com/defunkt/mustache/issues>
+* List: <http://groups.google.com/group/mustache-rb>
+* Boss: Chris Wanstrath :: <http://github.com/defunkt>

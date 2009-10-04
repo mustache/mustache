@@ -56,11 +56,11 @@ class Mustache
 
   # Context accessors
   def [](key)
-    context[key]
+    context[key.to_sym]
   end
 
   def []=(key, value)
-    context[key] = value
+    context[key.to_sym] = value
   end
 
   # How we turn a view object into HTML. The main method, if you will.
@@ -175,9 +175,7 @@ class Mustache
   # strings and symbols) then call methods on the view object.
   def find(name)
     name.strip!
-    if @context.has_key? name
-      @context[name]
-    elsif @context.has_key? name.to_sym
+    if @context.has_key? name.to_sym
       @context[name.to_sym]
     elsif respond_to? name
       send name

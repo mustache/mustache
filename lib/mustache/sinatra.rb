@@ -33,7 +33,7 @@ class Mustache
     # This is called by Sinatra's `render` with the proper paths
     # and, potentially, a block containing a sub-view
     def render_mustache(template, data, options, locals, &block)
-      name = Mustache.new.classify(template.to_s)
+      name = Mustache.classify(template.to_s)
 
       if defined?(Views) && Views.const_defined?(name)
         instance = Views.const_get(name).new

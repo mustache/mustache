@@ -213,11 +213,15 @@ Now `Simple` will look for `simple.html` in the directory it resides
 in, no matter the cwd.
 
 If you want to just change what template is used you can set
-`Mustache#template_file` directly:
+`Mustache.template_file` directly:
 
-    Simple.new.template_file = './blah.html'
+    Simple.template_file = './blah.html'
     
 You can also go ahead and set the template directly:
+
+    Simple.template = 'Hi {{person}}!'
+
+You can also set a different template for only a single instance:
 
     Simple.new.template = 'Hi {{person}}!'
 

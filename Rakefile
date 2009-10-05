@@ -1,4 +1,5 @@
 require 'rake/testtask'
+require 'rake/rdoctask'
 
 task :default => :test
 
@@ -25,12 +26,42 @@ rescue LoadError
   puts "Jeweler not available. Install it with: sudo gem install technicalpickles-jeweler -s http://gems.github.com"
 end
 
-desc "Build sdoc documentation"
-task :doc do
-  File.open('README.html', 'w') do |f|
-    require 'rdiscount'
-    f.puts Markdown.new(File.read('README.md')).to_html
+begin
+  require 'sdoc'
+  Rake::RDocTask.new do |rdoc|
+    rdoc.main = 'README.md'
+    rdoc.rdoc_files = %w( README.md LICENSE lib )
+    rdoc.rdoc_dir = 'docs'
   end
+rescue LoadError
+  puts "sdoc support not enabled. Please install sdoc."
+end
 
-  exec "sdoc -N --main=README.html README.html LICENSE lib"
+##
+# Markdown support for sdoc. Renders files ending in .md or .markdown
+# with RDiscount.
+module SDoc
+  module MarkdownSupport
+    def description
+      return super unless full_name =~ /\.(md|markdown)$/
+      # assuming your path is ROOT/html or ROOT/doc
+      path = Dir.pwd + '/../' + full_name
+      Markdown.new(File.read(path)).to_html + open_links_in_new_window
+    end
+
+    def open_links_in_new_window
+      <<-html
+<script type="text/javascript">$(function() {
+  $('a').each(function() { $(this).attr('target', '_blank') })
+})</script>
+html
+    end
+  end
+end
+
+begin
+  require 'rdiscount'
+  RDoc::TopLevel.send :include, SDoc::MarkdownSupport
+rescue LoadError
+  puts "Markdown support not enabled. Please install RDiscount."
 end

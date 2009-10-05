@@ -11,15 +11,16 @@ class Mustache
     end
 
     def render(context)
-      (@compiled ||= compile_proc).call(context)
+      class << self; self; end.class_eval <<-EOF, __FILE__, __LINE__ - 1
+        def render(ctx)
+          #{compile}
+        end
+      EOF
+      render(context)
     end
 
     def compile(src = @source)
       "\"#{compile_sections(src)}\""
-    end
-
-    def compile_proc(src = @source)
-      eval("proc{|ctx|#{compile(src)}}")
     end
 
     private

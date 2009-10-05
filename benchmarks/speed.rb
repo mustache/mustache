@@ -1,7 +1,7 @@
 require 'erb'
 
 $LOAD_PATH.unshift File.dirname(__FILE__)
-require 'bench'
+require 'helper'
 
 $LOAD_PATH.unshift File.dirname(__FILE__) + '/../examples'
 require 'complex_view'

@@ -91,11 +91,11 @@ class Mustache
     end
 
     def etag(s)
-      ev("Mustache.escape(ctx[#{s.strip.to_sym.inspect}])")
+      ev("Mustache.escape(ctx[#{s.to_sym.inspect}])")
     end
 
     def utag(s)
-      ev("ctx[#{s.strip.to_sym.inspect}]")
+      ev("ctx[#{s.to_sym.inspect}]")
     end
 
     def ev(s)
@@ -214,8 +214,8 @@ class Mustache
 
   # Parses our fancy pants template HTML and returns normal HTML with
   # all special {{tags}} and {{#sections}}replaced{{/sections}}.
-  def render(html)
+  def render(html, ctx = {})
     html = self.class.templateify(html)
-    html.render(context)
+    html.render(context.merge!(ctx))
   end
 end

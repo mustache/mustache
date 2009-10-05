@@ -297,10 +297,23 @@ Now:
 Convoluted but you get the idea.
 
 
+Installation
+------------
+
+### [Gemcutter](http://gemcutter.org/)
+
+    $ gem install mustache
+    
+### [Rip](http://hellorip.com)
+
+    $ rip install git://github.com/defunkt/mustache.git
+
+
 Meta
 ----
 
 * Code: `git clone git://github.com/defunkt/mustache.git`
+* Docs: <http://defunkt.github.com/mustache>
 * Bugs: <http://github.com/defunkt/mustache/issues>
 * List: <http://groups.google.com/group/mustache-rb>
 * Test: <http://runcoderun.com/defunkt/mustache>

@@ -39,7 +39,8 @@ class Mustache
         code = compile($2)
         ctxtmp = "ctx#{tmpid}"
         res << ev("(v = ctx[#{name}]) ? v.respond_to?(:each) ? "\
-          "(#{ctxtmp}=ctx; r=v.map{|h|ctx.merge!(h);#{code}}.join;ctx=#{ctxtmp};r) : #{code} : ''")
+          "(#{ctxtmp}=ctx.dup; r=v.map{|h|ctx.merge!(h);#{code}}.join; "\
+          "ctx.replace(#{ctxtmp});r) : #{code} : ''")
         src = $'
       end
       res << compile_tags(src)

@@ -31,7 +31,7 @@ class Mustache
     # If enumerable, the return value is iterated over (a for loop).
     def compile_sections(src)
       res = ""
-      while src =~ /\{\{\#(.+)\}\}\s*(.+)\{\{\/\1\}\}\s*/m
+      while src =~ /^\s*\{\{\#(.+)\}\}\n*(.+)^\s*\{\{\/\1\}\}\n*/m
         res << compile_tags($`)
         name = $1.strip.to_sym.inspect
         code = compile($2)

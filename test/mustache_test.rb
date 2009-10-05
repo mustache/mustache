@@ -13,11 +13,11 @@ class MustacheTest < Test::Unit::TestCase
   def test_complex_view
     assert_equal <<-end_complex, ComplexView.to_html
 <h1>Colors</h1>
-<ul>
-  <li><strong>red</strong></li>
-    <li><a href="#Green">green</a></li>
-    <li><a href="#Blue">blue</a></li>
-    </ul>
+  <ul>
+      <li><strong>red</strong></li>
+      <li><a href="#Green">green</a></li>
+      <li><a href="#Blue">blue</a></li>
+  </ul>
 end_complex
   end
 

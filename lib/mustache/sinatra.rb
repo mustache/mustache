@@ -18,7 +18,7 @@ If no `Views::Stats` class exists Mustache will render the template
 file directly.
 
 You can indeed use layouts with this library. Where you'd normally
-<%= yield %> you instead {{yield}} - the body of the subview is
+<%= yield %> you instead {{{yield}}} - the body of the subview is
 set to the `yield` variable and made available to you.
 =end
 require 'mustache'

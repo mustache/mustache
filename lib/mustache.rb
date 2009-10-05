@@ -91,11 +91,11 @@ class Mustache
     end
 
     def etag(s)
-      ev("Mustache.escape(ctx[#{s.to_sym.inspect}])")
+      ev("Mustache.escape(ctx[#{s.strip.to_sym.inspect}])")
     end
 
     def utag(s)
-      ev("ctx[#{s.to_sym.inspect}]")
+      ev("ctx[#{s.strip.to_sym.inspect}]")
     end
 
     def ev(s)

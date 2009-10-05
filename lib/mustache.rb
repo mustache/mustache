@@ -3,9 +3,9 @@ require 'cgi'
 class Mustache
   # A Template is a compiled version of a Mustache template.
   class Template
-    def initialize(source, mustache)
+    def initialize(source, template_path)
       @source = source
-      @mustache = mustache
+      @template_path = template_path
       @tmpid = 0
     end
 
@@ -75,7 +75,7 @@ class Mustache
       if Object.const_defined?(klass)
         ev("#{klass}.to_html")
       else
-        src = File.read(@mustache.path + '/' + name + '.html')
+        src = File.read(@template_path + '/' + name + '.html')
         compile(src)[1..-2]
       end
     end
@@ -167,7 +167,7 @@ class Mustache
   end
 
   def self.templateify(obj)
-    obj.is_a?(Template) ? obj : Template.new(obj.to_s, self)
+    obj.is_a?(Template) ? obj : Template.new(obj.to_s, path)
   end
 
   # The template itself. You can override this if you'd like.

@@ -1,8 +1,7 @@
 require 'cgi'
 
-# Blah blah blah?
-# who knows.
 class Mustache
+  # A Template is a compiled version of a Mustache template.
   class Template
     def initialize(source, mustache)
       @source = source

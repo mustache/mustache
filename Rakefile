@@ -10,5 +10,10 @@ end
 
 desc "Build sdoc documentation"
 task :doc do
-  exec "sdoc --main=README.md README.md LICENSE lib"
+  File.open('README.html', 'w') do |f|
+    require 'rdiscount'
+    f.puts Markdown.new(File.read('README.md')).to_html
+  end
+
+  exec "sdoc -N --main=README.html README.html LICENSE lib"
 end

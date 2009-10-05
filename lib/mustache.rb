@@ -214,6 +214,6 @@ class Mustache
   # all special {{tags}} and {{#sections}}replaced{{/sections}}.
   def render(html, ctx = {})
     html = self.class.templateify(html)
-    html.render(context.merge!(ctx))
+    html.render(context.update(ctx))
   end
 end

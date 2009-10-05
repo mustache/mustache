@@ -1,0 +1,374 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+    <title>README.md</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <link rel="stylesheet" href="../css/reset.css" type="text/css" media="screen" />
+    <link rel="stylesheet" href="../css/main.css" type="text/css" media="screen" />
+    <script src="../js/jquery-1.3.2.min.js" type="text/javascript" charset="utf-8"></script>
+    <script src="../js/jquery-effect.js" type="text/javascript" charset="utf-8"></script>
+    <script src="../js/main.js" type="text/javascript" charset="utf-8"></script>
+</head>
+
+<body>     
+    <div class="banner">
+        <h1>
+            README.md
+        </h1>
+        <ul class="files">
+            <li>README.md</li>
+            <li>Last modified: Mon Oct 05 15:24:38 -0700 2009</li>
+        </ul>
+    </div>
+
+    <div id="bodyContent">
+        <div id="content">
+    
+    <div class="description">
+        <h1>Mustache</h1>
+
+<p>Inspired by <a href="http://code.google.com/p/google-ctemplate/">ctemplate</a>
+and
+<a href="http://www.ivan.fomichev.name/2008/05/erlang-template-engine-prototype.html">et</a>,
+Mustache is a framework-agnostic way to render logic-free views.</p>
+
+<p>As ctemplates says, "It emphasizes separating logic from presentation:
+it is impossible to embed application logic in this template language."</p>
+
+<h2>Overview</h2>
+
+<p>Think of Mustache as a replacement for your views. Instead of views
+consisting of ERB or HAML with random helpers and arbitrary logic,
+your views are broken into two parts: a Ruby class and an HTML
+template.</p>
+
+<p>We call the Ruby class the "view" and the HTML template the
+"template."</p>
+
+<p>All your logic, decisions, and code is contained in your view. All
+your markup is contained in your template. The template does nothing
+but reference methods in your view.</p>
+
+<p>This strict separation makes it easier to write clean templates,
+easier to test your views, and more fun to work on your app's front end.</p>
+
+<h2>Why?</h2>
+
+<p>I like writing Ruby. I like writing HTML. I like writing JavaScript.</p>
+
+<p>I don't like writing ERB, Haml, Liquid, Django Templates, putting Ruby
+in my HTML, or putting JavaScript in my HTML.</p>
+
+<h2>Usage</h2>
+
+<p>We've got an <code>examples</code> folder but here's the canonical one:</p>
+
+<pre><code>class Simple &lt; Mustache
+  def name
+    "Chris"
+  end
+
+  def value
+    10_000
+  end
+
+  def taxed_value
+    value - (value * 0.4)
+  end
+
+  def in_ca
+    true
+  end
+end
+</code></pre>
+
+<p>We simply create a normal Ruby class and define methods. Some methods
+reference others, some return values, some return only booleans.</p>
+
+<p>Now let's write the template:</p>
+
+<pre><code>Hello {{name}}
+You have just won ${{value}}!
+{{#in_ca}}
+Well, ${{taxed_value}}, after taxes.
+{{/in_ca}}
+</code></pre>
+
+<p>This template references our view methods. To bring it all together,
+here's the code to render actual HTML;</p>
+
+<pre><code>Simple.new.to_html
+</code></pre>
+
+<p>Which returns the following:</p>
+
+<pre><code>Hello Chris
+You have just won $10000!
+Well, $6000.0, after taxes.
+</code></pre>
+
+<p>Simple.</p>
+
+<h2>Tag Types</h2>
+
+<p>Tags are indicated by the double mustaches. <code>{{name}}</code> is a tag. Let's
+talk about the different types of tags.</p>
+
+<h3>Variables</h3>
+
+<p>The most basic tag is the variable. A <code>{{name}}</code> tag in a basic
+template will try to call the <code>name</code> method on your view. If there is
+no <code>name</code> method, an exception will be raised.</p>
+
+<p>All variables are HTML escaped by default. If you want, for some
+reason, to return unescaped HTML you can use the triple mustache:
+<code>{{{name}}}</code>.</p>
+
+<h3>Boolean Sections</h3>
+
+<p>A section begins with a pound and ends with a slash. That is,
+<code>{{#person}}</code> begins a "person" section while <code>{{/person}}</code> ends it.</p>
+
+<p>If the <code>person</code> method exists and calling it returns false, the HTML
+between the pound and slash will not be displayed.</p>
+
+<p>If the <code>person</code> method exists and calling it returns true, the HTML
+between the pound and slash will be rendered and displayed.</p>
+
+<h3>Enumerable Sections</h3>
+
+<p>Enumerable sections are syntactically identical to boolean sections in
+that they begin with a pound and end with a slash. The difference,
+however, is in the view: if the method called returns an enumerable,
+the section is repeated as the enumerable is iterated over.</p>
+
+<p>Each item in the enumerable is expected to be a hash which will then
+become the context of the corresponding iteration. In this way we can
+construct loops.</p>
+
+<p>For example, imagine this template:</p>
+
+<pre><code>{{#repo}}
+  &lt;b&gt;{{name}}&lt;/b&gt;
+{{/repo}}
+</code></pre>
+
+<p>And this view code:</p>
+
+<pre><code>def repo
+  Repository.all.map { |r| { :name =&gt; r.to_s } }
+end
+</code></pre>
+
+<p>When rendered, our view will contain a list of all repository names in
+the database.</p>
+
+<h3>Comments</h3>
+
+<p>Comments begin with a bang and are ignored. The following template:</p>
+
+<pre><code>&lt;h1&gt;Today{{! ignore me }}.&lt;/h1&gt;
+</code></pre>
+
+<p>Will render as follows:</p>
+
+<pre><code>&lt;h1&gt;Today.&lt;/h1&gt;
+</code></pre>
+
+<h3>Partials</h3>
+
+<p>Partials begin with a less than sign, like <code>{{&lt; box}}</code>.</p>
+
+<p>If a partial's view is loaded, we use that to render the HTML. If
+nothing is loaded we render the template directly using our current context.</p>
+
+<p>In this way partials can reference variables or sections the calling
+view defines.</p>
+
+<h2>Dict-Style Views</h2>
+
+<p>ctemplate and friends want you to hand a dictionary to the template
+processor. Naturally Mustache supports a similar concept. Feel free
+to mix the class-based and this more procedural style at your leisure.</p>
+
+<p>Given this template (dict.html):</p>
+
+<pre><code>Hello {{name}}
+You have just won ${{value}}!
+</code></pre>
+
+<p>We can fill in the values at will:</p>
+
+<pre><code>dict = Dict.new
+dict[:name] = 'George'
+dict[:value] = 100
+dict.to_html
+</code></pre>
+
+<p>Which returns:</p>
+
+<pre><code>Hello George
+You have just won $100!
+</code></pre>
+
+<p>We can re-use the same object, too:</p>
+
+<pre><code>dict[:name] = 'Tony'
+dict.to_html
+Hello Tony
+You have just won $100!
+</code></pre>
+
+<h2>Templates</h2>
+
+<p>A word on templates. By default, a view will try to find its template
+on disk by searching for an HTML file in the current directory that
+follows the classic Ruby naming convention.</p>
+
+<pre><code>TemplatePartial =&gt; ./template_partial.html
+</code></pre>
+
+<p>You can set the search path using <code>Mustache.path</code>. It can be set on a
+class by class basis:</p>
+
+<pre><code>class Simple &lt; Mustache
+  self.path = File.dirname(__FILE__)
+  ... etc ...
+end
+</code></pre>
+
+<p>Now <code>Simple</code> will look for <code>simple.html</code> in the directory it resides
+in, no matter the cwd.</p>
+
+<p>If you want to just change what template is used you can set
+<code>Mustache.template_file</code> directly:</p>
+
+<pre><code>Simple.template_file = './blah.html'
+</code></pre>
+
+<p>You can also go ahead and set the template directly:</p>
+
+<pre><code>Simple.template = 'Hi {{person}}!'
+</code></pre>
+
+<p>You can also set a different template for only a single instance:</p>
+
+<pre><code>Simple.new.template = 'Hi {{person}}!'
+</code></pre>
+
+<p>Whatever works.</p>
+
+<h2>Helpers</h2>
+
+<p>What about global helpers? Maybe you have a nifty <code>gravatar</code> function
+you want to use in all your views? No problem.</p>
+
+<p>This is just Ruby, after all.</p>
+
+<pre><code>module ViewHelpers
+  def gravatar(email, size = 30)
+    gravatar_id = Digest::MD5.hexdigest(email.to_s.strip.downcase)
+    gravatar_for_id(gravatar_id, size)
+  end
+
+  def gravatar_for_id(gid, size = 30)
+    "#{gravatar_host}/avatar/#{gid}?s=#{size}"
+  end
+
+  def gravatar_host
+    @ssl ? 'https://secure.gravatar.com' : 'http://www.gravatar.com'
+  end
+end
+</code></pre>
+
+<p>Then just include it:  <br/>
+</p>
+
+<pre><code>class Simple &lt; Mustache
+  include ViewHelpers
+
+  def name
+    "Chris"
+  end
+
+  def value
+    10_000
+  end
+
+  def taxed_value
+    value - (value * 0.4)
+  end
+
+  def in_ca
+    true
+  end
+end
+</code></pre>
+
+<p>Great, but what about that <code>@ssl</code> ivar in <code>gravatar_host</code>? There are
+many ways we can go about setting it.</p>
+
+<p>Here's on example which illustrates a key feature of Mustache: you
+are free to use the <code>initialize</code> method just as you would in any
+normal class.</p>
+
+<pre><code>class Simple &lt; Mustache
+  include ViewHelpers
+
+  def initialize(ssl = false)
+    @ssl = ssl
+  end
+
+  ... etc ...
+end
+</code></pre>
+
+<p>Now:</p>
+
+<pre><code>Simple.new(request.ssl?).to_html
+</code></pre>
+
+<p>Convoluted but you get the idea.</p>
+
+<h2>Meta</h2>
+
+<ul>
+<li>Code: <code>git clone git://github.com/defunkt/mustache.git</code></li>
+<li>Bugs: <a href="http://github.com/defunkt/mustache/issues">http://github.com/defunkt/mustache/issues</a></li>
+<li>List: <a href="http://groups.google.com/group/mustache-rb">http://groups.google.com/group/mustache-rb</a></li>
+<li>Test: <a href="http://runcoderun.com/defunkt/mustache">http://runcoderun.com/defunkt/mustache</a></li>
+<li>Boss: Chris Wanstrath :: <a href="http://github.com/defunkt">http://github.com/defunkt</a></li>
+</ul>
+
+<script type="text/javascript">$(function() {
+  $('a').each(function() { $(this).attr('target', '_blank') })
+})</script>
+
+    </div>
+    
+
+    
+
+    
+    
+
+    
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</div>
+    </div>
+  </body>
+</html>

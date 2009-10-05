@@ -2,7 +2,7 @@ require 'cgi'
 
 # Blah blah blah?
 # who knows.
-class Mustache  
+class Mustache
   class Template
     def initialize(source, mustache)
       @source = source
@@ -23,8 +23,7 @@ class Mustache
       "\"#{compile_sections(src)}\""
     end
 
-    private
-
+  private
     # {{#sections}}okay{{/sections}}
     #
     # Sections can return true, false, or an enumerable.
@@ -75,7 +74,7 @@ class Mustache
     def compile_partial(name)
       klass = Mustache.classify(name)
       if Object.const_defined?(klass)
-        ev("#{klass}.to_html") 
+        ev("#{klass}.to_html")
       else
         src = File.read(@mustache.path + '/' + name + '.html')
         compile(src)[1..-2]
@@ -117,61 +116,59 @@ class Mustache
         @mustache.send(name)
       else
         raise "Can't find #{name} in #{inspect}"
-      end 
+      end
     end
   end
 
-  class << self
-    # Helper method for quickly instantiating and rendering a view.
-    def to_html
-      new.to_html
-    end
+  # Helper method for quickly instantiating and rendering a view.
+  def self.to_html
+    new.to_html
+  end
 
-    # The path informs your Mustache subclass where to look for its
-    # corresponding template.
-    def path=(path)
-      @path = File.expand_path(path)
-    end
+  # The path informs your Mustache subclass where to look for its
+  # corresponding template.
+  def self.path=(path)
+    @path = File.expand_path(path)
+  end
 
-    def path
-      @path || '.'
-    end
+  def self.path
+    @path || '.'
+  end
 
-    # Templates are self.class.name.underscore + '.html' -- a class of
-    # Dashboard would have a template (relative to the path) of
-    # dashboard.html
-    def template_file
-      @template_file ||= path + '/' + underscore(to_s) + '.html'
-    end
+  # Templates are self.class.name.underscore + '.html' -- a class of
+  # Dashboard would have a template (relative to the path) of
+  # dashboard.html
+  def self.template_file
+    @template_file ||= path + '/' + underscore(to_s) + '.html'
+  end
 
-    def template_file=(template_file)
-      @template_file = template_file
-    end
+  def self.template_file=(template_file)
+    @template_file = template_file
+  end
 
-    def template
-      @template ||= templateify(File.read(template_file))
-    end
+  def self.template
+    @template ||= templateify(File.read(template_file))
+  end
 
-    # template_partial => TemplatePartial
-    def classify(underscored)
-      underscored.split(/[-_]/).map { |part| part[0] = part[0].chr.upcase; part }.join
-    end
+  # template_partial => TemplatePartial
+  def self.classify(underscored)
+    underscored.split(/[-_]/).map { |part| part[0] = part[0].chr.upcase; part }.join
+  end
 
-    # TemplatePartial => template_partial
-    def underscore(classified)
-      string = classified.dup.split('::').last
-      string[0] = string[0].chr.downcase
-      string.gsub(/[A-Z]/) { |s| "_#{s.downcase}"}
-    end
+  # TemplatePartial => template_partial
+  def self.underscore(classified)
+    string = classified.dup.split('::').last
+    string[0] = string[0].chr.downcase
+    string.gsub(/[A-Z]/) { |s| "_#{s.downcase}"}
+  end
 
-    # Escape HTML.
-    def escape(string)
-      CGI.escapeHTML(string.to_s)
-    end
+  # Escape HTML.
+  def self.escape(string)
+    CGI.escapeHTML(string.to_s)
+  end
 
-    def templateify(obj)
-      obj.is_a?(Template) ? obj : Template.new(obj.to_s, self)
-    end
+  def self.templateify(obj)
+    obj.is_a?(Template) ? obj : Template.new(obj.to_s, self)
   end
 
   # The template itself. You can override this if you'd like.

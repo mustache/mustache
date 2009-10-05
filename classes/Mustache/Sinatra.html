@@ -28,6 +28,39 @@
     <div id="bodyContent">
         <div id="content">
     
+    <div class="description">
+        <p>
+Support for <a href="../Mustache.html">Mustache</a> in your <a
+href="Sinatra.html">Sinatra</a> app.
+</p>
+<pre>
+  require 'mustache/sinatra'
+
+  class App &lt; Sinatra::Base
+    helpers Mustache::Sinatra
+
+    get '/stats' do
+      mustache :stats
+    end
+  end
+</pre>
+<p>
+If a `Views::Stats` class exists in the above example, <a
+href="../Mustache.html">Mustache</a> will try to instantiate and use it for
+the rendering.
+</p>
+<p>
+If no `Views::Stats` class exists <a href="../Mustache.html">Mustache</a>
+will render the template file directly.
+</p>
+<p>
+You can indeed use layouts with this library. Where you&#8217;d normally
+<%= yield %> you instead {{{yield}}} - the body of the subview is set to
+the `yield` variable and made available to you.
+</p>
+
+    </div>
+    
 
     
 
@@ -94,11 +127,11 @@ Call this in your <a href="Sinatra.html">Sinatra</a> routes.
                     <p class="source-link">
                         Source: <a href="javascript:toggleSource('M000000_source')" id="l_M000000_source">show</a>
                         
-                        | <a href="http://github.com/defunkt/mustache/blob/cb2af981bd3fb663d2393aa82a53f8b022a151db/lib/mustache/sinatra.rb#L29" target="_blank" class="github_url">on GitHub</a>
+                        | <a href="http://github.com/defunkt/mustache/blob/4b682f395780a381a16c74d67a2dcc0a3ce568c4/lib/mustache/sinatra.rb#L27" target="_blank" class="github_url">on GitHub</a>
                         
                     </p>
                     <div id="M000000_source" class="dyn-source">
-                        <pre><span class="ruby-comment cmt"># File lib/mustache/sinatra.rb, line 29</span>
+                        <pre><span class="ruby-comment cmt"># File lib/mustache/sinatra.rb, line 27</span>
     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">mustache</span>(<span class="ruby-identifier">template</span>, <span class="ruby-identifier">options</span>={}, <span class="ruby-identifier">locals</span>={})
       <span class="ruby-identifier">render</span> <span class="ruby-identifier">:mustache</span>, <span class="ruby-identifier">template</span>, <span class="ruby-identifier">options</span>, <span class="ruby-identifier">locals</span>
     <span class="ruby-keyword kw">end</span></pre>
@@ -129,11 +162,11 @@ potentially, a block containing a sub-view
                     <p class="source-link">
                         Source: <a href="javascript:toggleSource('M000001_source')" id="l_M000001_source">show</a>
                         
-                        | <a href="http://github.com/defunkt/mustache/blob/cb2af981bd3fb663d2393aa82a53f8b022a151db/lib/mustache/sinatra.rb#L35" target="_blank" class="github_url">on GitHub</a>
+                        | <a href="http://github.com/defunkt/mustache/blob/4b682f395780a381a16c74d67a2dcc0a3ce568c4/lib/mustache/sinatra.rb#L33" target="_blank" class="github_url">on GitHub</a>
                         
                     </p>
                     <div id="M000001_source" class="dyn-source">
-                        <pre><span class="ruby-comment cmt"># File lib/mustache/sinatra.rb, line 35</span>
+                        <pre><span class="ruby-comment cmt"># File lib/mustache/sinatra.rb, line 33</span>
     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">render_mustache</span>(<span class="ruby-identifier">template</span>, <span class="ruby-identifier">data</span>, <span class="ruby-identifier">options</span>, <span class="ruby-identifier">locals</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)
       <span class="ruby-identifier">name</span> = <span class="ruby-constant">Mustache</span>.<span class="ruby-identifier">classify</span>(<span class="ruby-identifier">template</span>.<span class="ruby-identifier">to_s</span>)
 

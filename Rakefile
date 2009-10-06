@@ -73,7 +73,7 @@ task :pages do
     abort "dirty index - not publishing!"
   end
 
-  Rake[:rerdoc].invoke
+  Rake::Task[:rerdoc].invoke
   `git checkout gh-pages`
   `ls -1 | grep -v docs | xargs rm -rf; mv docs/* .; rm -rf docs`
   `git commit -a -m "update docs"; git push origin gh-pages`

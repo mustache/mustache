@@ -21,6 +21,7 @@ You can indeed use layouts with this library. Where you'd normally
 <%= yield %> you instead {{{yield}}} - the body of the subview is
 set to the `yield` variable and made available to you.
 =end
+require 'sinatra/base'
 require 'mustache'
 
 class Mustache
@@ -54,3 +55,5 @@ class Mustache
     end
   end
 end
+
+Sinatra.helpers Mustache::Sinatra

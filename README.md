@@ -309,6 +309,13 @@ Installation
     $ rip install git://github.com/defunkt/mustache.git
 
 
+Acknowledgements
+----------------
+
+Thanks to [Tom Preston-Werner](http://github.com/mojombo) for showing
+me ctemplate and [Leah Culver](http://github.com/leah) for the name "Mustache."
+
+
 Meta
 ----
 

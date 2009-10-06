@@ -65,3 +65,17 @@ begin
 rescue LoadError
   puts "Markdown support not enabled. Please install RDiscount."
 end
+
+
+desc "Build and publish documentation using GitHub Pages."
+task :pages do
+  if !`git status`.include?('nothing to commit')
+    abort "dirty index - not publishing!"
+  end
+
+  Rake[:rerdoc].invoke
+  `git checkout gh-pages`
+  `ls -1 | grep -v docs | xargs rm -rf; mv docs/* .; rm -rf docs`
+  `git commit -a -m "update docs"; git push origin gh-pages`
+  `git checkout master`
+end

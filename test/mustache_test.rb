@@ -121,4 +121,26 @@ end_partial
     assert_equal 'stat_stuff', Mustache.underscore('Views::StatStuff')
   end
 
+  def test_render
+    assert_equal 'Hello World!', Mustache.render('Hello World!')
+  end
+
+  def test_render_with_params
+    assert_equal 'Hello World!', Mustache.render('Hello {{planet}}!', :planet => 'World')
+  end
+
+  def test_render_from_file
+    expected = <<-data
+<VirtualHost *>
+  ServerName example.com
+  DocumentRoot /var/www/example.com
+  RailsEnv production
+</VirtualHost>
+data
+    template = File.read("examples/passenger.conf")
+    assert_equal expected, Mustache.render(template, :stage => 'production', 
+                                                     :server => 'example.com', 
+                                                     :deploy_to => '/var/www/example.com' )
+  end
+
 end

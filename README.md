@@ -41,6 +41,13 @@ in my HTML, or putting JavaScript in my HTML.
 Usage
 -----
 
+Quick example:
+
+    >> require 'mustache'
+    => true
+    >> Mustache.render("Hello {{planet}}", :planet => "World!")
+    => "Hello World!"
+
 We've got an `examples` folder but here's the canonical one:
 
     class Simple < Mustache

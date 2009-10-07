@@ -140,11 +140,11 @@ class Mustache
     @path || '.'
   end
 
-  # Templates are self.class.name.underscore + '.html' -- a class of
+  # Templates are self.class.name.underscore + extension -- a class of
   # Dashboard would have a template (relative to the path) of
   # dashboard.html
   def self.template_file
-    @template_file ||= path + '/' + underscore(to_s) + '.html'
+    @template_file ||= path + '/' + underscore(to_s) + '.' + template_extension
   end
 
   def self.template_file=(template_file)
@@ -153,6 +153,15 @@ class Mustache
 
   def self.template
     @template ||= templateify(File.read(template_file))
+  end
+
+  # Default extension is 'html'
+  def self.template_extension
+    @template_extension ||= 'html'
+  end
+
+  def self.template_extension=(template_extension)
+    @template_extension = template_extension
   end
 
   # template_partial => TemplatePartial

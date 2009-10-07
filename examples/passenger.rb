@@ -3,7 +3,8 @@ require 'mustache'
 
 class Passenger < Mustache
 
-  self.template_file = "#{File.dirname(__FILE__)}/passenger.conf"
+  self.path = File.dirname(__FILE__)
+  self.template_extension = 'conf'
 
   def server
     "example.com"

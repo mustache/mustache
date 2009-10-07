@@ -121,8 +121,12 @@ class Mustache
   end
 
   # Helper method for quickly instantiating and rendering a view.
-  def self.to_html
-    new.to_html
+  def self.to_text
+    new.to_text
+  end
+
+  class << self
+    alias :to_html :to_text
   end
 
   # The path informs your Mustache subclass where to look for its
@@ -211,4 +215,5 @@ class Mustache
     self.class.templateify(template).render(context)
   end
   alias_method :to_html, :render
+  alias_method :to_text, :render
 end

@@ -8,8 +8,20 @@ require 'template_partial'
 require 'escaped'
 require 'unescaped'
 require 'comments'
+require 'passenger'
 
 class MustacheTest < Test::Unit::TestCase
+
+  def test_passenger
+    assert_equal <<-end_passenger, Passenger.to_text
+<VirtualHost *>
+  ServerName example.com
+  DocumentRoot /var/www/example.com
+  RailsEnv production
+</VirtualHost>
+end_passenger
+  end
+
   def test_complex_view
     assert_equal <<-end_complex, ComplexView.to_html
 <h1>Colors</h1>
@@ -108,4 +120,5 @@ end_partial
   def test_namespaced_underscore
     assert_equal 'stat_stuff', Mustache.underscore('Views::StatStuff')
   end
+
 end

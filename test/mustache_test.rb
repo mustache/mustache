@@ -121,4 +121,12 @@ end_partial
     assert_equal 'stat_stuff', Mustache.underscore('Views::StatStuff')
   end
 
+  def test_render
+    assert_equal 'Hello World!', Mustache.render('Hello World!')
+  end
+
+  def test_render_with_params
+    assert_equal 'Hello World!', Mustache.render('Hello {{planet}}!', :planet => 'World')
+  end
+
 end

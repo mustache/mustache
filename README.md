@@ -320,6 +320,7 @@ Meta
 ----
 
 * Code: `git clone git://github.com/defunkt/mustache.git`
+* Home: <http://github.com/defunkt/mustache>
 * Docs: <http://defunkt.github.com/mustache>
 * Bugs: <http://github.com/defunkt/mustache/issues>
 * List: <http://groups.google.com/group/mustache-rb>

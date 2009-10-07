@@ -205,15 +205,10 @@ class Mustache
     context[key.to_sym] = value
   end
 
-  # How we turn a view object into HTML. The main method, if you will.
-  def to_html
-    render template
-  end
-
   # Parses our fancy pants template HTML and returns normal HTML with
   # all special {{tags}} and {{#sections}}replaced{{/sections}}.
-  def render(html, ctx = {})
-    html = self.class.templateify(html)
-    html.render(context.update(ctx))
+  def render
+    self.class.templateify(template).render(context)
   end
+  alias_method :to_html, :render
 end

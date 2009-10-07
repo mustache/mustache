@@ -10,13 +10,13 @@ require 'complex_view'
 template = File.read(File.dirname(__FILE__) + '/complex.erb')
 
 unless ENV['NOERB']
-  bench 'ERB w/o caching' do
-    ERB.new(template).result(ComplexView.new.send(:binding))
-  end
-
   erb =  ERB.new(template)
   bench 'ERB w/ caching' do
     erb.result(ComplexView.new.send(:binding))
+  end
+
+  bench 'ERB w/o caching' do
+    ERB.new(template).result(ComplexView.new.send(:binding))
   end
 end
 

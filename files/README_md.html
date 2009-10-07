@@ -19,7 +19,7 @@
         </h1>
         <ul class="files">
             <li>README.md</li>
-            <li>Last modified: Tue Oct 06 10:44:49 -0700 2009</li>
+            <li>Last modified: Wed Oct 07 16:23:23 -0700 2009</li>
         </ul>
     </div>
 
@@ -62,6 +62,14 @@ easier to test your views, and more fun to work on your app's front end.</p>
 in my HTML, or putting JavaScript in my HTML.</p>
 
 <h2>Usage</h2>
+
+<p>Quick example:</p>
+
+<pre><code>&gt;&gt; require 'mustache'
+=&gt; true
+&gt;&gt; Mustache.render("Hello {{planet}}", :planet =&gt; "World!")
+=&gt; "Hello World!"
+</code></pre>
 
 <p>We've got an <code>examples</code> folder but here's the canonical one:</p>
 
@@ -283,8 +291,7 @@ you want to use in all your views? No problem.</p>
 end
 </code></pre>
 
-<p>Then just include it:  <br/>
-</p>
+<p>Then just include it:</p>
 
 <pre><code>class Simple &lt; Mustache
   include ViewHelpers
@@ -353,10 +360,12 @@ me ctemplate and <a href="http://github.com/leah">Leah Culver</a> for the name "
 
 <ul>
 <li>Code: <code>git clone git://github.com/defunkt/mustache.git</code></li>
+<li>Home: <a href="http://github.com/defunkt/mustache">http://github.com/defunkt/mustache</a></li>
 <li>Docs: <a href="http://defunkt.github.com/mustache">http://defunkt.github.com/mustache</a></li>
 <li>Bugs: <a href="http://github.com/defunkt/mustache/issues">http://github.com/defunkt/mustache/issues</a></li>
 <li>List: <a href="http://groups.google.com/group/mustache-rb">http://groups.google.com/group/mustache-rb</a></li>
 <li>Test: <a href="http://runcoderun.com/defunkt/mustache">http://runcoderun.com/defunkt/mustache</a></li>
+<li>Gems: <a href="http://gemcutter.org/gems/mustache">http://gemcutter.org/gems/mustache</a></li>
 <li>Boss: Chris Wanstrath :: <a href="http://github.com/defunkt">http://github.com/defunkt</a></li>
 </ul>
 

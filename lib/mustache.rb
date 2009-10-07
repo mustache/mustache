@@ -121,8 +121,8 @@ class Mustache
   end
 
   # Helper method for quickly instantiating and rendering a view.
-  def self.render
-    new.render
+  def self.render(*args)
+    new.render(*args)
   end
 
   class << self
@@ -212,8 +212,8 @@ class Mustache
 
   # Parses our fancy pants template HTML and returns normal HTML with
   # all special {{tags}} and {{#sections}}replaced{{/sections}}.
-  def render
-    self.class.templateify(template).render(context)
+  def render(data = template, ctx = {})
+    self.class.templateify(data).render(context.update(ctx))
   end
   alias_method :to_html, :render
   alias_method :to_text, :render

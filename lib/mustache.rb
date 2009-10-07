@@ -22,7 +22,8 @@ class Mustache
       "\"#{compile_sections(src)}\""
     end
 
-  private
+  ## private
+
     # {{#sections}}okay{{/sections}}
     #
     # Sections can return true, false, or an enumerable.

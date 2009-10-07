@@ -74,7 +74,7 @@ class Mustache
     def compile_partial(name)
       klass = Mustache.classify(name)
       if Object.const_defined?(klass)
-        ev("#{klass}.to_html")
+        ev("#{klass}.render")
       else
         src = File.read(@template_path + '/' + name + '.html')
         compile(src)[1..-2]

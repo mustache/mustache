@@ -23,7 +23,7 @@ We call the Ruby class the "view" and the HTML template the
 
 All your logic, decisions, and code is contained in your view. All
 your markup is contained in your template. The template does nothing
-but reference methods in your view. 
+but reference methods in your view.
 
 This strict separation makes it easier to write clean templates,
 easier to test your views, and more fun to work on your app's front end.
@@ -100,7 +100,7 @@ no `name` method, an exception will be raised.
 
 All variables are HTML escaped by default. If you want, for some
 reason, to return unescaped HTML you can use the triple mustache:
-`{{{name}}}`. 
+`{{{name}}}`.
 
 ### Boolean Sections
 
@@ -118,7 +118,7 @@ between the pound and slash will be rendered and displayed.
 Enumerable sections are syntactically identical to boolean sections in
 that they begin with a pound and end with a slash. The difference,
 however, is in the view: if the method called returns an enumerable,
-the section is repeated as the enumerable is iterated over. 
+the section is repeated as the enumerable is iterated over.
 
 Each item in the enumerable is expected to be a hash which will then
 become the context of the corresponding iteration. In this way we can
@@ -144,7 +144,7 @@ the database.
 Comments begin with a bang and are ignored. The following template:
 
     <h1>Today{{! ignore me }}.</h1>
-    
+
 Will render as follows:
 
     <h1>Today.</h1>
@@ -173,14 +173,14 @@ Given this template (dict.html):
     You have just won ${{value}}!
 
 We can fill in the values at will:
-    
+
     dict = Dict.new
     dict[:name] = 'George'
     dict[:value] = 100
     dict.to_html
 
 Which returns:
-    
+
     Hello George
     You have just won $100!
 
@@ -200,7 +200,7 @@ on disk by searching for an HTML file in the current directory that
 follows the classic Ruby naming convention.
 
     TemplatePartial => ./template_partial.html
-    
+
 You can set the search path using `Mustache.path`. It can be set on a
 class by class basis:
 
@@ -216,7 +216,7 @@ If you want to just change what template is used you can set
 `Mustache.template_file` directly:
 
     Simple.template_file = './blah.html'
-    
+
 You can also go ahead and set the template directly:
 
     Simple.template = 'Hi {{person}}!'
@@ -232,7 +232,7 @@ Helpers
 -------
 
 What about global helpers? Maybe you have a nifty `gravatar` function
-you want to use in all your views? No problem. 
+you want to use in all your views? No problem.
 
 This is just Ruby, after all.
 
@@ -251,7 +251,7 @@ This is just Ruby, after all.
       end
     end
 
-Then just include it:    
+Then just include it:
 
     class Simple < Mustache
       include ViewHelpers
@@ -303,7 +303,7 @@ Installation
 ### [Gemcutter](http://gemcutter.org/)
 
     $ gem install mustache
-    
+
 ### [Rip](http://hellorip.com)
 
     $ rip install git://github.com/defunkt/mustache.git

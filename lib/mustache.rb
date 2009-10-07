@@ -210,7 +210,7 @@ class Mustache
     context[key.to_sym] = value
   end
 
-  # Parses our fancy pants template HTML and returns normal HTML with
+  # Parses our fancy pants template file and returns normal file with
   # all special {{tags}} and {{#sections}}replaced{{/sections}}.
   def render
     self.class.templateify(template).render(context)

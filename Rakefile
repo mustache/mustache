@@ -31,3 +31,8 @@ begin
 rescue LoadError
   puts "sdoc support not enabled. Please gem install sdoc-helpers."
 end
+
+desc "Push a new version to Gemcutter"
+task :publish => [ :gemspec, :build ] do
+  exec "gem push pkg/mustache-#{Mustache::Version}.gem" 
+end

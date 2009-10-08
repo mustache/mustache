@@ -40,7 +40,7 @@ class Mustache
         instance = Mustache.new
       end
 
-      instance_variable_names.each do |name|
+      instance_variables.each do |name|
         instance.instance_variable_set(name, instance_variable_get(name))
       end
 

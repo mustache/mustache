@@ -38,63 +38,67 @@ class Mustache
   # <%= yield %> you instead {{{yield}}} - the body of the subview is
   # set to the `yield` variable and made available to you.
   module Sinatra
-    # Call this in your Sinatra routes.
-    def mustache(template, options={}, locals={})
-      render :mustache, template, options, locals
-    end
-
-    # This is called by Sinatra's `render` with the proper paths
-    # and, potentially, a block containing a sub-view
-    def render_mustache(template, data, opts, locals, &block)
-      name = Mustache.classify(template.to_s)
-
-      # This is a horrible hack but we need it to know under which namespace
-      # Views is located. If you have Hurl::App::Views, namespace should be
-      # set to Hurl:App.
-      namespace = options.namespace
-
-      if namespace.const_defined?(:Views) && namespace::Views.const_defined?(name)
-        # First try to find the existing view,
-        # e.g. Hurl::Views::Index
-        klass = namespace::Views.const_get(name)
-
-      elsif File.exists?(file = "#{options.mustaches}/#{template}.rb")
-        # Couldn't find it - try to require the file if it exists, then
-        # load in the view.
-        require "#{file}".chomp('.rb')
-        klass = namespace::Views.const_get(name)
-
-      else
-        # Still nothing. Use the stache.
-        klass = Mustache
-
+    module Helpers
+      # Call this in your Sinatra routes.
+      def mustache(template, options={}, locals={})
+        render :mustache, template, options, locals
       end
 
-      # Create a new instance for playing with
-      instance = klass.new
+      # This is called by Sinatra's `render` with the proper paths
+      # and, potentially, a block containing a sub-view
+      def render_mustache(template, data, opts, locals, &block)
+        name = Mustache.classify(template.to_s)
 
-      # Copy instance variables set in Sinatra to the view
-      instance_variables.each do |name|
-        instance.instance_variable_set(name, instance_variable_get(name))
+        # This is a horrible hack but we need it to know under which namespace
+        # Views is located. If you have Hurl::App::Views, namespace should be
+        # set to Hurl:App.
+        namespace = options.namespace
+
+        if namespace.const_defined?(:Views) && namespace::Views.const_defined?(name)
+          # First try to find the existing view,
+          # e.g. Hurl::Views::Index
+          klass = namespace::Views.const_get(name)
+
+        elsif File.exists?(file = "#{options.mustaches}/#{template}.rb")
+          # Couldn't find it - try to require the file if it exists, then
+          # load in the view.
+          require "#{file}".chomp('.rb')
+          klass = namespace::Views.const_get(name)
+
+        else
+          # Still nothing. Use the stache.
+          klass = Mustache
+
+        end
+
+        # Create a new instance for playing with
+        instance = klass.new
+
+        # Copy instance variables set in Sinatra to the view
+        instance_variables.each do |name|
+          instance.instance_variable_set(name, instance_variable_get(name))
+        end
+
+        # Locals get added to the view's context
+        locals.each do |local, value|
+          instance[local] = value
+        end
+
+        # If we're paseed a block it's a subview. Sticking it in yield
+        # lets us use {{yield}} in layout.html to render the actual page.
+        instance[:yield] = block.call if block
+
+        instance.template = data
+        instance.to_html
       end
-
-      # Locals get added to the view's context
-      locals.each do |local, value|
-        instance[local] = value
-      end
-
-      # If we're paseed a block it's a subview. Sticking it in yield
-      # lets us use {{yield}} in layout.html to render the actual page.
-      instance[:yield] = block.call if block
-
-      instance.template = data
-      instance.to_html
     end
 
     def self.registered(app)
-      app.helpers Mustache::Sinatra
-      app.set :mustaches, Sinatra::Base.views
-      app.set :namespace, Object
+      app.helpers Mustache::Sinatra::Helpers
+      app.set :mustaches, ::Sinatra::Base.views
+      app.set :namespace, app
     end
   end
 end
+
+Sinatra.register Mustache::Sinatra

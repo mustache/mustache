@@ -36,8 +36,24 @@ href="Sinatra.html">Sinatra</a> app.
 <pre>
   require 'mustache/sinatra'
 
-  class App &lt; Sinatra::Base
-    helpers Mustache::Sinatra
+  class Hurl &lt; Sinatra::Base
+    register Mustache::Sinatra
+
+    # Should be the path to your .mustache template files.
+    set :views, &quot;path/to/mustache/templates&quot;
+
+    # Should be the path to your .rb Mustache view files.
+    # Only needed if different from the `views` setting
+    set :mustaches, &quot;path/to/mustache/views&quot;
+
+    # This tells Mustache where to look for the Views module,
+    # under which your View classes should live. By default it's
+    # the class of your app - in this case `Hurl`. That is, for an :index
+    # view Mustache will expect Hurl::Views::Index by default.
+
+    # If our Sinatra::Base subclass was instead Hurl::App,
+    # we'd want to do `set :namespace, Hurl::App`
+    set :namespace, Hurl
 
     get '/stats' do
       mustache :stats
@@ -45,9 +61,8 @@ href="Sinatra.html">Sinatra</a> app.
   end
 </pre>
 <p>
-If a `Views::Stats` class exists in the above example, <a
-href="../Mustache.html">Mustache</a> will try to instantiate and use it for
-the rendering.
+As noted above, <a href="../Mustache.html">Mustache</a> will look for
+`Hurl::Views::Index` when `mustache :index` is called.
 </p>
 <p>
 If no `Views::Stats` class exists <a href="../Mustache.html">Mustache</a>
@@ -72,20 +87,11 @@ the `yield` variable and made available to you.
     <div class="sectiontitle">Methods</div>
     <dl class="methods">
     
-        <dt>M</dt>
-        <dd>
-            <ul>
-                
-                <li><a href="#M000000">mustache</a></li>
-                
-            </ul>
-        </dd>
-    
         <dt>R</dt>
         <dd>
             <ul>
                 
-                <li><a href="#M000001">render_mustache</a></li>
+                <li><a href="#M000006">registered</a></li>
                 
             </ul>
         </dd>
@@ -98,26 +104,26 @@ the `yield` variable and made available to you.
     
 
     
-
+    <div class="sectiontitle">Classes and Modules</div>
+    <ul>
+        
+        <li><span class="type">MODULE</span> <a href="Sinatra/Helpers.html">Mustache::Sinatra::Helpers</a></li>
+        
+    </ul>
     
 
     
 
     
-            <div class="sectiontitle">Instance Public methods</div>
+
+    
+            <div class="sectiontitle">Class Public methods</div>
             
             <div class="method">
-                <div class="title" id="M000000">
+                <div class="title" id="M000006">
                     
-                    <a name="M000000"></a><b>mustache</b>(template, options={}, locals={})
+                    <a name="M000006"></a><b>registered</b>(app)
                     
-                </div>
-                
-                <div class="description">
-                  <p>
-Call this in your <a href="Sinatra.html">Sinatra</a> routes.
-</p>
-
                 </div>
                 
                 
@@ -125,71 +131,17 @@ Call this in your <a href="Sinatra.html">Sinatra</a> routes.
                 
                 <div class="sourcecode">
                     <p class="source-link">
-                        Source: <a href="javascript:toggleSource('M000000_source')" id="l_M000000_source">show</a>
+                        Source: <a href="javascript:toggleSource('M000006_source')" id="l_M000006_source">show</a>
                         
-                        | <a href="http://github.com/defunkt/mustache/blob/235511c7775121993364aea2f4113dbd5377508d/lib/mustache/sinatra.rb#L28" target="_blank" class="github_url">on GitHub</a>
-                        
-                    </p>
-                    <div id="M000000_source" class="dyn-source">
-                        <pre><span class="ruby-comment cmt"># File lib/mustache/sinatra.rb, line 28</span>
-    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">mustache</span>(<span class="ruby-identifier">template</span>, <span class="ruby-identifier">options</span>={}, <span class="ruby-identifier">locals</span>={})
-      <span class="ruby-identifier">render</span> <span class="ruby-identifier">:mustache</span>, <span class="ruby-identifier">template</span>, <span class="ruby-identifier">options</span>, <span class="ruby-identifier">locals</span>
-    <span class="ruby-keyword kw">end</span></pre>
-                    </div>
-                </div>
-                
-            </div>
-            
-            <div class="method">
-                <div class="title" id="M000001">
-                    
-                    <a name="M000001"></a><b>render_mustache</b>(template, data, options, locals, &amp;block)
-                    
-                </div>
-                
-                <div class="description">
-                  <p>
-This is called by Sinatra&#8217;s `render` with the proper paths and,
-potentially, a block containing a sub-view
-</p>
-
-                </div>
-                
-                
-                
-                
-                <div class="sourcecode">
-                    <p class="source-link">
-                        Source: <a href="javascript:toggleSource('M000001_source')" id="l_M000001_source">show</a>
-                        
-                        | <a href="http://github.com/defunkt/mustache/blob/235511c7775121993364aea2f4113dbd5377508d/lib/mustache/sinatra.rb#L34" target="_blank" class="github_url">on GitHub</a>
+                        | <a href="http://github.com/defunkt/mustache/blob/e5f53da894a6975eeea72087b87844f52bf85049/lib/mustache/sinatra.rb#L98" target="_blank" class="github_url">on GitHub</a>
                         
                     </p>
-                    <div id="M000001_source" class="dyn-source">
-                        <pre><span class="ruby-comment cmt"># File lib/mustache/sinatra.rb, line 34</span>
-    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">render_mustache</span>(<span class="ruby-identifier">template</span>, <span class="ruby-identifier">data</span>, <span class="ruby-identifier">options</span>, <span class="ruby-identifier">locals</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)
-      <span class="ruby-identifier">name</span> = <span class="ruby-constant">Mustache</span>.<span class="ruby-identifier">classify</span>(<span class="ruby-identifier">template</span>.<span class="ruby-identifier">to_s</span>)
-
-      <span class="ruby-keyword kw">if</span> <span class="ruby-keyword kw">defined?</span>(<span class="ruby-constant">Views</span>) <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-constant">Views</span>.<span class="ruby-identifier">const_defined?</span>(<span class="ruby-identifier">name</span>)
-        <span class="ruby-identifier">instance</span> = <span class="ruby-constant">Views</span>.<span class="ruby-identifier">const_get</span>(<span class="ruby-identifier">name</span>).<span class="ruby-identifier">new</span>
-      <span class="ruby-keyword kw">else</span>
-        <span class="ruby-identifier">instance</span> = <span class="ruby-constant">Mustache</span>.<span class="ruby-identifier">new</span>
-      <span class="ruby-keyword kw">end</span>
-
-      <span class="ruby-identifier">instance_variable_names</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">name</span><span class="ruby-operator">|</span>
-        <span class="ruby-identifier">instance</span>.<span class="ruby-identifier">instance_variable_set</span>(<span class="ruby-identifier">name</span>, <span class="ruby-identifier">instance_variable_get</span>(<span class="ruby-identifier">name</span>))
-      <span class="ruby-keyword kw">end</span>
-
-      <span class="ruby-identifier">locals</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">local</span>, <span class="ruby-identifier">value</span><span class="ruby-operator">|</span>
-        <span class="ruby-identifier">instance</span>[<span class="ruby-identifier">local</span>] = <span class="ruby-identifier">value</span>
-      <span class="ruby-keyword kw">end</span>
-
-      <span class="ruby-comment cmt"># If we're paseed a block it's a subview. Sticking it in yield</span>
-      <span class="ruby-comment cmt"># lets us use {{yield}} in layout.html to render the actual page.</span>
-      <span class="ruby-identifier">instance</span>[<span class="ruby-identifier">:yield</span>] = <span class="ruby-identifier">block</span>.<span class="ruby-identifier">call</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">block</span>
-
-      <span class="ruby-identifier">instance</span>.<span class="ruby-identifier">template</span> = <span class="ruby-identifier">data</span>
-      <span class="ruby-identifier">instance</span>.<span class="ruby-identifier">to_html</span>
+                    <div id="M000006_source" class="dyn-source">
+                        <pre><span class="ruby-comment cmt"># File lib/mustache/sinatra.rb, line 98</span>
+    <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">registered</span>(<span class="ruby-identifier">app</span>)
+      <span class="ruby-identifier">app</span>.<span class="ruby-identifier">helpers</span> <span class="ruby-constant">Mustache</span><span class="ruby-operator">::</span><span class="ruby-constant">Sinatra</span><span class="ruby-operator">::</span><span class="ruby-constant">Helpers</span>
+      <span class="ruby-identifier">app</span>.<span class="ruby-identifier">set</span> <span class="ruby-identifier">:mustaches</span>, <span class="ruby-operator">::</span><span class="ruby-constant">Sinatra</span><span class="ruby-operator">::</span><span class="ruby-constant">Base</span>.<span class="ruby-identifier">views</span>
+      <span class="ruby-identifier">app</span>.<span class="ruby-identifier">set</span> <span class="ruby-identifier">:namespace</span>, <span class="ruby-identifier">app</span>
     <span class="ruby-keyword kw">end</span></pre>
                     </div>
                 </div>

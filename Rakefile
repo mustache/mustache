@@ -34,5 +34,6 @@ end
 
 desc "Push a new version to Gemcutter"
 task :publish => [ :gemspec, :build ] do
-  exec "gem push pkg/mustache-#{Mustache::Version}.gem" 
+  system "gem push pkg/mustache-#{Mustache::Version}.gem" 
+  exec "git clean -fd"
 end

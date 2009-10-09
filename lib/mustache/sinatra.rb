@@ -7,6 +7,8 @@ class Mustache
   #   require 'mustache/sinatra'
   #
   #   class Hurl < Sinatra::Base
+  #     register Mustache::Sinatra
+  #
   #     # Should be the path to your .mustache template files.
   #     set :views, "path/to/mustache/templates"
   #

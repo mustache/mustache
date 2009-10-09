@@ -304,6 +304,15 @@ Now:
 Convoluted but you get the idea.
 
 
+Sinatra
+-------
+
+Mustache ships with Sinatra integration. Please see
+`lib/mustache/sinatra.rb` or
+<http://defunkt.github.com/mustache/classes/Mustache/Sinatra.html> for
+complete documentation.
+
+
 Installation
 ------------
 

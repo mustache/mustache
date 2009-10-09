@@ -6,7 +6,7 @@ class Mustache
   #
   #   require 'mustache/sinatra'
   #
-  #   class App < Sinatra::Base
+  #   class Hurl < Sinatra::Base
   #     # Should be the path to your .mustache template files.
   #     set :views, "path/to/mustache/templates"
   #
@@ -14,19 +14,21 @@ class Mustache
   #     # Only needed if different from the `views` setting
   #     set :mustaches, "path/to/mustache/views"
   #
-  #     # This tells Mustache where to look for the Views modules,
+  #     # This tells Mustache where to look for the Views module,
   #     # under which your View classes should live. By default it's
-  #     # Object. That is, for an :index view Mustache will expect
-  #     # Views::Index. In this example, we're telling Mustache to look
-  #     # for index at App::Views::Index.
-  #     set :namespace, App
+  #     # the class of your app - in this case `Hurl`. That is, for an :index
+  #     # view Mustache will expect Hurl::Views::Index by default.
+  #
+  #     # If our Sinatra::Base subclass was instead Hurl::App,
+  #     # we'd want to do `set :namespace, Hurl::App`
+  #     set :namespace, Hurl
   #
   #     get '/stats' do
   #       mustache :stats
   #     end
   #   end
   #
-  # As noted above, Mustache will look for `App::Views::Index` when
+  # As noted above, Mustache will look for `Hurl::Views::Index` when
   # `mustache :index` is called.
   #
   # If no `Views::Stats` class exists Mustache will render the template
@@ -43,20 +45,20 @@ class Mustache
 
     # This is called by Sinatra's `render` with the proper paths
     # and, potentially, a block containing a sub-view
-    def render_mustache(template, data, options, locals, &block)
+    def render_mustache(template, data, opts, locals, &block)
       name = Mustache.classify(template.to_s)
 
       # This is a horrible hack but we need it to know under which namespace
-      # Views is located. If you have Haystack::Views, namespace should be
-      # set to Haystack.
-      namespace = self.class.namespace
+      # Views is located. If you have Hurl::App::Views, namespace should be
+      # set to Hurl:App.
+      namespace = options.namespace
 
       if namespace.const_defined?(:Views) && namespace::Views.const_defined?(name)
         # First try to find the existing view,
-        # e.g. Haystack::Views::Index
+        # e.g. Hurl::Views::Index
         klass = namespace::Views.const_get(name)
 
-      elsif File.exists?(file = "#{self.class.mustaches}/#{template}.rb")
+      elsif File.exists?(file = "#{options.mustaches}/#{template}.rb")
         # Couldn't find it - try to require the file if it exists, then
         # load in the view.
         require "#{file}".chomp('.rb')
@@ -88,9 +90,11 @@ class Mustache
       instance.template = data
       instance.to_html
     end
+
+    def self.registered(app)
+      app.helpers Mustache::Sinatra
+      app.set :mustaches, Sinatra::Base.views
+      app.set :namespace, Object
+    end
   end
 end
-
-Sinatra::Base.helpers Mustache::Sinatra
-Sinatra::Base.set :mustaches, Sinatra::Base.views
-Sinatra::Base.set :namespace, Object

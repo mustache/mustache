@@ -312,6 +312,9 @@ Mustache ships with Sinatra integration. Please see
 <http://defunkt.github.com/mustache/classes/Mustache/Sinatra.html> for
 complete documentation.
 
+An example Sinatra application is also provided:
+<http://github.com/defunkt/mustache-sinatra-example>
+
 
 Installation
 ------------

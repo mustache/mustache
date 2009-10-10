@@ -23,7 +23,8 @@ begin
     gemspec.version = Mustache::Version
   end
 rescue LoadError
-  puts "Jeweler not available. Install it with: sudo gem install technicalpickles-jeweler -s http://gems.github.com"
+  puts "Jeweler not available."
+  puts "Install it with: gem install jeweler"
 end
 
 begin
@@ -36,7 +37,7 @@ desc "Push a new version to Gemcutter"
 task :publish => [ :gemspec, :build ] do
   system "git tag v#{Mustache::Version}"
   system "git push origin v#{Mustache::Version}"
-  system "gem push pkg/mustache-#{Mustache::Version}.gem" 
+  system "gem push pkg/mustache-#{Mustache::Version}.gem"
   system "git clean -fd"
   exec "rake pages"
 end

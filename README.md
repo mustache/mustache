@@ -1,10 +1,8 @@
 Mustache
 =========
 
-Inspired by [ctemplate](http://code.google.com/p/google-ctemplate/)
-and
-[et](http://www.ivan.fomichev.name/2008/05/erlang-template-engine-prototype.html),
-Mustache is a framework-agnostic way to render logic-free views.
+Inspired by [ctemplate][1] and [et][2], Mustache is a
+framework-agnostic way to render logic-free views.
 
 As ctemplates says, "It emphasizes separating logic from presentation:
 it is impossible to embed application logic in this template language."
@@ -346,3 +344,6 @@ Meta
 * Test: <http://runcoderun.com/defunkt/mustache>
 * Gems: <http://gemcutter.org/gems/mustache>
 * Boss: Chris Wanstrath :: <http://github.com/defunkt>
+
+[1]: http://code.google.com/p/google-ctemplate/
+[2]: http://www.ivan.fomichev.name/2008/05/erlang-template-engine-prototype.html

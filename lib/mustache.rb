@@ -105,6 +105,9 @@ class Mustache
   end
 
   # The template is the actual string Mustache uses as its template.
+  # There is a bit of magic here: what we get back is actually a
+  # Mustache::Template object here, but you can still safely use
+  # `template=` with a string.
   def self.template
     @template ||= templateify(File.read(template_file))
   end

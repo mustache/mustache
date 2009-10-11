@@ -7,6 +7,10 @@ class TemplatePartial < Mustache
   def title
     "Welcome"
   end
+
+  def title_bars
+    '-' * title.size
+  end
 end
 
 if $0 == __FILE__

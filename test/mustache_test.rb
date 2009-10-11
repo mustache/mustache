@@ -97,6 +97,18 @@ Again, Welcome!
 end_partial
   end
 
+  def test_template_partial_with_custom_extension
+    partial = TemplatePartial.new
+    partial.template_extension = 'txt'
+
+    assert_equal <<-end_partial.strip, partial.render
+Welcome
+-------
+
+## Again, Welcome! ##
+end_partial
+  end
+
   def test_comments
     assert_equal "<h1>A Comedy of Errors</h1>\n", Comments.render
   end

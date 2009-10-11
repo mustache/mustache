@@ -80,7 +80,7 @@ Now let's write the template:
 This template references our view methods. To bring it all together,
 here's the code to render actual HTML;
 
-    Simple.new.to_html
+    Simple.render
 
 Which returns the following:
 
@@ -182,7 +182,7 @@ We can fill in the values at will:
     dict = Dict.new
     dict[:name] = 'George'
     dict[:value] = 100
-    dict.to_html
+    dict.render
 
 Which returns:
 
@@ -192,7 +192,7 @@ Which returns:
 We can re-use the same object, too:
 
     dict[:name] = 'Tony'
-    dict.to_html
+    dict.render
     Hello Tony
     You have just won $100!
 
@@ -297,7 +297,7 @@ normal class.
 
 Now:
 
-    Simple.new(request.ssl?).to_html
+    Simple.new(request.ssl?).render
 
 Convoluted but you get the idea.
 

@@ -16,10 +16,11 @@ require 'mustache/context'
 # While Mustache will do its best to load and render a template for
 # you, this process is completely customizable using a few options.
 #
-# All settings can be overriden at either the class or instance
-# level. For example, going with the above example, we can do either
-# `Stats.template_path = "/usr/local/templates"` or
-# `view.template_path = "/usr/local/templates"`
+# All settings can be overriden at the class level.
+#
+# For example, going with the above example, we can use
+# `Stats.template_path = "/usr/local/templates"` to specify the path
+# Mustache uses to find templates.
 #
 # Here are the available options:
 #
@@ -49,6 +50,12 @@ require 'mustache/context'
 #   >> Mustache.render("Hello {{planet}}", :planet => "World!")
 #   => "Hello World!"
 #
+# The `template` setting is also available on instances.
+#
+#   view = Mustache.new
+#   view.template = "Hi, {{person}}!"
+#   view[:person] = 'Mom'
+#   view.render # => Hi, mom!
 class Mustache
   # Helper method for quickly instantiating and rendering a view.
   def self.render(*args)
@@ -68,7 +75,7 @@ class Mustache
   # The template path informs your Mustache subclass where to look for its
   # corresponding template. By default it's the current directory (".")
   def self.template_path
-    @template_path || '.'
+    @template_path ||= '.'
   end
 
   def self.template_path=(path)
@@ -87,7 +94,7 @@ class Mustache
 
   # A Mustache template's default extension is 'html'
   def self.template_extension
-    @template_extension
+    @template_extension ||= 'html'
   end
 
   def self.template_extension=(template_extension)
@@ -97,7 +104,7 @@ class Mustache
   # The template file is the absolute path of the file Mustache will
   # use as its template. By default it's ./class_name.html
   def self.template_file
-    @template_file
+    @template_file || "#{path}/#{underscore}.#{template_extension}"
   end
 
   def self.template_file=(template_file)
@@ -109,7 +116,7 @@ class Mustache
   # Mustache::Template object here, but you can still safely use
   # `template=` with a string.
   def self.template
-    @template
+    @template ||= templateify(File.read(template_file))
   end
 
   def self.template=(template)
@@ -136,7 +143,7 @@ class Mustache
 
   # Turns a string into a Mustache::Template. If passed a Template,
   # returns it.
-  def templateify(obj)
+  def self.templateify(obj)
     if obj.is_a?(Template)
       obj
     else
@@ -144,37 +151,13 @@ class Mustache
     end
   end
 
-  #
-  # Instance level settings
-  #
-
-  def template_path
-    @template_path || self.class.template_path || '.'
+  def templateify(obj)
+    self.class.templateify(obj)
   end
 
-  def template_path=(template_path)
-    @template_path = template_path
-  end
-
-  def template_extension
-    @template_extension || self.class.template_extension || 'html'
-  end
-
-  def template_extension=(template_extension)
-    @template_extension = template_extension
-  end
-
-  def template_file
-    @template_file || self.class.template_file ||
-      "#{template_path}/#{Mustache.underscore(self.class.name)}.#{template_extension}"
-  end
-
-  def template_file=(template_file)
-    @template_file = template_file
-  end
-
+  # The template can be set at the instance level.
   def template
-    @template || templateify(self.class.template || File.read(template_file))
+    @template ||= self.class.template
   end
 
   def template=(template)

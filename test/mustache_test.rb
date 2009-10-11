@@ -98,8 +98,9 @@ end_partial
   end
 
   def test_template_partial_with_custom_extension
-    partial = TemplatePartial.new
+    partial = Class.new(TemplatePartial)
     partial.template_extension = 'txt'
+    partial.template_path = File.dirname(__FILE__) + '/../examples'
 
     assert_equal <<-end_partial.strip, partial.render.strip
 Welcome

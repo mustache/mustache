@@ -87,7 +87,7 @@ class Mustache
 
   # A Mustache template's default extension is 'html'
   def self.template_extension
-    @template_extension || 'html'
+    @template_extension
   end
 
   def self.template_extension=(template_extension)
@@ -97,7 +97,7 @@ class Mustache
   # The template file is the absolute path of the file Mustache will
   # use as its template. By default it's ./class_name.html
   def self.template_file
-    @template_file || "#{template_path}/#{underscore(to_s)}.#{template_extension}"
+    @template_file
   end
 
   def self.template_file=(template_file)
@@ -109,11 +109,11 @@ class Mustache
   # Mustache::Template object here, but you can still safely use
   # `template=` with a string.
   def self.template
-    @template || templateify(File.read(template_file))
+    @template
   end
 
   def self.template=(template)
-    @template = templateify(template)
+    @template = template
   end
 
   # template_partial => TemplatePartial
@@ -132,15 +132,6 @@ class Mustache
 
   # Turns a string into a Mustache::Template. If passed a Template,
   # returns it.
-  def self.templateify(obj)
-    if obj.is_a?(Template)
-      obj
-    else
-      Template.new(obj.to_s, template_path, template_extension)
-    end
-  end
-
-  # Instance version.Turns a string into a Mustache::Template. If passed a Template,
   def templateify(obj)
     if obj.is_a?(Template)
       obj
@@ -154,7 +145,7 @@ class Mustache
   #
 
   def template_path
-    @template_path || self.class.template_path
+    @template_path || self.class.template_path || '.'
   end
 
   def template_path=(template_path)
@@ -162,7 +153,7 @@ class Mustache
   end
 
   def template_extension
-    @template_extension || self.class.template_extension
+    @template_extension || self.class.template_extension || 'html'
   end
 
   def template_extension=(template_extension)
@@ -170,8 +161,8 @@ class Mustache
   end
 
   def template_file
-    return @template_file if @template_file
-    "#{template_path}/#{Mustache.underscore(self.class.name)}.#{template_extension}"
+    @template_file || self.class.template_file ||
+      "#{template_path}/#{Mustache.underscore(self.class.name)}.#{template_extension}"
   end
 
   def template_file=(template_file)
@@ -179,7 +170,7 @@ class Mustache
   end
 
   def template
-    @template || templateify(File.read(template_file))
+    @template || templateify(self.class.template || File.read(template_file))
   end
 
   def template=(template)

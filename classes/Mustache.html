@@ -27,9 +27,13 @@
         </h1>
         <ul class="files">
             
-            <li><a href="../files/lib/mustache/version_rb.html">lib/mustache/version.rb</a></li>
+            <li><a href="../files/lib/mustache/context_rb.html">lib/mustache/context.rb</a></li>
             
             <li><a href="../files/lib/mustache/sinatra_rb.html">lib/mustache/sinatra.rb</a></li>
+            
+            <li><a href="../files/lib/mustache/template_rb.html">lib/mustache/template.rb</a></li>
+            
+            <li><a href="../files/lib/mustache/version_rb.html">lib/mustache/version.rb</a></li>
             
             <li><a href="../files/lib/mustache_rb.html">lib/mustache.rb</a></li>
             
@@ -37,6 +41,95 @@
     </div>
     <div id="bodyContent">
         <div id="content">
+    
+    <div class="description">
+        <p>
+<a href="Mustache.html">Mustache</a> is the base class from which your <a
+href="Mustache.html">Mustache</a> subclasses should inherit (though it can
+be used on its own).
+</p>
+<p>
+The typical <a href="Mustache.html">Mustache</a> workflow is as follows:
+</p>
+<ul>
+<li>Create a <a href="Mustache.html">Mustache</a> subclass: class Stats < <a
+href="Mustache.html">Mustache</a>
+
+</li>
+<li>Create a template: stats.html
+
+</li>
+<li>Instantiate an instance: view = Stats.new
+
+</li>
+<li>Render that instance: view.render
+
+</li>
+</ul>
+<p>
+You can skip the instantiation by calling `Stats.render` directly.
+</p>
+<p>
+While <a href="Mustache.html">Mustache</a> will do its best to load and
+render a template for you, this process is completely customizable using a
+few options.
+</p>
+<p>
+All settings can be overriden at either the class or instance level. For
+example, going with the above example, we can do either
+`Stats.template_path = &#8220;/usr/local/templates&#8220;` or
+`view.template_path = &#8220;/usr/local/templates&#8220;`
+</p>
+<p>
+Here are the available options:
+</p>
+<ul>
+<li><a href="Mustache.html#M000019">template_path</a>
+
+</li>
+</ul>
+<p>
+The `<a href="Mustache.html#M000019">template_path</a>` setting determines
+the path <a href="Mustache.html">Mustache</a> uses when looking for a
+template. By default it is &#8220;.&#8221; Setting it to
+/usr/local/templates, for example, means (given all other settings are
+default) a <a href="Mustache.html">Mustache</a> subclass `Stats` will try
+to load /usr/local/templates/stats.html
+</p>
+<ul>
+<li><a href="Mustache.html#M000023">template_extension</a>
+
+</li>
+</ul>
+<p>
+The `<a href="Mustache.html#M000023">template_extension</a>` is the
+extension <a href="Mustache.html">Mustache</a> uses when looking for
+template files. By default it is &#8220;html&#8220;
+</p>
+<ul>
+<li><a href="Mustache.html#M000025">template_file</a>
+
+</li>
+</ul>
+<p>
+You can tell <a href="Mustache.html">Mustache</a> exactly which template to
+us with this setting. It can be a relative or absolute path.
+</p>
+<ul>
+<li>template
+
+</li>
+</ul>
+<p>
+Sometimes you want <a href="Mustache.html">Mustache</a> to render a string,
+not a file. In those cases you may set the `template` setting. For example:
+</p>
+<pre>
+  &gt;&gt; Mustache.render(&quot;Hello {{planet}}&quot;, :planet =&gt; &quot;World!&quot;)
+  =&gt; &quot;Hello World!&quot;
+</pre>
+
+    </div>
     
 
     
@@ -53,9 +146,9 @@
         <dd>
             <ul>
                 
-                <li><a href="#M000032">[]</a>,</li>
+                <li><a href="#M000042">[]</a>,</li>
                 
-                <li><a href="#M000033">[]=</a></li>
+                <li><a href="#M000043">[]=</a></li>
                 
             </ul>
         </dd>
@@ -64,27 +157,9 @@
         <dd>
             <ul>
                 
-                <li><a href="#M000024">classify</a>,</li>
+                <li><a href="#M000029">classify</a>,</li>
                 
-                <li><a href="#M000031">context</a></li>
-                
-            </ul>
-        </dd>
-    
-        <dt>D</dt>
-        <dd>
-            <ul>
-                
-                <li><a href="#M000030">debug</a></li>
-                
-            </ul>
-        </dd>
-    
-        <dt>E</dt>
-        <dd>
-            <ul>
-                
-                <li><a href="#M000026">escape</a></li>
+                <li><a href="#M000041">context</a></li>
                 
             </ul>
         </dd>
@@ -93,9 +168,9 @@
         <dd>
             <ul>
                 
-                <li><a href="#M000018">path</a>,</li>
+                <li><a href="#M000021">path</a>,</li>
                 
-                <li><a href="#M000017">path=</a></li>
+                <li><a href="#M000022">path=</a></li>
                 
             </ul>
         </dd>
@@ -104,9 +179,9 @@
         <dd>
             <ul>
                 
-                <li><a href="#M000034">render</a>,</li>
+                <li><a href="#M000016">render</a>,</li>
                 
-                <li><a href="#M000016">render</a></li>
+                <li><a href="#M000044">render</a></li>
                 
             </ul>
         </dd>
@@ -115,29 +190,49 @@
         <dd>
             <ul>
                 
-                <li><a href="#M000021">template</a>,</li>
+                <li><a href="#M000039">template</a>,</li>
                 
-                <li><a href="#M000028">template</a>,</li>
+                <li><a href="#M000027">template</a>,</li>
                 
-                <li><a href="#M000029">template=</a>,</li>
+                <li><a href="#M000028">template=</a>,</li>
                 
-                <li><a href="#M000022">template_extension</a>,</li>
+                <li><a href="#M000040">template=</a>,</li>
                 
-                <li><a href="#M000023">template_extension=</a>,</li>
+                <li><a href="#M000023">template_extension</a>,</li>
                 
-                <li><a href="#M000019">template_file</a>,</li>
+                <li><a href="#M000035">template_extension</a>,</li>
                 
-                <li><a href="#M000020">template_file=</a>,</li>
+                <li><a href="#M000036">template_extension=</a>,</li>
                 
-                <li><a href="#M000027">templateify</a>,</li>
+                <li><a href="#M000024">template_extension=</a>,</li>
                 
-                <li><a href="#M000037">to_html</a>,</li>
+                <li><a href="#M000037">template_file</a>,</li>
                 
-                <li><a href="#M000035">to_html</a>,</li>
+                <li><a href="#M000025">template_file</a>,</li>
                 
-                <li><a href="#M000038">to_text</a>,</li>
+                <li><a href="#M000026">template_file=</a>,</li>
                 
-                <li><a href="#M000036">to_text</a></li>
+                <li><a href="#M000038">template_file=</a>,</li>
+                
+                <li><a href="#M000033">template_path</a>,</li>
+                
+                <li><a href="#M000019">template_path</a>,</li>
+                
+                <li><a href="#M000020">template_path=</a>,</li>
+                
+                <li><a href="#M000034">template_path=</a>,</li>
+                
+                <li><a href="#M000032">templateify</a>,</li>
+                
+                <li><a href="#M000031">templateify</a>,</li>
+                
+                <li><a href="#M000017">to_html</a>,</li>
+                
+                <li><a href="#M000045">to_html</a>,</li>
+                
+                <li><a href="#M000018">to_text</a>,</li>
+                
+                <li><a href="#M000046">to_text</a></li>
                 
             </ul>
         </dd>
@@ -146,7 +241,7 @@
         <dd>
             <ul>
                 
-                <li><a href="#M000025">underscore</a></li>
+                <li><a href="#M000030">underscore</a></li>
                 
             </ul>
         </dd>
@@ -178,7 +273,7 @@
         <tr valign='top'>
             <td class="attr-name">Version</td>
             <td>=</td>
-            <td class="attr-value">'0.1.4'</td>
+            <td class="attr-value">'0.2.0'</td>
         </tr>
         
         
@@ -191,9 +286,9 @@
             <div class="sectiontitle">Class Public methods</div>
             
             <div class="method">
-                <div class="title" id="M000024">
+                <div class="title" id="M000029">
                     
-                    <a name="M000024"></a><b>classify</b>(underscored)
+                    <a name="M000029"></a><b>classify</b>(underscored)
                     
                 </div>
                 
@@ -209,15 +304,17 @@ template_partial => TemplatePartial
                 
                 <div class="sourcecode">
                     <p class="source-link">
-                        Source: <a href="javascript:toggleSource('M000024_source')" id="l_M000024_source">show</a>
+                        Source: <a href="javascript:toggleSource('M000029_source')" id="l_M000029_source">show</a>
                         
-                        | <a href="http://github.com/defunkt/mustache/blob/1ad6ecd0ee56a7d8b0fe829d946b46532233f48a/lib/mustache.rb#L169" target="_blank" class="github_url">on GitHub</a>
+                        | <a href="http://github.com/defunkt/mustache/blob/6a6ab8361218d9c0a565950c3b81d1a026a02208/lib/mustache.rb#L120" target="_blank" class="github_url">on GitHub</a>
                         
                     </p>
-                    <div id="M000024_source" class="dyn-source">
-                        <pre><span class="ruby-comment cmt"># File lib/mustache.rb, line 169</span>
+                    <div id="M000029_source" class="dyn-source">
+                        <pre><span class="ruby-comment cmt"># File lib/mustache.rb, line 120</span>
   <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">classify</span>(<span class="ruby-identifier">underscored</span>)
-    <span class="ruby-identifier">underscored</span>.<span class="ruby-identifier">split</span>(<span class="ruby-regexp re">/[-_]/</span>).<span class="ruby-identifier">map</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">part</span><span class="ruby-operator">|</span> <span class="ruby-identifier">part</span>[<span class="ruby-value">0</span>] = <span class="ruby-identifier">part</span>[<span class="ruby-value">0</span>].<span class="ruby-identifier">chr</span>.<span class="ruby-identifier">upcase</span>; <span class="ruby-identifier">part</span> }.<span class="ruby-identifier">join</span>
+    <span class="ruby-identifier">underscored</span>.<span class="ruby-identifier">split</span>(<span class="ruby-regexp re">/[-_]/</span>).<span class="ruby-identifier">map</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">part</span><span class="ruby-operator">|</span>
+      <span class="ruby-identifier">part</span>[<span class="ruby-value">0</span>] = <span class="ruby-identifier">part</span>[<span class="ruby-value">0</span>].<span class="ruby-identifier">chr</span>.<span class="ruby-identifier">upcase</span>; <span class="ruby-identifier">part</span>
+    <span class="ruby-keyword kw">end</span>.<span class="ruby-identifier">join</span>
   <span class="ruby-keyword kw">end</span></pre>
                     </div>
                 </div>
@@ -225,15 +322,15 @@ template_partial => TemplatePartial
             </div>
             
             <div class="method">
-                <div class="title" id="M000026">
+                <div class="title" id="M000021">
                     
-                    <a name="M000026"></a><b>escape</b>(string)
+                    <a name="M000021"></a><b>path</b>()
                     
                 </div>
                 
                 <div class="description">
                   <p>
-Escape HTML.
+Alias for `<a href="Mustache.html#M000019">template_path</a>`
 </p>
 
                 </div>
@@ -243,42 +340,15 @@ Escape HTML.
                 
                 <div class="sourcecode">
                     <p class="source-link">
-                        Source: <a href="javascript:toggleSource('M000026_source')" id="l_M000026_source">show</a>
+                        Source: <a href="javascript:toggleSource('M000021_source')" id="l_M000021_source">show</a>
                         
-                        | <a href="http://github.com/defunkt/mustache/blob/1ad6ecd0ee56a7d8b0fe829d946b46532233f48a/lib/mustache.rb#L181" target="_blank" class="github_url">on GitHub</a>
-                        
-                    </p>
-                    <div id="M000026_source" class="dyn-source">
-                        <pre><span class="ruby-comment cmt"># File lib/mustache.rb, line 181</span>
-  <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">escape</span>(<span class="ruby-identifier">string</span>)
-    <span class="ruby-constant">CGI</span>.<span class="ruby-identifier">escapeHTML</span>(<span class="ruby-identifier">string</span>.<span class="ruby-identifier">to_s</span>)
-  <span class="ruby-keyword kw">end</span></pre>
-                    </div>
-                </div>
-                
-            </div>
-            
-            <div class="method">
-                <div class="title" id="M000018">
-                    
-                    <a name="M000018"></a><b>path</b>()
-                    
-                </div>
-                
-                
-                
-                
-                <div class="sourcecode">
-                    <p class="source-link">
-                        Source: <a href="javascript:toggleSource('M000018_source')" id="l_M000018_source">show</a>
-                        
-                        | <a href="http://github.com/defunkt/mustache/blob/1ad6ecd0ee56a7d8b0fe829d946b46532233f48a/lib/mustache.rb#L140" target="_blank" class="github_url">on GitHub</a>
+                        | <a href="http://github.com/defunkt/mustache/blob/6a6ab8361218d9c0a565950c3b81d1a026a02208/lib/mustache.rb#L79" target="_blank" class="github_url">on GitHub</a>
                         
                     </p>
-                    <div id="M000018_source" class="dyn-source">
-                        <pre><span class="ruby-comment cmt"># File lib/mustache.rb, line 140</span>
+                    <div id="M000021_source" class="dyn-source">
+                        <pre><span class="ruby-comment cmt"># File lib/mustache.rb, line 79</span>
   <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">path</span>
-    <span class="ruby-ivar">@path</span> <span class="ruby-operator">||</span> <span class="ruby-value str">'.'</span>
+    <span class="ruby-identifier">template_path</span>
   <span class="ruby-keyword kw">end</span></pre>
                     </div>
                 </div>
@@ -286,16 +356,15 @@ Escape HTML.
             </div>
             
             <div class="method">
-                <div class="title" id="M000017">
+                <div class="title" id="M000022">
                     
-                    <a name="M000017"></a><b>path=</b>(path)
+                    <a name="M000022"></a><b>path=</b>(path)
                     
                 </div>
                 
                 <div class="description">
                   <p>
-The path informs your <a href="Mustache.html">Mustache</a> subclass where
-to look for its corresponding template.
+Alias for `<a href="Mustache.html#M000019">template_path</a>`
 </p>
 
                 </div>
@@ -305,15 +374,15 @@ to look for its corresponding template.
                 
                 <div class="sourcecode">
                     <p class="source-link">
-                        Source: <a href="javascript:toggleSource('M000017_source')" id="l_M000017_source">show</a>
+                        Source: <a href="javascript:toggleSource('M000022_source')" id="l_M000022_source">show</a>
                         
-                        | <a href="http://github.com/defunkt/mustache/blob/1ad6ecd0ee56a7d8b0fe829d946b46532233f48a/lib/mustache.rb#L136" target="_blank" class="github_url">on GitHub</a>
+                        | <a href="http://github.com/defunkt/mustache/blob/6a6ab8361218d9c0a565950c3b81d1a026a02208/lib/mustache.rb#L84" target="_blank" class="github_url">on GitHub</a>
                         
                     </p>
-                    <div id="M000017_source" class="dyn-source">
-                        <pre><span class="ruby-comment cmt"># File lib/mustache.rb, line 136</span>
+                    <div id="M000022_source" class="dyn-source">
+                        <pre><span class="ruby-comment cmt"># File lib/mustache.rb, line 84</span>
   <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">path=</span>(<span class="ruby-identifier">path</span>)
-    <span class="ruby-ivar">@path</span> = <span class="ruby-constant">File</span>.<span class="ruby-identifier">expand_path</span>(<span class="ruby-identifier">path</span>)
+    <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">template_path</span> = <span class="ruby-identifier">path</span>
   <span class="ruby-keyword kw">end</span></pre>
                     </div>
                 </div>
@@ -341,11 +410,11 @@ Helper method for quickly instantiating and rendering a view.
                     <p class="source-link">
                         Source: <a href="javascript:toggleSource('M000016_source')" id="l_M000016_source">show</a>
                         
-                        | <a href="http://github.com/defunkt/mustache/blob/1ad6ecd0ee56a7d8b0fe829d946b46532233f48a/lib/mustache.rb#L125" target="_blank" class="github_url">on GitHub</a>
+                        | <a href="http://github.com/defunkt/mustache/blob/6a6ab8361218d9c0a565950c3b81d1a026a02208/lib/mustache.rb#L54" target="_blank" class="github_url">on GitHub</a>
                         
                     </p>
                     <div id="M000016_source" class="dyn-source">
-                        <pre><span class="ruby-comment cmt"># File lib/mustache.rb, line 125</span>
+                        <pre><span class="ruby-comment cmt"># File lib/mustache.rb, line 54</span>
   <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">render</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">args</span>)
     <span class="ruby-identifier">new</span>.<span class="ruby-identifier">render</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">args</span>)
   <span class="ruby-keyword kw">end</span></pre>
@@ -355,42 +424,18 @@ Helper method for quickly instantiating and rendering a view.
             </div>
             
             <div class="method">
-                <div class="title" id="M000021">
+                <div class="title" id="M000027">
                     
-                    <a name="M000021"></a><b>template</b>()
-                    
-                </div>
-                
-                
-                
-                
-                <div class="sourcecode">
-                    <p class="source-link">
-                        Source: <a href="javascript:toggleSource('M000021_source')" id="l_M000021_source">show</a>
-                        
-                        | <a href="http://github.com/defunkt/mustache/blob/1ad6ecd0ee56a7d8b0fe829d946b46532233f48a/lib/mustache.rb#L155" target="_blank" class="github_url">on GitHub</a>
-                        
-                    </p>
-                    <div id="M000021_source" class="dyn-source">
-                        <pre><span class="ruby-comment cmt"># File lib/mustache.rb, line 155</span>
-  <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">template</span>
-    <span class="ruby-ivar">@template</span> <span class="ruby-operator">||=</span> <span class="ruby-identifier">templateify</span>(<span class="ruby-constant">File</span>.<span class="ruby-identifier">read</span>(<span class="ruby-identifier">template_file</span>))
-  <span class="ruby-keyword kw">end</span></pre>
-                    </div>
-                </div>
-                
-            </div>
-            
-            <div class="method">
-                <div class="title" id="M000022">
-                    
-                    <a name="M000022"></a><b>template_extension</b>()
+                    <a name="M000027"></a><b>template</b>()
                     
                 </div>
                 
                 <div class="description">
                   <p>
-Default extension is &#8216;html&#8217;
+The template is the actual string <a href="Mustache.html">Mustache</a> uses
+as its template. There is a bit of magic here: what we get back is actually
+a <a href="Mustache/Template.html">Mustache::Template</a> object here, but
+you can still safely use `template=` with a string.
 </p>
 
                 </div>
@@ -400,15 +445,42 @@ Default extension is &#8216;html&#8217;
                 
                 <div class="sourcecode">
                     <p class="source-link">
-                        Source: <a href="javascript:toggleSource('M000022_source')" id="l_M000022_source">show</a>
+                        Source: <a href="javascript:toggleSource('M000027_source')" id="l_M000027_source">show</a>
                         
-                        | <a href="http://github.com/defunkt/mustache/blob/1ad6ecd0ee56a7d8b0fe829d946b46532233f48a/lib/mustache.rb#L160" target="_blank" class="github_url">on GitHub</a>
+                        | <a href="http://github.com/defunkt/mustache/blob/6a6ab8361218d9c0a565950c3b81d1a026a02208/lib/mustache.rb#L111" target="_blank" class="github_url">on GitHub</a>
                         
                     </p>
-                    <div id="M000022_source" class="dyn-source">
-                        <pre><span class="ruby-comment cmt"># File lib/mustache.rb, line 160</span>
-  <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">template_extension</span>
-    <span class="ruby-ivar">@template_extension</span> <span class="ruby-operator">||=</span> <span class="ruby-value str">'html'</span>
+                    <div id="M000027_source" class="dyn-source">
+                        <pre><span class="ruby-comment cmt"># File lib/mustache.rb, line 111</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">template</span>
+    <span class="ruby-ivar">@template</span> <span class="ruby-operator">||</span> <span class="ruby-identifier">templateify</span>(<span class="ruby-constant">File</span>.<span class="ruby-identifier">read</span>(<span class="ruby-identifier">template_file</span>))
+  <span class="ruby-keyword kw">end</span></pre>
+                    </div>
+                </div>
+                
+            </div>
+            
+            <div class="method">
+                <div class="title" id="M000028">
+                    
+                    <a name="M000028"></a><b>template=</b>(template)
+                    
+                </div>
+                
+                
+                
+                
+                <div class="sourcecode">
+                    <p class="source-link">
+                        Source: <a href="javascript:toggleSource('M000028_source')" id="l_M000028_source">show</a>
+                        
+                        | <a href="http://github.com/defunkt/mustache/blob/6a6ab8361218d9c0a565950c3b81d1a026a02208/lib/mustache.rb#L115" target="_blank" class="github_url">on GitHub</a>
+                        
+                    </p>
+                    <div id="M000028_source" class="dyn-source">
+                        <pre><span class="ruby-comment cmt"># File lib/mustache.rb, line 115</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">template=</span>(<span class="ruby-identifier">template</span>)
+    <span class="ruby-ivar">@template</span> = <span class="ruby-identifier">templateify</span>(<span class="ruby-identifier">template</span>)
   <span class="ruby-keyword kw">end</span></pre>
                     </div>
                 </div>
@@ -418,8 +490,16 @@ Default extension is &#8216;html&#8217;
             <div class="method">
                 <div class="title" id="M000023">
                     
-                    <a name="M000023"></a><b>template_extension=</b>(template_extension)
+                    <a name="M000023"></a><b>template_extension</b>()
                     
+                </div>
+                
+                <div class="description">
+                  <p>
+A <a href="Mustache.html">Mustache</a> template&#8217;s default extension
+is &#8216;html&#8217;
+</p>
+
                 </div>
                 
                 
@@ -429,11 +509,38 @@ Default extension is &#8216;html&#8217;
                     <p class="source-link">
                         Source: <a href="javascript:toggleSource('M000023_source')" id="l_M000023_source">show</a>
                         
-                        | <a href="http://github.com/defunkt/mustache/blob/1ad6ecd0ee56a7d8b0fe829d946b46532233f48a/lib/mustache.rb#L164" target="_blank" class="github_url">on GitHub</a>
+                        | <a href="http://github.com/defunkt/mustache/blob/6a6ab8361218d9c0a565950c3b81d1a026a02208/lib/mustache.rb#L89" target="_blank" class="github_url">on GitHub</a>
                         
                     </p>
                     <div id="M000023_source" class="dyn-source">
-                        <pre><span class="ruby-comment cmt"># File lib/mustache.rb, line 164</span>
+                        <pre><span class="ruby-comment cmt"># File lib/mustache.rb, line 89</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">template_extension</span>
+    <span class="ruby-ivar">@template_extension</span> <span class="ruby-operator">||</span> <span class="ruby-value str">'html'</span>
+  <span class="ruby-keyword kw">end</span></pre>
+                    </div>
+                </div>
+                
+            </div>
+            
+            <div class="method">
+                <div class="title" id="M000024">
+                    
+                    <a name="M000024"></a><b>template_extension=</b>(template_extension)
+                    
+                </div>
+                
+                
+                
+                
+                <div class="sourcecode">
+                    <p class="source-link">
+                        Source: <a href="javascript:toggleSource('M000024_source')" id="l_M000024_source">show</a>
+                        
+                        | <a href="http://github.com/defunkt/mustache/blob/6a6ab8361218d9c0a565950c3b81d1a026a02208/lib/mustache.rb#L93" target="_blank" class="github_url">on GitHub</a>
+                        
+                    </p>
+                    <div id="M000024_source" class="dyn-source">
+                        <pre><span class="ruby-comment cmt"># File lib/mustache.rb, line 93</span>
   <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">template_extension=</span>(<span class="ruby-identifier">template_extension</span>)
     <span class="ruby-ivar">@template_extension</span> = <span class="ruby-identifier">template_extension</span>
   <span class="ruby-keyword kw">end</span></pre>
@@ -443,16 +550,80 @@ Default extension is &#8216;html&#8217;
             </div>
             
             <div class="method">
-                <div class="title" id="M000019">
+                <div class="title" id="M000025">
                     
-                    <a name="M000019"></a><b>template_file</b>()
+                    <a name="M000025"></a><b>template_file</b>()
                     
                 </div>
                 
                 <div class="description">
                   <p>
-Templates are self.class.name.underscore + extension &#8212; a class of
-Dashboard would have a template (relative to the path) of dashboard.html
+The template file is the absolute path of the file <a
+href="Mustache.html">Mustache</a> will use as its template. By default
+it&#8217;s ./class_name.html
+</p>
+
+                </div>
+                
+                
+                
+                
+                <div class="sourcecode">
+                    <p class="source-link">
+                        Source: <a href="javascript:toggleSource('M000025_source')" id="l_M000025_source">show</a>
+                        
+                        | <a href="http://github.com/defunkt/mustache/blob/6a6ab8361218d9c0a565950c3b81d1a026a02208/lib/mustache.rb#L99" target="_blank" class="github_url">on GitHub</a>
+                        
+                    </p>
+                    <div id="M000025_source" class="dyn-source">
+                        <pre><span class="ruby-comment cmt"># File lib/mustache.rb, line 99</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">template_file</span>
+    <span class="ruby-ivar">@template_file</span> <span class="ruby-operator">||</span> <span class="ruby-node">&quot;#{template_path}/#{underscore(to_s)}.#{template_extension}&quot;</span>
+  <span class="ruby-keyword kw">end</span></pre>
+                    </div>
+                </div>
+                
+            </div>
+            
+            <div class="method">
+                <div class="title" id="M000026">
+                    
+                    <a name="M000026"></a><b>template_file=</b>(template_file)
+                    
+                </div>
+                
+                
+                
+                
+                <div class="sourcecode">
+                    <p class="source-link">
+                        Source: <a href="javascript:toggleSource('M000026_source')" id="l_M000026_source">show</a>
+                        
+                        | <a href="http://github.com/defunkt/mustache/blob/6a6ab8361218d9c0a565950c3b81d1a026a02208/lib/mustache.rb#L103" target="_blank" class="github_url">on GitHub</a>
+                        
+                    </p>
+                    <div id="M000026_source" class="dyn-source">
+                        <pre><span class="ruby-comment cmt"># File lib/mustache.rb, line 103</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">template_file=</span>(<span class="ruby-identifier">template_file</span>)
+    <span class="ruby-ivar">@template_file</span> = <span class="ruby-identifier">template_file</span>
+  <span class="ruby-keyword kw">end</span></pre>
+                    </div>
+                </div>
+                
+            </div>
+            
+            <div class="method">
+                <div class="title" id="M000019">
+                    
+                    <a name="M000019"></a><b>template_path</b>()
+                    
+                </div>
+                
+                <div class="description">
+                  <p>
+The template path informs your <a href="Mustache.html">Mustache</a>
+subclass where to look for its corresponding template. By default
+it&#8217;s the current directory (&#8220;.&#8221;)
 </p>
 
                 </div>
@@ -464,13 +635,13 @@ Dashboard would have a template (relative to the path) of dashboard.html
                     <p class="source-link">
                         Source: <a href="javascript:toggleSource('M000019_source')" id="l_M000019_source">show</a>
                         
-                        | <a href="http://github.com/defunkt/mustache/blob/1ad6ecd0ee56a7d8b0fe829d946b46532233f48a/lib/mustache.rb#L147" target="_blank" class="github_url">on GitHub</a>
+                        | <a href="http://github.com/defunkt/mustache/blob/6a6ab8361218d9c0a565950c3b81d1a026a02208/lib/mustache.rb#L70" target="_blank" class="github_url">on GitHub</a>
                         
                     </p>
                     <div id="M000019_source" class="dyn-source">
-                        <pre><span class="ruby-comment cmt"># File lib/mustache.rb, line 147</span>
-  <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">template_file</span>
-    <span class="ruby-ivar">@template_file</span> <span class="ruby-operator">||=</span> <span class="ruby-identifier">path</span> <span class="ruby-operator">+</span> <span class="ruby-value str">'/'</span> <span class="ruby-operator">+</span> <span class="ruby-identifier">underscore</span>(<span class="ruby-identifier">to_s</span>) <span class="ruby-operator">+</span> <span class="ruby-value str">'.'</span> <span class="ruby-operator">+</span> <span class="ruby-identifier">template_extension</span>
+                        <pre><span class="ruby-comment cmt"># File lib/mustache.rb, line 70</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">template_path</span>
+    <span class="ruby-ivar">@template_path</span> <span class="ruby-operator">||</span> <span class="ruby-value str">'.'</span>
   <span class="ruby-keyword kw">end</span></pre>
                     </div>
                 </div>
@@ -480,7 +651,7 @@ Dashboard would have a template (relative to the path) of dashboard.html
             <div class="method">
                 <div class="title" id="M000020">
                     
-                    <a name="M000020"></a><b>template_file=</b>(template_file)
+                    <a name="M000020"></a><b>template_path=</b>(path)
                     
                 </div>
                 
@@ -491,13 +662,13 @@ Dashboard would have a template (relative to the path) of dashboard.html
                     <p class="source-link">
                         Source: <a href="javascript:toggleSource('M000020_source')" id="l_M000020_source">show</a>
                         
-                        | <a href="http://github.com/defunkt/mustache/blob/1ad6ecd0ee56a7d8b0fe829d946b46532233f48a/lib/mustache.rb#L151" target="_blank" class="github_url">on GitHub</a>
+                        | <a href="http://github.com/defunkt/mustache/blob/6a6ab8361218d9c0a565950c3b81d1a026a02208/lib/mustache.rb#L74" target="_blank" class="github_url">on GitHub</a>
                         
                     </p>
                     <div id="M000020_source" class="dyn-source">
-                        <pre><span class="ruby-comment cmt"># File lib/mustache.rb, line 151</span>
-  <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">template_file=</span>(<span class="ruby-identifier">template_file</span>)
-    <span class="ruby-ivar">@template_file</span> = <span class="ruby-identifier">template_file</span>
+                        <pre><span class="ruby-comment cmt"># File lib/mustache.rb, line 74</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">template_path=</span>(<span class="ruby-identifier">path</span>)
+    <span class="ruby-ivar">@template_path</span> = <span class="ruby-constant">File</span>.<span class="ruby-identifier">expand_path</span>(<span class="ruby-identifier">path</span>)
   <span class="ruby-keyword kw">end</span></pre>
                     </div>
                 </div>
@@ -505,10 +676,19 @@ Dashboard would have a template (relative to the path) of dashboard.html
             </div>
             
             <div class="method">
-                <div class="title" id="M000027">
+                <div class="title" id="M000031">
                     
-                    <a name="M000027"></a><b>templateify</b>(obj)
+                    <a name="M000031"></a><b>templateify</b>(obj)
                     
+                </div>
+                
+                <div class="description">
+                  <p>
+Turns a string into a <a
+href="Mustache/Template.html">Mustache::Template</a>. If passed a <a
+href="Mustache/Template.html">Template</a>, returns it.
+</p>
+
                 </div>
                 
                 
@@ -516,15 +696,19 @@ Dashboard would have a template (relative to the path) of dashboard.html
                 
                 <div class="sourcecode">
                     <p class="source-link">
-                        Source: <a href="javascript:toggleSource('M000027_source')" id="l_M000027_source">show</a>
+                        Source: <a href="javascript:toggleSource('M000031_source')" id="l_M000031_source">show</a>
                         
-                        | <a href="http://github.com/defunkt/mustache/blob/1ad6ecd0ee56a7d8b0fe829d946b46532233f48a/lib/mustache.rb#L185" target="_blank" class="github_url">on GitHub</a>
+                        | <a href="http://github.com/defunkt/mustache/blob/6a6ab8361218d9c0a565950c3b81d1a026a02208/lib/mustache.rb#L135" target="_blank" class="github_url">on GitHub</a>
                         
                     </p>
-                    <div id="M000027_source" class="dyn-source">
-                        <pre><span class="ruby-comment cmt"># File lib/mustache.rb, line 185</span>
+                    <div id="M000031_source" class="dyn-source">
+                        <pre><span class="ruby-comment cmt"># File lib/mustache.rb, line 135</span>
   <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">templateify</span>(<span class="ruby-identifier">obj</span>)
-    <span class="ruby-identifier">obj</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">Template</span>) <span class="ruby-operator">?</span> <span class="ruby-identifier">obj</span> <span class="ruby-operator">:</span> <span class="ruby-constant">Template</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">obj</span>.<span class="ruby-identifier">to_s</span>, <span class="ruby-identifier">path</span>)
+    <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">obj</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">Template</span>)
+      <span class="ruby-identifier">obj</span>
+    <span class="ruby-keyword kw">else</span>
+      <span class="ruby-constant">Template</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">obj</span>.<span class="ruby-identifier">to_s</span>, <span class="ruby-identifier">template_path</span>, <span class="ruby-identifier">template_extension</span>)
+    <span class="ruby-keyword kw">end</span>
   <span class="ruby-keyword kw">end</span></pre>
                     </div>
                 </div>
@@ -532,9 +716,77 @@ Dashboard would have a template (relative to the path) of dashboard.html
             </div>
             
             <div class="method">
-                <div class="title" id="M000025">
+                <div class="title" id="M000017">
                     
-                    <a name="M000025"></a><b>underscore</b>(classified)
+                    <a name="M000017"></a><b>to_html</b>(*args)
+                    
+                </div>
+                
+                <div class="description">
+                  <p>
+Alias for `render`
+</p>
+
+                </div>
+                
+                
+                
+                
+                <div class="sourcecode">
+                    <p class="source-link">
+                        Source: <a href="javascript:toggleSource('M000017_source')" id="l_M000017_source">show</a>
+                        
+                        | <a href="http://github.com/defunkt/mustache/blob/6a6ab8361218d9c0a565950c3b81d1a026a02208/lib/mustache.rb#L59" target="_blank" class="github_url">on GitHub</a>
+                        
+                    </p>
+                    <div id="M000017_source" class="dyn-source">
+                        <pre><span class="ruby-comment cmt"># File lib/mustache.rb, line 59</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">to_html</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">args</span>)
+    <span class="ruby-identifier">render</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">args</span>)
+  <span class="ruby-keyword kw">end</span></pre>
+                    </div>
+                </div>
+                
+            </div>
+            
+            <div class="method">
+                <div class="title" id="M000018">
+                    
+                    <a name="M000018"></a><b>to_text</b>(*args)
+                    
+                </div>
+                
+                <div class="description">
+                  <p>
+Alias for `render`
+</p>
+
+                </div>
+                
+                
+                
+                
+                <div class="sourcecode">
+                    <p class="source-link">
+                        Source: <a href="javascript:toggleSource('M000018_source')" id="l_M000018_source">show</a>
+                        
+                        | <a href="http://github.com/defunkt/mustache/blob/6a6ab8361218d9c0a565950c3b81d1a026a02208/lib/mustache.rb#L64" target="_blank" class="github_url">on GitHub</a>
+                        
+                    </p>
+                    <div id="M000018_source" class="dyn-source">
+                        <pre><span class="ruby-comment cmt"># File lib/mustache.rb, line 64</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">to_text</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">args</span>)
+    <span class="ruby-identifier">render</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">args</span>)
+  <span class="ruby-keyword kw">end</span></pre>
+                    </div>
+                </div>
+                
+            </div>
+            
+            <div class="method">
+                <div class="title" id="M000030">
+                    
+                    <a name="M000030"></a><b>underscore</b>(classified)
                     
                 </div>
                 
@@ -550,13 +802,13 @@ TemplatePartial => template_partial
                 
                 <div class="sourcecode">
                     <p class="source-link">
-                        Source: <a href="javascript:toggleSource('M000025_source')" id="l_M000025_source">show</a>
+                        Source: <a href="javascript:toggleSource('M000030_source')" id="l_M000030_source">show</a>
                         
-                        | <a href="http://github.com/defunkt/mustache/blob/1ad6ecd0ee56a7d8b0fe829d946b46532233f48a/lib/mustache.rb#L174" target="_blank" class="github_url">on GitHub</a>
+                        | <a href="http://github.com/defunkt/mustache/blob/6a6ab8361218d9c0a565950c3b81d1a026a02208/lib/mustache.rb#L127" target="_blank" class="github_url">on GitHub</a>
                         
                     </p>
-                    <div id="M000025_source" class="dyn-source">
-                        <pre><span class="ruby-comment cmt"># File lib/mustache.rb, line 174</span>
+                    <div id="M000030_source" class="dyn-source">
+                        <pre><span class="ruby-comment cmt"># File lib/mustache.rb, line 127</span>
   <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">underscore</span>(<span class="ruby-identifier">classified</span>)
     <span class="ruby-identifier">string</span> = <span class="ruby-identifier">classified</span>.<span class="ruby-identifier">dup</span>.<span class="ruby-identifier">split</span>(<span class="ruby-value str">'::'</span>).<span class="ruby-identifier">last</span>
     <span class="ruby-identifier">string</span>[<span class="ruby-value">0</span>] = <span class="ruby-identifier">string</span>[<span class="ruby-value">0</span>].<span class="ruby-identifier">chr</span>.<span class="ruby-identifier">downcase</span>
@@ -570,15 +822,19 @@ TemplatePartial => template_partial
             <div class="sectiontitle">Instance Public methods</div>
             
             <div class="method">
-                <div class="title" id="M000032">
+                <div class="title" id="M000042">
                     
-                    <a name="M000032"></a><b>[]</b>(key)
+                    <a name="M000042"></a><b>[]</b>(key)
                     
                 </div>
                 
                 <div class="description">
                   <p>
-<a href="Mustache/Context.html">Context</a> accessors
+<a href="Mustache/Context.html">Context</a> accessors.
+</p>
+<p>
+view = Mustache.new view[:name] = &#8220;Jon&#8221; view.template =
+&#8220;Hi, {{name}}!&#8221; view.render # => &#8220;Hi, Jon!&#8220;
 </p>
 
                 </div>
@@ -588,13 +844,13 @@ TemplatePartial => template_partial
                 
                 <div class="sourcecode">
                     <p class="source-link">
-                        Source: <a href="javascript:toggleSource('M000032_source')" id="l_M000032_source">show</a>
+                        Source: <a href="javascript:toggleSource('M000042_source')" id="l_M000042_source">show</a>
                         
-                        | <a href="http://github.com/defunkt/mustache/blob/1ad6ecd0ee56a7d8b0fe829d946b46532233f48a/lib/mustache.rb#L215" target="_blank" class="github_url">on GitHub</a>
+                        | <a href="http://github.com/defunkt/mustache/blob/6a6ab8361218d9c0a565950c3b81d1a026a02208/lib/mustache.rb#L202" target="_blank" class="github_url">on GitHub</a>
                         
                     </p>
-                    <div id="M000032_source" class="dyn-source">
-                        <pre><span class="ruby-comment cmt"># File lib/mustache.rb, line 215</span>
+                    <div id="M000042_source" class="dyn-source">
+                        <pre><span class="ruby-comment cmt"># File lib/mustache.rb, line 202</span>
   <span class="ruby-keyword kw">def</span> <span class="ruby-operator">[]</span>(<span class="ruby-identifier">key</span>)
     <span class="ruby-identifier">context</span>[<span class="ruby-identifier">key</span>.<span class="ruby-identifier">to_sym</span>]
   <span class="ruby-keyword kw">end</span></pre>
@@ -604,9 +860,9 @@ TemplatePartial => template_partial
             </div>
             
             <div class="method">
-                <div class="title" id="M000033">
+                <div class="title" id="M000043">
                     
-                    <a name="M000033"></a><b>[]=</b>(key, value)
+                    <a name="M000043"></a><b>[]=</b>(key, value)
                     
                 </div>
                 
@@ -615,13 +871,13 @@ TemplatePartial => template_partial
                 
                 <div class="sourcecode">
                     <p class="source-link">
-                        Source: <a href="javascript:toggleSource('M000033_source')" id="l_M000033_source">show</a>
+                        Source: <a href="javascript:toggleSource('M000043_source')" id="l_M000043_source">show</a>
                         
-                        | <a href="http://github.com/defunkt/mustache/blob/1ad6ecd0ee56a7d8b0fe829d946b46532233f48a/lib/mustache.rb#L219" target="_blank" class="github_url">on GitHub</a>
+                        | <a href="http://github.com/defunkt/mustache/blob/6a6ab8361218d9c0a565950c3b81d1a026a02208/lib/mustache.rb#L206" target="_blank" class="github_url">on GitHub</a>
                         
                     </p>
-                    <div id="M000033_source" class="dyn-source">
-                        <pre><span class="ruby-comment cmt"># File lib/mustache.rb, line 219</span>
+                    <div id="M000043_source" class="dyn-source">
+                        <pre><span class="ruby-comment cmt"># File lib/mustache.rb, line 206</span>
   <span class="ruby-keyword kw">def</span> <span class="ruby-operator">[]=</span>(<span class="ruby-identifier">key</span>, <span class="ruby-identifier">value</span>)
     <span class="ruby-identifier">context</span>[<span class="ruby-identifier">key</span>.<span class="ruby-identifier">to_sym</span>] = <span class="ruby-identifier">value</span>
   <span class="ruby-keyword kw">end</span></pre>
@@ -631,9 +887,9 @@ TemplatePartial => template_partial
             </div>
             
             <div class="method">
-                <div class="title" id="M000031">
+                <div class="title" id="M000041">
                     
-                    <a name="M000031"></a><b>context</b>()
+                    <a name="M000041"></a><b>context</b>()
                     
                 </div>
                 
@@ -651,13 +907,13 @@ want access to the hash currently being iterated over.
                 
                 <div class="sourcecode">
                     <p class="source-link">
-                        Source: <a href="javascript:toggleSource('M000031_source')" id="l_M000031_source">show</a>
+                        Source: <a href="javascript:toggleSource('M000041_source')" id="l_M000041_source">show</a>
                         
-                        | <a href="http://github.com/defunkt/mustache/blob/1ad6ecd0ee56a7d8b0fe829d946b46532233f48a/lib/mustache.rb#L210" target="_blank" class="github_url">on GitHub</a>
+                        | <a href="http://github.com/defunkt/mustache/blob/6a6ab8361218d9c0a565950c3b81d1a026a02208/lib/mustache.rb#L192" target="_blank" class="github_url">on GitHub</a>
                         
                     </p>
-                    <div id="M000031_source" class="dyn-source">
-                        <pre><span class="ruby-comment cmt"># File lib/mustache.rb, line 210</span>
+                    <div id="M000041_source" class="dyn-source">
+                        <pre><span class="ruby-comment cmt"># File lib/mustache.rb, line 192</span>
   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">context</span>
     <span class="ruby-ivar">@context</span> <span class="ruby-operator">||=</span> <span class="ruby-constant">Context</span>.<span class="ruby-identifier">new</span>(<span class="ruby-keyword kw">self</span>)
   <span class="ruby-keyword kw">end</span></pre>
@@ -667,50 +923,9 @@ want access to the hash currently being iterated over.
             </div>
             
             <div class="method">
-                <div class="title" id="M000030">
+                <div class="title" id="M000044">
                     
-                    <a name="M000030"></a><b>debug</b>()
-                    
-                </div>
-                
-                <div class="description">
-                  <p>
-Pass a block to `debug` with your debug putses. Set the `DEBUG` env
-variable when you want to run those blocks.
-</p>
-<p>
-e.g.
-</p>
-<pre>
- debug { puts @context.inspect }
-</pre>
-
-                </div>
-                
-                
-                
-                
-                <div class="sourcecode">
-                    <p class="source-link">
-                        Source: <a href="javascript:toggleSource('M000030_source')" id="l_M000030_source">show</a>
-                        
-                        | <a href="http://github.com/defunkt/mustache/blob/1ad6ecd0ee56a7d8b0fe829d946b46532233f48a/lib/mustache.rb#L203" target="_blank" class="github_url">on GitHub</a>
-                        
-                    </p>
-                    <div id="M000030_source" class="dyn-source">
-                        <pre><span class="ruby-comment cmt"># File lib/mustache.rb, line 203</span>
-  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">debug</span>
-    <span class="ruby-keyword kw">yield</span> <span class="ruby-keyword kw">if</span> <span class="ruby-constant">ENV</span>[<span class="ruby-value str">'DEBUG'</span>]
-  <span class="ruby-keyword kw">end</span></pre>
-                    </div>
-                </div>
-                
-            </div>
-            
-            <div class="method">
-                <div class="title" id="M000034">
-                    
-                    <a name="M000034"></a><b>render</b>(data = template, ctx = {})
+                    <a name="M000044"></a><b>render</b>(data = template, ctx = {})
                     
                 </div>
                 
@@ -726,13 +941,9 @@ special {{tags}} and {{sections}}replaced{{/sections}}.
                 <div class="aka">
                     This method is also aliased as
                     
-                    <a href="Mustache.html#M000035">to_html</a>
+                    <a href="Mustache.html#M000045">to_html</a>
                     
-                    <a href="Mustache.html#M000036">to_text</a>
-                    
-                    <a href="Mustache.html#M000037">to_html</a>
-                    
-                    <a href="Mustache.html#M000038">to_text</a>
+                    <a href="Mustache.html#M000046">to_text</a>
                     
                 </div>
                 
@@ -740,15 +951,15 @@ special {{tags}} and {{sections}}replaced{{/sections}}.
                 
                 <div class="sourcecode">
                     <p class="source-link">
-                        Source: <a href="javascript:toggleSource('M000034_source')" id="l_M000034_source">show</a>
+                        Source: <a href="javascript:toggleSource('M000044_source')" id="l_M000044_source">show</a>
                         
-                        | <a href="http://github.com/defunkt/mustache/blob/1ad6ecd0ee56a7d8b0fe829d946b46532233f48a/lib/mustache.rb#L225" target="_blank" class="github_url">on GitHub</a>
+                        | <a href="http://github.com/defunkt/mustache/blob/6a6ab8361218d9c0a565950c3b81d1a026a02208/lib/mustache.rb#L212" target="_blank" class="github_url">on GitHub</a>
                         
                     </p>
-                    <div id="M000034_source" class="dyn-source">
-                        <pre><span class="ruby-comment cmt"># File lib/mustache.rb, line 225</span>
+                    <div id="M000044_source" class="dyn-source">
+                        <pre><span class="ruby-comment cmt"># File lib/mustache.rb, line 212</span>
   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">render</span>(<span class="ruby-identifier">data</span> = <span class="ruby-identifier">template</span>, <span class="ruby-identifier">ctx</span> = {})
-    <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">class</span>.<span class="ruby-identifier">templateify</span>(<span class="ruby-identifier">data</span>).<span class="ruby-identifier">render</span>(<span class="ruby-identifier">context</span>.<span class="ruby-identifier">update</span>(<span class="ruby-identifier">ctx</span>))
+    <span class="ruby-identifier">templateify</span>(<span class="ruby-identifier">data</span>).<span class="ruby-identifier">render</span>(<span class="ruby-identifier">context</span>.<span class="ruby-identifier">update</span>(<span class="ruby-identifier">ctx</span>))
   <span class="ruby-keyword kw">end</span></pre>
                     </div>
                 </div>
@@ -756,17 +967,10 @@ special {{tags}} and {{sections}}replaced{{/sections}}.
             </div>
             
             <div class="method">
-                <div class="title" id="M000028">
+                <div class="title" id="M000039">
                     
-                    <a name="M000028"></a><b>template</b>()
+                    <a name="M000039"></a><b>template</b>()
                     
-                </div>
-                
-                <div class="description">
-                  <p>
-The template itself. You can override this if you&#8217;d like.
-</p>
-
                 </div>
                 
                 
@@ -774,15 +978,15 @@ The template itself. You can override this if you&#8217;d like.
                 
                 <div class="sourcecode">
                     <p class="source-link">
-                        Source: <a href="javascript:toggleSource('M000028_source')" id="l_M000028_source">show</a>
+                        Source: <a href="javascript:toggleSource('M000039_source')" id="l_M000039_source">show</a>
                         
-                        | <a href="http://github.com/defunkt/mustache/blob/1ad6ecd0ee56a7d8b0fe829d946b46532233f48a/lib/mustache.rb#L190" target="_blank" class="github_url">on GitHub</a>
+                        | <a href="http://github.com/defunkt/mustache/blob/6a6ab8361218d9c0a565950c3b81d1a026a02208/lib/mustache.rb#L181" target="_blank" class="github_url">on GitHub</a>
                         
                     </p>
-                    <div id="M000028_source" class="dyn-source">
-                        <pre><span class="ruby-comment cmt"># File lib/mustache.rb, line 190</span>
+                    <div id="M000039_source" class="dyn-source">
+                        <pre><span class="ruby-comment cmt"># File lib/mustache.rb, line 181</span>
   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">template</span>
-    <span class="ruby-ivar">@template</span> <span class="ruby-operator">||=</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">class</span>.<span class="ruby-identifier">template</span>
+    <span class="ruby-ivar">@template</span> <span class="ruby-operator">||</span> <span class="ruby-identifier">templateify</span>(<span class="ruby-constant">File</span>.<span class="ruby-identifier">read</span>(<span class="ruby-identifier">template_file</span>))
   <span class="ruby-keyword kw">end</span></pre>
                     </div>
                 </div>
@@ -790,9 +994,9 @@ The template itself. You can override this if you&#8217;d like.
             </div>
             
             <div class="method">
-                <div class="title" id="M000029">
+                <div class="title" id="M000040">
                     
-                    <a name="M000029"></a><b>template=</b>(template)
+                    <a name="M000040"></a><b>template=</b>(template)
                     
                 </div>
                 
@@ -801,15 +1005,15 @@ The template itself. You can override this if you&#8217;d like.
                 
                 <div class="sourcecode">
                     <p class="source-link">
-                        Source: <a href="javascript:toggleSource('M000029_source')" id="l_M000029_source">show</a>
+                        Source: <a href="javascript:toggleSource('M000040_source')" id="l_M000040_source">show</a>
                         
-                        | <a href="http://github.com/defunkt/mustache/blob/1ad6ecd0ee56a7d8b0fe829d946b46532233f48a/lib/mustache.rb#L194" target="_blank" class="github_url">on GitHub</a>
+                        | <a href="http://github.com/defunkt/mustache/blob/6a6ab8361218d9c0a565950c3b81d1a026a02208/lib/mustache.rb#L185" target="_blank" class="github_url">on GitHub</a>
                         
                     </p>
-                    <div id="M000029_source" class="dyn-source">
-                        <pre><span class="ruby-comment cmt"># File lib/mustache.rb, line 194</span>
+                    <div id="M000040_source" class="dyn-source">
+                        <pre><span class="ruby-comment cmt"># File lib/mustache.rb, line 185</span>
   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">template=</span>(<span class="ruby-identifier">template</span>)
-    <span class="ruby-ivar">@template</span> = <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">class</span>.<span class="ruby-identifier">templateify</span>(<span class="ruby-identifier">template</span>)
+    <span class="ruby-ivar">@template</span> = <span class="ruby-identifier">templateify</span>(<span class="ruby-identifier">template</span>)
   <span class="ruby-keyword kw">end</span></pre>
                     </div>
                 </div>
@@ -819,43 +1023,217 @@ The template itself. You can override this if you&#8217;d like.
             <div class="method">
                 <div class="title" id="M000035">
                     
-                    <a name="M000035"></a><b>to_html</b>(data = template, ctx = {})
+                    <a name="M000035"></a><b>template_extension</b>()
                     
                 </div>
                 
-                <div class="description">
-                  <p>
-Alias for <a href="Mustache.html#M000016">render</a>
-</p>
-
+                
+                
+                
+                <div class="sourcecode">
+                    <p class="source-link">
+                        Source: <a href="javascript:toggleSource('M000035_source')" id="l_M000035_source">show</a>
+                        
+                        | <a href="http://github.com/defunkt/mustache/blob/6a6ab8361218d9c0a565950c3b81d1a026a02208/lib/mustache.rb#L164" target="_blank" class="github_url">on GitHub</a>
+                        
+                    </p>
+                    <div id="M000035_source" class="dyn-source">
+                        <pre><span class="ruby-comment cmt"># File lib/mustache.rb, line 164</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">template_extension</span>
+    <span class="ruby-ivar">@template_extension</span> <span class="ruby-operator">||</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">class</span>.<span class="ruby-identifier">template_extension</span>
+  <span class="ruby-keyword kw">end</span></pre>
+                    </div>
                 </div>
-                
-                
-                
-            </div>
-            
-            <div class="method">
-                <div class="title" id="M000037">
-                    
-                    <a name="M000037"></a><b>to_html</b>(data = template, ctx = {})
-                    
-                </div>
-                
-                <div class="description">
-                  <p>
-Alias for <a href="Mustache.html#M000016">render</a>
-</p>
-
-                </div>
-                
-                
                 
             </div>
             
             <div class="method">
                 <div class="title" id="M000036">
                     
-                    <a name="M000036"></a><b>to_text</b>(data = template, ctx = {})
+                    <a name="M000036"></a><b>template_extension=</b>(template_extension)
+                    
+                </div>
+                
+                
+                
+                
+                <div class="sourcecode">
+                    <p class="source-link">
+                        Source: <a href="javascript:toggleSource('M000036_source')" id="l_M000036_source">show</a>
+                        
+                        | <a href="http://github.com/defunkt/mustache/blob/6a6ab8361218d9c0a565950c3b81d1a026a02208/lib/mustache.rb#L168" target="_blank" class="github_url">on GitHub</a>
+                        
+                    </p>
+                    <div id="M000036_source" class="dyn-source">
+                        <pre><span class="ruby-comment cmt"># File lib/mustache.rb, line 168</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">template_extension=</span>(<span class="ruby-identifier">template_extension</span>)
+    <span class="ruby-ivar">@template_extension</span> = <span class="ruby-identifier">template_extension</span>
+  <span class="ruby-keyword kw">end</span></pre>
+                    </div>
+                </div>
+                
+            </div>
+            
+            <div class="method">
+                <div class="title" id="M000037">
+                    
+                    <a name="M000037"></a><b>template_file</b>()
+                    
+                </div>
+                
+                
+                
+                
+                <div class="sourcecode">
+                    <p class="source-link">
+                        Source: <a href="javascript:toggleSource('M000037_source')" id="l_M000037_source">show</a>
+                        
+                        | <a href="http://github.com/defunkt/mustache/blob/6a6ab8361218d9c0a565950c3b81d1a026a02208/lib/mustache.rb#L172" target="_blank" class="github_url">on GitHub</a>
+                        
+                    </p>
+                    <div id="M000037_source" class="dyn-source">
+                        <pre><span class="ruby-comment cmt"># File lib/mustache.rb, line 172</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">template_file</span>
+    <span class="ruby-keyword kw">return</span> <span class="ruby-ivar">@template_file</span> <span class="ruby-keyword kw">if</span> <span class="ruby-ivar">@template_file</span>
+    <span class="ruby-node">&quot;#{template_path}/#{Mustache.underscore(self.class.name)}.#{template_extension}&quot;</span>
+  <span class="ruby-keyword kw">end</span></pre>
+                    </div>
+                </div>
+                
+            </div>
+            
+            <div class="method">
+                <div class="title" id="M000038">
+                    
+                    <a name="M000038"></a><b>template_file=</b>(template_file)
+                    
+                </div>
+                
+                
+                
+                
+                <div class="sourcecode">
+                    <p class="source-link">
+                        Source: <a href="javascript:toggleSource('M000038_source')" id="l_M000038_source">show</a>
+                        
+                        | <a href="http://github.com/defunkt/mustache/blob/6a6ab8361218d9c0a565950c3b81d1a026a02208/lib/mustache.rb#L177" target="_blank" class="github_url">on GitHub</a>
+                        
+                    </p>
+                    <div id="M000038_source" class="dyn-source">
+                        <pre><span class="ruby-comment cmt"># File lib/mustache.rb, line 177</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">template_file=</span>(<span class="ruby-identifier">template_file</span>)
+    <span class="ruby-ivar">@template_file</span> = <span class="ruby-identifier">template_file</span>
+  <span class="ruby-keyword kw">end</span></pre>
+                    </div>
+                </div>
+                
+            </div>
+            
+            <div class="method">
+                <div class="title" id="M000033">
+                    
+                    <a name="M000033"></a><b>template_path</b>()
+                    
+                </div>
+                
+                <div class="description">
+                  <p>
+Instance level settings
+</p>
+
+                </div>
+                
+                
+                
+                
+                <div class="sourcecode">
+                    <p class="source-link">
+                        Source: <a href="javascript:toggleSource('M000033_source')" id="l_M000033_source">show</a>
+                        
+                        | <a href="http://github.com/defunkt/mustache/blob/6a6ab8361218d9c0a565950c3b81d1a026a02208/lib/mustache.rb#L156" target="_blank" class="github_url">on GitHub</a>
+                        
+                    </p>
+                    <div id="M000033_source" class="dyn-source">
+                        <pre><span class="ruby-comment cmt"># File lib/mustache.rb, line 156</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">template_path</span>
+    <span class="ruby-ivar">@template_path</span> <span class="ruby-operator">||</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">class</span>.<span class="ruby-identifier">template_path</span>
+  <span class="ruby-keyword kw">end</span></pre>
+                    </div>
+                </div>
+                
+            </div>
+            
+            <div class="method">
+                <div class="title" id="M000034">
+                    
+                    <a name="M000034"></a><b>template_path=</b>(template_path)
+                    
+                </div>
+                
+                
+                
+                
+                <div class="sourcecode">
+                    <p class="source-link">
+                        Source: <a href="javascript:toggleSource('M000034_source')" id="l_M000034_source">show</a>
+                        
+                        | <a href="http://github.com/defunkt/mustache/blob/6a6ab8361218d9c0a565950c3b81d1a026a02208/lib/mustache.rb#L160" target="_blank" class="github_url">on GitHub</a>
+                        
+                    </p>
+                    <div id="M000034_source" class="dyn-source">
+                        <pre><span class="ruby-comment cmt"># File lib/mustache.rb, line 160</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">template_path=</span>(<span class="ruby-identifier">template_path</span>)
+    <span class="ruby-ivar">@template_path</span> = <span class="ruby-identifier">template_path</span>
+  <span class="ruby-keyword kw">end</span></pre>
+                    </div>
+                </div>
+                
+            </div>
+            
+            <div class="method">
+                <div class="title" id="M000032">
+                    
+                    <a name="M000032"></a><b>templateify</b>(obj)
+                    
+                </div>
+                
+                <div class="description">
+                  <p>
+Instance version.Turns a string into a <a
+href="Mustache/Template.html">Mustache::Template</a>. If passed a <a
+href="Mustache/Template.html">Template</a>,
+</p>
+
+                </div>
+                
+                
+                
+                
+                <div class="sourcecode">
+                    <p class="source-link">
+                        Source: <a href="javascript:toggleSource('M000032_source')" id="l_M000032_source">show</a>
+                        
+                        | <a href="http://github.com/defunkt/mustache/blob/6a6ab8361218d9c0a565950c3b81d1a026a02208/lib/mustache.rb#L144" target="_blank" class="github_url">on GitHub</a>
+                        
+                    </p>
+                    <div id="M000032_source" class="dyn-source">
+                        <pre><span class="ruby-comment cmt"># File lib/mustache.rb, line 144</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">templateify</span>(<span class="ruby-identifier">obj</span>)
+    <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">obj</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">Template</span>)
+      <span class="ruby-identifier">obj</span>
+    <span class="ruby-keyword kw">else</span>
+      <span class="ruby-constant">Template</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">obj</span>.<span class="ruby-identifier">to_s</span>, <span class="ruby-identifier">template_path</span>, <span class="ruby-identifier">template_extension</span>)
+    <span class="ruby-keyword kw">end</span>
+  <span class="ruby-keyword kw">end</span></pre>
+                    </div>
+                </div>
+                
+            </div>
+            
+            <div class="method">
+                <div class="title" id="M000045">
+                    
+                    <a name="M000045"></a><b>to_html</b>(data = template, ctx = {})
                     
                 </div>
                 
@@ -871,9 +1249,9 @@ Alias for <a href="Mustache.html#M000016">render</a>
             </div>
             
             <div class="method">
-                <div class="title" id="M000038">
+                <div class="title" id="M000046">
                     
-                    <a name="M000038"></a><b>to_text</b>(data = template, ctx = {})
+                    <a name="M000046"></a><b>to_text</b>(data = template, ctx = {})
                     
                 </div>
                 

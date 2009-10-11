@@ -27,12 +27,22 @@
         </h1>
         <ul class="files">
             
-            <li><a href="../../files/lib/mustache_rb.html">lib/mustache.rb</a></li>
+            <li><a href="../../files/lib/mustache/context_rb.html">lib/mustache/context.rb</a></li>
             
         </ul>
     </div>
     <div id="bodyContent">
         <div id="content">
+    
+    <div class="description">
+        <p>
+A <a href="Context.html">Context</a> represents the context which a <a
+href="../Mustache.html">Mustache</a> template is executed within. All <a
+href="../Mustache.html">Mustache</a> tags reference keys in the <a
+href="Context.html">Context</a>.
+</p>
+
+    </div>
     
 
     
@@ -49,7 +59,7 @@
         <dd>
             <ul>
                 
-                <li><a href="#M000015">[]</a></li>
+                <li><a href="#M000001">[]</a></li>
                 
             </ul>
         </dd>
@@ -58,7 +68,7 @@
         <dd>
             <ul>
                 
-                <li><a href="#M000014">new</a></li>
+                <li><a href="#M000000">new</a></li>
                 
             </ul>
         </dd>
@@ -80,9 +90,9 @@
             <div class="sectiontitle">Class Public methods</div>
             
             <div class="method">
-                <div class="title" id="M000014">
+                <div class="title" id="M000000">
                     
-                    <a name="M000014"></a><b>new</b>(mustache)
+                    <a name="M000000"></a><b>new</b>(mustache)
                     
                 </div>
                 
@@ -91,13 +101,13 @@
                 
                 <div class="sourcecode">
                     <p class="source-link">
-                        Source: <a href="javascript:toggleSource('M000014_source')" id="l_M000014_source">show</a>
+                        Source: <a href="javascript:toggleSource('M000000_source')" id="l_M000000_source">show</a>
                         
-                        | <a href="http://github.com/defunkt/mustache/blob/1ad6ecd0ee56a7d8b0fe829d946b46532233f48a/lib/mustache.rb#L108" target="_blank" class="github_url">on GitHub</a>
+                        | <a href="http://github.com/defunkt/mustache/blob/d545a3e0497caff3e2002f83e0a6a5033408dcc3/lib/mustache/context.rb#L5" target="_blank" class="github_url">on GitHub</a>
                         
                     </p>
-                    <div id="M000014_source" class="dyn-source">
-                        <pre><span class="ruby-comment cmt"># File lib/mustache.rb, line 108</span>
+                    <div id="M000000_source" class="dyn-source">
+                        <pre><span class="ruby-comment cmt"># File lib/mustache/context.rb, line 5</span>
     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">initialize</span>(<span class="ruby-identifier">mustache</span>)
       <span class="ruby-ivar">@mustache</span> = <span class="ruby-identifier">mustache</span>
       <span class="ruby-keyword kw">super</span>()
@@ -110,9 +120,9 @@
             <div class="sectiontitle">Instance Public methods</div>
             
             <div class="method">
-                <div class="title" id="M000015">
+                <div class="title" id="M000001">
                     
-                    <a name="M000015"></a><b>[]</b>(name)
+                    <a name="M000001"></a><b>[]</b>(name)
                     
                 </div>
                 
@@ -121,20 +131,20 @@
                 
                 <div class="sourcecode">
                     <p class="source-link">
-                        Source: <a href="javascript:toggleSource('M000015_source')" id="l_M000015_source">show</a>
+                        Source: <a href="javascript:toggleSource('M000001_source')" id="l_M000001_source">show</a>
                         
-                        | <a href="http://github.com/defunkt/mustache/blob/1ad6ecd0ee56a7d8b0fe829d946b46532233f48a/lib/mustache.rb#L113" target="_blank" class="github_url">on GitHub</a>
+                        | <a href="http://github.com/defunkt/mustache/blob/d545a3e0497caff3e2002f83e0a6a5033408dcc3/lib/mustache/context.rb#L10" target="_blank" class="github_url">on GitHub</a>
                         
                     </p>
-                    <div id="M000015_source" class="dyn-source">
-                        <pre><span class="ruby-comment cmt"># File lib/mustache.rb, line 113</span>
+                    <div id="M000001_source" class="dyn-source">
+                        <pre><span class="ruby-comment cmt"># File lib/mustache/context.rb, line 10</span>
     <span class="ruby-keyword kw">def</span> <span class="ruby-operator">[]</span>(<span class="ruby-identifier">name</span>)
       <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">has_key?</span>(<span class="ruby-identifier">name</span>)
         <span class="ruby-keyword kw">super</span>
       <span class="ruby-keyword kw">elsif</span> <span class="ruby-ivar">@mustache</span>.<span class="ruby-identifier">respond_to?</span>(<span class="ruby-identifier">name</span>)
         <span class="ruby-ivar">@mustache</span>.<span class="ruby-identifier">send</span>(<span class="ruby-identifier">name</span>)
       <span class="ruby-keyword kw">else</span>
-        <span class="ruby-identifier">raise</span> <span class="ruby-node">&quot;Can't find #{name} in #{inspect}&quot;</span>
+        <span class="ruby-identifier">raise</span> <span class="ruby-node">&quot;Can't find #{name} in #{@mustache.inspect}&quot;</span>
       <span class="ruby-keyword kw">end</span>
     <span class="ruby-keyword kw">end</span></pre>
                     </div>

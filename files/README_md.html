@@ -19,7 +19,7 @@
         </h1>
         <ul class="files">
             <li>README.md</li>
-            <li>Last modified: Thu Oct 08 20:40:50 -0700 2009</li>
+            <li>Last modified: Sat Oct 10 18:22:00 -0700 2009</li>
         </ul>
     </div>
 
@@ -29,10 +29,8 @@
     <div class="description">
         <h1>Mustache</h1>
 
-<p>Inspired by <a href="http://code.google.com/p/google-ctemplate/">ctemplate</a>
-and
-<a href="http://www.ivan.fomichev.name/2008/05/erlang-template-engine-prototype.html">et</a>,
-Mustache is a framework-agnostic way to render logic-free views.</p>
+<p>Inspired by <a href="http://code.google.com/p/google-ctemplate/">ctemplate</a> and <a href="http://www.ivan.fomichev.name/2008/05/erlang-template-engine-prototype.html">et</a>, Mustache is a
+framework-agnostic way to render logic-free views.</p>
 
 <p>As ctemplates says, "It emphasizes separating logic from presentation:
 it is impossible to embed application logic in this template language."</p>
@@ -107,7 +105,7 @@ Well, ${{taxed_value}}, after taxes.
 <p>This template references our view methods. To bring it all together,
 here's the code to render actual HTML;</p>
 
-<pre><code>Simple.new.to_html
+<pre><code>Simple.render
 </code></pre>
 
 <p>Which returns the following:</p>
@@ -212,7 +210,7 @@ You have just won ${{value}}!
 <pre><code>dict = Dict.new
 dict[:name] = 'George'
 dict[:value] = 100
-dict.to_html
+dict.render
 </code></pre>
 
 <p>Which returns:</p>
@@ -224,7 +222,7 @@ You have just won $100!
 <p>We can re-use the same object, too:</p>
 
 <pre><code>dict[:name] = 'Tony'
-dict.to_html
+dict.render
 Hello Tony
 You have just won $100!
 </code></pre>
@@ -334,7 +332,7 @@ end
 
 <p>Now:</p>
 
-<pre><code>Simple.new(request.ssl?).to_html
+<pre><code>Simple.new(request.ssl?).render
 </code></pre>
 
 <p>Convoluted but you get the idea.</p>
@@ -345,6 +343,9 @@ end
 <code>lib/mustache/sinatra.rb</code> or
 <a href="http://defunkt.github.com/mustache/classes/Mustache/Sinatra.html">http://defunkt.github.com/mustache/classes/Mustache/Sinatra.html</a> for
 complete documentation.</p>
+
+<p>An example Sinatra application is also provided:
+<a href="http://github.com/defunkt/mustache-sinatra-example">http://github.com/defunkt/mustache-sinatra-example</a></p>
 
 <h2>Installation</h2>
 

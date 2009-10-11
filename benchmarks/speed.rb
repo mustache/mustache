@@ -43,9 +43,9 @@ content = File.read(ComplexView.template_file)
 
 unless ENV['CACHED']
   bench '{ w/o caching' do
-    tpl = ComplexView.new
-    tpl.template = content
-    tpl[:item] = items
-    tpl.to_html
+    ctpl = ComplexView.new
+    ctpl.template = content
+    ctpl[:item] = items
+    ctpl.to_html
   end
 end

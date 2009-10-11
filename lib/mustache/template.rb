@@ -11,9 +11,10 @@ class Mustache
   class Template
     # Expects a Mustache template as a string along with a template
     # path, which it uses to find partials.
-    def initialize(source, template_path)
+    def initialize(source, template_path = '.', template_extension = 'html')
       @source = source
       @template_path = template_path
+      @template_extension = template_extension
       @tmpid = 0
     end
 
@@ -92,7 +93,7 @@ class Mustache
       if Object.const_defined?(klass)
         ev("#{klass}.render")
       else
-        src = File.read(@template_path + '/' + name + '.html')
+        src = File.read("#{@template_path}/#{name}.#{@template_extension}")
         compile(src)[1..-2]
       end
     end

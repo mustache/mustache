@@ -169,15 +169,6 @@ class Mustache
     @template = self.class.templateify(template)
   end
 
-  # Pass a block to `debug` with your debug putses. Set the `DEBUG`
-  # env variable when you want to run those blocks.
-  #
-  # e.g.
-  #  debug { puts @context.inspect }
-  def debug
-    yield if ENV['DEBUG']
-  end
-
   # A helper method which gives access to the context at a given time.
   # Kind of a hack for now, but useful when you're in an iterating section
   # and want access to the hash currently being iterated over.

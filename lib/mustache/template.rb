@@ -76,7 +76,7 @@ class Mustache
         when '!'
           # ignore comments
         when '='
-          @open_tag, @close_tag = $2.strip.split(' ', 2)
+          self.otag, self.ctag = $2.strip.split(' ', 2)
         when '<'
           res << compile_partial($2.strip)
         when '{'
@@ -112,12 +112,20 @@ class Mustache
 
     # {{ - opening tag delimiter
     def otag
-      Regexp.escape(@open_tag || "{{")
+      @otag ||= Regexp.escape('{{')
+    end
+
+    def otag=(tag)
+      @otag = Regexp.escape(tag)
     end
 
     # }} - closing tag delimiter
     def ctag
-      Regexp.escape(@close_tag || "}}")
+      @ctag ||= Regexp.escape('}}')
+    end
+
+    def ctag=(tag)
+      @ctag = Regexp.escape(tag)
     end
 
     # {{}} - an escaped tag

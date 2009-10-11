@@ -1,3 +1,5 @@
+require 'cgi'
+
 class Mustache
   # A Template is a compiled version of a Mustache template.
   #
@@ -105,7 +107,7 @@ class Mustache
 
     # {{}} - an escaped tag
     def etag(s)
-      ev("Mustache.escape(ctx[#{s.strip.to_sym.inspect}])")
+      ev("CGI.escapeHTML(ctx[#{s.strip.to_sym.inspect}].to_s)")
     end
 
     # {{{}}} - an unescaped tag

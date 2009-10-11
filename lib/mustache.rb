@@ -1,4 +1,3 @@
-require 'cgi'
 require 'mustache/template'
 require 'mustache/context'
 
@@ -126,11 +125,6 @@ class Mustache
     string = classified.dup.split('::').last
     string[0] = string[0].chr.downcase
     string.gsub(/[A-Z]/) { |s| "_#{s.downcase}"}
-  end
-
-  # Escape HTML.
-  def self.escape(string)
-    CGI.escapeHTML(string.to_s)
   end
 
   # Turns a string into a Mustache::Template. If passed a Template,

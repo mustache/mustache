@@ -65,13 +65,13 @@ You shouldn&#8217;t use this class directly.
         <dd>
             <ul>
                 
-                <li><a href="#M000006">compile</a>,</li>
+                <li><a href="#M000007">compile</a>,</li>
                 
                 <li><a href="#M000010">compile_partial</a>,</li>
                 
-                <li><a href="#M000007">compile_sections</a>,</li>
+                <li><a href="#M000008">compile_sections</a>,</li>
                 
-                <li><a href="#M000008">compile_tags</a></li>
+                <li><a href="#M000009">compile_tags</a></li>
                 
             </ul>
         </dd>
@@ -91,7 +91,7 @@ You shouldn&#8217;t use this class directly.
         <dd>
             <ul>
                 
-                <li><a href="#M000004">new</a></li>
+                <li><a href="#M000005">new</a></li>
                 
             </ul>
         </dd>
@@ -100,7 +100,7 @@ You shouldn&#8217;t use this class directly.
         <dd>
             <ul>
                 
-                <li><a href="#M000005">render</a></li>
+                <li><a href="#M000006">render</a></li>
                 
             </ul>
         </dd>
@@ -149,9 +149,9 @@ You shouldn&#8217;t use this class directly.
             <div class="sectiontitle">Class Public methods</div>
             
             <div class="method">
-                <div class="title" id="M000004">
+                <div class="title" id="M000005">
                     
-                    <a name="M000004"></a><b>new</b>(source, template_path = '.', template_extension = 'html')
+                    <a name="M000005"></a><b>new</b>(source, template_path = '.', template_extension = 'html')
                     
                 </div>
                 
@@ -168,12 +168,12 @@ along with a template path, which it uses to find partials.
                 
                 <div class="sourcecode">
                     <p class="source-link">
-                        Source: <a href="javascript:toggleSource('M000004_source')" id="l_M000004_source">show</a>
+                        Source: <a href="javascript:toggleSource('M000005_source')" id="l_M000005_source">show</a>
                         
                         | <a href="http://github.com/defunkt/mustache/blob/ff81e91bce3e01ab7810bbfa0b53cc071570a3ba/lib/mustache/template.rb#L14" target="_blank" class="github_url">on GitHub</a>
                         
                     </p>
-                    <div id="M000004_source" class="dyn-source">
+                    <div id="M000005_source" class="dyn-source">
                         <pre><span class="ruby-comment cmt"># File lib/mustache/template.rb, line 14</span>
     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">initialize</span>(<span class="ruby-identifier">source</span>, <span class="ruby-identifier">template_path</span> = <span class="ruby-value str">'.'</span>, <span class="ruby-identifier">template_extension</span> = <span class="ruby-value str">'html'</span>)
       <span class="ruby-ivar">@source</span> = <span class="ruby-identifier">source</span>
@@ -189,9 +189,9 @@ along with a template path, which it uses to find partials.
             <div class="sectiontitle">Instance Public methods</div>
             
             <div class="method">
-                <div class="title" id="M000006">
+                <div class="title" id="M000007">
                     
-                    <a name="M000006"></a><b>compile</b>(src = @source)
+                    <a name="M000007"></a><b>compile</b>(src = @source)
                     
                 </div>
                 
@@ -209,12 +209,12 @@ interpolation-friendly Ruby string.
                 
                 <div class="sourcecode">
                     <p class="source-link">
-                        Source: <a href="javascript:toggleSource('M000006_source')" id="l_M000006_source">show</a>
+                        Source: <a href="javascript:toggleSource('M000007_source')" id="l_M000007_source">show</a>
                         
                         | <a href="http://github.com/defunkt/mustache/blob/ff81e91bce3e01ab7810bbfa0b53cc071570a3ba/lib/mustache/template.rb#L38" target="_blank" class="github_url">on GitHub</a>
                         
                     </p>
-                    <div id="M000006_source" class="dyn-source">
+                    <div id="M000007_source" class="dyn-source">
                         <pre><span class="ruby-comment cmt"># File lib/mustache/template.rb, line 38</span>
     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">compile</span>(<span class="ruby-identifier">src</span> = <span class="ruby-ivar">@source</span>)
       <span class="ruby-node">&quot;\&quot;#{compile_sections(src)}\&quot;&quot;</span>
@@ -265,9 +265,9 @@ Partials are basically a way to render views from inside other views.
             </div>
             
             <div class="method">
-                <div class="title" id="M000007">
+                <div class="title" id="M000008">
                     
-                    <a name="M000007"></a><b>compile_sections</b>(src)
+                    <a name="M000008"></a><b>compile_sections</b>(src)
                     
                 </div>
                 
@@ -288,12 +288,12 @@ return value is iterated over (a `for` loop).
                 
                 <div class="sourcecode">
                     <p class="source-link">
-                        Source: <a href="javascript:toggleSource('M000007_source')" id="l_M000007_source">show</a>
+                        Source: <a href="javascript:toggleSource('M000008_source')" id="l_M000008_source">show</a>
                         
                         | <a href="http://github.com/defunkt/mustache/blob/ff81e91bce3e01ab7810bbfa0b53cc071570a3ba/lib/mustache/template.rb#L48" target="_blank" class="github_url">on GitHub</a>
                         
                     </p>
-                    <div id="M000007_source" class="dyn-source">
+                    <div id="M000008_source" class="dyn-source">
                         <pre><span class="ruby-comment cmt"># File lib/mustache/template.rb, line 48</span>
     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">compile_sections</span>(<span class="ruby-identifier">src</span>)
       <span class="ruby-identifier">res</span> = <span class="ruby-value str">&quot;&quot;</span>
@@ -317,9 +317,9 @@ return value is iterated over (a `for` loop).
             </div>
             
             <div class="method">
-                <div class="title" id="M000008">
+                <div class="title" id="M000009">
                     
-                    <a name="M000008"></a><b>compile_tags</b>(src)
+                    <a name="M000009"></a><b>compile_tags</b>(src)
                     
                 </div>
                 
@@ -350,12 +350,12 @@ of tags:
                 
                 <div class="sourcecode">
                     <p class="source-link">
-                        Source: <a href="javascript:toggleSource('M000008_source')" id="l_M000008_source">show</a>
+                        Source: <a href="javascript:toggleSource('M000009_source')" id="l_M000009_source">show</a>
                         
                         | <a href="http://github.com/defunkt/mustache/blob/ff81e91bce3e01ab7810bbfa0b53cc071570a3ba/lib/mustache/template.rb#L71" target="_blank" class="github_url">on GitHub</a>
                         
                     </p>
-                    <div id="M000008_source" class="dyn-source">
+                    <div id="M000009_source" class="dyn-source">
                         <pre><span class="ruby-comment cmt"># File lib/mustache/template.rb, line 71</span>
     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">compile_tags</span>(<span class="ruby-identifier">src</span>)
       <span class="ruby-identifier">res</span> = <span class="ruby-value str">&quot;&quot;</span>
@@ -450,9 +450,9 @@ string.
             </div>
             
             <div class="method">
-                <div class="title" id="M000005">
+                <div class="title" id="M000006">
                     
-                    <a name="M000005"></a><b>render</b>(context)
+                    <a name="M000006"></a><b>render</b>(context)
                     
                 </div>
                 
@@ -470,12 +470,12 @@ symbols.
                 
                 <div class="sourcecode">
                     <p class="source-link">
-                        Source: <a href="javascript:toggleSource('M000005_source')" id="l_M000005_source">show</a>
+                        Source: <a href="javascript:toggleSource('M000006_source')" id="l_M000006_source">show</a>
                         
                         | <a href="http://github.com/defunkt/mustache/blob/ff81e91bce3e01ab7810bbfa0b53cc071570a3ba/lib/mustache/template.rb#L23" target="_blank" class="github_url">on GitHub</a>
                         
                     </p>
-                    <div id="M000005_source" class="dyn-source">
+                    <div id="M000006_source" class="dyn-source">
                         <pre><span class="ruby-comment cmt"># File lib/mustache/template.rb, line 23</span>
     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">render</span>(<span class="ruby-identifier">context</span>)
       <span class="ruby-comment cmt"># Compile our Mustache template into a Ruby string</span>

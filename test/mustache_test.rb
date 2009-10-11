@@ -23,7 +23,7 @@ end_passenger
   end
 
   def test_complex_view
-    assert_equal <<-end_complex, ComplexView.to_html
+    assert_equal <<-end_complex, ComplexView.render
 <h1>Colors</h1>
   <ul>
       <li><strong>red</strong></li>
@@ -34,7 +34,7 @@ end_complex
   end
 
   def test_simple
-    assert_equal <<-end_simple, Simple.to_html
+    assert_equal <<-end_simple, Simple.render
 Hello Chris
 You have just won $10000!
 Well, $6000.0, after taxes.
@@ -47,7 +47,7 @@ end_simple
     view[:value] = '4000'
     view[:in_ca] = false
 
-    assert_equal <<-end_simple, view.to_html
+    assert_equal <<-end_simple, view.render
 Hello Bob
 You have just won $4000!
 end_simple
@@ -62,7 +62,7 @@ end_simple
       { :taxed_value => 3 },
     ]
 
-    assert_equal <<-end_simple, view.to_html
+    assert_equal <<-end_simple, view.render
 Hello Crazy
 You have just won $10000!
 Well, $1, after taxes.
@@ -76,11 +76,11 @@ end_simple
     view.template = 'Hi {{person}}!'
     view[:person]  = 'mom'
 
-    assert_equal 'Hi mom!', view.to_html
+    assert_equal 'Hi mom!', view.render
   end
 
   def test_view_partial
-    assert_equal <<-end_partial.strip, ViewPartial.to_html
+    assert_equal <<-end_partial.strip, ViewPartial.render
 <h1>Welcome</h1>
 Hello Chris
 You have just won $10000!
@@ -91,22 +91,22 @@ end_partial
   end
 
   def test_template_partial
-    assert_equal <<-end_partial.strip, TemplatePartial.to_html
+    assert_equal <<-end_partial.strip, TemplatePartial.render
 <h1>Welcome</h1>
 Again, Welcome!
 end_partial
   end
 
   def test_comments
-    assert_equal "<h1>A Comedy of Errors</h1>\n", Comments.to_html
+    assert_equal "<h1>A Comedy of Errors</h1>\n", Comments.render
   end
 
   def test_escaped
-    assert_equal '<h1>Bear &gt; Shark</h1>', Escaped.to_html
+    assert_equal '<h1>Bear &gt; Shark</h1>', Escaped.render
   end
 
   def test_unescaped
-    assert_equal '<h1>Bear > Shark</h1>', Unescaped.to_html
+    assert_equal '<h1>Bear > Shark</h1>', Unescaped.render
   end
 
   def test_classify
@@ -138,8 +138,8 @@ end_partial
 </VirtualHost>
 data
     template = File.read("examples/passenger.conf")
-    assert_equal expected, Mustache.render(template, :stage => 'production', 
-                                                     :server => 'example.com', 
+    assert_equal expected, Mustache.render(template, :stage => 'production',
+                                                     :server => 'example.com',
                                                      :deploy_to => '/var/www/example.com' )
   end
 

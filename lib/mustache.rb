@@ -80,6 +80,7 @@ class Mustache
 
   def self.template_path=(path)
     @template_path = File.expand_path(path)
+    @template = nil
   end
 
   # Alias for `template_path`
@@ -99,6 +100,7 @@ class Mustache
 
   def self.template_extension=(template_extension)
     @template_extension = template_extension
+    @template = nil
   end
 
   # The template file is the absolute path of the file Mustache will
@@ -109,6 +111,7 @@ class Mustache
 
   def self.template_file=(template_file)
     @template_file = template_file
+    @template = nil
   end
 
   # The template is the actual string Mustache uses as its template.

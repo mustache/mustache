@@ -129,6 +129,11 @@ end_partial
     assert_equal 'template_partial', Mustache.underscore('TemplatePartial')
   end
 
+  def test_anon_subclass_underscore
+    klass = Class.new(TemplatePartial)
+    assert_equal 'template_partial', klass.underscore
+  end
+
   def test_namespaced_underscore
     assert_equal 'stat_stuff', Mustache.underscore('Views::StatStuff')
   end

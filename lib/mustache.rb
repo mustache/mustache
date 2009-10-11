@@ -124,7 +124,11 @@ class Mustache
   end
 
   # TemplatePartial => template_partial
-  def self.underscore(classified)
+  # Takes a string but defaults to using the current class' name.
+  def self.underscore(classified = name)
+    classified = name if classified.to_s.empty?
+    classified = superclass.name if classified.to_s.empty?
+
     string = classified.dup.split('::').last
     string[0] = string[0].chr.downcase
     string.gsub(/[A-Z]/) { |s| "_#{s.downcase}"}

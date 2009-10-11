@@ -15,8 +15,10 @@ unless ENV['NOERB']
     erb.result(ComplexView.new.send(:binding))
   end
 
-  bench 'ERB w/o caching' do
-    ERB.new(template).result(ComplexView.new.send(:binding))
+  unless ENV['CACHED']
+    bench 'ERB w/o caching' do
+      ERB.new(template).result(ComplexView.new.send(:binding))
+    end
   end
 end
 
@@ -35,14 +37,14 @@ items << { :name => 'blue', :current => false, :url => '#Blue' }
 
 tpl[:item] = items
 
-bench '{ w/ caching' do
+bench '{   w/ caching' do
   tpl.to_html
 end
 
 content = File.read(ComplexView.template_file)
 
 unless ENV['CACHED']
-  bench '{ w/o caching' do
+  bench '{   w/o caching' do
     ctpl = ComplexView.new
     ctpl.template = content
     ctpl[:item] = items

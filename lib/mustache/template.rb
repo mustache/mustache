@@ -47,7 +47,7 @@ class Mustache
     # If enumerable, the return value is iterated over (a `for` loop).
     def compile_sections(src)
       res = ""
-      while src =~ /^\s*\{\{\#(.+)\}\}\n*(.+)^\s*\{\{\/\1\}\}\n*/m
+      while src =~ /^\s*#{otag}\#(.+)#{ctag}\n*(.+)^\s*#{otag}\/\1#{ctag}\n*/m
         # $` = The string to the left of the last successful match
         res << compile_tags($`)
         name = $1.strip.to_sym.inspect
@@ -70,11 +70,13 @@ class Mustache
     # 4. Partial tags - {{< partial_name }}
     def compile_tags(src)
       res = ""
-      while src =~ /\{\{(!|<|\{)?([^\/#]+?)\1?\}\}+/
+      while src =~ /#{otag}(=|!|<|\{)?([^\/#]+?)\1?#{ctag}+/
         res << str($`)
         case $1
         when '!'
           # ignore comments
+        when '='
+          @open_tag, @close_tag = $2.strip.split(' ', 2)
         when '<'
           res << compile_partial($2.strip)
         when '{'
@@ -106,6 +108,16 @@ class Mustache
     # Get a (hopefully) literal version of an object, sans quotes
     def str(s)
       s.inspect[1..-2]
+    end
+
+    # {{ - opening tag delimiter
+    def otag
+      Regexp.escape(@open_tag || "{{")
+    end
+
+    # }} - closing tag delimiter
+    def ctag
+      Regexp.escape(@close_tag || "}}")
     end
 
     # {{}} - an escaped tag

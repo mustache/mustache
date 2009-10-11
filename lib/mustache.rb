@@ -1,7 +1,56 @@
 require 'cgi'
 
+# Mustache is the base class from which your Mustache subclasses
+# should inherit (though it can be used on its own).
+#
+# The typical Mustache workflow is as follows:
+#
+# * Create a Mustache subclass: class Stats < Mustache
+# * Create a template: stats.html
+# * Instantiate an instance: view = Stats.new
+# * Render that instance: view.render
+#
+# You can skip the instantiation by calling `Stats.render` directly.
+#
+# While Mustache will do its best to load and render a template for
+# you, this process is completely customizable using a few options.
+#
+# All settings can be overriden at either the class or instance
+# level. For example, going with the above example, we can do either
+# `Stats.templates_path = "/usr/local/templates"` or
+# `view.templates_path = "/usr/local/templates"`
+#
+# Here are the available options:
+#
+# * templates_path
+#
+# The `templates_path` setting determines the path Mustache uses when
+# looking for a template. By default it is "."
+# Setting it to /usr/local/templates, for example, means (given all
+# other settings are default) a Mustache subclass `Stats` will try to
+# load /usr/local/templates/stats.html
+#
+# * template_extension
+#
+# The `template_extension` is the extension Mustache uses when looking
+# for template files. By default it is "html"
+#
+# * template_file
+#
+# You can tell Mustache exactly which template to us with this
+# setting. It can be a relative or absolute path.
+#
+# * template
+#
+# Sometimes you want Mustache to render a string, not a file. In those
+# cases you may set the `template` setting. For example:
+#
+#   >> Mustache.render("Hello {{planet}}", :planet => "World!")
+#   => "Hello World!"
+#
 class Mustache
   # A Template is a compiled version of a Mustache template.
+  # asdasdsa
   class Template
     def initialize(source, template_path)
       @source = source

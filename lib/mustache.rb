@@ -17,14 +17,14 @@ require 'cgi'
 #
 # All settings can be overriden at either the class or instance
 # level. For example, going with the above example, we can do either
-# `Stats.templates_path = "/usr/local/templates"` or
-# `view.templates_path = "/usr/local/templates"`
+# `Stats.template_path = "/usr/local/templates"` or
+# `view.template_path = "/usr/local/templates"`
 #
 # Here are the available options:
 #
-# * templates_path
+# * template_path
 #
-# The `templates_path` setting determines the path Mustache uses when
+# The `template_path` setting determines the path Mustache uses when
 # looking for a template. By default it is "."
 # Setting it to /usr/local/templates, for example, means (given all
 # other settings are default) a Mustache subclass `Stats` will try to
@@ -50,20 +50,33 @@ require 'cgi'
 #
 class Mustache
   # A Template is a compiled version of a Mustache template.
-  # asdasdsa
+  #
+  # The idea is this: when handed a Mustache template, convert it into
+  # a Ruby string by transforming Mustache tags into interpolated
+  # Ruby.
+  #
+  # You shouldn't use this class directly.
   class Template
+    # Expects a Mustache template as a string along with a template
+    # path, which it uses to find partials.
     def initialize(source, template_path)
       @source = source
       @template_path = template_path
       @tmpid = 0
     end
 
+    # Renders the `@source` Mustache template using the given
+    # `context`, which should be a simple hash keyed with symbols.
     def render(context)
-      class << self; self; end.class_eval <<-EOF, __FILE__, __LINE__ - 1
-        def render(ctx)
-          #{compile}
-        end
-      EOF
+      # Compile our Mustache template into a Ruby string
+      compiled = "def render(ctx) #{compile} end"
+
+      # Here we rewrite ourself with the interpolated Ruby version of
+      # our Mustache template so subsequent calls are very fast and
+      # can skip the compilation stage.
+      instance_eval(compiled, __FILE__, __LINE__ - 1)
+
+      # Call the newly rewritten version of #render
       render(context)
     end
 
@@ -71,24 +84,24 @@ class Mustache
       "\"#{compile_sections(src)}\""
     end
 
-  ## private
-
     # {{#sections}}okay{{/sections}}
     #
     # Sections can return true, false, or an enumerable.
     # If true, the section is displayed.
     # If false, the section is not displayed.
-    # If enumerable, the return value is iterated over (a for loop).
+    # If enumerable, the return value is iterated over (a `for` loop).
     def compile_sections(src)
       res = ""
       while src =~ /^\s*\{\{\#(.+)\}\}\n*(.+)^\s*\{\{\/\1\}\}\n*/m
+        # $` = The string to the left of the last successful match
         res << compile_tags($`)
         name = $1.strip.to_sym.inspect
         code = compile($2)
         ctxtmp = "ctx#{tmpid}"
         res << ev("(v = ctx[#{name}]) ? v.respond_to?(:each) ? "\
-          "(#{ctxtmp}=ctx.dup; r=v.map{|h|ctx.merge!(h);#{code}}.join; "\
+          "(#{ctxtmp}=ctx.dup; r=v.map{|h|ctx.update(h);#{code}}.join; "\
           "ctx.replace(#{ctxtmp});r) : #{code} : ''")
+        # $' = The string to the right of the last successful match
         src = $'
       end
       res << compile_tags(src)
@@ -130,28 +143,35 @@ class Mustache
       end
     end
 
-    # Generate a temporary id.
+    # Generate a temporary id, used when compiling code.
     def tmpid
       @tmpid += 1
     end
 
+    # Get a (hopefully) literal version of an object, sans quotes
     def str(s)
       s.inspect[1..-2]
     end
 
+    # {{}} - an escaped tag
     def etag(s)
       ev("Mustache.escape(ctx[#{s.strip.to_sym.inspect}])")
     end
 
+    # {{{}}} - an unescaped tag
     def utag(s)
       ev("ctx[#{s.strip.to_sym.inspect}]")
     end
 
+    # An interpolation-friendly version of a string, for use within a
+    # Ruby string.
     def ev(s)
       "#\{#{s}}"
     end
   end
 
+  # A Context represents the context which a Mustache template is
+  # executed within. All Mustache tags reference keys in the Context.
   class Context < Hash
     def initialize(mustache)
       @mustache = mustache
@@ -164,7 +184,7 @@ class Mustache
       elsif @mustache.respond_to?(name)
         @mustache.send(name)
       else
-        raise "Can't find #{name} in #{inspect}"
+        raise "Can't find #{name} in #{@mustache.inspect}"
       end
     end
   end
@@ -174,37 +194,32 @@ class Mustache
     new.render(*args)
   end
 
+  # Alias for `render`
+  def self.to_html(*args)
+    render(*args)
+  end
+
+  # Alias for `render`
+  def self.to_text(*args)
+    render(*args)
+  end
+
+  # The template path informs your Mustache subclass where to look for its
+  # corresponding template. By default it's the current directory (".")
+  def self.template_path
+    @template_path ||= '.'
+  end
+
+  def self.template_path=(path)
+    @template_path = File.expand_path(path)
+  end
+
   class << self
-    alias_method :to_html, :render
-    alias_method :to_text, :render
+    alias_method :path=, :template_path=
+    alias_method :path,  :template_path
   end
 
-  # The path informs your Mustache subclass where to look for its
-  # corresponding template.
-  def self.path=(path)
-    @path = File.expand_path(path)
-  end
-
-  def self.path
-    @path || '.'
-  end
-
-  # Templates are self.class.name.underscore + extension -- a class of
-  # Dashboard would have a template (relative to the path) of
-  # dashboard.html
-  def self.template_file
-    @template_file ||= path + '/' + underscore(to_s) + '.' + template_extension
-  end
-
-  def self.template_file=(template_file)
-    @template_file = template_file
-  end
-
-  def self.template
-    @template ||= templateify(File.read(template_file))
-  end
-
-  # Default extension is 'html'
+  # A Mustache template's default extension is 'html'
   def self.template_extension
     @template_extension ||= 'html'
   end
@@ -213,9 +228,30 @@ class Mustache
     @template_extension = template_extension
   end
 
+  # The template file is the absolute path of the file Mustache will
+  # use as its template. By default it's ./class_name.html
+  def self.template_file
+    @template_file ||= "#{template_path}/#{underscore(to_s)}.#{template_extension}"
+  end
+
+  def self.template_file=(template_file)
+    @template_file = template_file
+  end
+
+  # The template is the actual string Mustache uses as its template.
+  def self.template
+    @template ||= templateify(File.read(template_file))
+  end
+
+  def self.template=(template)
+    @template = templateify(template)
+  end
+
   # template_partial => TemplatePartial
   def self.classify(underscored)
-    underscored.split(/[-_]/).map { |part| part[0] = part[0].chr.upcase; part }.join
+    underscored.split(/[-_]/).map do |part|
+      part[0] = part[0].chr.upcase; part
+    end.join
   end
 
   # TemplatePartial => template_partial
@@ -230,11 +266,40 @@ class Mustache
     CGI.escapeHTML(string.to_s)
   end
 
+  # Turns a string into a Mustache::Template. If passed a Template,
+  # returns it.
   def self.templateify(obj)
-    obj.is_a?(Template) ? obj : Template.new(obj.to_s, path)
+    obj.is_a?(Template) ? obj : Template.new(obj.to_s, template_path)
   end
 
-  # The template itself. You can override this if you'd like.
+  #
+  # Instance level settings
+  #
+
+  def template_path
+    @template_path ||= self.class.template_path
+  end
+
+  def template_path=(template_path)
+    @template_path = template_path
+  end
+
+  def template_extension
+    @template_extension ||= self.class.template_extension
+  end
+
+  def template_extension=(template_extension)
+    @template_extension = template_extension
+  end
+
+  def template_file
+    @template_file ||= self.class.template_file
+  end
+
+  def template_file=(template_file)
+    @template_file = template_file
+  end
+
   def template
     @template ||= self.class.template
   end

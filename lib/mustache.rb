@@ -133,7 +133,20 @@ class Mustache
   # Turns a string into a Mustache::Template. If passed a Template,
   # returns it.
   def self.templateify(obj)
-    obj.is_a?(Template) ? obj : Template.new(obj.to_s, template_path)
+    if obj.is_a?(Template)
+      obj
+    else
+      Template.new(obj.to_s, template_path, template_extension)
+    end
+  end
+
+  # Instance version.Turns a string into a Mustache::Template. If passed a Template,
+  def templateify(obj)
+    if obj.is_a?(Template)
+      obj
+    else
+      Template.new(obj.to_s, template_path, template_extension)
+    end
   end
 
   #
@@ -166,11 +179,11 @@ class Mustache
   end
 
   def template
-    @template || self.class.templateify(File.read(template_file))
+    @template || templateify(File.read(template_file))
   end
 
   def template=(template)
-    @template = self.class.templateify(template)
+    @template = templateify(template)
   end
 
   # A helper method which gives access to the context at a given time.
@@ -197,7 +210,7 @@ class Mustache
   # Parses our fancy pants template file and returns normal file with
   # all special {{tags}} and {{#sections}}replaced{{/sections}}.
   def render(data = template, ctx = {})
-    self.class.templateify(data).render(context.update(ctx))
+    templateify(data).render(context.update(ctx))
   end
   alias_method :to_html, :render
   alias_method :to_text, :render

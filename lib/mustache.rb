@@ -157,7 +157,8 @@ class Mustache
   end
 
   def template_file
-    @template_file || self.class.template_file
+    return @template_file if @template_file
+    "#{template_path}/#{Mustache.underscore(self.class.name)}.#{template_extension}"
   end
 
   def template_file=(template_file)
@@ -165,7 +166,7 @@ class Mustache
   end
 
   def template
-    @template || self.class.template
+    @template || self.class.templateify(File.read(template_file))
   end
 
   def template=(template)

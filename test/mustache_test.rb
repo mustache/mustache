@@ -101,7 +101,7 @@ end_partial
     partial = TemplatePartial.new
     partial.template_extension = 'txt'
 
-    assert_equal <<-end_partial.strip, partial.render
+    assert_equal <<-end_partial.strip, partial.render.strip
 Welcome
 -------
 

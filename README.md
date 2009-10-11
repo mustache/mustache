@@ -206,11 +206,11 @@ follows the classic Ruby naming convention.
 
     TemplatePartial => ./template_partial.html
 
-You can set the search path using `Mustache.path`. It can be set on a
+You can set the search path using `Mustache.template_path`. It can be set on a
 class by class basis:
 
     class Simple < Mustache
-      self.path = File.dirname(__FILE__)
+      self.template_path = File.dirname(__FILE__)
       ... etc ...
     end
 
@@ -222,11 +222,18 @@ If you want to just change what template is used you can set
 
     Simple.template_file = './blah.html'
 
-You can also go ahead and set the template directly:
+Mustache also allows you to define the extension it'll use.
+
+    Simple.template_extension = 'xml'
+
+Given all other defaults, the above line will cause Mustache to look
+for './blah.xml'
+
+Feel free to set the template directly:
 
     Simple.template = 'Hi {{person}}!'
 
-You can also set a different template for only a single instance:
+Or set a different template for a single instance:
 
     Simple.new.template = 'Hi {{person}}!'
 

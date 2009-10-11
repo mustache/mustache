@@ -165,6 +165,31 @@ In this way partials can reference variables or sections the calling
 view defines.
 
 
+### Set Delimiter
+
+Set Delimiter tags start with an equal sign and change the tag
+delimiters from {{ and }} to custom strings.
+
+Consider the following contrived example:
+
+    * {{ default_tags }}
+    {{=<% %>=}}
+    * <% erb_style_tags %>
+    <%={{ }}=%>
+    * {{ default_tags_again }}
+
+Here we have a list with three items. The first item uses the default
+tag style, the second uses erb style as defined by the Set Delimiter
+tag, and the third returns to the default style after yet another Set
+Delimiter declaration.
+
+According to [ctemplates][3], this "is useful for languages like TeX, where
+double-braces may occur in the text and are awkward to use for
+markup."
+
+Custom delimiters may not contain whitespace or the equals sign.
+
+
 Dict-Style Views
 ----------------
 
@@ -354,3 +379,4 @@ Meta
 
 [1]: http://code.google.com/p/google-ctemplate/
 [2]: http://www.ivan.fomichev.name/2008/05/erlang-template-engine-prototype.html
+[3]: http://google-ctemplate.googlecode.com/svn/trunk/doc/howto.html

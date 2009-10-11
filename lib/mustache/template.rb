@@ -32,6 +32,8 @@ class Mustache
       render(context)
     end
 
+    # Does the dirty work of transforming a Mustache template into an
+    # interpolation-friendly Ruby string.
     def compile(src = @source)
       "\"#{compile_sections(src)}\""
     end

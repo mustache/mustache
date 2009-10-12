@@ -2,6 +2,8 @@
 
 * Improved error message when an enumerable section did not return all
   hashes.
+* Added a shortcut: if a section's value is a single hash, treat is as
+  a one element array whose value is the hash.
 
 ## 0.2.2 (2009-10-11)
 

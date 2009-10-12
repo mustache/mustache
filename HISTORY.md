@@ -7,6 +7,7 @@
 * Bugfix: String templates set at the class level were not compiled
 * Added a class-level `compiled?` method for checking if a template
   has been compiled.
+* Added an instance-level `compiled?` method.
 
 ## 0.2.2 (2009-10-11)
 

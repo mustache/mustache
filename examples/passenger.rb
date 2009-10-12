@@ -2,7 +2,6 @@ $LOAD_PATH.unshift File.dirname(__FILE__) + '/../lib'
 require 'mustache'
 
 class Passenger < Mustache
-
   self.path = File.dirname(__FILE__)
   self.template_extension = 'conf'
 
@@ -21,7 +20,6 @@ class Passenger < Mustache
   def timestamp
     Time.now.strftime('%Y%m%d%H%M%S')
   end
-
 end
 
 if $0 == __FILE__

@@ -11,7 +11,6 @@ require 'comments'
 require 'passenger'
 
 class MustacheTest < Test::Unit::TestCase
-
   def test_passenger
     assert_equal <<-end_passenger, Passenger.to_text
 <VirtualHost *>

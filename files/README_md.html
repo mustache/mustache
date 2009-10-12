@@ -19,7 +19,7 @@
         </h1>
         <ul class="files">
             <li>README.md</li>
-            <li>Last modified: Sun Oct 11 15:36:02 -0700 2009</li>
+            <li>Last modified: Sun Oct 11 18:07:05 -0700 2009</li>
         </ul>
     </div>
 
@@ -196,10 +196,10 @@ view defines.</p>
 <h2>Dict-Style Views</h2>
 
 <p>ctemplate and friends want you to hand a dictionary to the template
-processor. Naturally Mustache supports a similar concept. Feel free
-to mix the class-based and this more procedural style at your leisure.</p>
+processor. Mustache supports a similar concept. Feel free to mix the
+class-based and this more procedural style at your leisure.</p>
 
-<p>Given this template (dict.html):</p>
+<p>Given this template (winner.html):</p>
 
 <pre><code>Hello {{name}}
 You have just won ${{value}}!
@@ -207,10 +207,10 @@ You have just won ${{value}}!
 
 <p>We can fill in the values at will:</p>
 
-<pre><code>dict = Dict.new
-dict[:name] = 'George'
-dict[:value] = 100
-dict.render
+<pre><code>view = Winner.new
+view[:name] = 'George'
+view[:value] = 100
+view.render
 </code></pre>
 
 <p>Which returns:</p>
@@ -221,8 +221,8 @@ You have just won $100!
 
 <p>We can re-use the same object, too:</p>
 
-<pre><code>dict[:name] = 'Tony'
-dict.render
+<pre><code>view[:name] = 'Tony'
+view.render
 Hello Tony
 You have just won $100!
 </code></pre>

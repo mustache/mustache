@@ -200,9 +200,18 @@ data
     assert_equal '<li>1234</li>', instance.render.strip
   end
 
-  def test_knows_when_its_been_compiled
+  def test_knows_when_its_been_compiled_when_set_with_string
     assert ! Mustache.compiled?
     Mustache.template = 'Hi, {{person}}!'
     assert Mustache.compiled?
+  end
+
+  def test_knows_when_its_been_compiled_when_using_a_file_template
+    klass = Class.new(Simple)
+    klass.template_file = File.dirname(__FILE__) + '/../examples/simple.html'
+
+    assert ! klass.compiled?
+    klass.render
+    assert klass.compiled?
   end
 end

@@ -191,4 +191,12 @@ data
       instance.render
     end
   end
+
+  def test_enumerable_sections_accept_a_hash_as_a_context
+    instance = Mustache.new
+    instance[:list] = { :item => 1234 }
+    instance.template = '{{#list}} <li>{{item}}</li> {{/list}}'
+
+    assert_equal '<li>1234</li>', instance.render.strip
+  end
 end

@@ -55,7 +55,7 @@ class Mustache
         ctxtmp = "ctx#{tmpid}"
         res << ev(<<-compiled)
         if v = ctx[#{name}]
-          v = [v] if v.is_a?(Hash)
+          v = [v] if v.is_a?(Hash) # shortcut when passed a single hash
           if v.respond_to?(:each)
             #{ctxtmp} = ctx.dup
             begin

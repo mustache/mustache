@@ -1,3 +1,8 @@
+## 0.2.3 (2009-??-??)
+
+* Improved error message when an enumerable section did not return all
+  hashes.
+
 ## 0.2.2 (2009-10-11)
 
 * Improved documentation

@@ -9,6 +9,7 @@ require 'escaped'
 require 'unescaped'
 require 'comments'
 require 'passenger'
+require 'delimiters'
 
 class MustacheTest < Test::Unit::TestCase
   def test_passenger
@@ -131,6 +132,18 @@ Welcome
 end_partial
   end
 
+
+  def test_delimiters
+    assert_equal <<-end_partial, Delimiters.render
+
+* It worked the first time.
+
+* And it worked the second time.
+
+* Then, surprisingly, it worked the third time.
+end_partial
+  end
+
   def test_comments
     assert_equal "<h1>A Comedy of Errors</h1>\n", Comments.render
   end
@@ -181,5 +194,4 @@ data
                                                      :server => 'example.com',
                                                      :deploy_to => '/var/www/example.com' )
   end
-
 end

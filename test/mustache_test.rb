@@ -199,4 +199,10 @@ data
 
     assert_equal '<li>1234</li>', instance.render.strip
   end
+
+  def test_knows_when_its_been_compiled
+    assert ! Mustache.compiled?
+    Mustache.template = 'Hi, {{person}}!'
+    assert Mustache.compiled?
+  end
 end

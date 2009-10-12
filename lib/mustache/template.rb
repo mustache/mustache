@@ -57,7 +57,12 @@ class Mustache
         if v = ctx[#{name}]
           if v.respond_to?(:each)
             #{ctxtmp} = ctx.dup
-            r = v.map { |h| ctx.update(h); #{code} }.join
+            begin
+              r = v.map { |h| ctx.update(h); #{code} }.join
+            rescue TypeError => e
+              raise TypeError,
+                "All elements in {{#{name.to_s[1..-1]}}} are not hashes!"
+            end
             ctx.replace(#{ctxtmp})
             r
           else

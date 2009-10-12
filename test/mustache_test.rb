@@ -43,6 +43,17 @@ end_complex
 rendered
   end
 
+  def test_two_line_sections
+    html = %(<p class="flash-notice" {{# no_flash }}style="display: none;"\n{{/ no_flash }}>)
+
+    instance = Mustache.new
+    instance.template = html
+    instance[:no_flash] = true
+    assert_equal <<-rendered.strip, instance.render
+<p class="flash-notice" style="display: none;"\n>
+rendered
+  end
+
   def test_simple
     assert_equal <<-end_simple, Simple.render
 Hello Chris

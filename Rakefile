@@ -47,3 +47,16 @@ task :publish => [ :gemspec, :build ] do
   system "git clean -fd"
   exec "rake pages"
 end
+
+desc "Install the edge gem"
+task :install_edge => [ :dev_version, :gemspec, :build ] do
+  exec "gem install pkg/mustache-#{Mustache::Version}.gem"
+end
+
+# Sets the current Mustache version to the current dev version
+task :dev_version do
+  $LOAD_PATH.unshift 'lib/mustache'
+  require 'mustache/version'
+  version = Mustache::Version + '.' + Time.now.to_i.to_s
+  Mustache.const_set(:Version, version)
+end

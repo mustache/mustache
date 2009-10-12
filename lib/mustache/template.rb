@@ -53,9 +53,24 @@ class Mustache
         name = $1.strip.to_sym.inspect
         code = compile($2)
         ctxtmp = "ctx#{tmpid}"
-        res << ev("(v = ctx[#{name}]) ? v.respond_to?(:each) ? "\
-          "(#{ctxtmp}=ctx.dup; r=v.map{|h|ctx.update(h);#{code}}.join; "\
-          "ctx.replace(#{ctxtmp});r) : #{code} : ''")
+        res << ev(<<-compiled)
+        if v = ctx[#{name}]
+          v = [v] if v.is_a?(Hash) # shortcut when passed a single hash
+          if v.respond_to?(:each)
+            #{ctxtmp} = ctx.dup
+            begin
+              r = v.map { |h| ctx.update(h); #{code} }.join
+            rescue TypeError => e
+              raise TypeError,
+                "All elements in {{#{name.to_s[1..-1]}}} are not hashes!"
+            end
+            ctx.replace(#{ctxtmp})
+            r
+          else
+            #{code}
+          end
+        end
+        compiled
         # $' = The string to the right of the last successful match
         src = $'
       end

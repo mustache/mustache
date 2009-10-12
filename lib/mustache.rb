@@ -123,7 +123,18 @@ class Mustache
   end
 
   def self.template=(template)
-    @template = template
+    @template = templateify(template)
+  end
+
+  # Has this template already been compiled? Compilation is somewhat
+  # expensive so it may be useful to check this before attempting it.
+  def self.compiled?
+    @template.is_a? Template
+  end
+
+  # Has this instance or its class already compiled a template?
+  def compiled?
+    (@template && @template.is_a?(Template)) || self.class.compiled?
   end
 
   # template_partial => TemplatePartial

@@ -144,6 +144,24 @@ And this view code:
 When rendered, our view will contain a list of all repository names in
 the database.
 
+As a convenience, if a section returns a hash (as opposed to an array
+or a boolean) it will be treated as a single item array.
+
+With the above template, we could use this Ruby code for a single
+iteration:
+
+    def repo
+      { :name => Repository.first.to_s }
+    end
+
+This would be treated by Mustache as functionally equivalent to the
+following:
+
+    def repo
+      [ { :name => Repository.first.to_s } ]
+    end
+
+
 ### Comments
 
 Comments begin with a bang and are ignored. The following template:

@@ -2,6 +2,19 @@
 
 * Set Delimiter tags are now supported. See the README
 
+## 0.2.3 (2009-??-??)
+
+* Improved error message when an enumerable section did not return all
+  hashes.
+* Added a shortcut: if a section's value is a single hash, treat is as
+  a one element array whose value is the hash.
+* Bugfix: String templates set at the class level were not compiled
+* Added a class-level `compiled?` method for checking if a template
+  has been compiled.
+* Added an instance-level `compiled?` method.
+* Cache template compilation in Sinatra
+>>>>>>> master
+
 ## 0.2.2 (2009-10-11)
 
 * Improved documentation

@@ -201,9 +201,11 @@ data
   end
 
   def test_knows_when_its_been_compiled_when_set_with_string
-    assert ! Mustache.compiled?
-    Mustache.template = 'Hi, {{person}}!'
-    assert Mustache.compiled?
+    klass = Class.new(Mustache)
+
+    assert ! klass.compiled?
+    klass.template = 'Hi, {{person}}!'
+    assert klass.compiled?
   end
 
   def test_knows_when_its_been_compiled_when_using_a_file_template
@@ -213,5 +215,26 @@ data
     assert ! klass.compiled?
     klass.render
     assert klass.compiled?
+  end
+
+  def test_an_instance_knows_when_its_class_is_compiled
+    instance = Simple.new
+
+    assert ! Simple.compiled?
+    assert ! instance.compiled?
+
+    Simple.render
+
+    assert Simple.compiled?
+    assert instance.compiled?
+  end
+
+  def test_knows_when_its_been_compiled_at_the_instance_level
+    klass = Class.new(Mustache)
+    instance = klass.new
+
+    assert ! instance.compiled?
+    instance.template = 'Hi, {{person}}!'
+    assert instance.compiled?
   end
 end

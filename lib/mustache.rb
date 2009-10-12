@@ -132,6 +132,11 @@ class Mustache
     @template.is_a? Template
   end
 
+  # Has this instance or its class already compiled a template?
+  def compiled?
+    (@template && @template.is_a?(Template)) || self.class.compiled?
+  end
+
   # template_partial => TemplatePartial
   def self.classify(underscored)
     underscored.split(/[-_]/).map do |part|

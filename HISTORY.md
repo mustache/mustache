@@ -1,6 +1,9 @@
 ## 0.3.0 (2009-??-??)
 
 * Set Delimiter tags are now supported. See the README
+* Improved documentation
+* Fixed single line sections
+* Broke preserved indentation
 
 ## 0.2.1 (2009-10-11)
 

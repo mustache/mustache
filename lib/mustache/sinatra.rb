@@ -67,6 +67,9 @@ class Mustache
           require "#{file}".chomp('.rb')
           klass = namespace::Views.const_get(name)
 
+          # compile and cache the template
+          klass.template = data
+
         else
           # Still nothing. Use the stache.
           klass = Mustache
@@ -90,7 +93,7 @@ class Mustache
         # lets us use {{yield}} in layout.html to render the actual page.
         instance[:yield] = block.call if block
 
-        instance.template = data
+        instance.template = data unless instance.compiled?
         instance.to_html
       end
     end

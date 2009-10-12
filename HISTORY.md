@@ -8,6 +8,7 @@
 * Added a class-level `compiled?` method for checking if a template
   has been compiled.
 * Added an instance-level `compiled?` method.
+* Cache template compilation in Sinatra
 
 ## 0.2.2 (2009-10-11)
 

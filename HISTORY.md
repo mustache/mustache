@@ -1,9 +1,6 @@
 ## 0.3.0 (2009-??-??)
 
 * Set Delimiter tags are now supported. See the README
-
-## 0.2.3 (2009-??-??)
-
 * Improved error message when an enumerable section did not return all
   hashes.
 * Added a shortcut: if a section's value is a single hash, treat is as
@@ -13,7 +10,6 @@
   has been compiled.
 * Added an instance-level `compiled?` method.
 * Cache template compilation in Sinatra
->>>>>>> master
 
 ## 0.2.2 (2009-10-11)
 

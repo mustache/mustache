@@ -71,7 +71,11 @@ You shouldn&#8217;t use this class directly.
                 
                 <li><a href="#M000008">compile_sections</a>,</li>
                 
-                <li><a href="#M000009">compile_tags</a></li>
+                <li><a href="#M000009">compile_tags</a>,</li>
+                
+                <li><a href="#M000015">ctag</a>,</li>
+                
+                <li><a href="#M000016">ctag=</a></li>
                 
             </ul>
         </dd>
@@ -80,9 +84,9 @@ You shouldn&#8217;t use this class directly.
         <dd>
             <ul>
                 
-                <li><a href="#M000013">etag</a>,</li>
+                <li><a href="#M000017">etag</a>,</li>
                 
-                <li><a href="#M000016">ev</a></li>
+                <li><a href="#M000019">ev</a></li>
                 
             </ul>
         </dd>
@@ -92,6 +96,17 @@ You shouldn&#8217;t use this class directly.
             <ul>
                 
                 <li><a href="#M000005">new</a></li>
+                
+            </ul>
+        </dd>
+    
+        <dt>O</dt>
+        <dd>
+            <ul>
+                
+                <li><a href="#M000013">otag</a>,</li>
+                
+                <li><a href="#M000014">otag=</a></li>
                 
             </ul>
         </dd>
@@ -127,7 +142,7 @@ You shouldn&#8217;t use this class directly.
         <dd>
             <ul>
                 
-                <li><a href="#M000015">utag</a></li>
+                <li><a href="#M000018">utag</a></li>
                 
             </ul>
         </dd>
@@ -170,7 +185,7 @@ along with a template path, which it uses to find partials.
                     <p class="source-link">
                         Source: <a href="javascript:toggleSource('M000005_source')" id="l_M000005_source">show</a>
                         
-                        | <a href="http://github.com/defunkt/mustache/blob/176aa899ba4665429d89516c5c8a6d620cb09159/lib/mustache/template.rb#L14" target="_blank" class="github_url">on GitHub</a>
+                        | <a href="http://github.com/defunkt/mustache/blob/d2b84855ea08c363bb248d91ca44099ec289b65d/lib/mustache/template.rb#L14" target="_blank" class="github_url">on GitHub</a>
                         
                     </p>
                     <div id="M000005_source" class="dyn-source">
@@ -211,7 +226,7 @@ interpolation-friendly Ruby string.
                     <p class="source-link">
                         Source: <a href="javascript:toggleSource('M000007_source')" id="l_M000007_source">show</a>
                         
-                        | <a href="http://github.com/defunkt/mustache/blob/176aa899ba4665429d89516c5c8a6d620cb09159/lib/mustache/template.rb#L38" target="_blank" class="github_url">on GitHub</a>
+                        | <a href="http://github.com/defunkt/mustache/blob/d2b84855ea08c363bb248d91ca44099ec289b65d/lib/mustache/template.rb#L38" target="_blank" class="github_url">on GitHub</a>
                         
                     </p>
                     <div id="M000007_source" class="dyn-source">
@@ -245,11 +260,11 @@ Partials are basically a way to render views from inside other views.
                     <p class="source-link">
                         Source: <a href="javascript:toggleSource('M000010_source')" id="l_M000010_source">show</a>
                         
-                        | <a href="http://github.com/defunkt/mustache/blob/176aa899ba4665429d89516c5c8a6d620cb09159/lib/mustache/template.rb#L91" target="_blank" class="github_url">on GitHub</a>
+                        | <a href="http://github.com/defunkt/mustache/blob/d2b84855ea08c363bb248d91ca44099ec289b65d/lib/mustache/template.rb#L109" target="_blank" class="github_url">on GitHub</a>
                         
                     </p>
                     <div id="M000010_source" class="dyn-source">
-                        <pre><span class="ruby-comment cmt"># File lib/mustache/template.rb, line 91</span>
+                        <pre><span class="ruby-comment cmt"># File lib/mustache/template.rb, line 109</span>
     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">compile_partial</span>(<span class="ruby-identifier">name</span>)
       <span class="ruby-identifier">klass</span> = <span class="ruby-constant">Mustache</span>.<span class="ruby-identifier">classify</span>(<span class="ruby-identifier">name</span>)
       <span class="ruby-keyword kw">if</span> <span class="ruby-constant">Object</span>.<span class="ruby-identifier">const_defined?</span>(<span class="ruby-identifier">klass</span>)
@@ -290,22 +305,20 @@ return value is iterated over (a `for` loop).
                     <p class="source-link">
                         Source: <a href="javascript:toggleSource('M000008_source')" id="l_M000008_source">show</a>
                         
-                        | <a href="http://github.com/defunkt/mustache/blob/176aa899ba4665429d89516c5c8a6d620cb09159/lib/mustache/template.rb#L48" target="_blank" class="github_url">on GitHub</a>
+                        | <a href="http://github.com/defunkt/mustache/blob/d2b84855ea08c363bb248d91ca44099ec289b65d/lib/mustache/template.rb#L48" target="_blank" class="github_url">on GitHub</a>
                         
                     </p>
                     <div id="M000008_source" class="dyn-source">
                         <pre><span class="ruby-comment cmt"># File lib/mustache/template.rb, line 48</span>
     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">compile_sections</span>(<span class="ruby-identifier">src</span>)
       <span class="ruby-identifier">res</span> = <span class="ruby-value str">&quot;&quot;</span>
-      <span class="ruby-keyword kw">while</span> <span class="ruby-identifier">src</span> <span class="ruby-operator">=~</span> <span class="ruby-regexp re">/\{\{\#(.+)\}\}\s*(.+)\{\{\/\1\}\}\s*/</span><span class="ruby-identifier">m</span>
+      <span class="ruby-keyword kw">while</span> <span class="ruby-identifier">src</span> <span class="ruby-operator">=~</span> <span class="ruby-node">/#{otag}\#(.+)#{ctag}\s*(.+)#{otag}\/\1#{ctag}\s*/</span><span class="ruby-identifier">m</span>
         <span class="ruby-comment cmt"># $` = The string to the left of the last successful match</span>
         <span class="ruby-identifier">res</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">compile_tags</span>(<span class="ruby-identifier">$`</span>)
         <span class="ruby-identifier">name</span> = <span class="ruby-identifier">$1</span>.<span class="ruby-identifier">strip</span>.<span class="ruby-identifier">to_sym</span>.<span class="ruby-identifier">inspect</span>
         <span class="ruby-identifier">code</span> = <span class="ruby-identifier">compile</span>(<span class="ruby-identifier">$2</span>)
         <span class="ruby-identifier">ctxtmp</span> = <span class="ruby-node">&quot;ctx#{tmpid}&quot;</span>
-        <span class="ruby-identifier">res</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">ev</span>(<span class="ruby-node">&quot;(v = ctx[#{name}]) ? v.respond_to?(:each) ? &quot;</span>\
-          <span class="ruby-node">&quot;(#{ctxtmp}=ctx.dup; r=v.map{|h|ctx.update(h);#{code}}.join; &quot;</span>\
-          <span class="ruby-node">&quot;ctx.replace(#{ctxtmp});r) : #{code} : ''&quot;</span>)
+        <span class="ruby-identifier">res</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">ev</span>(<span class="ruby-value str">&quot;if v = ctx[\#{name}]\nv = [v] if v.is_a?(Hash) # shortcut when passed a single hash\nif v.respond_to?(:each)\n\#{ctxtmp} = ctx.dup\nbegin\nr = v.map { |h| ctx.update(h); \#{code} }.join\nrescue TypeError =&gt; e\nraise TypeError,\n\&quot;All elements in {{\#{name.to_s[1..-1]}}} are not hashes!\&quot;\nend\nctx.replace(\#{ctxtmp})\nr\nelse\n\#{code}\nend\nend\n&quot;</span>)
         <span class="ruby-comment cmt"># $' = The string to the right of the last successful match</span>
         <span class="ruby-identifier">src</span> = <span class="ruby-identifier">$'</span>
       <span class="ruby-keyword kw">end</span>
@@ -352,18 +365,20 @@ of tags:
                     <p class="source-link">
                         Source: <a href="javascript:toggleSource('M000009_source')" id="l_M000009_source">show</a>
                         
-                        | <a href="http://github.com/defunkt/mustache/blob/176aa899ba4665429d89516c5c8a6d620cb09159/lib/mustache/template.rb#L71" target="_blank" class="github_url">on GitHub</a>
+                        | <a href="http://github.com/defunkt/mustache/blob/d2b84855ea08c363bb248d91ca44099ec289b65d/lib/mustache/template.rb#L87" target="_blank" class="github_url">on GitHub</a>
                         
                     </p>
                     <div id="M000009_source" class="dyn-source">
-                        <pre><span class="ruby-comment cmt"># File lib/mustache/template.rb, line 71</span>
+                        <pre><span class="ruby-comment cmt"># File lib/mustache/template.rb, line 87</span>
     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">compile_tags</span>(<span class="ruby-identifier">src</span>)
       <span class="ruby-identifier">res</span> = <span class="ruby-value str">&quot;&quot;</span>
-      <span class="ruby-keyword kw">while</span> <span class="ruby-identifier">src</span> <span class="ruby-operator">=~</span> <span class="ruby-regexp re">/\{\{(!|&lt;|\{)?([^\/#]+?)\1?\}\}+/</span>
+      <span class="ruby-keyword kw">while</span> <span class="ruby-identifier">src</span> <span class="ruby-operator">=~</span> <span class="ruby-node">/#{otag}(=|!|&lt;|\{)?([^\/#]+?)\1?#{ctag}+/</span>
         <span class="ruby-identifier">res</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">str</span>(<span class="ruby-identifier">$`</span>)
         <span class="ruby-keyword kw">case</span> <span class="ruby-identifier">$1</span>
         <span class="ruby-keyword kw">when</span> <span class="ruby-value str">'!'</span>
           <span class="ruby-comment cmt"># ignore comments</span>
+        <span class="ruby-keyword kw">when</span> <span class="ruby-value str">'='</span>
+          <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">otag</span>, <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">ctag</span> = <span class="ruby-identifier">$2</span>.<span class="ruby-identifier">strip</span>.<span class="ruby-identifier">split</span>(<span class="ruby-value str">' '</span>, <span class="ruby-value">2</span>)
         <span class="ruby-keyword kw">when</span> <span class="ruby-value str">'&lt;'</span>
           <span class="ruby-identifier">res</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">compile_partial</span>(<span class="ruby-identifier">$2</span>.<span class="ruby-identifier">strip</span>)
         <span class="ruby-keyword kw">when</span> <span class="ruby-value str">'{'</span>
@@ -381,9 +396,70 @@ of tags:
             </div>
             
             <div class="method">
-                <div class="title" id="M000013">
+                <div class="title" id="M000015">
                     
-                    <a name="M000013"></a><b>etag</b>(s)
+                    <a name="M000015"></a><b>ctag</b>()
+                    
+                </div>
+                
+                <div class="description">
+                  <p>
+}} - closing tag delimiter
+</p>
+
+                </div>
+                
+                
+                
+                
+                <div class="sourcecode">
+                    <p class="source-link">
+                        Source: <a href="javascript:toggleSource('M000015_source')" id="l_M000015_source">show</a>
+                        
+                        | <a href="http://github.com/defunkt/mustache/blob/d2b84855ea08c363bb248d91ca44099ec289b65d/lib/mustache/template.rb#L139" target="_blank" class="github_url">on GitHub</a>
+                        
+                    </p>
+                    <div id="M000015_source" class="dyn-source">
+                        <pre><span class="ruby-comment cmt"># File lib/mustache/template.rb, line 139</span>
+    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">ctag</span>
+      <span class="ruby-ivar">@ctag</span> <span class="ruby-operator">||=</span> <span class="ruby-constant">Regexp</span>.<span class="ruby-identifier">escape</span>(<span class="ruby-value str">'}}'</span>)
+    <span class="ruby-keyword kw">end</span></pre>
+                    </div>
+                </div>
+                
+            </div>
+            
+            <div class="method">
+                <div class="title" id="M000016">
+                    
+                    <a name="M000016"></a><b>ctag=</b>(tag)
+                    
+                </div>
+                
+                
+                
+                
+                <div class="sourcecode">
+                    <p class="source-link">
+                        Source: <a href="javascript:toggleSource('M000016_source')" id="l_M000016_source">show</a>
+                        
+                        | <a href="http://github.com/defunkt/mustache/blob/d2b84855ea08c363bb248d91ca44099ec289b65d/lib/mustache/template.rb#L143" target="_blank" class="github_url">on GitHub</a>
+                        
+                    </p>
+                    <div id="M000016_source" class="dyn-source">
+                        <pre><span class="ruby-comment cmt"># File lib/mustache/template.rb, line 143</span>
+    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">ctag=</span>(<span class="ruby-identifier">tag</span>)
+      <span class="ruby-ivar">@ctag</span> = <span class="ruby-constant">Regexp</span>.<span class="ruby-identifier">escape</span>(<span class="ruby-identifier">tag</span>)
+    <span class="ruby-keyword kw">end</span></pre>
+                    </div>
+                </div>
+                
+            </div>
+            
+            <div class="method">
+                <div class="title" id="M000017">
+                    
+                    <a name="M000017"></a><b>etag</b>(s)
                     
                 </div>
                 
@@ -399,13 +475,13 @@ of tags:
                 
                 <div class="sourcecode">
                     <p class="source-link">
-                        Source: <a href="javascript:toggleSource('M000013_source')" id="l_M000013_source">show</a>
+                        Source: <a href="javascript:toggleSource('M000017_source')" id="l_M000017_source">show</a>
                         
-                        | <a href="http://github.com/defunkt/mustache/blob/176aa899ba4665429d89516c5c8a6d620cb09159/lib/mustache/template.rb#L112" target="_blank" class="github_url">on GitHub</a>
+                        | <a href="http://github.com/defunkt/mustache/blob/d2b84855ea08c363bb248d91ca44099ec289b65d/lib/mustache/template.rb#L148" target="_blank" class="github_url">on GitHub</a>
                         
                     </p>
-                    <div id="M000013_source" class="dyn-source">
-                        <pre><span class="ruby-comment cmt"># File lib/mustache/template.rb, line 112</span>
+                    <div id="M000017_source" class="dyn-source">
+                        <pre><span class="ruby-comment cmt"># File lib/mustache/template.rb, line 148</span>
     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">etag</span>(<span class="ruby-identifier">s</span>)
       <span class="ruby-identifier">ev</span>(<span class="ruby-node">&quot;CGI.escapeHTML(ctx[#{s.strip.to_sym.inspect}].to_s)&quot;</span>)
     <span class="ruby-keyword kw">end</span></pre>
@@ -415,9 +491,9 @@ of tags:
             </div>
             
             <div class="method">
-                <div class="title" id="M000016">
+                <div class="title" id="M000019">
                     
-                    <a name="M000016"></a><b>ev</b>(s)
+                    <a name="M000019"></a><b>ev</b>(s)
                     
                 </div>
                 
@@ -434,15 +510,76 @@ string.
                 
                 <div class="sourcecode">
                     <p class="source-link">
-                        Source: <a href="javascript:toggleSource('M000016_source')" id="l_M000016_source">show</a>
+                        Source: <a href="javascript:toggleSource('M000019_source')" id="l_M000019_source">show</a>
                         
-                        | <a href="http://github.com/defunkt/mustache/blob/176aa899ba4665429d89516c5c8a6d620cb09159/lib/mustache/template.rb#L123" target="_blank" class="github_url">on GitHub</a>
+                        | <a href="http://github.com/defunkt/mustache/blob/d2b84855ea08c363bb248d91ca44099ec289b65d/lib/mustache/template.rb#L159" target="_blank" class="github_url">on GitHub</a>
                         
                     </p>
-                    <div id="M000016_source" class="dyn-source">
-                        <pre><span class="ruby-comment cmt"># File lib/mustache/template.rb, line 123</span>
+                    <div id="M000019_source" class="dyn-source">
+                        <pre><span class="ruby-comment cmt"># File lib/mustache/template.rb, line 159</span>
     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">ev</span>(<span class="ruby-identifier">s</span>)
       <span class="ruby-node">&quot;#\{#{s}}&quot;</span>
+    <span class="ruby-keyword kw">end</span></pre>
+                    </div>
+                </div>
+                
+            </div>
+            
+            <div class="method">
+                <div class="title" id="M000013">
+                    
+                    <a name="M000013"></a><b>otag</b>()
+                    
+                </div>
+                
+                <div class="description">
+                  <p>
+{{ - opening tag delimiter
+</p>
+
+                </div>
+                
+                
+                
+                
+                <div class="sourcecode">
+                    <p class="source-link">
+                        Source: <a href="javascript:toggleSource('M000013_source')" id="l_M000013_source">show</a>
+                        
+                        | <a href="http://github.com/defunkt/mustache/blob/d2b84855ea08c363bb248d91ca44099ec289b65d/lib/mustache/template.rb#L130" target="_blank" class="github_url">on GitHub</a>
+                        
+                    </p>
+                    <div id="M000013_source" class="dyn-source">
+                        <pre><span class="ruby-comment cmt"># File lib/mustache/template.rb, line 130</span>
+    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">otag</span>
+      <span class="ruby-ivar">@otag</span> <span class="ruby-operator">||=</span> <span class="ruby-constant">Regexp</span>.<span class="ruby-identifier">escape</span>(<span class="ruby-value str">'{{'</span>)
+    <span class="ruby-keyword kw">end</span></pre>
+                    </div>
+                </div>
+                
+            </div>
+            
+            <div class="method">
+                <div class="title" id="M000014">
+                    
+                    <a name="M000014"></a><b>otag=</b>(tag)
+                    
+                </div>
+                
+                
+                
+                
+                <div class="sourcecode">
+                    <p class="source-link">
+                        Source: <a href="javascript:toggleSource('M000014_source')" id="l_M000014_source">show</a>
+                        
+                        | <a href="http://github.com/defunkt/mustache/blob/d2b84855ea08c363bb248d91ca44099ec289b65d/lib/mustache/template.rb#L134" target="_blank" class="github_url">on GitHub</a>
+                        
+                    </p>
+                    <div id="M000014_source" class="dyn-source">
+                        <pre><span class="ruby-comment cmt"># File lib/mustache/template.rb, line 134</span>
+    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">otag=</span>(<span class="ruby-identifier">tag</span>)
+      <span class="ruby-ivar">@otag</span> = <span class="ruby-constant">Regexp</span>.<span class="ruby-identifier">escape</span>(<span class="ruby-identifier">tag</span>)
     <span class="ruby-keyword kw">end</span></pre>
                     </div>
                 </div>
@@ -472,7 +609,7 @@ symbols.
                     <p class="source-link">
                         Source: <a href="javascript:toggleSource('M000006_source')" id="l_M000006_source">show</a>
                         
-                        | <a href="http://github.com/defunkt/mustache/blob/176aa899ba4665429d89516c5c8a6d620cb09159/lib/mustache/template.rb#L23" target="_blank" class="github_url">on GitHub</a>
+                        | <a href="http://github.com/defunkt/mustache/blob/d2b84855ea08c363bb248d91ca44099ec289b65d/lib/mustache/template.rb#L23" target="_blank" class="github_url">on GitHub</a>
                         
                     </p>
                     <div id="M000006_source" class="dyn-source">
@@ -515,11 +652,11 @@ Get a (hopefully) literal version of an object, sans quotes
                     <p class="source-link">
                         Source: <a href="javascript:toggleSource('M000012_source')" id="l_M000012_source">show</a>
                         
-                        | <a href="http://github.com/defunkt/mustache/blob/176aa899ba4665429d89516c5c8a6d620cb09159/lib/mustache/template.rb#L107" target="_blank" class="github_url">on GitHub</a>
+                        | <a href="http://github.com/defunkt/mustache/blob/d2b84855ea08c363bb248d91ca44099ec289b65d/lib/mustache/template.rb#L125" target="_blank" class="github_url">on GitHub</a>
                         
                     </p>
                     <div id="M000012_source" class="dyn-source">
-                        <pre><span class="ruby-comment cmt"># File lib/mustache/template.rb, line 107</span>
+                        <pre><span class="ruby-comment cmt"># File lib/mustache/template.rb, line 125</span>
     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">str</span>(<span class="ruby-identifier">s</span>)
       <span class="ruby-identifier">s</span>.<span class="ruby-identifier">inspect</span>[<span class="ruby-value">1</span><span class="ruby-operator">..</span><span class="ruby-value">-2</span>]
     <span class="ruby-keyword kw">end</span></pre>
@@ -549,11 +686,11 @@ Generate a temporary id, used when compiling code.
                     <p class="source-link">
                         Source: <a href="javascript:toggleSource('M000011_source')" id="l_M000011_source">show</a>
                         
-                        | <a href="http://github.com/defunkt/mustache/blob/176aa899ba4665429d89516c5c8a6d620cb09159/lib/mustache/template.rb#L102" target="_blank" class="github_url">on GitHub</a>
+                        | <a href="http://github.com/defunkt/mustache/blob/d2b84855ea08c363bb248d91ca44099ec289b65d/lib/mustache/template.rb#L120" target="_blank" class="github_url">on GitHub</a>
                         
                     </p>
                     <div id="M000011_source" class="dyn-source">
-                        <pre><span class="ruby-comment cmt"># File lib/mustache/template.rb, line 102</span>
+                        <pre><span class="ruby-comment cmt"># File lib/mustache/template.rb, line 120</span>
     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">tmpid</span>
       <span class="ruby-ivar">@tmpid</span> <span class="ruby-operator">+=</span> <span class="ruby-value">1</span>
     <span class="ruby-keyword kw">end</span></pre>
@@ -563,9 +700,9 @@ Generate a temporary id, used when compiling code.
             </div>
             
             <div class="method">
-                <div class="title" id="M000015">
+                <div class="title" id="M000018">
                     
-                    <a name="M000015"></a><b>utag</b>(s)
+                    <a name="M000018"></a><b>utag</b>(s)
                     
                 </div>
                 
@@ -581,13 +718,13 @@ Generate a temporary id, used when compiling code.
                 
                 <div class="sourcecode">
                     <p class="source-link">
-                        Source: <a href="javascript:toggleSource('M000015_source')" id="l_M000015_source">show</a>
+                        Source: <a href="javascript:toggleSource('M000018_source')" id="l_M000018_source">show</a>
                         
-                        | <a href="http://github.com/defunkt/mustache/blob/176aa899ba4665429d89516c5c8a6d620cb09159/lib/mustache/template.rb#L117" target="_blank" class="github_url">on GitHub</a>
+                        | <a href="http://github.com/defunkt/mustache/blob/d2b84855ea08c363bb248d91ca44099ec289b65d/lib/mustache/template.rb#L153" target="_blank" class="github_url">on GitHub</a>
                         
                     </p>
-                    <div id="M000015_source" class="dyn-source">
-                        <pre><span class="ruby-comment cmt"># File lib/mustache/template.rb, line 117</span>
+                    <div id="M000018_source" class="dyn-source">
+                        <pre><span class="ruby-comment cmt"># File lib/mustache/template.rb, line 153</span>
     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">utag</span>(<span class="ruby-identifier">s</span>)
       <span class="ruby-identifier">ev</span>(<span class="ruby-node">&quot;ctx[#{s.strip.to_sym.inspect}]&quot;</span>)
     <span class="ruby-keyword kw">end</span></pre>

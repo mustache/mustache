@@ -19,7 +19,7 @@
         </h1>
         <ul class="files">
             <li>HISTORY.md</li>
-            <li>Last modified: Sun Oct 11 18:12:29 -0700 2009</li>
+            <li>Last modified: Wed Oct 14 08:31:12 -0700 2009</li>
         </ul>
     </div>
 
@@ -27,7 +27,23 @@
         <div id="content">
     
     <div class="description">
-        <h2>0.2.2 (2009-10-11)</h2>
+        <h2>0.3.0 (2009-??-??)</h2>
+
+<ul>
+<li>Set Delimiter tags are now supported. See the README</li>
+<li>Improved error message when an enumerable section did not return all
+hashes.</li>
+<li>Added a shortcut: if a section's value is a single hash, treat is as
+a one element array whose value is the hash.</li>
+<li>Bugfix: String templates set at the class level were not compiled</li>
+<li>Added a class-level <code>compiled?</code> method for checking if a template
+has been compiled.</li>
+<li>Added an instance-level <code>compiled?</code> method.</li>
+<li>Cache template compilation in Sinatra</li>
+</ul>
+
+
+<h2>0.2.2 (2009-10-11)</h2>
 
 <ul>
 <li>Improved documentation</li>

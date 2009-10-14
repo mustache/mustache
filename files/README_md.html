@@ -19,7 +19,7 @@
         </h1>
         <ul class="files">
             <li>README.md</li>
-            <li>Last modified: Sun Oct 11 18:07:05 -0700 2009</li>
+            <li>Last modified: Wed Oct 14 08:31:00 -0700 2009</li>
         </ul>
     </div>
 
@@ -171,6 +171,25 @@ end
 <p>When rendered, our view will contain a list of all repository names in
 the database.</p>
 
+<p>As a convenience, if a section returns a hash (as opposed to an array
+or a boolean) it will be treated as a single item array.</p>
+
+<p>With the above template, we could use this Ruby code for a single
+iteration:</p>
+
+<pre><code>def repo
+  { :name =&gt; Repository.first.to_s }
+end
+</code></pre>
+
+<p>This would be treated by Mustache as functionally equivalent to the
+following:</p>
+
+<pre><code>def repo
+  [ { :name =&gt; Repository.first.to_s } ]
+end
+</code></pre>
+
 <h3>Comments</h3>
 
 <p>Comments begin with a bang and are ignored. The following template:</p>
@@ -192,6 +211,31 @@ nothing is loaded we render the template directly using our current context.</p>
 
 <p>In this way partials can reference variables or sections the calling
 view defines.</p>
+
+<h3>Set Delimiter</h3>
+
+<p>Set Delimiter tags start with an equal sign and change the tag
+delimiters from {{ and }} to custom strings.</p>
+
+<p>Consider the following contrived example:</p>
+
+<pre><code>* {{ default_tags }}
+{{=&lt;% %&gt;=}}
+* &lt;% erb_style_tags %&gt;
+&lt;%={{ }}=%&gt;
+* {{ default_tags_again }}
+</code></pre>
+
+<p>Here we have a list with three items. The first item uses the default
+tag style, the second uses erb style as defined by the Set Delimiter
+tag, and the third returns to the default style after yet another Set
+Delimiter declaration.</p>
+
+<p>According to <a href="http://google-ctemplate.googlecode.com/svn/trunk/doc/howto.html">ctemplates</a>, this "is useful for languages like TeX, where
+double-braces may occur in the text and are awkward to use for
+markup."</p>
+
+<p>Custom delimiters may not contain whitespace or the equals sign.</p>
 
 <h2>Dict-Style Views</h2>
 
@@ -236,11 +280,11 @@ follows the classic Ruby naming convention.</p>
 <pre><code>TemplatePartial =&gt; ./template_partial.html
 </code></pre>
 
-<p>You can set the search path using <code>Mustache.path</code>. It can be set on a
+<p>You can set the search path using <code>Mustache.template_path</code>. It can be set on a
 class by class basis:</p>
 
 <pre><code>class Simple &lt; Mustache
-  self.path = File.dirname(__FILE__)
+  self.template_path = File.dirname(__FILE__)
   ... etc ...
 end
 </code></pre>
@@ -254,12 +298,20 @@ in, no matter the cwd.</p>
 <pre><code>Simple.template_file = './blah.html'
 </code></pre>
 
-<p>You can also go ahead and set the template directly:</p>
+<p>Mustache also allows you to define the extension it'll use.</p>
+
+<pre><code>Simple.template_extension = 'xml'
+</code></pre>
+
+<p>Given all other defaults, the above line will cause Mustache to look
+for './blah.xml'</p>
+
+<p>Feel free to set the template directly:</p>
 
 <pre><code>Simple.template = 'Hi {{person}}!'
 </code></pre>
 
-<p>You can also set a different template for only a single instance:</p>
+<p>Or set a different template for a single instance:</p>
 
 <pre><code>Simple.new.template = 'Hi {{person}}!'
 </code></pre>

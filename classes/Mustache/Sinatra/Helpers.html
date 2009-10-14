@@ -94,7 +94,7 @@ Call this in your <a href="../Sinatra.html">Sinatra</a> routes.
                     <p class="source-link">
                         Source: <a href="javascript:toggleSource('M000002_source')" id="l_M000002_source">show</a>
                         
-                        | <a href="http://github.com/defunkt/mustache/blob/e5f53da894a6975eeea72087b87844f52bf85049/lib/mustache/sinatra.rb#L45" target="_blank" class="github_url">on GitHub</a>
+                        | <a href="http://github.com/defunkt/mustache/blob/8e233bb805e05dd5a9512b45f3dc5156cdfc0a7d/lib/mustache/sinatra.rb#L45" target="_blank" class="github_url">on GitHub</a>
                         
                     </p>
                     <div id="M000002_source" class="dyn-source">
@@ -129,7 +129,7 @@ potentially, a block containing a sub-view
                     <p class="source-link">
                         Source: <a href="javascript:toggleSource('M000003_source')" id="l_M000003_source">show</a>
                         
-                        | <a href="http://github.com/defunkt/mustache/blob/e5f53da894a6975eeea72087b87844f52bf85049/lib/mustache/sinatra.rb#L51" target="_blank" class="github_url">on GitHub</a>
+                        | <a href="http://github.com/defunkt/mustache/blob/8e233bb805e05dd5a9512b45f3dc5156cdfc0a7d/lib/mustache/sinatra.rb#L51" target="_blank" class="github_url">on GitHub</a>
                         
                     </p>
                     <div id="M000003_source" class="dyn-source">
@@ -152,6 +152,9 @@ potentially, a block containing a sub-view
           <span class="ruby-comment cmt"># load in the view.</span>
           <span class="ruby-identifier">require</span> <span class="ruby-node">&quot;#{file}&quot;</span>.<span class="ruby-identifier">chomp</span>(<span class="ruby-value str">'.rb'</span>)
           <span class="ruby-identifier">klass</span> = <span class="ruby-identifier">namespace</span><span class="ruby-operator">::</span><span class="ruby-constant">Views</span>.<span class="ruby-identifier">const_get</span>(<span class="ruby-identifier">name</span>)
+
+          <span class="ruby-comment cmt"># compile and cache the template</span>
+          <span class="ruby-identifier">klass</span>.<span class="ruby-identifier">template</span> = <span class="ruby-identifier">data</span>
 
         <span class="ruby-keyword kw">else</span>
           <span class="ruby-comment cmt"># Still nothing. Use the stache.</span>
@@ -176,7 +179,7 @@ potentially, a block containing a sub-view
         <span class="ruby-comment cmt"># lets us use {{yield}} in layout.html to render the actual page.</span>
         <span class="ruby-identifier">instance</span>[<span class="ruby-identifier">:yield</span>] = <span class="ruby-identifier">block</span>.<span class="ruby-identifier">call</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">block</span>
 
-        <span class="ruby-identifier">instance</span>.<span class="ruby-identifier">template</span> = <span class="ruby-identifier">data</span>
+        <span class="ruby-identifier">instance</span>.<span class="ruby-identifier">template</span> = <span class="ruby-identifier">data</span> <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">instance</span>.<span class="ruby-identifier">compiled?</span>
         <span class="ruby-identifier">instance</span>.<span class="ruby-identifier">to_html</span>
       <span class="ruby-keyword kw">end</span></pre>
                     </div>

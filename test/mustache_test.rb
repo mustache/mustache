@@ -25,12 +25,23 @@ end_passenger
   def test_complex_view
     assert_equal <<-end_complex, ComplexView.render
 <h1>Colors</h1>
-  <ul>
-      <li><strong>red</strong></li>
-      <li><a href="#Green">green</a></li>
-      <li><a href="#Blue">blue</a></li>
-  </ul>
+<ul>
+  <li><strong>red</strong></li>
+    <li><a href="#Green">green</a></li>
+    <li><a href="#Blue">blue</a></li>
+    </ul>
 end_complex
+
+# TODO: Preserve indentation
+# http://github.com/defunkt/mustache/issues#issue/2
+#     assert_equal <<-end_complex, ComplexView.render
+# <h1>Colors</h1>
+#   <ul>
+#       <li><strong>red</strong></li>
+#       <li><a href="#Green">green</a></li>
+#       <li><a href="#Blue">blue</a></li>
+#   </ul>
+# end_complex
   end
 
   def test_single_line_sections

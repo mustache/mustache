@@ -1,4 +1,4 @@
-## 0.3.0 (2009-??-??)
+## 0.3.0 (2009-10-14)
 
 * Set Delimiter tags are now supported. See the README
 * Improved error message when an enumerable section did not return all

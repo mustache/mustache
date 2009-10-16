@@ -1,3 +1,7 @@
+## 0.3.1 (2009-??-??)
+
+* Added mustache.vim to contrib/ (Thanks Juvenn Woo!)
+
 ## 0.3.0 (2009-10-14)
 
 * Set Delimiter tags are now supported. See the README

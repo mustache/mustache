@@ -364,6 +364,13 @@ An example Sinatra application is also provided:
 <http://github.com/defunkt/mustache-sinatra-example>
 
 
+Vim
+---
+
+Thanks to [Juvenn Woo](http://github.com/juvenn) for mustache.vim. It
+is included under the contrib/ directory.
+
+
 Installation
 ------------
 

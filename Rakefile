@@ -9,6 +9,9 @@ Rake::TestTask.new do |t|
   t.verbose = false
 end
 
+desc "Build a gem"
+task :gem => [ :gemspec, :build ]
+
 desc "Launch Kicker (like autotest)"
 task :kicker do
   puts "Kicking... (ctrl+c to cancel)"

@@ -103,9 +103,11 @@ The most basic tag is the variable. A `{{name}}` tag in a basic
 template will try to call the `name` method on your view. If there is
 no `name` method, an exception will be raised.
 
-All variables are HTML escaped by default. If you want, for some
-reason, to return unescaped HTML you can use the triple mustache:
-`{{{name}}}`.
+All variables are HTML escaped by default. If you want to return
+unescaped HTML, use the triple mustache: `{{{name}}}`.
+
+By default a variable "miss" returns an empty string. You can
+configure this by setting `Mustache.raise_on_context_miss` to true.
 
 ### Boolean Sections
 

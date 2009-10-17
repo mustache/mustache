@@ -10,6 +10,8 @@ class Mustache
     def [](name)
       if has_key?(name)
         super
+      elsif has_key?(name.to_s)
+        super(name.to_s)
       elsif @mustache.respond_to?(name)
         @mustache.send(name)
       else

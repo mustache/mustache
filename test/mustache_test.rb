@@ -224,6 +224,14 @@ data
     assert_equal '<li>1234</li>', instance.render.strip
   end
 
+  def test_enumerable_sections_accept_a_string_keyed_hash_as_a_context
+    instance = Mustache.new
+    instance[:list] = { 'item' => 1234 }
+    instance.template = '{{#list}} <li>{{item}}</li> {{/list}}'
+
+    assert_equal '<li>1234</li>', instance.render.strip
+  end
+
   def test_knows_when_its_been_compiled_when_set_with_string
     klass = Class.new(Mustache)
 

@@ -1,3 +1,7 @@
+## 0.4.0 (2009-??-??)
+
+* Stopped raising context miss exceptions by default, added ContextMiss
+
 ## 0.3.1 (2009-??-??)
 
 * Added mustache.vim to contrib/ (Thanks Juvenn Woo!)

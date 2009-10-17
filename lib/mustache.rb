@@ -126,6 +126,20 @@ class Mustache
     @template = templateify(template)
   end
 
+  # Should an exception be raised when we cannot find a corresponding method
+  # or key in the current context? By default this is false to emulate ctemplate's
+  # behavior, but it may be useful to enable when debugging or developing.
+  #
+  # If set to true and there is a context miss, `Mustache::ContextMiss` will
+  # be raised.
+  def self.raise_on_context_miss?
+    @raise_on_context_miss
+  end
+
+  def self.raise_on_context_miss=(boolean)
+    @raise_on_context_miss = boolean
+  end
+
   # Has this template already been compiled? Compilation is somewhat
   # expensive so it may be useful to check this before attempting it.
   def self.compiled?
@@ -177,6 +191,12 @@ class Mustache
   def template=(template)
     @template = templateify(template)
   end
+
+  # Instance level version of `Mustache.raise_on_context_miss?`
+  def raise_on_context_miss?
+    self.class.raise_on_context_miss? || @raise_on_context_miss
+  end
+  attr_writer :raise_on_context_miss
 
   # A helper method which gives access to the context at a given time.
   # Kind of a hack for now, but useful when you're in an iterating section

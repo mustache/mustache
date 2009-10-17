@@ -232,6 +232,31 @@ data
     assert_equal '<li>1234</li>', instance.render.strip
   end
 
+  def test_not_found_in_context_renders_empty_string
+    instance = Mustache.new
+    instance.template = '{{#list}} <li>{{item}}</li> {{/list}}'
+
+    assert_equal '', instance.render.strip
+  end
+
+  def test_not_found_in_nested_context_renders_empty_string
+    instance = Mustache.new
+    instance[:list] = { :item => 1234 }
+    instance.template = '{{#list}} <li>{{prefix}}{{item}}</li> {{/list}}'
+
+    assert_equal '<li>1234</li>', instance.render.strip
+  end
+
+  def test_not_found_in_context_raises_when_asked_to
+    instance = Mustache.new
+    instance.raise_on_context_miss = true
+    instance.template = '{{#list}} <li>{{item}}</li> {{/list}}'
+
+    assert_raises Mustache::ContextMiss do
+      instance.render.strip
+    end
+  end
+
   def test_knows_when_its_been_compiled_when_set_with_string
     klass = Class.new(Mustache)
 

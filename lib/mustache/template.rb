@@ -85,7 +85,7 @@ class Mustache
     # 4. Partial tags - {{< partial_name }}
     def compile_tags(src)
       res = ""
-      while src =~ /#{otag}(=|!|<|\{)?([^\/#]+?)\1?#{ctag}+/
+      while src =~ /#{otag}(=|!|<|\{)?(.+?)\1?#{ctag}+/
         res << str($`)
         case $1
         when '!'

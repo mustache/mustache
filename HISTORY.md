@@ -2,6 +2,7 @@
 
 * Added mustache.vim to contrib/ (Thanks Juvenn Woo!)
 * Support string keys in contexts (not just symbol keys).
+* Bugfix: # and / were not permitted in tag names. Now they are.
 
 ## 0.3.0 (2009-10-14)
 

@@ -76,6 +76,16 @@ class Mustache
 
         end
 
+        # Tell the view class its extension and path so finding partials
+        # works as expected.
+        if klass.template_extension != 'mustache'
+          klass.template_extension = 'mustache'
+        end
+
+        if klass.template_path != options.mustaches
+          klass.template_path = options.mustaches
+        end
+
         # Create a new instance for playing with
         instance = klass.new
 

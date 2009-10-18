@@ -143,7 +143,6 @@ Welcome
 end_partial
   end
 
-
   def test_delimiters
     assert_equal <<-end_partial, Delimiters.render
 

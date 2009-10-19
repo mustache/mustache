@@ -3,7 +3,7 @@
 * Added mustache.vim to contrib/ (Thanks Juvenn Woo!)
 * Support string keys in contexts (not just symbol keys).
 * Bugfix: # and / were not permitted in tag names. Now they are.
-* Fixed partials in Sinatra - they needed to know their extension and path
+* Bugfix: Partials in Sinatra needed to know their extension and path
 
 ## 0.3.0 (2009-10-14)
 

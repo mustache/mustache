@@ -10,6 +10,7 @@ require 'unescaped'
 require 'comments'
 require 'passenger'
 require 'delimiters'
+require 'double_section'
 
 class MustacheTest < Test::Unit::TestCase
   def test_passenger
@@ -143,7 +144,6 @@ Welcome
 end_partial
   end
 
-
   def test_delimiters
     assert_equal <<-end_partial, Delimiters.render
 
@@ -153,6 +153,14 @@ end_partial
 
 * Then, surprisingly, it worked the third time.
 end_partial
+  end
+
+  def test_double_section
+    assert_equal <<-end_section.strip, DoubleSection.render.strip
+* first
+* second
+* third
+end_section
   end
 
   def test_comments

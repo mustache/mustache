@@ -94,7 +94,7 @@ Call this in your <a href="../Sinatra.html">Sinatra</a> routes.
                     <p class="source-link">
                         Source: <a href="javascript:toggleSource('M000002_source')" id="l_M000002_source">show</a>
                         
-                        | <a href="http://github.com/defunkt/mustache/blob/8e233bb805e05dd5a9512b45f3dc5156cdfc0a7d/lib/mustache/sinatra.rb#L45" target="_blank" class="github_url">on GitHub</a>
+                        | <a href="http://github.com/defunkt/mustache/blob/5e5fdef06c5545236bfc1ede2fb3005e7b3aab8b/lib/mustache/sinatra.rb#L45" target="_blank" class="github_url">on GitHub</a>
                         
                     </p>
                     <div id="M000002_source" class="dyn-source">
@@ -129,7 +129,7 @@ potentially, a block containing a sub-view
                     <p class="source-link">
                         Source: <a href="javascript:toggleSource('M000003_source')" id="l_M000003_source">show</a>
                         
-                        | <a href="http://github.com/defunkt/mustache/blob/8e233bb805e05dd5a9512b45f3dc5156cdfc0a7d/lib/mustache/sinatra.rb#L51" target="_blank" class="github_url">on GitHub</a>
+                        | <a href="http://github.com/defunkt/mustache/blob/5e5fdef06c5545236bfc1ede2fb3005e7b3aab8b/lib/mustache/sinatra.rb#L51" target="_blank" class="github_url">on GitHub</a>
                         
                     </p>
                     <div id="M000003_source" class="dyn-source">
@@ -160,6 +160,16 @@ potentially, a block containing a sub-view
           <span class="ruby-comment cmt"># Still nothing. Use the stache.</span>
           <span class="ruby-identifier">klass</span> = <span class="ruby-constant">Mustache</span>
 
+        <span class="ruby-keyword kw">end</span>
+
+        <span class="ruby-comment cmt"># Tell the view class its extension and path so finding partials</span>
+        <span class="ruby-comment cmt"># works as expected.</span>
+        <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">klass</span>.<span class="ruby-identifier">template_extension</span> <span class="ruby-operator">!=</span> <span class="ruby-value str">'mustache'</span>
+          <span class="ruby-identifier">klass</span>.<span class="ruby-identifier">template_extension</span> = <span class="ruby-value str">'mustache'</span>
+        <span class="ruby-keyword kw">end</span>
+
+        <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">klass</span>.<span class="ruby-identifier">template_path</span> <span class="ruby-operator">!=</span> <span class="ruby-identifier">options</span>.<span class="ruby-identifier">mustaches</span>
+          <span class="ruby-identifier">klass</span>.<span class="ruby-identifier">template_path</span> = <span class="ruby-identifier">options</span>.<span class="ruby-identifier">mustaches</span>
         <span class="ruby-keyword kw">end</span>
 
         <span class="ruby-comment cmt"># Create a new instance for playing with</span>

@@ -103,7 +103,7 @@ href="Context.html">Context</a>.
                     <p class="source-link">
                         Source: <a href="javascript:toggleSource('M000000_source')" id="l_M000000_source">show</a>
                         
-                        | <a href="http://github.com/defunkt/mustache/blob/d545a3e0497caff3e2002f83e0a6a5033408dcc3/lib/mustache/context.rb#L5" target="_blank" class="github_url">on GitHub</a>
+                        | <a href="http://github.com/defunkt/mustache/blob/307ba659aded4c4e14725233f80d9d04bd7560f6/lib/mustache/context.rb#L5" target="_blank" class="github_url">on GitHub</a>
                         
                     </p>
                     <div id="M000000_source" class="dyn-source">
@@ -133,7 +133,7 @@ href="Context.html">Context</a>.
                     <p class="source-link">
                         Source: <a href="javascript:toggleSource('M000001_source')" id="l_M000001_source">show</a>
                         
-                        | <a href="http://github.com/defunkt/mustache/blob/d545a3e0497caff3e2002f83e0a6a5033408dcc3/lib/mustache/context.rb#L10" target="_blank" class="github_url">on GitHub</a>
+                        | <a href="http://github.com/defunkt/mustache/blob/307ba659aded4c4e14725233f80d9d04bd7560f6/lib/mustache/context.rb#L10" target="_blank" class="github_url">on GitHub</a>
                         
                     </p>
                     <div id="M000001_source" class="dyn-source">
@@ -141,6 +141,8 @@ href="Context.html">Context</a>.
     <span class="ruby-keyword kw">def</span> <span class="ruby-operator">[]</span>(<span class="ruby-identifier">name</span>)
       <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">has_key?</span>(<span class="ruby-identifier">name</span>)
         <span class="ruby-keyword kw">super</span>
+      <span class="ruby-keyword kw">elsif</span> <span class="ruby-identifier">has_key?</span>(<span class="ruby-identifier">name</span>.<span class="ruby-identifier">to_s</span>)
+        <span class="ruby-keyword kw">super</span>(<span class="ruby-identifier">name</span>.<span class="ruby-identifier">to_s</span>)
       <span class="ruby-keyword kw">elsif</span> <span class="ruby-ivar">@mustache</span>.<span class="ruby-identifier">respond_to?</span>(<span class="ruby-identifier">name</span>)
         <span class="ruby-ivar">@mustache</span>.<span class="ruby-identifier">send</span>(<span class="ruby-identifier">name</span>)
       <span class="ruby-keyword kw">else</span>

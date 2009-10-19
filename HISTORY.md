@@ -1,4 +1,4 @@
-## 0.3.1 (2009-??-??)
+## 0.3.1 (2009-10-19)
 
 * Added mustache.vim to contrib/ (Thanks Juvenn Woo!)
 * Support string keys in contexts (not just symbol keys).

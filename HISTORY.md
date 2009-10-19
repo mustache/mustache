@@ -1,6 +1,9 @@
 ## 0.4.0 (2009-??-??)
 
-* Stopped raising context miss exceptions by default, added ContextMiss
+* Stopped raising context miss exceptions by default
+* Added `Mustache.raise_on_context_miss` setting (defaults to false)
+* Throw Mustache::ContextMiss when raise_on_context_miss is true and
+  we encounter a miss.
 
 ## 0.3.1 (2009-10-19)
 

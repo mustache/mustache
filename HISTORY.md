@@ -4,6 +4,7 @@
 * Support string keys in contexts (not just symbol keys).
 * Bugfix: # and / were not permitted in tag names. Now they are.
 * Bugfix: Partials in Sinatra needed to know their extension and path
+* Bugfix: Using the same boolean section twice was failing
 
 ## 0.3.0 (2009-10-14)
 

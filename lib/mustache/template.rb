@@ -47,7 +47,7 @@ class Mustache
     # If enumerable, the return value is iterated over (a `for` loop).
     def compile_sections(src)
       res = ""
-      while src =~ /#{otag}\#(.+)#{ctag}\s*(.+)#{otag}\/\1#{ctag}\s*/m
+      while src =~ /#{otag}\#(.+)#{ctag}\s*(.+?)#{otag}\/\1#{ctag}\s*/m
         # $` = The string to the left of the last successful match
         res << compile_tags($`)
         name = $1.strip.to_sym.inspect

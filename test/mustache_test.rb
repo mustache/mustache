@@ -234,6 +234,19 @@ data
     end
   end
 
+  def test_unclosed_sections_reports_the_line_number
+    instance = Mustache.new
+    instance[:list] = [ :item => 1234 ]
+    instance.template = "hi\nmom\n{{#list}} <li>{{item}}</li> {{/gist}}"
+
+    begin
+      instance.render
+    rescue => e
+    end
+
+    assert e.message.include?('line 3')
+  end
+
   def test_enumerable_sections_accept_a_hash_as_a_context
     instance = Mustache.new
     instance[:list] = { :item => 1234 }

@@ -9,6 +9,13 @@ class Mustache
   #
   # You shouldn't use this class directly.
   class Template
+    # An UnclosedSection error is thrown when a {{# section }} is not
+    # closed.
+    #
+    # For example:
+    #   {{# open }} blah {{/ close }}
+    class UnclosedSection < RuntimeError;  end
+
     # Expects a Mustache template as a string along with a template
     # path, which it uses to find partials.
     def initialize(source, template_path = '.', template_extension = 'html')
@@ -85,9 +92,12 @@ class Mustache
     # 4. Partial tags - {{< partial_name }}
     def compile_tags(src)
       res = ""
-      while src =~ /#{otag}(=|!|<|\{)?(.+?)\1?#{ctag}+/
+      while src =~ /#{otag}(#|=|!|<|\{)?(.+?)\1?#{ctag}+/
         res << str($`)
         case $1
+        when '#'
+          # Unclosed section - raise an error
+          raise UnclosedSection.new("Unclosed section: #$2")
         when '!'
           # ignore comments
         when '='

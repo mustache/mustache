@@ -1,3 +1,7 @@
+## 0.3.3 (2009-??-??)
+
+* Unclosed sections now throw a helpful error message
+
 ## 0.3.2 (2009-10-19)
 
 * Bugfix: Partials in Sinatra were using the wrong path.

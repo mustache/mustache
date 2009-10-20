@@ -224,6 +224,16 @@ data
     end
   end
 
+  def test_reports_unclosed_sections
+    instance = Mustache.new
+    instance[:list] = [ :item => 1234 ]
+    instance.template = '{{#list}} <li>{{item}}</li> {{/gist}}'
+
+    assert_raise Mustache::Template::UnclosedSection do
+      instance.render
+    end
+  end
+
   def test_enumerable_sections_accept_a_hash_as_a_context
     instance = Mustache.new
     instance[:list] = { :item => 1234 }

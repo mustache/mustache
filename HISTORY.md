@@ -1,3 +1,7 @@
+## 0.3.2 (2009-10-19)
+
+* Bugfix: Partials in Sinatra were using the wrong path.
+
 ## 0.3.1 (2009-10-19)
 
 * Added mustache.vim to contrib/ (Thanks Juvenn Woo!)

@@ -82,8 +82,10 @@ class Mustache
           klass.template_extension = 'mustache'
         end
 
-        if klass.template_path != options.mustaches
-          klass.template_path = options.mustaches
+        # Confusingly Sinatra's `views` setting tells Mustache where the
+        # templates are found. It's fine, blame Chris.
+        if klass.template_path != options.views
+          klass.template_path = options.views
         end
 
         # Create a new instance for playing with

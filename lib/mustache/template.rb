@@ -14,7 +14,21 @@ class Mustache
     #
     # For example:
     #   {{# open }} blah {{/ close }}
-    class UnclosedSection < RuntimeError;  end
+    class UnclosedSection < RuntimeError
+      attr_reader :message
+
+      # Report the line number of the offending unclosed section.
+      def initialize(source, matching_line, unclosed_section)
+        num = 0
+
+        source.split("\n").each_with_index do |line, i|
+          num = i + 1
+          break if line.strip == matching_line.strip
+        end
+
+        @message = "line #{num}: ##{unclosed_section.strip} is not closed"
+      end
+    end
 
     # Expects a Mustache template as a string along with a template
     # path, which it uses to find partials.
@@ -96,8 +110,9 @@ class Mustache
         res << str($`)
         case $1
         when '#'
-          # Unclosed section - raise an error
-          raise UnclosedSection.new("Unclosed section: #$2")
+          # Unclosed section - raise an error and
+          # report the line number
+          raise UnclosedSection.new(@source, $&, $2)
         when '!'
           # ignore comments
         when '='

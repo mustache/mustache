@@ -285,6 +285,15 @@ Or set a different template for a single instance:
 Whatever works.
 
 
+Views
+-----
+
+Mustache supports a bit of magic when it comes to views. If you're
+authoring a plugin or extension for a web framework (Sinatra, Rails,
+etc), check out the `view_namespace` and `view_path` settings on the
+`Mustache` class. They will surely provide needed assistance.
+
+
 Helpers
 -------
 

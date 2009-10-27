@@ -56,6 +56,19 @@ require 'mustache/context'
 #   view.template = "Hi, {{person}}!"
 #   view[:person] = 'Mom'
 #   view.render # => Hi, mom!
+#
+# * view_namespace
+#
+# To make life easy on those developing Mustache plugins for web frameworks or
+# other libraries, Mustache will attempt to load view classes (i.e. Mustache
+# subclasses) using the `view_class` class method. The `view_namespace` tells
+# Mustache under which constant view classes live. By default it is `Object`.
+#
+# * view_path
+#
+# Similar to `template_path`, the `view_path` option tells Mustache where to look
+# for files containing view classes when using the `view_class` method.
+#
 class Mustache
   # Helper method for quickly instantiating and rendering a view.
   def self.render(*args)
@@ -124,6 +137,46 @@ class Mustache
 
   def self.template=(template)
     @template = templateify(template)
+  end
+
+  # The constant under which Mustache will look for views. By default it's
+  # `Object`, but it might be nice to set it to something like `Hurl::Views` if
+  # your app's main namespace is `Hurl`.
+  def self.view_namespace
+    @view_namespace || Object
+  end
+
+  def self.view_namespace=(namespace)
+    @view_namespace = namespace
+  end
+
+  # Mustache searches the view path for .rb files to require when asked to find a
+  # view class. Defaults to "."
+  def self.view_path
+    @view_path ||= '.'
+  end
+
+  def self.view_path=(path)
+    @view_path = path
+  end
+
+  # When given a symbol or string representing a class, will try to produce an
+  # appropriate view class.
+  # e.g.
+  #   Mustache.view_namespace = Hurl::Views
+  #   Mustache.view_class(:Partial) # => Hurl::Views::Partial
+  def self.view_class(name)
+    name = name.to_s
+    file_name = underscore(name)
+
+    if view_namespace.const_defined?(name)
+      view_namespace.const_get(name)
+    elsif File.exists?(file = "#{view_path}/#{file_name}.rb")
+      require "#{file}".chomp('.rb')
+      view_namespace.const_get(name)
+    else
+      Mustache
+    end
   end
 
   # Should an exception be raised when we cannot find a corresponding method

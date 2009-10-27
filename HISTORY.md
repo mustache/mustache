@@ -5,6 +5,10 @@
 * Throw Mustache::ContextMiss when raise_on_context_miss is true and
   we encounter a miss.
 * The default template extension is now "mustache" (instead of "html").
+* Added the `view_namespace` and `view_path` settings to `Mustache`
+* Added `Mustache.view_class` method which autoloads a class using the
+  new `view_namespace` and `view_path` settings. Should be used by
+  plugin developers.
 
 ## 0.3.3 (2009-??-??)
 

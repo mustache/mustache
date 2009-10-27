@@ -1,4 +1,4 @@
-## 0.4.0 (2009-??-??)
+## 0.4.0 (2009-10-27)
 
 * Stopped raising context miss exceptions by default
 * Added `Mustache.raise_on_context_miss` setting (defaults to false)
@@ -10,9 +10,6 @@
   new `view_namespace` and `view_path` settings. Should be used by
   plugin developers.
 * Updated the Sinatra extension to use the new `view_class` method
-
-## 0.3.3 (2009-??-??)
-
 * Unclosed sections now throw a helpful error message
 * Report line numbers on unclosed section errors
 * Added Rack::Bug panel

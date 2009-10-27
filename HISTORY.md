@@ -4,6 +4,7 @@
 * Added `Mustache.raise_on_context_miss` setting (defaults to false)
 * Throw Mustache::ContextMiss when raise_on_context_miss is true and
   we encounter a miss.
+* The default template extension is now "mustache" (instead of "html").
 
 ## 0.3.3 (2009-??-??)
 

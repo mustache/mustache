@@ -399,6 +399,14 @@ Thanks to [Juvenn Woo](http://github.com/juvenn) for mustache.vim. It
 is included under the contrib/ directory.
 
 
+Emacs
+----
+
+tpl-mode.el is included under the contrib/ directory for any Emacs users.
+Based on Google's tpl-mode for ctemplates, it adds support for Mustache's
+more lenient tag values and includes a few commands for your editing pleasure.
+
+
 Installation
 ------------
 

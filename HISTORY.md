@@ -1,6 +1,7 @@
 ## 0.4.1 (2009-??-??)
 
 * Partials now respect the `view_namespace` setting.
+* Added tpl-mode.el to contrib/ for us Emacs users.
 
 ## 0.4.0 (2009-10-27)
 

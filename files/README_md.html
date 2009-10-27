@@ -19,7 +19,7 @@
         </h1>
         <ul class="files">
             <li>README.md</li>
-            <li>Last modified: Mon Oct 19 20:10:20 -0700 2009</li>
+            <li>Last modified: Tue Oct 27 03:05:49 -0700 2009</li>
         </ul>
     </div>
 
@@ -128,9 +128,11 @@ talk about the different types of tags.</p>
 template will try to call the <code>name</code> method on your view. If there is
 no <code>name</code> method, an exception will be raised.</p>
 
-<p>All variables are HTML escaped by default. If you want, for some
-reason, to return unescaped HTML you can use the triple mustache:
-<code>{{{name}}}</code>.</p>
+<p>All variables are HTML escaped by default. If you want to return
+unescaped HTML, use the triple mustache: <code>{{{name}}}</code>.</p>
+
+<p>By default a variable "miss" returns an empty string. You can
+configure this by setting <code>Mustache.raise_on_context_miss</code> to true.</p>
 
 <h3>Boolean Sections</h3>
 
@@ -243,7 +245,7 @@ markup."</p>
 processor. Mustache supports a similar concept. Feel free to mix the
 class-based and this more procedural style at your leisure.</p>
 
-<p>Given this template (winner.html):</p>
+<p>Given this template (winner.mustache):</p>
 
 <pre><code>Hello {{name}}
 You have just won ${{value}}!
@@ -277,7 +279,7 @@ You have just won $100!
 on disk by searching for an HTML file in the current directory that
 follows the classic Ruby naming convention.</p>
 
-<pre><code>TemplatePartial =&gt; ./template_partial.html
+<pre><code>TemplatePartial =&gt; ./template_partial.mustache
 </code></pre>
 
 <p>You can set the search path using <code>Mustache.template_path</code>. It can be set on a
@@ -289,13 +291,13 @@ class by class basis:</p>
 end
 </code></pre>
 
-<p>Now <code>Simple</code> will look for <code>simple.html</code> in the directory it resides
+<p>Now <code>Simple</code> will look for <code>simple.mustache</code> in the directory it resides
 in, no matter the cwd.</p>
 
 <p>If you want to just change what template is used you can set
 <code>Mustache.template_file</code> directly:</p>
 
-<pre><code>Simple.template_file = './blah.html'
+<pre><code>Simple.template_file = './blah.mustache'
 </code></pre>
 
 <p>Mustache also allows you to define the extension it'll use.</p>
@@ -317,6 +319,13 @@ for './blah.xml'</p>
 </code></pre>
 
 <p>Whatever works.</p>
+
+<h2>Views</h2>
+
+<p>Mustache supports a bit of magic when it comes to views. If you're
+authoring a plugin or extension for a web framework (Sinatra, Rails,
+etc), check out the <code>view_namespace</code> and <code>view_path</code> settings on the
+<code>Mustache</code> class. They will surely provide needed assistance.</p>
 
 <h2>Helpers</h2>
 
@@ -398,6 +407,23 @@ complete documentation.</p>
 
 <p>An example Sinatra application is also provided:
 <a href="http://github.com/defunkt/mustache-sinatra-example">http://github.com/defunkt/mustache-sinatra-example</a></p>
+
+<h2><a href="http://github.com/brynary/rack-bug/">Rack::Bug</a></h2>
+
+<p>Mustache also ships with a <code>Rack::Bug</code> panel. In your <code>config.ru</code> add
+the following code:</p>
+
+<pre><code>require 'rack/bug/panels/mustache_panel'
+use Rack::Bug::MustachePanel
+</code></pre>
+
+<p>Using Rails? Add this to your initializer or environment file:</p>
+
+<pre><code>require 'rack/bug/panels/mustache_panel'
+config.middleware.use "Rack::Bug::MustachePanel"
+</code></pre>
+
+<p><a href="http://img.skitch.com/20091027-n8pxwwx8r61tc318a15q1n6m14.png"><img src="http://img.skitch.com/20091027-xyf4h1yxnefpp7usyddrcmc7dn.png" alt="Rack::Bug" /></a></p>
 
 <h2>Vim</h2>
 

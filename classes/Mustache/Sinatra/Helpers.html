@@ -94,7 +94,7 @@ Call this in your <a href="../Sinatra.html">Sinatra</a> routes.
                     <p class="source-link">
                         Source: <a href="javascript:toggleSource('M000002_source')" id="l_M000002_source">show</a>
                         
-                        | <a href="http://github.com/defunkt/mustache/blob/ac718407ae7fdc66e9a11d6c440e298863514652/lib/mustache/sinatra.rb#L45" target="_blank" class="github_url">on GitHub</a>
+                        | <a href="http://github.com/defunkt/mustache/blob/f47f8fa47ade4f9c98594c850d757a98a7c7d77c/lib/mustache/sinatra.rb#L45" target="_blank" class="github_url">on GitHub</a>
                         
                     </p>
                     <div id="M000002_source" class="dyn-source">
@@ -129,44 +129,24 @@ potentially, a block containing a sub-view
                     <p class="source-link">
                         Source: <a href="javascript:toggleSource('M000003_source')" id="l_M000003_source">show</a>
                         
-                        | <a href="http://github.com/defunkt/mustache/blob/ac718407ae7fdc66e9a11d6c440e298863514652/lib/mustache/sinatra.rb#L51" target="_blank" class="github_url">on GitHub</a>
+                        | <a href="http://github.com/defunkt/mustache/blob/f47f8fa47ade4f9c98594c850d757a98a7c7d77c/lib/mustache/sinatra.rb#L51" target="_blank" class="github_url">on GitHub</a>
                         
                     </p>
                     <div id="M000003_source" class="dyn-source">
                         <pre><span class="ruby-comment cmt"># File lib/mustache/sinatra.rb, line 51</span>
       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">render_mustache</span>(<span class="ruby-identifier">template</span>, <span class="ruby-identifier">data</span>, <span class="ruby-identifier">opts</span>, <span class="ruby-identifier">locals</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)
-        <span class="ruby-identifier">name</span> = <span class="ruby-constant">Mustache</span>.<span class="ruby-identifier">classify</span>(<span class="ruby-identifier">template</span>.<span class="ruby-identifier">to_s</span>)
+        <span class="ruby-comment cmt"># If you have Hurl::App::Views, namespace should be set to Hurl::App.</span>
+        <span class="ruby-constant">Mustache</span>.<span class="ruby-identifier">view_namespace</span> = <span class="ruby-identifier">options</span>.<span class="ruby-identifier">namespace</span>
 
-        <span class="ruby-comment cmt"># This is a horrible hack but we need it to know under which namespace</span>
-        <span class="ruby-comment cmt"># Views is located. If you have Hurl::App::Views, namespace should be</span>
-        <span class="ruby-comment cmt"># set to Hurl:App.</span>
-        <span class="ruby-identifier">namespace</span> = <span class="ruby-identifier">options</span>.<span class="ruby-identifier">namespace</span>
+        <span class="ruby-comment cmt"># This is probably the same as options.views, but we'll set it anyway.</span>
+        <span class="ruby-comment cmt"># It's used to tell Mustache where to look for view classes.</span>
+        <span class="ruby-constant">Mustache</span>.<span class="ruby-identifier">view_path</span> = <span class="ruby-identifier">options</span>.<span class="ruby-identifier">mustaches</span>
 
-        <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">namespace</span>.<span class="ruby-identifier">const_defined?</span>(<span class="ruby-identifier">:Views</span>) <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-identifier">namespace</span><span class="ruby-operator">::</span><span class="ruby-constant">Views</span>.<span class="ruby-identifier">const_defined?</span>(<span class="ruby-identifier">name</span>)
-          <span class="ruby-comment cmt"># First try to find the existing view,</span>
-          <span class="ruby-comment cmt"># e.g. Hurl::Views::Index</span>
-          <span class="ruby-identifier">klass</span> = <span class="ruby-identifier">namespace</span><span class="ruby-operator">::</span><span class="ruby-constant">Views</span>.<span class="ruby-identifier">const_get</span>(<span class="ruby-identifier">name</span>)
+        <span class="ruby-comment cmt"># Grab the class!</span>
+        <span class="ruby-identifier">klass</span> = <span class="ruby-constant">Mustache</span>.<span class="ruby-identifier">view_class</span>(<span class="ruby-identifier">template</span>)
 
-        <span class="ruby-keyword kw">elsif</span> <span class="ruby-constant">File</span>.<span class="ruby-identifier">exists?</span>(<span class="ruby-identifier">file</span> = <span class="ruby-node">&quot;#{options.mustaches}/#{template}.rb&quot;</span>)
-          <span class="ruby-comment cmt"># Couldn't find it - try to require the file if it exists, then</span>
-          <span class="ruby-comment cmt"># load in the view.</span>
-          <span class="ruby-identifier">require</span> <span class="ruby-node">&quot;#{file}&quot;</span>.<span class="ruby-identifier">chomp</span>(<span class="ruby-value str">'.rb'</span>)
-          <span class="ruby-identifier">klass</span> = <span class="ruby-identifier">namespace</span><span class="ruby-operator">::</span><span class="ruby-constant">Views</span>.<span class="ruby-identifier">const_get</span>(<span class="ruby-identifier">name</span>)
-
-          <span class="ruby-comment cmt"># compile and cache the template</span>
-          <span class="ruby-identifier">klass</span>.<span class="ruby-identifier">template</span> = <span class="ruby-identifier">data</span>
-
-        <span class="ruby-keyword kw">else</span>
-          <span class="ruby-comment cmt"># Still nothing. Use the stache.</span>
-          <span class="ruby-identifier">klass</span> = <span class="ruby-constant">Mustache</span>
-
-        <span class="ruby-keyword kw">end</span>
-
-        <span class="ruby-comment cmt"># Tell the view class its extension and path so finding partials</span>
-        <span class="ruby-comment cmt"># works as expected.</span>
-        <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">klass</span>.<span class="ruby-identifier">template_extension</span> <span class="ruby-operator">!=</span> <span class="ruby-value str">'mustache'</span>
-          <span class="ruby-identifier">klass</span>.<span class="ruby-identifier">template_extension</span> = <span class="ruby-value str">'mustache'</span>
-        <span class="ruby-keyword kw">end</span>
+        <span class="ruby-comment cmt"># Only cache the data if this isn't the generic base class.</span>
+        <span class="ruby-identifier">klass</span>.<span class="ruby-identifier">template</span> = <span class="ruby-identifier">data</span> <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">klass</span> <span class="ruby-operator">==</span> <span class="ruby-constant">Mustache</span>
 
         <span class="ruby-comment cmt"># Confusingly Sinatra's `views` setting tells Mustache where the</span>
         <span class="ruby-comment cmt"># templates are found. It's fine, blame Chris.</span>

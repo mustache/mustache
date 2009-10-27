@@ -19,7 +19,7 @@
         </h1>
         <ul class="files">
             <li>HISTORY.md</li>
-            <li>Last modified: Mon Oct 19 20:13:33 -0700 2009</li>
+            <li>Last modified: Tue Oct 27 03:05:49 -0700 2009</li>
         </ul>
     </div>
 
@@ -27,7 +27,26 @@
         <div id="content">
     
     <div class="description">
-        <h2>0.3.2 (2009-10-19)</h2>
+        <h2>0.4.0 (2009-10-27)</h2>
+
+<ul>
+<li>Stopped raising context miss exceptions by default</li>
+<li>Added <code>Mustache.raise_on_context_miss</code> setting (defaults to false)</li>
+<li>Throw Mustache::ContextMiss when raise_on_context_miss is true and
+we encounter a miss.</li>
+<li>The default template extension is now "mustache" (instead of "html").</li>
+<li>Added the <code>view_namespace</code> and <code>view_path</code> settings to <code>Mustache</code></li>
+<li>Added <code>Mustache.view_class</code> method which autoloads a class using the
+new <code>view_namespace</code> and <code>view_path</code> settings. Should be used by
+plugin developers.</li>
+<li>Updated the Sinatra extension to use the new <code>view_class</code> method</li>
+<li>Unclosed sections now throw a helpful error message</li>
+<li>Report line numbers on unclosed section errors</li>
+<li>Added Rack::Bug panel</li>
+</ul>
+
+
+<h2>0.3.2 (2009-10-19)</h2>
 
 <ul>
 <li>Bugfix: Partials in Sinatra were using the wrong path.</li>

@@ -298,7 +298,7 @@ data
 
   def test_knows_when_its_been_compiled_when_using_a_file_template
     klass = Class.new(Simple)
-    klass.template_file = File.dirname(__FILE__) + '/../examples/simple.html'
+    klass.template_file = File.dirname(__FILE__) + '/../examples/simple.mustache'
 
     assert ! klass.compiled?
     klass.render

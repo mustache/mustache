@@ -7,7 +7,7 @@ require 'mustache/context'
 # The typical Mustache workflow is as follows:
 #
 # * Create a Mustache subclass: class Stats < Mustache
-# * Create a template: stats.html
+# * Create a template: stats.mustache
 # * Instantiate an instance: view = Stats.new
 # * Render that instance: view.render
 #
@@ -30,12 +30,12 @@ require 'mustache/context'
 # looking for a template. By default it is "."
 # Setting it to /usr/local/templates, for example, means (given all
 # other settings are default) a Mustache subclass `Stats` will try to
-# load /usr/local/templates/stats.html
+# load /usr/local/templates/stats.mustache
 #
 # * template_extension
 #
 # The `template_extension` is the extension Mustache uses when looking
-# for template files. By default it is "html"
+# for template files. By default it is "mustache"
 #
 # * template_file
 #
@@ -93,9 +93,9 @@ class Mustache
     self.template_path = path
   end
 
-  # A Mustache template's default extension is 'html'
+  # A Mustache template's default extension is 'mustache'
   def self.template_extension
-    @template_extension ||= 'html'
+    @template_extension ||= 'mustache'
   end
 
   def self.template_extension=(template_extension)
@@ -104,7 +104,7 @@ class Mustache
   end
 
   # The template file is the absolute path of the file Mustache will
-  # use as its template. By default it's ./class_name.html
+  # use as its template. By default it's ./class_name.mustache
   def self.template_file
     @template_file || "#{path}/#{underscore}.#{template_extension}"
   end

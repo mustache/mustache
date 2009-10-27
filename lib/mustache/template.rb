@@ -32,7 +32,7 @@ class Mustache
 
     # Expects a Mustache template as a string along with a template
     # path, which it uses to find partials.
-    def initialize(source, template_path = '.', template_extension = 'html')
+    def initialize(source, template_path = '.', template_extension = 'mustache')
       @source = source
       @template_path = template_path
       @template_extension = template_extension

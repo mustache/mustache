@@ -1,4 +1,6 @@
 if defined? Mustache
+  require 'benchmark'
+
   Mustache.class_eval do
     alias_method :real_render, :render
 

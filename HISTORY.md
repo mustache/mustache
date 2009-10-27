@@ -2,6 +2,7 @@
 
 * Partials now respect the `view_namespace` setting.
 * Added tpl-mode.el to contrib/ for us Emacs users.
+* Rack::Bug bugfix: ensure benchmark is required before using it
 
 ## 0.4.0 (2009-10-27)
 

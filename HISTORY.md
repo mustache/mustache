@@ -9,6 +9,7 @@
 * Added `Mustache.view_class` method which autoloads a class using the
   new `view_namespace` and `view_path` settings. Should be used by
   plugin developers.
+* Updated the Sinatra extension to use the new `view_class` method
 
 ## 0.3.3 (2009-??-??)
 

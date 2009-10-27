@@ -217,7 +217,7 @@ ctemplate and friends want you to hand a dictionary to the template
 processor. Mustache supports a similar concept. Feel free to mix the
 class-based and this more procedural style at your leisure.
 
-Given this template (winner.html):
+Given this template (winner.mustache):
 
     Hello {{name}}
     You have just won ${{value}}!
@@ -249,7 +249,7 @@ A word on templates. By default, a view will try to find its template
 on disk by searching for an HTML file in the current directory that
 follows the classic Ruby naming convention.
 
-    TemplatePartial => ./template_partial.html
+    TemplatePartial => ./template_partial.mustache
 
 You can set the search path using `Mustache.template_path`. It can be set on a
 class by class basis:
@@ -259,13 +259,13 @@ class by class basis:
       ... etc ...
     end
 
-Now `Simple` will look for `simple.html` in the directory it resides
+Now `Simple` will look for `simple.mustache` in the directory it resides
 in, no matter the cwd.
 
 If you want to just change what template is used you can set
 `Mustache.template_file` directly:
 
-    Simple.template_file = './blah.html'
+    Simple.template_file = './blah.mustache'
 
 Mustache also allows you to define the extension it'll use.
 

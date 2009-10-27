@@ -13,7 +13,8 @@ module Rack
         end
 
         def variables
-          MustachePanel.variables.map do |key, value|
+          vars = MustachePanel.variables.sort_by { |key, _| key.to_s }
+          vars.map do |key, value|
             if value.is_a?(Array) && value.size > 10
               size = value.size
               value = value.first(10)

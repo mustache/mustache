@@ -166,7 +166,10 @@ class Mustache
   #   Mustache.view_namespace = Hurl::Views
   #   Mustache.view_class(:Partial) # => Hurl::Views::Partial
   def self.view_class(name)
-    name = name.to_s
+    if name != classify(name.to_s)
+      name = classify(name.to_s)
+    end
+
     file_name = underscore(name)
 
     if view_namespace.const_defined?(name)

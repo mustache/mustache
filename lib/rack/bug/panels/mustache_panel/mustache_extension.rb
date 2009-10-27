@@ -9,6 +9,9 @@ if defined? Mustache
       end
       out
     end
+
+    alias_method :to_html, :render
+    alias_method :to_text, :render
   end
 
   Mustache::Context.class_eval do

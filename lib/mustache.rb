@@ -171,12 +171,19 @@ class Mustache
     end
 
     file_name = underscore(name)
+    namespace = view_namespace
 
-    if view_namespace.const_defined?(name)
-      view_namespace.const_get(name)
+    if namespace.const_defined?(:Views) && namespace::Views.const_defined?(name)
+      namespace::Views.const_get(name)
+    elsif namespace.const_defined?(name)
+      namespace.const_get(name)
     elsif File.exists?(file = "#{view_path}/#{file_name}.rb")
       require "#{file}".chomp('.rb')
-      view_namespace.const_get(name)
+      if namespace.const_get(:Views)
+        namespace::Views.const_get(name)
+      else
+        namespace.const_get(name)
+      end
     else
       Mustache
     end

@@ -366,6 +366,23 @@ An example Sinatra application is also provided:
 <http://github.com/defunkt/mustache-sinatra-example>
 
 
+[Rack::Bug][4]
+---------
+
+Mustache also ships with a `Rack::Bug` panel. In your `config.ru` add
+the following code:
+
+    require 'rack/bug/panels/mustache_panel'
+    use Rack::Bug::MustachePanel
+
+Using Rails? Add this to your initializer or environment file:
+
+    require 'rack/bug/panels/mustache_panel'
+    config.middleware.use "Rack::Bug::MustachePanel"
+
+[![Rack::Bug](http://img.skitch.com/20091027-xyf4h1yxnefpp7usyddrcmc7dn.png)][5]
+
+
 Vim
 ---
 
@@ -407,3 +424,5 @@ Meta
 [1]: http://code.google.com/p/google-ctemplate/
 [2]: http://www.ivan.fomichev.name/2008/05/erlang-template-engine-prototype.html
 [3]: http://google-ctemplate.googlecode.com/svn/trunk/doc/howto.html
+[4]: http://github.com/brynary/rack-bug/
+[5]: http://img.skitch.com/20091027-n8pxwwx8r61tc318a15q1n6m14.png

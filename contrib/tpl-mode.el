@@ -51,7 +51,7 @@
   (setq tpl-mode-map (make-sparse-keymap)))
 
 (define-key tpl-mode-map "\t" 'tpl-indent-command)
-(define-key tpl-mode-map "\C-m" 'newline-and-indent)
+(define-key tpl-mode-map "\C-m" 'reindent-then-newline-and-indent)
 (define-key tpl-mode-map "\C-ct" 'tpl-insert-tag)
 (define-key tpl-mode-map "\C-cv" 'tpl-insert-variable)
 (define-key tpl-mode-map "\C-cs" 'tpl-insert-section)

@@ -2,6 +2,7 @@
 
 * Unclosed sections now throw a helpful error message
 * Report line numbers on unclosed section errors
+* Added Rack::Bug panel
 
 ## 0.3.2 (2009-10-19)
 

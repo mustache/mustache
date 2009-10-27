@@ -170,6 +170,11 @@ class Mustache
       name = classify(name.to_s)
     end
 
+    # Emptiness begets emptiness.
+    if name.to_s == ''
+      return Mustache
+    end
+
     file_name = underscore(name)
     namespace = view_namespace
 

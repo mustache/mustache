@@ -17,6 +17,16 @@ class AutoloadingTest < Test::Unit::TestCase
     assert_equal Comments, klass
   end
 
+  def test_autoload_nil
+    klass = Mustache.view_class(nil)
+    assert_equal Mustache, klass
+  end
+
+  def test_autoload_empty_string
+    klass = Mustache.view_class('')
+    assert_equal Mustache, klass
+  end
+
   def test_namespaced_autoload
     Mustache.view_namespace = TestViews
     klass = Mustache.view_class('Namespaced')

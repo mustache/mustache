@@ -1,3 +1,7 @@
+## 0.4.1 (2009-??-??)
+
+* Partials now respect the `view_namespace` setting.
+
 ## 0.4.0 (2009-10-27)
 
 * Stopped raising context miss exceptions by default

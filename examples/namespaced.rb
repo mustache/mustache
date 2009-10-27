@@ -9,8 +9,19 @@ module TestViews
       "Dragon < Tiger"
     end
   end
-end
 
+  class NamespacedWithPartial < Mustache
+    self.template = "My opinion: {{<MyPartial}}"
+  end
+
+  class MyPartial < Mustache
+    self.template = "{{exclamation}}!"
+
+    def exclamation
+      :Victory
+    end
+  end
+end
 
 if $0 == __FILE__
   puts TestViews::Namespaced.to_html

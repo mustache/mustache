@@ -131,8 +131,8 @@ class Mustache
 
     # Partials are basically a way to render views from inside other views.
     def compile_partial(name)
-      klass = Mustache.classify(name)
-      if Object.const_defined?(klass)
+      klass = Mustache.view_class(name)
+      if klass != Mustache
         ev("#{klass}.render")
       else
         src = File.read("#{@template_path}/#{name}.#{@template_extension}")

@@ -35,4 +35,13 @@ class AutoloadingTest < Test::Unit::TestCase
 <h1>Dragon &lt; Tiger</h1>
 end_render
   end
+
+  def test_namespaced_partial_autoload
+    Mustache.view_namespace = TestViews
+    klass = Mustache.view_class(:namespaced_with_partial)
+    assert_equal TestViews::NamespacedWithPartial, klass
+    assert_equal <<-end_render.strip, klass.render
+My opinion: Victory!
+end_render
+  end
 end

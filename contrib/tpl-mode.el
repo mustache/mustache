@@ -169,9 +169,8 @@
 (defun tpl-insert-section (section)
   "Inserts a tpl section."
   (interactive "sSection: ")
-  (insert (concat "{{#" section "}}"))
   (tpl-indent)
-  (forward-line 1)
+  (insert (concat "{{#" section "}}\n"))
   (insert "\n")
   (insert (concat "{{/" section "}}"))
   (tpl-indent)

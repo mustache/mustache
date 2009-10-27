@@ -19,7 +19,7 @@
         </h1>
         <ul class="files">
             <li>lib/rack/bug/panels/mustache_panel/view.mustache</li>
-            <li>Last modified: Tue Oct 27 03:05:49 -0700 2009</li>
+            <li>Last modified: Tue Oct 27 16:18:16 -0700 2009</li>
         </ul>
     </div>
 
@@ -28,6 +28,23 @@
     
     <div class="description">
         <p>
+<script type=&#8220;text/javascript&#8220;> $(function() {
+</p>
+<pre>
+  $('#mustache_variables .variable').each(function() {
+    var el = $(this)
+    if (el.text().length &gt; 500) {
+      var txt = el.text()
+      el.click(function() {
+        $(this).text(txt)
+      }).text( el.text().slice(0, 500) + '...' )
+    }
+  })
+</pre>
+<p>
+}); </script>
+</p>
+<p>
 <h3>Render Times</h3>
 </p>
 <p>
@@ -53,7 +70,7 @@
 <h3>Variables</h3>
 </p>
 <p>
-<table>
+<table id=&#8220;mustache_variables&#8220;>
 </p>
 <pre>
   &lt;tr&gt;
@@ -64,7 +81,7 @@
   {{# variables }}
     &lt;tr&gt;
       &lt;td&gt;{{ key }}&lt;/td&gt;
-      &lt;td&gt;{{ value }}&lt;/td&gt;
+      &lt;td class=&quot;variable&quot;&gt;{{ value }}&lt;/td&gt;
     &lt;/tr&gt;
   {{/ variables }}
 </pre>

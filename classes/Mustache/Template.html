@@ -192,7 +192,7 @@ along with a template path, which it uses to find partials.
                     <p class="source-link">
                         Source: <a href="javascript:toggleSource('M000006_source')" id="l_M000006_source">show</a>
                         
-                        | <a href="http://github.com/defunkt/mustache/blob/e391559603c432353cfdf81a14efa82b1b45b268/lib/mustache/template.rb#L35" target="_blank" class="github_url">on GitHub</a>
+                        | <a href="http://github.com/defunkt/mustache/blob/c0c39af1053460962ce759cba65827bda9f8f5e2/lib/mustache/template.rb#L35" target="_blank" class="github_url">on GitHub</a>
                         
                     </p>
                     <div id="M000006_source" class="dyn-source">
@@ -233,7 +233,7 @@ interpolation-friendly Ruby string.
                     <p class="source-link">
                         Source: <a href="javascript:toggleSource('M000008_source')" id="l_M000008_source">show</a>
                         
-                        | <a href="http://github.com/defunkt/mustache/blob/e391559603c432353cfdf81a14efa82b1b45b268/lib/mustache/template.rb#L59" target="_blank" class="github_url">on GitHub</a>
+                        | <a href="http://github.com/defunkt/mustache/blob/c0c39af1053460962ce759cba65827bda9f8f5e2/lib/mustache/template.rb#L59" target="_blank" class="github_url">on GitHub</a>
                         
                     </p>
                     <div id="M000008_source" class="dyn-source">
@@ -267,14 +267,14 @@ Partials are basically a way to render views from inside other views.
                     <p class="source-link">
                         Source: <a href="javascript:toggleSource('M000011_source')" id="l_M000011_source">show</a>
                         
-                        | <a href="http://github.com/defunkt/mustache/blob/e391559603c432353cfdf81a14efa82b1b45b268/lib/mustache/template.rb#L134" target="_blank" class="github_url">on GitHub</a>
+                        | <a href="http://github.com/defunkt/mustache/blob/c0c39af1053460962ce759cba65827bda9f8f5e2/lib/mustache/template.rb#L134" target="_blank" class="github_url">on GitHub</a>
                         
                     </p>
                     <div id="M000011_source" class="dyn-source">
                         <pre><span class="ruby-comment cmt"># File lib/mustache/template.rb, line 134</span>
     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">compile_partial</span>(<span class="ruby-identifier">name</span>)
-      <span class="ruby-identifier">klass</span> = <span class="ruby-constant">Mustache</span>.<span class="ruby-identifier">classify</span>(<span class="ruby-identifier">name</span>)
-      <span class="ruby-keyword kw">if</span> <span class="ruby-constant">Object</span>.<span class="ruby-identifier">const_defined?</span>(<span class="ruby-identifier">klass</span>)
+      <span class="ruby-identifier">klass</span> = <span class="ruby-constant">Mustache</span>.<span class="ruby-identifier">view_class</span>(<span class="ruby-identifier">name</span>)
+      <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">klass</span> <span class="ruby-operator">!=</span> <span class="ruby-constant">Mustache</span>
         <span class="ruby-identifier">ev</span>(<span class="ruby-node">&quot;#{klass}.render&quot;</span>)
       <span class="ruby-keyword kw">else</span>
         <span class="ruby-identifier">src</span> = <span class="ruby-constant">File</span>.<span class="ruby-identifier">read</span>(<span class="ruby-node">&quot;#{@template_path}/#{name}.#{@template_extension}&quot;</span>)
@@ -312,7 +312,7 @@ return value is iterated over (a `for` loop).
                     <p class="source-link">
                         Source: <a href="javascript:toggleSource('M000009_source')" id="l_M000009_source">show</a>
                         
-                        | <a href="http://github.com/defunkt/mustache/blob/e391559603c432353cfdf81a14efa82b1b45b268/lib/mustache/template.rb#L69" target="_blank" class="github_url">on GitHub</a>
+                        | <a href="http://github.com/defunkt/mustache/blob/c0c39af1053460962ce759cba65827bda9f8f5e2/lib/mustache/template.rb#L69" target="_blank" class="github_url">on GitHub</a>
                         
                     </p>
                     <div id="M000009_source" class="dyn-source">
@@ -372,7 +372,7 @@ of tags:
                     <p class="source-link">
                         Source: <a href="javascript:toggleSource('M000010_source')" id="l_M000010_source">show</a>
                         
-                        | <a href="http://github.com/defunkt/mustache/blob/e391559603c432353cfdf81a14efa82b1b45b268/lib/mustache/template.rb#L108" target="_blank" class="github_url">on GitHub</a>
+                        | <a href="http://github.com/defunkt/mustache/blob/c0c39af1053460962ce759cba65827bda9f8f5e2/lib/mustache/template.rb#L108" target="_blank" class="github_url">on GitHub</a>
                         
                     </p>
                     <div id="M000010_source" class="dyn-source">
@@ -427,7 +427,7 @@ of tags:
                     <p class="source-link">
                         Source: <a href="javascript:toggleSource('M000016_source')" id="l_M000016_source">show</a>
                         
-                        | <a href="http://github.com/defunkt/mustache/blob/e391559603c432353cfdf81a14efa82b1b45b268/lib/mustache/template.rb#L164" target="_blank" class="github_url">on GitHub</a>
+                        | <a href="http://github.com/defunkt/mustache/blob/c0c39af1053460962ce759cba65827bda9f8f5e2/lib/mustache/template.rb#L164" target="_blank" class="github_url">on GitHub</a>
                         
                     </p>
                     <div id="M000016_source" class="dyn-source">
@@ -454,7 +454,7 @@ of tags:
                     <p class="source-link">
                         Source: <a href="javascript:toggleSource('M000017_source')" id="l_M000017_source">show</a>
                         
-                        | <a href="http://github.com/defunkt/mustache/blob/e391559603c432353cfdf81a14efa82b1b45b268/lib/mustache/template.rb#L168" target="_blank" class="github_url">on GitHub</a>
+                        | <a href="http://github.com/defunkt/mustache/blob/c0c39af1053460962ce759cba65827bda9f8f5e2/lib/mustache/template.rb#L168" target="_blank" class="github_url">on GitHub</a>
                         
                     </p>
                     <div id="M000017_source" class="dyn-source">
@@ -488,7 +488,7 @@ of tags:
                     <p class="source-link">
                         Source: <a href="javascript:toggleSource('M000018_source')" id="l_M000018_source">show</a>
                         
-                        | <a href="http://github.com/defunkt/mustache/blob/e391559603c432353cfdf81a14efa82b1b45b268/lib/mustache/template.rb#L173" target="_blank" class="github_url">on GitHub</a>
+                        | <a href="http://github.com/defunkt/mustache/blob/c0c39af1053460962ce759cba65827bda9f8f5e2/lib/mustache/template.rb#L173" target="_blank" class="github_url">on GitHub</a>
                         
                     </p>
                     <div id="M000018_source" class="dyn-source">
@@ -523,7 +523,7 @@ string.
                     <p class="source-link">
                         Source: <a href="javascript:toggleSource('M000020_source')" id="l_M000020_source">show</a>
                         
-                        | <a href="http://github.com/defunkt/mustache/blob/e391559603c432353cfdf81a14efa82b1b45b268/lib/mustache/template.rb#L184" target="_blank" class="github_url">on GitHub</a>
+                        | <a href="http://github.com/defunkt/mustache/blob/c0c39af1053460962ce759cba65827bda9f8f5e2/lib/mustache/template.rb#L184" target="_blank" class="github_url">on GitHub</a>
                         
                     </p>
                     <div id="M000020_source" class="dyn-source">
@@ -557,7 +557,7 @@ string.
                     <p class="source-link">
                         Source: <a href="javascript:toggleSource('M000014_source')" id="l_M000014_source">show</a>
                         
-                        | <a href="http://github.com/defunkt/mustache/blob/e391559603c432353cfdf81a14efa82b1b45b268/lib/mustache/template.rb#L155" target="_blank" class="github_url">on GitHub</a>
+                        | <a href="http://github.com/defunkt/mustache/blob/c0c39af1053460962ce759cba65827bda9f8f5e2/lib/mustache/template.rb#L155" target="_blank" class="github_url">on GitHub</a>
                         
                     </p>
                     <div id="M000014_source" class="dyn-source">
@@ -584,7 +584,7 @@ string.
                     <p class="source-link">
                         Source: <a href="javascript:toggleSource('M000015_source')" id="l_M000015_source">show</a>
                         
-                        | <a href="http://github.com/defunkt/mustache/blob/e391559603c432353cfdf81a14efa82b1b45b268/lib/mustache/template.rb#L159" target="_blank" class="github_url">on GitHub</a>
+                        | <a href="http://github.com/defunkt/mustache/blob/c0c39af1053460962ce759cba65827bda9f8f5e2/lib/mustache/template.rb#L159" target="_blank" class="github_url">on GitHub</a>
                         
                     </p>
                     <div id="M000015_source" class="dyn-source">
@@ -620,7 +620,7 @@ symbols.
                     <p class="source-link">
                         Source: <a href="javascript:toggleSource('M000007_source')" id="l_M000007_source">show</a>
                         
-                        | <a href="http://github.com/defunkt/mustache/blob/e391559603c432353cfdf81a14efa82b1b45b268/lib/mustache/template.rb#L44" target="_blank" class="github_url">on GitHub</a>
+                        | <a href="http://github.com/defunkt/mustache/blob/c0c39af1053460962ce759cba65827bda9f8f5e2/lib/mustache/template.rb#L44" target="_blank" class="github_url">on GitHub</a>
                         
                     </p>
                     <div id="M000007_source" class="dyn-source">
@@ -663,7 +663,7 @@ Get a (hopefully) literal version of an object, sans quotes
                     <p class="source-link">
                         Source: <a href="javascript:toggleSource('M000013_source')" id="l_M000013_source">show</a>
                         
-                        | <a href="http://github.com/defunkt/mustache/blob/e391559603c432353cfdf81a14efa82b1b45b268/lib/mustache/template.rb#L150" target="_blank" class="github_url">on GitHub</a>
+                        | <a href="http://github.com/defunkt/mustache/blob/c0c39af1053460962ce759cba65827bda9f8f5e2/lib/mustache/template.rb#L150" target="_blank" class="github_url">on GitHub</a>
                         
                     </p>
                     <div id="M000013_source" class="dyn-source">
@@ -697,7 +697,7 @@ Generate a temporary id, used when compiling code.
                     <p class="source-link">
                         Source: <a href="javascript:toggleSource('M000012_source')" id="l_M000012_source">show</a>
                         
-                        | <a href="http://github.com/defunkt/mustache/blob/e391559603c432353cfdf81a14efa82b1b45b268/lib/mustache/template.rb#L145" target="_blank" class="github_url">on GitHub</a>
+                        | <a href="http://github.com/defunkt/mustache/blob/c0c39af1053460962ce759cba65827bda9f8f5e2/lib/mustache/template.rb#L145" target="_blank" class="github_url">on GitHub</a>
                         
                     </p>
                     <div id="M000012_source" class="dyn-source">
@@ -731,7 +731,7 @@ Generate a temporary id, used when compiling code.
                     <p class="source-link">
                         Source: <a href="javascript:toggleSource('M000019_source')" id="l_M000019_source">show</a>
                         
-                        | <a href="http://github.com/defunkt/mustache/blob/e391559603c432353cfdf81a14efa82b1b45b268/lib/mustache/template.rb#L178" target="_blank" class="github_url">on GitHub</a>
+                        | <a href="http://github.com/defunkt/mustache/blob/c0c39af1053460962ce759cba65827bda9f8f5e2/lib/mustache/template.rb#L178" target="_blank" class="github_url">on GitHub</a>
                         
                     </p>
                     <div id="M000019_source" class="dyn-source">

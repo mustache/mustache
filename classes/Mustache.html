@@ -27,9 +27,9 @@
         </h1>
         <ul class="files">
             
-            <li><a href="../files/lib/mustache/context_rb.html">lib/mustache/context.rb</a></li>
-            
             <li><a href="../files/lib/mustache/sinatra_rb.html">lib/mustache/sinatra.rb</a></li>
+            
+            <li><a href="../files/lib/mustache/context_rb.html">lib/mustache/context.rb</a></li>
             
             <li><a href="../files/lib/mustache/template_rb.html">lib/mustache/template.rb</a></li>
             
@@ -86,12 +86,12 @@ href="Mustache.html">Mustache</a> uses to find templates.
 Here are the available options:
 </p>
 <ul>
-<li><a href="Mustache.html#M000026">template_path</a>
+<li><a href="Mustache.html#M000025">template_path</a>
 
 </li>
 </ul>
 <p>
-The `<a href="Mustache.html#M000026">template_path</a>` setting determines
+The `<a href="Mustache.html#M000025">template_path</a>` setting determines
 the path <a href="Mustache.html">Mustache</a> uses when looking for a
 template. By default it is &#8220;.&#8221; Setting it to
 /usr/local/templates, for example, means (given all other settings are
@@ -160,7 +160,7 @@ By default it is `Object`.
 </li>
 </ul>
 <p>
-Similar to `<a href="Mustache.html#M000026">template_path</a>`, the `<a
+Similar to `<a href="Mustache.html#M000025">template_path</a>`, the `<a
 href="Mustache.html#M000038">view_path</a>` option tells <a
 href="Mustache.html">Mustache</a> where to look for files containing view
 classes when using the `<a href="Mustache.html#M000040">view_class</a>`
@@ -254,9 +254,9 @@ method.
                 
                 <li><a href="#M000033">template_file=</a>,</li>
                 
-                <li><a href="#M000026">template_path</a>,</li>
+                <li><a href="#M000025">template_path</a>,</li>
                 
-                <li><a href="#M000027">template_path=</a>,</li>
+                <li><a href="#M000026">template_path=</a>,</li>
                 
                 <li><a href="#M000048">templateify</a>,</li>
                 
@@ -328,7 +328,7 @@ method.
         <tr valign='top'>
             <td class="attr-name">Version</td>
             <td>=</td>
-            <td class="attr-value">'0.4.0'</td>
+            <td class="attr-value">'0.4.1'</td>
         </tr>
         
         
@@ -433,7 +433,7 @@ so it may be useful to check this before attempting it.
                 
                 <div class="description">
                   <p>
-Alias for `<a href="Mustache.html#M000026">template_path</a>`
+Alias for `<a href="Mustache.html#M000025">template_path</a>`
 </p>
 
                 </div>
@@ -467,7 +467,7 @@ Alias for `<a href="Mustache.html#M000026">template_path</a>`
                 
                 <div class="description">
                   <p>
-Alias for `<a href="Mustache.html#M000026">template_path</a>`
+Alias for `<a href="Mustache.html#M000025">template_path</a>`
 </p>
 
                 </div>
@@ -786,9 +786,9 @@ it&#8217;s ./class_name.mustache
             </div>
             
             <div class="method">
-                <div class="title" id="M000026">
+                <div class="title" id="M000025">
                     
-                    <a name="M000026"></a><b>template_path</b>()
+                    <a name="M000025"></a><b>template_path</b>()
                     
                 </div>
                 
@@ -806,12 +806,12 @@ it&#8217;s the current directory (&#8220;.&#8221;)
                 
                 <div class="sourcecode">
                     <p class="source-link">
-                        Source: <a href="javascript:toggleSource('M000026_source')" id="l_M000026_source">show</a>
+                        Source: <a href="javascript:toggleSource('M000025_source')" id="l_M000025_source">show</a>
                         
                         | <a href="http://github.com/defunkt/mustache/blob/8d5a5956710e6d6e6f6d365992629a757c3d54d5/lib/mustache.rb#L90" target="_blank" class="github_url">on GitHub</a>
                         
                     </p>
-                    <div id="M000026_source" class="dyn-source">
+                    <div id="M000025_source" class="dyn-source">
                         <pre><span class="ruby-comment cmt"># File lib/mustache.rb, line 90</span>
   <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">template_path</span>
     <span class="ruby-ivar">@template_path</span> <span class="ruby-operator">||=</span> <span class="ruby-value str">'.'</span>
@@ -822,9 +822,9 @@ it&#8217;s the current directory (&#8220;.&#8221;)
             </div>
             
             <div class="method">
-                <div class="title" id="M000027">
+                <div class="title" id="M000026">
                     
-                    <a name="M000027"></a><b>template_path=</b>(path)
+                    <a name="M000026"></a><b>template_path=</b>(path)
                     
                 </div>
                 
@@ -833,12 +833,12 @@ it&#8217;s the current directory (&#8220;.&#8221;)
                 
                 <div class="sourcecode">
                     <p class="source-link">
-                        Source: <a href="javascript:toggleSource('M000027_source')" id="l_M000027_source">show</a>
+                        Source: <a href="javascript:toggleSource('M000026_source')" id="l_M000026_source">show</a>
                         
                         | <a href="http://github.com/defunkt/mustache/blob/8d5a5956710e6d6e6f6d365992629a757c3d54d5/lib/mustache.rb#L94" target="_blank" class="github_url">on GitHub</a>
                         
                     </p>
-                    <div id="M000027_source" class="dyn-source">
+                    <div id="M000026_source" class="dyn-source">
                         <pre><span class="ruby-comment cmt"># File lib/mustache.rb, line 94</span>
   <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">template_path=</span>(<span class="ruby-identifier">path</span>)
     <span class="ruby-ivar">@template_path</span> = <span class="ruby-constant">File</span>.<span class="ruby-identifier">expand_path</span>(<span class="ruby-identifier">path</span>)

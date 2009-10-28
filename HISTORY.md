@@ -1,4 +1,4 @@
-## 0.4.2 (2009-??-??)
+## 0.4.2 (2009-10-28)
 
 * Bugfix: Ignore bad constant names when autoloading
 

@@ -192,6 +192,8 @@ class Mustache
     else
       Mustache
     end
+  rescue NameError
+    Mustache
   end
 
   # Should an exception be raised when we cannot find a corresponding method

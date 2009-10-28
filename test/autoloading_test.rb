@@ -44,4 +44,8 @@ end_render
 My opinion: Victory!
 end_render
   end
+
+  def test_bad_constant_name
+    assert_equal Mustache, Mustache.view_class(404)
+  end
 end

@@ -1,3 +1,7 @@
+## 0.4.2 (2009-??-??)
+
+* Bugfix: Ignore bad constant names when autoloading
+
 ## 0.4.1 (2009-10-27)
 
 * Partials now respect the `view_namespace` setting.

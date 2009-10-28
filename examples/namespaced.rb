@@ -11,7 +11,7 @@ module TestViews
   end
 
   class NamespacedWithPartial < Mustache
-    self.template = "My opinion: {{<MyPartial}}"
+    self.template = "My opinion: {{>MyPartial}}"
   end
 
   class MyPartial < Mustache

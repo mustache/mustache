@@ -1,3 +1,7 @@
+## 0.4.3 (2009-??-??)
+
+* ctemplate compat: Partials are indicated by >, not <
+
 ## 0.4.2 (2009-10-28)
 
 * Bugfix: Ignore bad constant names when autoloading

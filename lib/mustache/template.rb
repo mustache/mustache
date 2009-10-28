@@ -103,10 +103,10 @@ class Mustache
     # 1. Escaped variable tags - {{var}}
     # 2. Unescaped variable tags - {{{var}}}
     # 3. Comment variable tags - {{! comment}
-    # 4. Partial tags - {{< partial_name }}
+    # 4. Partial tags - {{> partial_name }}
     def compile_tags(src)
       res = ""
-      while src =~ /#{otag}(#|=|!|<|\{)?(.+?)\1?#{ctag}+/
+      while src =~ /#{otag}(#|=|!|<|>|\{)?(.+?)\1?#{ctag}+/
         res << str($`)
         case $1
         when '#'
@@ -117,7 +117,7 @@ class Mustache
           # ignore comments
         when '='
           self.otag, self.ctag = $2.strip.split(' ', 2)
-        when '<'
+        when '>', '<'
           res << compile_partial($2.strip)
         when '{'
           res << utag($2.strip)

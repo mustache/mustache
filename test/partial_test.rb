@@ -22,7 +22,7 @@ end_partial
 <h1>Context Test</h1>
 <ul>
 {{#titles}}
-<li>{{<inner_partial}}</li>
+<li>{{>inner_partial}}</li>
 {{/titles}}
 </ul>
 end_template
@@ -46,7 +46,7 @@ end_partial
 <h1>Context Test</h1>
 <ul>
 {{#titles}}
-<li>{{<inner_partial}}</li>
+<li>{{>inner_partial}}</li>
 {{/titles}}
 </ul>
 end_template

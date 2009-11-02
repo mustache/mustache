@@ -1,4 +1,5 @@
-require 'test/unit'
+$LOAD_PATH.unshift File.dirname(__FILE__)
+require 'helper'
 
 module TestViews; end
 

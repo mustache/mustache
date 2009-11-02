@@ -1,16 +1,5 @@
-require 'test/unit'
-
-$LOAD_PATH.unshift File.dirname(__FILE__) + '/../examples'
-require 'simple'
-require 'complex_view'
-require 'view_partial'
-require 'template_partial'
-require 'escaped'
-require 'unescaped'
-require 'comments'
-require 'passenger'
-require 'delimiters'
-require 'double_section'
+$LOAD_PATH.unshift File.dirname(__FILE__)
+require 'helper'
 
 class MustacheTest < Test::Unit::TestCase
   def test_passenger

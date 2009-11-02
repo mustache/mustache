@@ -2,7 +2,6 @@ $LOAD_PATH.unshift File.dirname(__FILE__)
 require 'helper'
 
 class PartialTest < Test::Unit::TestCase
-
   def test_view_partial
     assert_equal <<-end_partial.strip, ViewPartial.render
 <h1>Welcome</h1>

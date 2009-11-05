@@ -27,7 +27,7 @@ class Mustache
       elsif @mustache.raise_on_context_miss?
         raise ContextMiss.new("Can't find #{name} in #{@mustache.inspect}")
       else
-        ''
+        nil
       end
     end
   end

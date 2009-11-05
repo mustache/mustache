@@ -1,6 +1,7 @@
 ## 0.4.3 (2009-??-??)
 
 * ctemplate compat: Partials are indicated by >, not <
+* Bugfix: Context miss should return nil, not empty string. Fixes 1.9.x
 
 ## 0.4.2 (2009-10-28)
 

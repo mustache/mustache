@@ -1,5 +1,6 @@
-## 0.5.0 (2009-??-??)
+## 0.5.0 (2009-11-23)
 
+* Partial classes are no longer supported. Use modules!
 * Added `mustache` script for rendering templates on the command line.
 * ctemplate compat: Partials are indicated by >, not <
 * Bugfix: Context miss should return nil, not empty string. Fixes 1.9.x

@@ -376,7 +376,7 @@ An example Sinatra application is also provided:
 
 
 [Rack::Bug][4]
----------
+--------------
 
 Mustache also ships with a `Rack::Bug` panel. In your `config.ru` add
 the following code:
@@ -410,8 +410,51 @@ more lenient tag values and includes a few commands for your editing pleasure.
 TextMate
 --------
 
-Check out Tekkub's 
+Check out Tekkub's
 [Mustache.tmbundle](http://github.com/tekkub/Mustache.tmbundle).
+
+
+Command Line
+------------
+
+Mustache includes a `mustache` script for rendering templates on the
+command line. This can be useful when designing HTML that will
+eventually be included in a website: instead of having to format the
+HTML as Mustache later, you can do it now!
+
+The script expects a Mustache template on STDIN with YAML
+frontmatter. An example looks like this:
+
+    $ cat complete.mustache
+    ---
+    names: [ {name: chris}, {name: mark}, {name: scott} ]
+    ---
+    {{#names}}
+      Hi {{name}}!
+    {{/names}}
+
+    $ cat complete.mustache | mustache
+    Hi chris!
+    Hi mark!
+    Hi scott!
+
+It's probably more useful to keep the YAML and HTML in separate files,
+though. Luckily `cat` works great for this, too:
+
+    $ cat data.yml
+    ---
+    names: [ {name: chris}, {name: mark}, {name: scott} ]
+    ---
+
+    $ cat template.mustache
+    {{#names}}
+      Hi {{name}}!
+    {{/names}}
+
+    $ cat data.yml template.mustache | ruby -I lib bin/mustache
+    Hi chris!
+    Hi mark!
+    Hi scott!
 
 
 Installation

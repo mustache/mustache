@@ -47,7 +47,7 @@
         <dd>
             <ul>
                 
-                <li><a href="#M000026">[]</a></li>
+                <li><a href="#M000034">[]</a></li>
                 
             </ul>
         </dd>
@@ -56,7 +56,7 @@
         <dd>
             <ul>
                 
-                <li><a href="#M000021">render</a></li>
+                <li><a href="#M000029">render</a></li>
                 
             </ul>
         </dd>
@@ -78,9 +78,9 @@
             <div class="sectiontitle">Instance Public methods</div>
             
             <div class="method">
-                <div class="title" id="M000026">
+                <div class="title" id="M000034">
                     
-                    <a name="M000026"></a><b>[]</b>(name)
+                    <a name="M000034"></a><b>[]</b>(name)
                     
                 </div>
                 
@@ -89,12 +89,12 @@
                 
                 <div class="sourcecode">
                     <p class="source-link">
-                        Source: <a href="javascript:toggleSource('M000026_source')" id="l_M000026_source">show</a>
+                        Source: <a href="javascript:toggleSource('M000034_source')" id="l_M000034_source">show</a>
                         
                         | <a href="http://github.com/defunkt/mustache/blob/fe139fe078f3e1e8368c34d9aca7f682e2dfa082/lib/rack/bug/panels/mustache_panel/mustache_extension.rb#L22" target="_blank" class="github_url">on GitHub</a>
                         
                     </p>
-                    <div id="M000026_source" class="dyn-source">
+                    <div id="M000034_source" class="dyn-source">
                         <pre><span class="ruby-comment cmt"># File lib/rack/bug/panels/mustache_panel/mustache_extension.rb, line 22</span>
     <span class="ruby-keyword kw">def</span> <span class="ruby-operator">[]</span>(<span class="ruby-identifier">name</span>)
       <span class="ruby-keyword kw">return</span> <span class="ruby-identifier">real_get</span>(<span class="ruby-identifier">name</span>) <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">name</span> <span class="ruby-operator">==</span> <span class="ruby-identifier">:yield</span> <span class="ruby-operator">||</span> <span class="ruby-operator">!</span><span class="ruby-ivar">@mustache</span>.<span class="ruby-identifier">respond_to?</span>(<span class="ruby-identifier">name</span>)
@@ -106,9 +106,9 @@
             </div>
             
             <div class="method">
-                <div class="title" id="M000021">
+                <div class="title" id="M000029">
                     
-                    <a name="M000021"></a><b>render</b>(*args, &amp;block)
+                    <a name="M000029"></a><b>render</b>(*args, &amp;block)
                     
                 </div>
                 
@@ -117,12 +117,12 @@
                 
                 <div class="sourcecode">
                     <p class="source-link">
-                        Source: <a href="javascript:toggleSource('M000021_source')" id="l_M000021_source">show</a>
+                        Source: <a href="javascript:toggleSource('M000029_source')" id="l_M000029_source">show</a>
                         
                         | <a href="http://github.com/defunkt/mustache/blob/fe139fe078f3e1e8368c34d9aca7f682e2dfa082/lib/rack/bug/panels/mustache_panel/mustache_extension.rb#L7" target="_blank" class="github_url">on GitHub</a>
                         
                     </p>
-                    <div id="M000021_source" class="dyn-source">
+                    <div id="M000029_source" class="dyn-source">
                         <pre><span class="ruby-comment cmt"># File lib/rack/bug/panels/mustache_panel/mustache_extension.rb, line 7</span>
     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">render</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">args</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)
       <span class="ruby-identifier">out</span> = <span class="ruby-value str">''</span>

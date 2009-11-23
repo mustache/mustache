@@ -5,9 +5,8 @@ class PartialTest < Test::Unit::TestCase
   def test_view_partial
     assert_equal <<-end_partial.strip, ViewPartial.render
 <h1>Welcome</h1>
-Hello Chris
-You have just won $10000!
-Well, $6000.0, after taxes.
+Hello Bob
+You have just won $100000!
 
 <h3>Fair enough, right?</h3>
 end_partial

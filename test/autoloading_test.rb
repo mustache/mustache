@@ -42,7 +42,7 @@ end_render
     klass = Mustache.view_class(:namespaced_with_partial)
     assert_equal TestViews::NamespacedWithPartial, klass
     assert_equal <<-end_render.strip, klass.render
-My opinion: Victory!
+My opinion: Again, Victory!
 end_render
   end
 

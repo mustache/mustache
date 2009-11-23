@@ -11,14 +11,11 @@ module TestViews
   end
 
   class NamespacedWithPartial < Mustache
-    self.template = "My opinion: {{>MyPartial}}"
-  end
+    self.path = File.dirname(__FILE__)
+    self.template = "My opinion: {{>inner_partial}}"
 
-  class MyPartial < Mustache
-    self.template = "{{exclamation}}!"
-
-    def exclamation
-      :Victory
+    def title
+      "Victory"
     end
   end
 end

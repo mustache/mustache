@@ -19,7 +19,7 @@ module SimpleView
   end
 end
 
-class ViewPartial < Mustache
+class PartialWithModule < Mustache
   include SimpleView
   self.path = File.dirname(__FILE__)
 
@@ -33,5 +33,5 @@ class ViewPartial < Mustache
 end
 
 if $0 == __FILE__
-  puts ViewPartial.to_html
+  puts PartialWithModule.to_html
 end

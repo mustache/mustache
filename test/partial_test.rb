@@ -3,7 +3,7 @@ require 'helper'
 
 class PartialTest < Test::Unit::TestCase
   def test_view_partial
-    assert_equal <<-end_partial.strip, ViewPartial.render
+    assert_equal <<-end_partial.strip, PartialWithModule.render
 <h1>Welcome</h1>
 Hello Bob
 You have just won $100000!

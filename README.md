@@ -178,11 +178,30 @@ Will render as follows:
 
 Partials begin with a greater than sign, like `{{> box}}`.
 
-If a partial's view is loaded, we use that to render the HTML. If
-nothing is loaded we render the template directly using our current context.
+It is useful to think of partials as a "template expansion" - that is,
+the actual partial tag will be replaced with the content of the
+partial. Therefor partials share the current context.
 
-In this way partials can reference variables or sections the calling
-view defines.
+For example, this template and partial:
+
+    base.mustache
+    Names:
+    {{# names }}
+      {{> user }}
+    {{/ names }}
+
+    user.mustache:
+    <strong>{{ name }}</strong>
+
+Can be thought of as a single, expanded template:
+
+    Names:
+    {{# names }}
+      <strong>{{ name }}</strong>
+    {{/ names }}
+
+Have partial-specific code you want to share between view classes?
+Consider using a module and including it.
 
 
 ### Set Delimiter

@@ -470,7 +470,7 @@ though. Luckily `cat` works great for this, too:
       Hi {{name}}!
     {{/names}}
 
-    $ cat data.yml template.mustache | ruby -I lib bin/mustache
+    $ cat data.yml template.mustache | mustache
     Hi chris!
     Hi mark!
     Hi scott!

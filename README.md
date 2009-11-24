@@ -452,13 +452,13 @@ frontmatter. An example looks like this:
       Hi {{name}}!
     {{/names}}
 
-    $ cat complete.mustache | mustache
+    $ mustache < complete.mustache
     Hi chris!
     Hi mark!
     Hi scott!
 
 It's probably more useful to keep the YAML and HTML in separate files,
-though. Luckily `cat` works great for this, too:
+though. `cat` makes this easy:
 
     $ cat data.yml
     ---

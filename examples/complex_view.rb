@@ -17,7 +17,7 @@ class ComplexView < Mustache
   end
 
   def link
-    not context[:current]
+    not self[:current]
   end
 
   def list

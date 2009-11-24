@@ -74,7 +74,7 @@
   "The basic indentation offset.")
 
 ;; Constant regular expressions to identify template elements.
-(defconst tpl-mode-tpl-token "[a-zA-Z][a-zA-Z0-9_:=\?!-]*?")
+(defconst tpl-mode-tpl-token "[a-zA-Z_][a-zA-Z0-9_:=\?!-]*?")
 (defconst tpl-mode-section (concat "\\({{[#/]\s*"
                                    tpl-mode-tpl-token
                                    "\s*}}\\)"))
@@ -86,7 +86,7 @@
                                          "\s*\\)}}"))
 ;; TODO(tonyg) Figure out a way to support multiline comments.
 (defconst tpl-mode-comment "\\({{!.*?}}\\)")
-(defconst tpl-mode-include (concat "\\({{>\s*"
+(defconst tpl-mode-include (concat "\\({{[><]\s*"
                                    tpl-mode-tpl-token
                                    "\s*}}\\)"))
 (defconst tpl-mode-variable (concat "\\({{\s*"
@@ -240,7 +240,7 @@
    (list tpl-mode-comment
          '(1 font-lock-comment-face))
    (list tpl-mode-include
-         '(1 font-lock-builtin-face))
+         '(1 font-lock-function-name-face))
    (list tpl-mode-builtins
          '(1 font-lock-variable-name-face))
    (list tpl-mode-variable

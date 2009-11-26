@@ -6,8 +6,12 @@ require 'yaml'
 if STDIN.stat.size > 0
   doc = STDIN.read
   if doc =~ /^(\s*---(.*)---\s*)/m
-    data = YAML.load($2.strip)
-    puts Mustache.render(doc.sub($1, ''), data)
+    yaml = $2.strip
+    template = doc.sub($1, '')
+    
+    YAML.each_document(yaml) do |data|
+      puts Mustache.render(template, data)
+    end
   else
     puts doc
   end

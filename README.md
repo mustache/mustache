@@ -457,6 +457,24 @@ frontmatter. An example looks like this:
     Hi mark!
     Hi scott!
 
+You can include multiple documents in your YAML frontmatter if you
+like. Then the template is evaluated once for each of them.
+
+    $ cat multiple.mustache
+    ---
+    name: chris
+    ---
+    name: mark
+    ---
+    name: scott
+    ---
+    Hi {{name}!
+    
+    $ mustache < multiple.mustache
+    Hi chris!
+    Hi mark!
+    Hi scott!
+
 It's probably more useful to keep the YAML and HTML in separate files,
 though. `cat` makes this easy:
 

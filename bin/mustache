@@ -34,5 +34,16 @@ The data.yml file should start with --- on a single line and end with
     ---
 
 The converted document will be printed on STDOUT.
+
+You can include multiple documents in your YAML frontmatter if you
+like. Then the template is evaluated once for each of them.
+
+    ---
+    name: chris
+    ---
+    name: mark
+    ---
+    name: scott
+    ---
 usage
 end

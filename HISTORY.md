@@ -1,3 +1,7 @@
+## 0.5.1 (2009-??-??)
+
+* Added "mail merge" functionality to `mustache` script.
+
 ## 0.5.0 (2009-11-23)
 
 * Partial classes are no longer supported. Use modules!

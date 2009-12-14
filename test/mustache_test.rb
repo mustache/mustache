@@ -125,6 +125,12 @@ end_section
     assert_equal "<h1>A Comedy of Errors</h1>\n", Comments.render
   end
 
+  def test_multi_linecomments
+    view = Comments.new
+    view.template = "<h1>{{title}}{{! just something interesting... \n#or not... }}</h1>\n"
+    assert_equal "<h1>A Comedy of Errors</h1>\n", view.render
+  end
+
   def test_escaped
     assert_equal '<h1>Bear &gt; Shark</h1>', Escaped.render
   end

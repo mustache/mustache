@@ -1,6 +1,7 @@
 ## 0.5.1 (2009-??-??)
 
 * Added "mail merge" functionality to `mustache` script.
+* Support for multi-line tags (useful for comments)
 
 ## 0.5.0 (2009-11-23)
 

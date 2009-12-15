@@ -2,6 +2,7 @@
 
 * Added "mail merge" functionality to `mustache` script.
 * Support for multi-line tags (useful for comments)
+* Sinatra Bugfix: Use Sinatra app's view path, not Sinatra base class'.
 
 ## 0.5.0 (2009-11-23)
 

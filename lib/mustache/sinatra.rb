@@ -92,7 +92,7 @@ class Mustache
 
     def self.registered(app)
       app.helpers Mustache::Sinatra::Helpers
-      app.set :mustaches, ::Sinatra::Base.views
+      app.set :mustaches, app.views
       app.set :namespace, app
     end
   end

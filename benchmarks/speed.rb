@@ -11,15 +11,16 @@ template = File.read(File.dirname(__FILE__) + '/complex.erb')
 
 unless ENV['NOERB']
   erb =  ERB.new(template)
-  scope = ComplexView.new.send(:binding)
+  erb_scope = ComplexView.new
+  erb_scope.instance_eval("def render_erb; #{erb.src}; end")
   bench 'ERB  w/ caching' do
-    erb.result(scope)
+    erb_scope.render_erb
   end
 
   unless ENV['CACHED']
-    scope = ComplexView.new.send(:binding)
+    erb_nocache_scope = ComplexView.new.send(:binding)
     bench 'ERB  w/o caching' do
-      ERB.new(template).result(scope)
+      ERB.new(template).result(erb_nocache_scope)
     end
   end
 end
@@ -30,16 +31,17 @@ require 'haml'
 template = File.read(File.dirname(__FILE__) + '/complex.haml')
 
 unless ENV['NOHAML']
-  haml = Haml::Engine.new(template)
-  scope = ComplexView.new.send(:binding)
+  haml = Haml::Engine.new(template, :ugly => true)
+  haml_scope = ComplexView.new
+  haml.def_method(haml_scope, :render_haml)
   bench 'HAML w/ caching' do
-    haml.render(scope)
+    haml_scope.render_haml
   end
 
   unless ENV['CACHED']
-    scope = ComplexView.new.send(:binding)
+    haml_nocache_scope = ComplexView.new.send(:binding)
     bench 'HAML w/o caching' do
-      Haml::Engine.new(template).render(scope)
+      Haml::Engine.new(template).render(haml_nocache_scope)
     end
   end
 end

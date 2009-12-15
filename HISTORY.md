@@ -1,4 +1,4 @@
-## 0.5.1 (2009-??-??)
+## 0.5.1 (2009-12-15)
 
 * Added "mail merge" functionality to `mustache` script.
 * Support for multi-line tags (useful for comments)

@@ -167,6 +167,19 @@ data
                                                      :deploy_to => '/var/www/example.com' )
   end
 
+  def test_doesnt_execute_what_it_doesnt_need_to
+    instance = Mustache.new
+    instance[:show] = false
+    instance.instance_eval do
+      def die
+        raise "bummer"
+      end
+    end
+    instance.template = '{{#show}} <li>{{die}}</li> {{/show}} yay'
+
+    assert_equal "yay", instance.render
+  end
+
   def test_reports_type_errors_in_sections
     instance = Mustache.new
     instance[:list] = [ :item, 1234 ]

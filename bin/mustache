@@ -3,12 +3,12 @@
 require 'mustache'
 require 'yaml'
 
-if STDIN.stat.size > 0
-  doc = STDIN.read
+if !$stdin.tty?
+  doc = $stdin.read
   if doc =~ /^(\s*---(.*)---\s*)/m
     yaml = $2.strip
     template = doc.sub($1, '')
-    
+
     YAML.each_document(yaml) do |data|
       puts Mustache.render(template, data)
     end

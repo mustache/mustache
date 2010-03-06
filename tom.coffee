@@ -28,7 +28,6 @@ $ ->
   $('#demo').click() if window.location.hash is "#demo"    
   
   $('.run').click ->
-    console.log 'clicked run'
     template: $('.template').val()
     json: $.parseJSON $('.json').val()
     html: Mustache.to_html(template, json).replace(/^\s*/mg, '')

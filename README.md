@@ -102,6 +102,19 @@ the `mustache(5)` manpage or
 <http://defunkt.github.com/mustache/mustache.5.html>.
 
 
+Escaping
+--------
+
+Mustache does escape all values when using the standard double
+Mustache syntax. Characters which will be escaped: `& \ " < >`. To
+disable escaping, simply use tripple mustaches like
+`{{{unescaped_variable}}}`.
+
+Example: Using `{{variable}}` inside a template for `5 > 2` will
+result in `5 &gt; 2`, where as the usage of `{{{variable}}}` will
+result in `5 > 2`.
+
+
 Dict-Style Views
 ----------------
 

@@ -210,6 +210,7 @@ Custom delimiters may not contain whitespace or the equals sign.
 ## COPYRIGHT
 
 Mustache is Copyright (C) 2009 Chris Wanstrath
+
 Original CTemplate by Google
 
 

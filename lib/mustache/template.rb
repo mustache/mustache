@@ -76,20 +76,8 @@ class Mustache
         ctxtmp = "ctx#{tmpid}"
         res << ev(<<-compiled)
         if v = ctx[#{name}]
-          v = [v] if v.is_a?(Hash) # shortcut when passed a single hash
-          if v.respond_to?(:each)
-            #{ctxtmp} = ctx.dup
-            begin
-              r = v.map { |h| ctx.update(h); #{code} }.join
-            rescue TypeError => e
-              raise TypeError,
-                "All elements in {{#{name.to_s[1..-1]}}} are not hashes!"
-            end
-            ctx.replace(#{ctxtmp})
-            r
-          else
-            #{code}
-          end
+          v = [v] unless v.is_a?(Array) # shortcut when passed non-array
+          v.map { |h| ctx.push(h); c = #{code}; ctx.pop; c }.join
         end
         compiled
         # $' = The string to the right of the last successful match

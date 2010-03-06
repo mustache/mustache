@@ -1,25 +1,34 @@
 task :default => :test
-
 task :test do
   # nothing
 end
 
 desc "Build & open index.html in your browser with `open(1)`"
 task :open do
-  exec "rake build && open index.html"
+  exec "rake build:html && open index.html"
 end
 
-desc "Build the index.html"
-task :build do
-  exec "coffee --no-wrap tom.coffee &&
-    ruby -rubygems data.rb > data.yml &&
-    cat data.yml index.mustache | mustache > index.html"
+desc "Build JavaScript"
+task "build:coffee" do
+  sh "coffee --no-wrap *.coffee"
 end
 
-desc "Print the index.html"
-task :print do
-  exec "ruby -rubygems data.rb > data.yml &&
-    cat data.yml index.mustache | mustache"
+desc "Build data.yml"
+task "build:data" do
+  ruby "-rubygems data.rb > data.yml"
+end
+
+desc "Build index.html"
+task "build:html" do
+  sh "cat data.yml index.mustache | mustache > index.html"
+end
+
+desc "Build the whole site"
+task :build => [ "build:coffee", "build:data", "build:html" ]
+
+desc "Build and print the index.html"
+task :print => "build:html" do
+  exec "cat index.html"
 end
 
 desc "Publish gh-pages to GitHub"

@@ -1,3 +1,7 @@
+## 0.6.0 (2010-??-??)
+
+* Ruby objects can be used in sections, not just hashes. See 9477619638
+
 ## 0.5.1 (2009-12-15)
 
 * Added "mail merge" functionality to `mustache` script.

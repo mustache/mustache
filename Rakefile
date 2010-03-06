@@ -20,3 +20,8 @@ task :print do
   exec "ruby -rubygems data.rb > data.yml &&
     cat data.yml index.mustache | mustache"
 end
+
+desc "Publish gh-pages to GitHub"
+task :publish do
+  exec "rake build && git push origin gh-pages"
+end

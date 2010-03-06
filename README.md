@@ -7,6 +7,9 @@ framework-agnostic way to render logic-free views.
 As ctemplates says, "It emphasizes separating logic from presentation:
 it is impossible to embed application logic in this template language."
 
+For a list of implementations (other than Ruby) and tips, see
+<http://defunkt.github.com/mustache/>.
+
 
 Overview
 --------
@@ -94,139 +97,9 @@ Simple.
 Tag Types
 ---------
 
-Tags are indicated by the double mustaches. `{{name}}` is a tag. Let's
-talk about the different types of tags.
-
-### Variables
-
-The most basic tag is the variable. A `{{name}}` tag in a basic
-template will try to call the `name` method on your view. If there is
-no `name` method, an exception will be raised.
-
-All variables are HTML escaped by default. If you want to return
-unescaped HTML, use the triple mustache: `{{{name}}}`.
-
-By default a variable "miss" returns an empty string. You can
-configure this by setting `Mustache.raise_on_context_miss` to true.
-
-### Boolean Sections
-
-A section begins with a pound and ends with a slash. That is,
-`{{#person}}` begins a "person" section while `{{/person}}` ends it.
-
-If the `person` method exists and calling it returns false, the HTML
-between the pound and slash will not be displayed.
-
-If the `person` method exists and calling it returns true, the HTML
-between the pound and slash will be rendered and displayed.
-
-### Enumerable Sections
-
-Enumerable sections are syntactically identical to boolean sections in
-that they begin with a pound and end with a slash. The difference,
-however, is in the view: if the method called returns an enumerable,
-the section is repeated as the enumerable is iterated over.
-
-Each item in the enumerable is expected to be a hash which will then
-become the context of the corresponding iteration. In this way we can
-construct loops.
-
-For example, imagine this template:
-
-    {{#repo}}
-      <b>{{name}}</b>
-    {{/repo}}
-
-And this view code:
-
-    def repo
-      Repository.all.map { |r| { :name => r.to_s } }
-    end
-
-When rendered, our view will contain a list of all repository names in
-the database.
-
-As a convenience, if a section returns a hash (as opposed to an array
-or a boolean) it will be treated as a single item array.
-
-With the above template, we could use this Ruby code for a single
-iteration:
-
-    def repo
-      { :name => Repository.first.to_s }
-    end
-
-This would be treated by Mustache as functionally equivalent to the
-following:
-
-    def repo
-      [ { :name => Repository.first.to_s } ]
-    end
-
-
-### Comments
-
-Comments begin with a bang and are ignored. The following template:
-
-    <h1>Today{{! ignore me }}.</h1>
-
-Will render as follows:
-
-    <h1>Today.</h1>
-
-### Partials
-
-Partials begin with a greater than sign, like `{{> box}}`.
-
-It is useful to think of partials as a "template expansion" - that is,
-the actual partial tag will be replaced with the content of the
-partial. Therefor partials share the current context.
-
-For example, this template and partial:
-
-    base.mustache
-    Names:
-    {{# names }}
-      {{> user }}
-    {{/ names }}
-
-    user.mustache:
-    <strong>{{ name }}</strong>
-
-Can be thought of as a single, expanded template:
-
-    Names:
-    {{# names }}
-      <strong>{{ name }}</strong>
-    {{/ names }}
-
-Have partial-specific code you want to share between view classes?
-Consider using a module and including it.
-
-
-### Set Delimiter
-
-Set Delimiter tags start with an equal sign and change the tag
-delimiters from {{ and }} to custom strings.
-
-Consider the following contrived example:
-
-    * {{ default_tags }}
-    {{=<% %>=}}
-    * <% erb_style_tags %>
-    <%={{ }}=%>
-    * {{ default_tags_again }}
-
-Here we have a list with three items. The first item uses the default
-tag style, the second uses erb style as defined by the Set Delimiter
-tag, and the third returns to the default style after yet another Set
-Delimiter declaration.
-
-According to [ctemplates][3], this "is useful for languages like TeX, where
-double-braces may occur in the text and are awkward to use for
-markup."
-
-Custom delimiters may not contain whitespace or the equals sign.
+For a language-agnostic overview of Mustache's template syntax, see
+the `mustache(5)` manpage or
+<http://defunkt.github.com/mustache/mustache.5.html>.
 
 
 Dict-Style Views
@@ -417,6 +290,7 @@ Vim
 Thanks to [Juvenn Woo](http://github.com/juvenn) for mustache.vim. It
 is included under the contrib/ directory.
 
+See <http://gist.github.com/323622> for installation instructions.
 
 Emacs
 -----
@@ -426,86 +300,33 @@ Emacs users. Based on Google's tpl-mode for ctemplates, it adds
 support for Mustache's more lenient tag values and includes a few
 commands for your editing pleasure.
 
+See <http://gist.github.com/323619> for installation instructions.
+
 
 TextMate
 --------
 
-Check out Tekkub's
-[Mustache.tmbundle](http://github.com/tekkub/Mustache.tmbundle).
+[Mustache.tmbundle](http://github.com/defunkt/Mustache.tmbundle)
 
+See <http://gist.github.com/323624> for installation instructions.
 
 Command Line
 ------------
 
-Mustache includes a `mustache` script for rendering templates on the
-command line. This can be useful when designing HTML that will
-eventually be included in a website: instead of having to format the
-HTML as Mustache later, you can do it now!
-
-The script expects a Mustache template on STDIN with YAML
-frontmatter. An example looks like this:
-
-    $ cat complete.mustache
-    ---
-    names: [ {name: chris}, {name: mark}, {name: scott} ]
-    ---
-    {{#names}}
-      Hi {{name}}!
-    {{/names}}
-
-    $ mustache < complete.mustache
-    Hi chris!
-    Hi mark!
-    Hi scott!
-
-You can include multiple documents in your YAML frontmatter if you
-like. Then the template is evaluated once for each of them.
-
-    $ cat multiple.mustache
-    ---
-    name: chris
-    ---
-    name: mark
-    ---
-    name: scott
-    ---
-    Hi {{name}!
-
-    $ mustache < multiple.mustache
-    Hi chris!
-    Hi mark!
-    Hi scott!
-
-It's probably more useful to keep the YAML and HTML in separate files,
-though. `cat` makes this easy:
-
-    $ cat data.yml
-    ---
-    names: [ {name: chris}, {name: mark}, {name: scott} ]
-    ---
-
-    $ cat template.mustache
-    {{#names}}
-      Hi {{name}}!
-    {{/names}}
-
-    $ cat data.yml template.mustache | mustache
-    Hi chris!
-    Hi mark!
-    Hi scott!
-
+See `mustache(1)` man page or
+<http://defunkt.github.com/mustache/mustache.1.html>
+for command line docs.
 
 Installation
 ------------
 
-### [Gemcutter](http://gemcutter.org/)
+### [RubyGems](http://rubygems.org/)
 
     $ gem install mustache
 
 ### [Rip](http://hellorip.com)
 
     $ rip install git://github.com/defunkt/mustache.git
-
 
 Acknowledgements
 ----------------
@@ -518,13 +339,11 @@ Meta
 ----
 
 * Code: `git clone git://github.com/defunkt/mustache.git`
-* Home: <http://github.com/defunkt/mustache>
-* Docs: <http://defunkt.github.com/mustache>
+* Home: <http://defunkt.github.com/mustache>
 * Bugs: <http://github.com/defunkt/mustache/issues>
 * List: <http://groups.google.com/group/mustache-rb>
 * Test: <http://runcoderun.com/defunkt/mustache>
-* Gems: <http://gemcutter.org/gems/mustache>
-* Boss: Chris Wanstrath :: <http://github.com/defunkt>
+* Gems: <http://rubygems.org/gems/mustache>
 
 [1]: http://code.google.com/p/google-ctemplate/
 [2]: http://www.ivan.fomichev.name/2008/05/erlang-template-engine-prototype.html

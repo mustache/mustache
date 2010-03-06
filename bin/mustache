@@ -19,31 +19,7 @@ else
   puts <<-usage
 Usage: cat data.yml template.mustache | mustache
 
-Expects a single Mustache template on STDIN complete with YAML
-frontmatter.
-
-Runs template.mustache through Mustache, using the data in data.yml to
-replace sections and variables. Useful when developing templates
-before hooking them into your website or whatnot.
-
-The data.yml file should start with --- on a single line and end with
---- on a single line, e.g.
-
-    ---
-    names: [ {name: chris}, {name: mark}, {name: scott} ]
-    ---
-
-The converted document will be printed on STDOUT.
-
-You can include multiple documents in your YAML frontmatter if you
-like. Then the template is evaluated once for each of them.
-
-    ---
-    name: chris
-    ---
-    name: mark
-    ---
-    name: scott
-    ---
+See mustache(1) or http://defunkt.github.com/mustache/mustache.1.html
+for an overview.
 usage
 end

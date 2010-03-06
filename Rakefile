@@ -16,7 +16,7 @@ end
 
 desc "Show the manual"
 task :man => :build_man do
-  exec "man man/mustache.5"
+  exec "man man/mustache.1"
 end
 
 desc "Launch Kicker (like autotest)"

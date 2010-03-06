@@ -205,3 +205,15 @@ markup."
 Custom delimiters may not contain whitespace or the equals sign.
 
 [ct]: http://google-ctemplate.googlecode.com/svn/trunk/doc/howto.html
+
+
+## COPYRIGHT
+
+Mustache is Copyright (C) 2009 Chris Wanstrath
+Original CTemplate by Google
+
+
+## SEE ALSO
+
+mustache(1), mustache(7), gem(1),
+<http://defunkt.github.com/mustache/>

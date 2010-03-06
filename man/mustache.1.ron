@@ -84,8 +84,10 @@ If you have RubyGems installed:
 ## COPYRIGHT
 
 Mustache is Copyright (C) 2009 Chris Wanstrath
+Original CTemplate by Google
 
 
 ## SEE ALSO
 
-mustache(5), mustache(7), gem(1)
+mustache(5), mustache(7), gem(1),
+<http://defunkt.github.com/mustache/>

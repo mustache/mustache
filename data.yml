@@ -5,12 +5,12 @@ last_language:
 languages: 
 - :url: http://github.com/janl/mustache.js
   :name: JavaScript
+- :url: http://github.com/defunkt/pystache
+  :name: Python
 - :url: http://github.com/mojombo/mustache.erl
   :name: Erlang
 - :url: http://github.com/hoisie/mustache.go/
   :name: Go
-- :url: http://github.com/defunkt/pystache
-  :name: Python
 - :url: http://github.com/nrk/hige
   :name: Lua
 ---

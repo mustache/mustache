@@ -18,9 +18,14 @@ $.fn.scrollTo = function scrollTo(speed) {
 };
 $(function() {
   $('#demo').click(function() {
-    $('#demo-box').show();
-    $('#demo').scrollTo(1);
-    return true;
+    $('#demo-box').toggle();
+    if ($('#demo-box:visible').length > 0) {
+      $('#demo').scrollTo(1);
+      window.location.hash = '#demo';
+    } else {
+      window.location.hash = '';
+    }
+    return false;
   });
   if (window.location.hash === "#demo") {
     $('#demo').click();

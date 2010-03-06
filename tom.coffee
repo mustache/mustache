@@ -16,9 +16,13 @@ $.fn.scrollTo: (speed) ->
 
 $ ->
   $('#demo').click ->
-    $('#demo-box').show()
-    $('#demo').scrollTo(1)
-    true
+    $('#demo-box').toggle()
+    if $('#demo-box:visible').length > 0 
+      $('#demo').scrollTo(1)
+      window.location.hash: '#demo'      
+    else  
+      window.location.hash: ''
+    false
     
   $('#demo').click() if window.location.hash is "#demo"    
   

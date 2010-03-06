@@ -45,7 +45,7 @@ class Mustache
 
     # Alias for `fetch`.
     def [](name)
-      fetch(name)
+      fetch(name, nil)
     end
 
     # Similar to Hash#fetch, finds a value by `name` in the context's

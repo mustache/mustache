@@ -9,8 +9,15 @@ Rake::TestTask.new do |t|
   t.verbose = false
 end
 
-desc "Build a gem"
-task :gem => [ :gemspec, :build ]
+desc "Build the manual"
+task :build_man do
+  sh "ron -br5 --organization=DEFUNKT --manual='Mustache Manual' man/*.ron"
+end
+
+desc "Show the manual"
+task :man => :build_man do
+  exec "man man/mustache.5"
+end
 
 desc "Launch Kicker (like autotest)"
 task :kicker do
@@ -20,26 +27,42 @@ end
 
 begin
   require 'jeweler'
+
   $LOAD_PATH.unshift 'lib'
   require 'mustache/version'
   Jeweler::Tasks.new do |gemspec|
     gemspec.name = "mustache"
-    gemspec.summary = "Mustache is a framework-agnostic way to render logic-free views."
-    gemspec.description = "Mustache is a framework-agnostic way to render logic-free views."
-    gemspec.email = "chris@ozmm.org"
+    gemspec.summary =
+      "Mustache is a framework-agnostic way to render logic-free views."
+    gemspec.version = Mustache::Version
+    gemspec.executables = ["mustache"]
     gemspec.homepage = "http://github.com/defunkt/mustache"
     gemspec.authors = ["Chris Wanstrath"]
-    gemspec.version = Mustache::Version
+    gemspec.email = "chris@ozmm.org"
+    gemspec.description = <<description
+Inspired by ctemplate, Mustache is a framework-agnostic way to render
+logic-free views.
+
+As ctemplates says, "It emphasizes separating logic from presentation:
+it is impossible to embed application logic in this template
+language.
+
+Think of Mustache as a replacement for your views. Instead of views
+consisting of ERB or HAML with random helpers and arbitrary logic,
+your views are broken into two parts: a Ruby class and an HTML
+template.
+description
   end
+
 rescue LoadError
-  puts "Jeweler not available."
-  puts "Install it with: gem install jeweler"
+  warn "Jewler not available."
+  warn "Install it with: gem i jewler"
 end
 
 begin
   require 'sdoc_helpers'
 rescue LoadError
-  puts "sdoc support not enabled. Please gem install sdoc-helpers."
+  warn "sdoc support not enabled. Please gem install sdoc-helpers."
 end
 
 desc "Push a new version to Gemcutter"

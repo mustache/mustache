@@ -2,41 +2,30 @@
 <html>
   <head>
     <title>&#123;&#123; mustache }}</title>
-    <style>
-      * {
-        margin: 0;
-        padding: 0;
-      }
-      #logo {
-        -webkit-transform: rotate(-90deg);
-        -moz-transform: rotate(-90deg);
-        text-align: center;
-        display: block;
-        font-size: 250px;
-        font-family: Georgia;
-      }
-    </style>
+    <link href="burt.css" media="screen" rel="stylesheet" type="text/css" />
   </head>
   <body>
     <span id="logo">}</span>
-    <p>Logic-less templates.
-      Available in
-      {{#languages}}
-        <a href="{{url}}">{{name}}</a>,
-      {{/languages}}
-      {{#last_language}}
-        and for
-        <a href="{{url}}">{{name}}</a>.
-      {{/last_language}}
-  </p>
+    <div id="content">
+      <p>Logic-less templates.</p>
 
-  <p>
-    Works great with
-    <a href="">Emacs</a>,
-    <a href="">Vim</a>,
-    and
-    <a href="">TextMate</a>.
-  </p>
+      <p>
+        Available in
+        {{#languages}}
+          <a href="{{url}}">{{name}}</a>,
+        {{/languages}}
+        {{#last_language}}
+          and for
+          <a href="{{url}}">{{name}}</a>.
+        {{/last_language}}
+      </p>
 
-
+      <p>
+        Works great with
+        <a href="">Emacs</a>,
+        <a href="">Vim</a>,
+        and
+        <a href="">TextMate</a>.
+      </p>
+    </div>
 </html>

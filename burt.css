@@ -1,0 +1,25 @@
+body {
+    font-family: Georgia;
+}
+
+#logo {
+    line-height: 180px;
+    -webkit-transform: rotate(-90deg);
+    -moz-transform: rotate(-90deg);
+    text-align: center;
+    display: block;
+    font-size: 250px;
+    font-family: Georgia;
+    margin-bottom: -30px;
+}
+
+#content {
+    width: 600px;
+    margin: 0 auto;
+}
+
+p {
+    font-size: 30px;
+    margin-bottom: 20px;
+    text-align: left;
+}

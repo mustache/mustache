@@ -14,8 +14,8 @@
 ;;;    (add-hook 'tpl-mode-hook '(lambda () (font-lock-mode 1)))
 ;;; ---
 ;;;
-;;; While the CTemplate language can be used for any types of text,
-;;; this mode is intended for using CTemplate to write HTML.
+;;; While the Mustache language can be used for any types of text,
+;;; this mode is intended for using Mustache to write HTML.
 ;;;
 ;;; The indentation still has minor bugs due to the fact that
 ;;; templates do not require valid HTML.

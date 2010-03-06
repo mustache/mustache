@@ -1,0 +1,355 @@
+.\" generated with Ron/v0.3
+.\" http://github.com/rtomayko/ron/
+.
+.TH "MUSTACHE" "5" "March 2010" "DEFUNKT" "Mustache Manual"
+.
+.SH "NAME"
+\fBmustache\fR \-\- Logic\-less templates.
+.
+.SH "SYNOPSIS"
+A typical Mustache template:
+.
+.IP "" 4
+.
+.nf
+
+\fBHello {{name}}
+You have just won ${{value}}!
+{{#in_ca}}
+Well, ${{taxed_value}}, after taxes.
+{{/in_ca}} \fR
+.
+.fi
+.
+.IP "" 0
+.
+.P
+Given the following hash:
+.
+.IP "" 4
+.
+.nf
+
+\fB{
+  "name": "Chris",
+  "value": 10000,
+  "taxed_value": 10000 - (10000 * 0.4),
+  "in_ca": true
+} \fR
+.
+.fi
+.
+.IP "" 0
+.
+.P
+Will produce the following:
+.
+.IP "" 4
+.
+.nf
+
+\fBHello Chris
+You have just won $10000!
+Well, $6000.0, after taxes. \fR
+.
+.fi
+.
+.IP "" 0
+.
+.SH "DESCRIPTION"
+Mustache can be used for HTML, config files, source code \-
+anything. It works by expanding tags in a template using values
+provided in a hash or object.
+.
+.P
+We call it "logic\-less" because there are no if statements, else
+clauses, or for loops. Instead there are only tags. Some tags are
+replaced with a value, some nothing, and others a series of
+values. This document explains the different types of Mustache tags.
+.
+.SH "TAG TYPES"
+Tags are indicated by the double mustaches. \fB{{name}}\fR is a tag. Let's
+talk about the different types of tags.
+.
+.SS "Variables"
+The most basic tag is the variable. A \fB{{name}}\fR tag in a basic
+template will try to call the \fBname\fR method on your view. If there is
+no \fBname\fR method, an exception will be raised.
+.
+.P
+All variables are HTML escaped by default. If you want to return
+unescaped HTML, use the triple mustache: \fB{{{name}}}\fR.
+.
+.P
+By default a variable "miss" returns an empty string. This can usually
+be configured in your Mustache library.
+.
+.P
+Template:
+.
+.IP "" 4
+.
+.nf
+
+\fB* {{name}}
+* {{age}}
+* {{company}}
+* {{{company}}} \fR
+.
+.fi
+.
+.IP "" 0
+.
+.P
+Hash:
+.
+.IP "" 4
+.
+.nf
+
+\fB{
+  "name": "Chris",
+  "company": "<b>GitHub</b>"
+} \fR
+.
+.fi
+.
+.IP "" 0
+.
+.P
+Output:
+.
+.IP "" 4
+.
+.nf
+
+\fB* Chris
+*
+* &lt;b&gt;GitHub&lt;/b&gt;
+* <b>GitHub</b> \fR
+.
+.fi
+.
+.IP "" 0
+.
+.SS "Boolean Sections"
+A section begins with a pound and ends with a slash. That is,\fB{{#person}}\fR begins a "person" section while \fB{{/person}}\fR ends it.
+.
+.P
+If the \fBperson\fR key exists and calling it returns false, the HTML
+between the pound and slash will not be displayed.
+.
+.P
+If the \fBperson\fR method exists and calling it returns true, the HTML
+between the pound and slash will be rendered and displayed.
+.
+.P
+Template:
+.
+.IP "" 4
+.
+.nf
+
+\fB{{#person}}
+  Shown!
+{{/person}}
+{{#anything_else}}
+  Never shown!
+{{/anything_else}} \fR
+.
+.fi
+.
+.IP "" 0
+.
+.P
+Hash:
+.
+.IP "" 4
+.
+.nf
+
+\fB{
+  "person": true
+} \fR
+.
+.fi
+.
+.IP "" 0
+.
+.P
+Output:
+.
+.IP "" 4
+.
+.nf
+
+\fBShown! \fR
+.
+.fi
+.
+.IP "" 0
+.
+.SS "Enumerable Sections"
+Enumerable sections are syntactically identical to boolean sections in
+that they begin with a pound and end with a slash. The difference,
+however, is in the view: if the method called returns an enumerable,
+the section is repeated as the enumerable is iterated over.
+.
+.P
+Each item in the enumerable is expected to be a hash which will then
+become the context of the corresponding iteration. In this way we can
+construct loops.
+.
+.P
+Template:
+.
+.IP "" 4
+.
+.nf
+
+\fB{{#repo}}
+  <b>{{name}}</b>
+{{/repo}} \fR
+.
+.fi
+.
+.IP "" 0
+.
+.P
+Hash:
+.
+.IP "" 4
+.
+.nf
+
+\fB{
+  "repo": [
+    { "name": "resque" },
+    { "name": "hub" },
+    { "name": "rip" },
+  ]
+} \fR
+.
+.fi
+.
+.IP "" 0
+.
+.P
+Output:
+.
+.IP "" 4
+.
+.nf
+
+\fB<b>resque</b>
+<b>hub</b>
+<b>rip</b> \fR
+.
+.fi
+.
+.IP "" 0
+.
+.SS "Comments"
+Comments begin with a bang and are ignored. The following template:
+.
+.IP "" 4
+.
+.nf
+
+\fB<h1>Today{{! ignore me }}.</h1> \fR
+.
+.fi
+.
+.IP "" 0
+.
+.P
+Will render as follows:
+.
+.IP "" 4
+.
+.nf
+
+\fB<h1>Today.</h1> \fR
+.
+.fi
+.
+.IP "" 0
+.
+.SS "Partials"
+Partials begin with a greater than sign, like \fB{{> box}}\fR.
+.
+.P
+It is useful to think of partials as a "template expansion" \- that is,
+the actual partial tag will be replaced with the content of the
+partial. Therefor partials share the current context.
+.
+.P
+For example, this template and partial:
+.
+.IP "" 4
+.
+.nf
+
+\fBbase.mustache:
+<h2>Names</h2>
+{{# names }}
+  {{> user }}
+{{/ names }} 
+user.mustache:
+<strong>{{ name }}</strong>
+\fR
+.
+.fi
+.
+.IP "" 0
+.
+.P
+Can be thought of as a single, expanded template:
+.
+.IP "" 4
+.
+.nf
+
+\fB<h2>Names</h2>
+{{# names }}
+  <strong>{{ name }}</strong>
+{{/ names }} \fR
+.
+.fi
+.
+.IP "" 0
+.
+.SS "Set Delimiter"
+Set Delimiter tags start with an equal sign and change the tag
+delimiters from {{ and }} to custom strings.
+.
+.P
+Consider the following contrived example:
+.
+.IP "" 4
+.
+.nf
+
+\fB* {{ default_tags }}
+{{=<% %>=}}
+* <% erb_style_tags %>
+<%={{ }}=%>
+* {{ default_tags_again }} \fR
+.
+.fi
+.
+.IP "" 0
+.
+.P
+Here we have a list with three items. The first item uses the default
+tag style, the second uses erb style as defined by the Set Delimiter
+tag, and the third returns to the default style after yet another Set
+Delimiter declaration.
+.
+.P
+According to \fIctemplates\fR, this "is useful for languages like TeX, where
+double\-braces may occur in the text and are awkward to use for
+markup."
+.
+.P
+Custom delimiters may not contain whitespace or the equals sign.

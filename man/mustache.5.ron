@@ -1,0 +1,207 @@
+mustache(5) -- Logic-less templates.
+====================================
+
+## SYNOPSIS
+
+A typical Mustache template:
+
+    Hello {{name}}
+    You have just won ${{value}}!
+    {{#in_ca}}
+    Well, ${{taxed_value}}, after taxes.
+    {{/in_ca}}
+
+Given the following hash:
+
+    {
+      "name": "Chris",
+      "value": 10000,
+      "taxed_value": 10000 - (10000 * 0.4),
+      "in_ca": true
+    }
+
+Will produce the following:
+
+    Hello Chris
+    You have just won $10000!
+    Well, $6000.0, after taxes.
+
+
+## DESCRIPTION
+
+Mustache can be used for HTML, config files, source code -
+anything. It works by expanding tags in a template using values
+provided in a hash or object.
+
+We call it "logic-less" because there are no if statements, else
+clauses, or for loops. Instead there are only tags. Some tags are
+replaced with a value, some nothing, and others a series of
+values. This document explains the different types of Mustache tags.
+
+
+## TAG TYPES
+
+Tags are indicated by the double mustaches. `{{name}}` is a tag. Let's
+talk about the different types of tags.
+
+
+### Variables
+
+The most basic tag is the variable. A `{{name}}` tag in a basic
+template will try to call the `name` method on your view. If there is
+no `name` method, an exception will be raised.
+
+All variables are HTML escaped by default. If you want to return
+unescaped HTML, use the triple mustache: `{{{name}}}`.
+
+By default a variable "miss" returns an empty string. This can usually
+be configured in your Mustache library.
+
+Template:
+
+    * {{name}}
+    * {{age}}
+    * {{company}}
+    * {{{company}}}
+
+Hash:
+
+    {
+      "name": "Chris",
+      "company": "<b>GitHub</b>"
+    }
+
+Output:
+
+    * Chris
+    *
+    * &lt;b&gt;GitHub&lt;/b&gt;
+    * <b>GitHub</b>
+
+### Boolean Sections
+
+A section begins with a pound and ends with a slash. That is,
+`{{#person}}` begins a "person" section while `{{/person}}` ends it.
+
+If the `person` key exists and calling it returns false, the HTML
+between the pound and slash will not be displayed.
+
+If the `person` method exists and calling it returns true, the HTML
+between the pound and slash will be rendered and displayed.
+
+Template:
+
+    {{#person}}
+      Shown!
+    {{/person}}
+    {{#anything_else}}
+      Never shown!
+    {{/anything_else}}
+
+Hash:
+
+    {
+      "person": true
+    }
+
+Output:
+
+    Shown!
+
+### Enumerable Sections
+
+Enumerable sections are syntactically identical to boolean sections in
+that they begin with a pound and end with a slash. The difference,
+however, is in the view: if the method called returns an enumerable,
+the section is repeated as the enumerable is iterated over.
+
+Each item in the enumerable is expected to be a hash which will then
+become the context of the corresponding iteration. In this way we can
+construct loops.
+
+Template:
+
+    {{#repo}}
+      <b>{{name}}</b>
+    {{/repo}}
+
+Hash:
+
+    {
+      "repo": [
+        { "name": "resque" },
+        { "name": "hub" },
+        { "name": "rip" },
+      ]
+    }
+
+Output:
+
+    <b>resque</b>
+    <b>hub</b>
+    <b>rip</b>
+
+
+### Comments
+
+Comments begin with a bang and are ignored. The following template:
+
+    <h1>Today{{! ignore me }}.</h1>
+
+Will render as follows:
+
+    <h1>Today.</h1>
+
+
+### Partials
+
+Partials begin with a greater than sign, like `{{> box}}`.
+
+It is useful to think of partials as a "template expansion" - that is,
+the actual partial tag will be replaced with the content of the
+partial. Therefor partials share the current context.
+
+For example, this template and partial:
+
+    base.mustache:
+    <h2>Names</h2>
+    {{# names }}
+      {{> user }}
+    {{/ names }}
+
+    user.mustache:
+    <strong>{{ name }}</strong>
+
+Can be thought of as a single, expanded template:
+
+    <h2>Names</h2>
+    {{# names }}
+      <strong>{{ name }}</strong>
+    {{/ names }}
+
+
+### Set Delimiter
+
+Set Delimiter tags start with an equal sign and change the tag
+delimiters from {{ and }} to custom strings.
+
+Consider the following contrived example:
+
+    * {{ default_tags }}
+    {{=<% %>=}}
+    * <% erb_style_tags %>
+    <%={{ }}=%>
+    * {{ default_tags_again }}
+
+Here we have a list with three items. The first item uses the default
+tag style, the second uses erb style as defined by the Set Delimiter
+tag, and the third returns to the default style after yet another Set
+Delimiter declaration.
+
+According to [ctemplates][ct], this "is useful for languages like TeX, where
+double-braces may occur in the text and are awkward to use for
+markup."
+
+Custom delimiters may not contain whitespace or the equals sign.
+
+[ct]: http://google-ctemplate.googlecode.com/svn/trunk/doc/howto.html

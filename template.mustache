@@ -3,16 +3,14 @@
 {{#bug}}
 {{/bug}}
 
-{{#list}}
-  {{#item}}
-    {{#current}}
-      <li><strong>{{name}}</strong></li>
-    {{/current}}
-    {{#link}}
-      <li><a href="{{url}}">{{name}}</a></li>
-    {{/link}}
-  {{/item}}
-{{/list}}
+{{#items}}
+  {{#first}}
+    <li><strong>{{name}}</strong></li>
+  {{/first}}
+  {{#link}}
+    <li><a href="{{url}}">{{name}}</a></li>
+  {{/link}}
+{{/items}}
 
 {{#empty}}
   <p>The list is empty.</p>

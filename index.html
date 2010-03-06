@@ -78,16 +78,14 @@ i__p__ /  |  ##############  | | ####### |__l___xp____| ooooo |      |~~~~|
         <label>Mustache</label>
         <textarea class="template">
 <h1>{{header}}</h1>
-{{#list}}
-  {{#item}}
-    {{#current}}
-      <li><strong>{{name}}</strong></li>
-    {{/current}}
-    {{#link}}
-      <li><a href="{{url}}">{{name}}</a></li>
-    {{/link}}
-  {{/item}}
-{{/list}}
+{{#items}}
+  {{#first}}
+    <li><strong>{{name}}</strong></li>
+  {{/first}}
+  {{#link}}
+    <li><a href="{{url}}">{{name}}</a></li>
+  {{/link}}
+{{/items}}
 
 {{#empty}}
   <p>The list is empty.</p>
@@ -97,13 +95,11 @@ i__p__ /  |  ##############  | | ####### |__l___xp____| ooooo |      |~~~~|
         <label>JSON</label>
         <textarea class="json">{
   "header": "Colors",
-  "item": [
-      {"name": "red", "current": true, "url": "#Red"},
-      {"name": "green", "current": false, "url": "#Green"},
-      {"name": "blue", "current": false, "url": "#Blue"}
+  "items": [
+      {"name": "red", "first": true, "url": "#Red"},
+      {"name": "green", "link": true, "url": "#Green"},
+      {"name": "blue", "link": true, "url": "#Blue"}
   ],
-  "link": true,
-  "list": true,
   "empty": false
 }</textarea>
 

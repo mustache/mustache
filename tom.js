@@ -6,16 +6,10 @@
 // Scrolls element1 to element2:
 //   $('element1').scrollTo($('element2'))
 //   $('element1').scrollTo($('element2'), speed)
-$.fn.scrollTo = function scrollTo(el, speed) {
+$.fn.scrollTo = function scrollTo(speed) {
   var container, offset, target;
-  if (typeof el === 'number' || !el) {
-    speed = el;
-    target = this;
-    container = 'html,body';
-  } else {
-    target = el;
-    container = this;
-  }
+  target = this;
+  container = 'html,body';
   offset = $(target).offset().top - 30;
   $(container).animate({
     scrollTop: offset
@@ -33,7 +27,6 @@ $(function() {
   }
   return $('.run').click(function() {
     var html, json, template;
-    console.log('clicked run');
     template = $('.template').val();
     json = $.parseJSON($('.json').val());
     html = Mustache.to_html(template, json).replace(/^\s*/mg, '');

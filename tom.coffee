@@ -6,14 +6,9 @@
 # Scrolls element1 to element2:
 #   $('element1').scrollTo($('element2'))
 #   $('element1').scrollTo($('element2'), speed)
-$.fn.scrollTo: (el, speed) ->
-  if typeof el is 'number' or not el
-    speed: el
-    target: this
-    container:'html,body'
-  else
-    target: el
-    container: this
+$.fn.scrollTo: (speed) ->
+  target: this
+  container:'html,body'
 
   offset: $(target).offset().top - 30
   $(container).animate({scrollTop: offset}, speed or 1000)

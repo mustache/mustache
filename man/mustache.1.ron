@@ -74,6 +74,13 @@ For example:
     Hi scott!
 
 
+## INSTALLATION
+
+If you have RubyGems installed:
+
+    gem install mustache
+
+
 ## COPYRIGHT
 
 Mustache is Copyright (C) 2009 Chris Wanstrath
@@ -81,4 +88,4 @@ Mustache is Copyright (C) 2009 Chris Wanstrath
 
 ## SEE ALSO
 
-mustache(5), mustache(7)
+mustache(5), mustache(7), gem(1)

@@ -271,4 +271,8 @@
   (setq font-lock-defaults '(tpl-mode-font-lock-keywords))
   (run-hooks 'tpl-mode-hook))
 
+;; Automatically load tpl-mode for .mustache files.
+(add-to-list 'auto-mode-alist '("\\.mustache$" . tpl-mode))
+(add-hook 'tpl-mode-hook '(lambda () (font-lock-mode 1)))
+
 (provide 'tpl-mode)

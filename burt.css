@@ -3,13 +3,15 @@ body {
 }
 
 #logo {
-    line-height: 180px;
+    height: 180px;
+    width: 200px;
     -webkit-transform: rotate(-90deg);
     -moz-transform: rotate(-90deg);
     text-align: center;
     display: block;
     font-size: 250px;
     font-family: Georgia;
+    margin: 0 auto;
     margin-bottom: -30px;
 }
 

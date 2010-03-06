@@ -23,6 +23,17 @@ end_passenger
 end_complex
   end
 
+  def test_nested_objects
+    assert_equal <<-end_complex, NestedObjects.render
+<h1>Colors</h1>
+<ul>
+  <li><strong>red</strong></li>
+    <li><a href="#Green">green</a></li>
+    <li><a href="#Blue">blue</a></li>
+    </ul>
+end_complex
+  end
+
   def test_single_line_sections
     html = %(<p class="flash-notice" {{# no_flash }}style="display: none;"{{/ no_flash }}>)
 

@@ -1,0 +1,84 @@
+mustache(1) -- Mustache processor
+=================================
+
+## SYNOPSIS
+
+`cat data.yml template.mustache | mustache`
+
+
+## DESCRIPTION
+
+Mustache is a logic-less templating system for HTML, config files,
+anything.
+
+The `mustache` command processes a Mustache template preceded by YAML
+frontmatter from standard input and prints one or more documents to
+standard output.
+
+YAML frontmatter beings with `---` on a single line, followed by YAML,
+ending with another `---` on a single line, e.g.
+
+    ---
+    names: [ {name: chris}, {name: mark}, {name: scott} ]
+    ---
+
+If you are unfamiliar with YAML, it is a superset of JSON. Valid JSON
+should work fine.
+
+After the frontmatter should come any valid Mustache template. See
+mustache(5) for an overview of Mustache templates.
+
+For example:
+
+    {{#names}}
+      Hi {{name}}!
+    {{/names}}
+
+Now let's combine them.
+
+    $ cat data.yml
+    ---
+    names: [ {name: chris}, {name: mark}, {name: scott} ]
+    ---
+
+    $ cat template.mustache
+    {{#names}}
+      Hi {{name}}!
+    {{/names}}
+
+    $ cat data.yml template.mustache | mustache
+    Hi chris!
+    Hi mark!
+    Hi scott!
+
+If you provide multiple YAML documents (as delimited by `---`), your
+template will be rendered multiple times. Like a mail merge.
+
+For example:
+
+    $ cat data.yml
+    ---
+    name: chris
+    ---
+    name: mark
+    ---
+    name: scott
+    ---
+
+    $ cat template.mustache
+    Hi {{name}}!
+
+    $ cat data.yml template.mustache | mustache
+    Hi chris!
+    Hi mark!
+    Hi scott!
+
+
+## COPYRIGHT
+
+Mustache is Copyright (C) 2009 Chris Wanstrath
+
+
+## SEE ALSO
+
+mustache(5), mustache(7)

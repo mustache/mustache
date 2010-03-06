@@ -1,3 +1,7 @@
+# Usage: ruby data.rb > data.yml
+#
+# Generates data.yml for use with index.mustache
+
 require 'hpricot'
 require 'open-uri'
 require 'yaml'

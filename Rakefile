@@ -79,11 +79,12 @@ task :publish => [ :test, :gemspec, :build ] do
 end
 
 desc "Publish to GitHub Pages"
-task :pages => [ :build_man, :check_dirty ] do
+task :pages => [ :build_man ] do
   Dir['man/*.html'].each do |f|
     cp f, File.basename(f).sub('.html', '.newhtml')
   end
 
+  `git commit -am 'generated manual'`
   `git checkout gh-pages`
 
   Dir['*.newhtml'].each do |f|
@@ -95,12 +96,6 @@ task :pages => [ :build_man, :check_dirty ] do
   `git push origin gh-pages`
   `git checkout master`
   puts :done
-end
-
-task :check_dirty do
-  if !`git status`.include?('nothing to commit')
-    abort "dirty index - not publishing!"
-  end
 end
 
 desc "Install the edge gem"

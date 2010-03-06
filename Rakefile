@@ -59,11 +59,11 @@ rescue LoadError
   warn "Install it with: gem i jewler"
 end
 
-begin
-  require 'sdoc_helpers'
-rescue LoadError
-  warn "sdoc support not enabled. Please gem install sdoc-helpers."
-end
+# begin
+#   require 'sdoc_helpers'
+# rescue LoadError
+#   warn "sdoc support not enabled. Please gem install sdoc-helpers."
+# end
 
 desc "Push a new version to Gemcutter"
 task :publish => [ :test, :gemspec, :build ] do
@@ -73,6 +73,31 @@ task :publish => [ :test, :gemspec, :build ] do
   system "gem push pkg/mustache-#{Mustache::Version}.gem"
   system "git clean -fd"
   exec "rake pages"
+end
+
+desc "Publish to GitHub Pages"
+task :pages => [ :build_man, :check_dirty ] do
+  Dir['man/*.html'].each do |f|
+    cp f, File.basename(f).sub('.html', '.newhtml')
+  end
+
+  `git checkout gh-pages`
+
+  Dir['*.newhtml'].each do |f|
+    mv f, f.sub('.newhtml', '.html')
+  end
+
+  `git add .`
+  `git commit -m updated`
+  `git push origin gh-pages`
+  `git checkout master`
+  puts :done
+end
+
+task :check_dirty do
+  if !`git status`.include?('nothing to commit')
+    abort "dirty index - not publishing!"
+  end
 end
 
 desc "Install the edge gem"

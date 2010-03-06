@@ -1,8 +1,10 @@
 body {
     font-family: Georgia;
+    color: #333;
 }
 
 #logo {
+    color: #000;
     height: 180px;
     width: 200px;
     -webkit-transform: rotate(-90deg);
@@ -24,4 +26,27 @@ p {
     font-size: 30px;
     margin-bottom: 20px;
     text-align: left;
+}
+
+label {
+
+}
+
+textarea, .html {
+    border: 1px solid #bbb;
+    padding: 5px;
+    width: 100%;
+    height: 350px;
+    font-size: 18px;
+    font-family: Inconsolata, monaco, courier;
+    margin-bottom: 20px;
+}
+
+.json {
+  margin-bottom: 0;
+}
+
+.run {
+    margin-bottom: 20px;
+    font-size: 130%;
 }

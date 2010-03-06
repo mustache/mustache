@@ -37,6 +37,7 @@ i__p__ /  |  ##############  | | ####### |__l___xp____| ooooo |      |~~~~|
   <head>
     <title>&#123;&#123; mustache }}</title>
     <link href="burt.css" media="screen" rel="stylesheet" type="text/css" />
+    <link href="extras/highlight.css" media="screen" rel="stylesheet" type="text/css" />
   </head>
   <body>
     <span id="logo">}</span>
@@ -68,5 +69,55 @@ i__p__ /  |  ##############  | | ####### |__l___xp____| ooooo |      |~~~~|
         <a href="mustache.1.html">mustache(1)</a> and
         <a href="mustache.5.html">mustache(5)</a>
       </p>
+
+      <p>
+        <a id="demo-link" href="#demo">Demo</a>
+      </p>
+
+      <div id="demo" >
+        <label>Mustache</label>
+        <textarea class="template">
+<h1>{{header}}</h1>
+{{#list}}
+  {{#item}}
+    {{#current}}
+      <li><strong>{{name}}</strong></li>
+    {{/current}}
+    {{#link}}
+      <li><a href="{{url}}">{{name}}</a></li>
+    {{/link}}
+  {{/item}}
+{{/list}}
+
+{{#empty}}
+  <p>The list is empty.</p>
+{{/empty}}
+</textarea>
+
+        <label>JSON</label>
+        <textarea class="json">{
+  "header": "Colors",
+  "item": [
+      {"name": "red", "current": true, "url": "#Red"},
+      {"name": "green", "current": false, "url": "#Green"},
+      {"name": "blue", "current": false, "url": "#Blue"}
+  ],
+  "link": true,
+  "list": true,
+  "empty": false
+}</textarea>
+
+        <p><input type="button" class="run" value="Render Template"/></p>
+
+        <label>HTML</label>
+        <pre class="html sh_html"></pre>
+      </div>
     </div>
+
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
+    <script src="extras/coffee-script.js"></script>
+    <script src="extras/mustache.js"></script>
+    <script src="extras/highlight.js"></script>
+    <script src="tom.js"></script>
+  </body>
 </html>

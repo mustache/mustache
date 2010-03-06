@@ -11,7 +11,8 @@ end
 
 desc "Build the index.html"
 task :build do
-  exec "ruby -rubygems data.rb > data.yml &&
+  exec "coffee --no-wrap tom.coffee &&
+    ruby -rubygems data.rb > data.yml &&
     cat data.yml index.mustache | mustache > index.html"
 end
 

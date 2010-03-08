@@ -1,6 +1,13 @@
-## 0.6.0 (2010-??-??)
+## 0.6.0 (2010-03-08)
 
-* Ruby objects can be used in sections, not just hashes. See 9477619638
+* Ruby objects can be used in sections, not just hashes. See
+  http://github.com/defunkt/mustache/commit/9477619638
+* As a result, `TypeError` is no longer thrown when hashes are not
+  passed.
+* mustache(1) man page is now included
+* mustache(5) man page is now included
+* tpl-mode.el has been renamed mustache-mode.el
+* Improved README
 
 ## 0.5.1 (2009-12-15)
 

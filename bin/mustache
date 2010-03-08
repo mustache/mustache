@@ -4,6 +4,8 @@ require 'mustache'
 require 'yaml'
 
 if !$stdin.tty?
+  # Not at a terminal, read from STDIN and print rendered templates to
+  # STDOUT.
   doc = $stdin.read
   if doc =~ /^(\s*---(.*)---\s*)/m
     yaml = $2.strip
@@ -15,9 +17,12 @@ if !$stdin.tty?
   else
     puts doc
   end
+elsif (ARGV.delete('-c') || ARGV.delete('--compile')) && (file = ARGV[0])
+  puts Mustache.compile(File.read(file))
 else
   puts <<-usage
 Usage: cat data.yml template.mustache | mustache
+Usage: mustache -c FILE
 
 See mustache(1) or http://defunkt.github.com/mustache/mustache.1.html
 for an overview.

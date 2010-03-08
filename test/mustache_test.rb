@@ -282,7 +282,6 @@ data
 
     assert Simple.compiled?
     assert instance.compiled?
-    assert false
   end
 
   def test_knows_when_its_been_compiled_at_the_instance_level

@@ -85,6 +85,14 @@ class Mustache
     render(*args)
   end
 
+  # Compiles a string template and returns it as a string for use as
+  # an interpolated Ruby string (not fully rendered HTML), e.g.
+  # >> Mustache.compile("Hi, {{person}}!")
+  # => "Hi, #{CGI.escapeHTML(ctx[:person].to_s)}!"
+  def self.compile(template)
+    templateify(template).to_s
+  end
+
   # The template path informs your Mustache subclass where to look for its
   # corresponding template. By default it's the current directory (".")
   def self.template_path

@@ -59,6 +59,7 @@ class Mustache
     def compile(src = @source)
       "\"#{compile_sections(src)}\""
     end
+    alias_method :to_s, :compile
 
     # {{#sections}}okay{{/sections}}
     #

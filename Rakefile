@@ -1,66 +1,86 @@
 require 'rake/testtask'
 require 'rake/rdoctask'
 
+def command?(command)
+  system("type #{command} > /dev/null")
+end
+
+#
+# Tests
+#
+
 task :default => :test
 
-desc "Build a gem."
-task :gem => [ :gemspec, :build ]
-
-Rake::TestTask.new do |t|
-  t.libs << 'lib'
-  t.pattern = 'test/**/*_test.rb'
-  t.verbose = false
+if command? :turn
+  desc "Run tests"
+  task :test do
+    sh "turn"
+  end
+else
+  Rake::TestTask.new do |t|
+    t.libs << 'lib'
+    t.pattern = 'test/**/*_test.rb'
+    t.verbose = false
+  end
 end
 
-desc "Build the manual"
-task :build_man do
-  sh "ron -br5 --organization=DEFUNKT --manual='Mustache Manual' man/*.ron"
-end
+#
+# Ron
+#
 
-desc "Show the manual"
-task :man => :build_man do
-  exec "man man/mustache.1"
-end
-
-desc "Launch Kicker (like autotest)"
-task :kicker do
-  puts "Kicking... (ctrl+c to cancel)"
-  exec "kicker -e rake test lib examples"
-end
-
-begin
-  require 'jeweler'
-
-  $LOAD_PATH.unshift 'lib'
-  require 'mustache/version'
-  Jeweler::Tasks.new do |gemspec|
-    gemspec.name = "mustache"
-    gemspec.summary =
-      "Mustache is a framework-agnostic way to render logic-free views."
-    gemspec.version = Mustache::Version
-    gemspec.executables = ["mustache"]
-    gemspec.homepage = "http://github.com/defunkt/mustache"
-    gemspec.authors = ["Chris Wanstrath"]
-    gemspec.email = "chris@ozmm.org"
-    gemspec.description = <<description
-Inspired by ctemplate, Mustache is a framework-agnostic way to render
-logic-free views.
-
-As ctemplates says, "It emphasizes separating logic from presentation:
-it is impossible to embed application logic in this template
-language.
-
-Think of Mustache as a replacement for your views. Instead of views
-consisting of ERB or HAML with random helpers and arbitrary logic,
-your views are broken into two parts: a Ruby class and an HTML
-template.
-description
+if command? :ron
+  desc "Show the manual"
+  task :man => "man:build" do
+    exec "man man/mustache.1"
   end
 
-rescue LoadError
-  warn "Jewler not available."
-  warn "Install it with: gem i jewler"
+  desc "Build the manual"
+  task "man:build" do
+    sh "ron -br5 --organization=DEFUNKT --manual='Mustache Manual' man/*.ron"
+  end
 end
+
+if command? :kicker
+  desc "Launch Kicker (like autotest)"
+  task :kicker do
+    puts "Kicking... (ctrl+c to cancel)"
+    exec "kicker -e rake test lib examples"
+  end
+end
+
+#
+# Gems
+#
+
+begin
+  require 'mg'
+  MG.new("mustache.gemspec")
+
+  desc "Build a gem."
+  task :gem => :package
+
+  # Ensure tests pass before pushing a gem.
+  task :gemcutter => :test
+
+  desc "Push a new version to Gemcutter and publish docs."
+  task :publish => :gemcutter do
+    require File.dirname(__FILE__) + '/lib/mustache/version'
+
+    system "git tag v#{Mustache::Version}"
+    system "git push origin v#{Mustache::Version}"
+    system "git push origin master"
+    system "gem push pkg/mustache-#{Mustache::Version}.gem"
+    system "git clean -fd"
+    exec "rake pages"
+  end
+rescue LoadError
+  warn "mg not available."
+  warn "Install it with: gem i mg"
+end
+
+#
+# Documentation
+#
 
 # begin
 #   require 'sdoc_helpers'
@@ -68,18 +88,8 @@ end
 #   warn "sdoc support not enabled. Please gem install sdoc-helpers."
 # end
 
-desc "Push a new version to Gemcutter"
-task :publish => [ :test, :gemspec, :build ] do
-  system "git tag v#{Mustache::Version}"
-  system "git push origin v#{Mustache::Version}"
-  system "git push origin master"
-  system "gem push pkg/mustache-#{Mustache::Version}.gem"
-  system "git clean -fd"
-  exec "rake pages"
-end
-
 desc "Publish to GitHub Pages"
-task :pages => [ :build_man ] do
+task :pages => [ "build:man" ] do
   Dir['man/*.html'].each do |f|
     cp f, File.basename(f).sub('.html', '.newhtml')
   end
@@ -96,17 +106,4 @@ task :pages => [ :build_man ] do
   `git push origin gh-pages`
   `git checkout master`
   puts :done
-end
-
-desc "Install the edge gem"
-task :install_edge => [ :dev_version, :gemspec, :build ] do
-  exec "gem install pkg/mustache-#{Mustache::Version}.gem"
-end
-
-# Sets the current Mustache version to the current dev version
-task :dev_version do
-  $LOAD_PATH.unshift 'lib/mustache'
-  require 'mustache/version'
-  version = Mustache::Version + '.' + Time.now.to_i.to_s
-  Mustache.const_set(:Version, version)
 end

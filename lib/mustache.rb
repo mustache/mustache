@@ -93,6 +93,10 @@ class Mustache
     templateify(template).to_s
   end
 
+  def self.render_file(name)
+    File.read("#{template_path}/#{name}.#{template_extension}")
+  end
+
   # The template path informs your Mustache subclass where to look for its
   # corresponding template. By default it's the current directory (".")
   def self.template_path
@@ -121,6 +125,17 @@ class Mustache
 
   def self.template_extension=(template_extension)
     @template_extension = template_extension
+    @template = nil
+  end
+
+  # The template name is the Mustache template file without any
+  # extension or other information. Defaults to `class_name`.
+  def self.template_name
+    @template_name || underscore
+  end
+
+  def self.template_name=(template_name)
+    @template_name = template_name
     @template = nil
   end
 

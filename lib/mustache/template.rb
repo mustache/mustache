@@ -74,7 +74,6 @@ class Mustache
         res << compile_tags($`)
         name = $1.strip.to_sym.inspect
         code = compile($2)
-        ctxtmp = "ctx#{tmpid}"
         res << ev(<<-compiled)
         if v = ctx[#{name}]
           v = [v] unless v.is_a?(Array) # shortcut when passed non-array
@@ -120,8 +119,8 @@ class Mustache
 
     # Partials are basically a way to render views from inside other views.
     def compile_partial(name)
-      src = File.read("#{@template_path}/#{name}.#{@template_extension}")
-      compile(src)[1..-2]
+      name = name.to_s.to_sym.inspect
+      ev("compile(ctx.partial(#{name}))")
     end
 
     # Generate a temporary id, used when compiling code.

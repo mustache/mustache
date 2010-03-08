@@ -77,4 +77,10 @@ Welcome
 ## Again, Welcome! ##
 end_partial
   end
+
+  def test_recursive_paritals
+    assert_equal <<-end_partial, Recursive.render
+It works!
+end_partial
+  end
 end

@@ -36,6 +36,10 @@ class Mustache
       self
     end
 
+    def partial(name)
+      @mustache.class.render_file(name)
+    end
+
     # Can be used to add a value to the context in a hash-like way.
     #
     # context[:name] = "Chris"

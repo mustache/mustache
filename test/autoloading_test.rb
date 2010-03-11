@@ -5,7 +5,7 @@ module TestViews; end
 
 class AutoloadingTest < Test::Unit::TestCase
   def setup
-    Mustache.view_path = File.dirname(__FILE__) + '/../examples'
+    Mustache.view_path = File.dirname(__FILE__) + '/fixtures'
   end
 
   def test_autoload

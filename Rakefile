@@ -14,7 +14,8 @@ task :default => :test
 if command? :turn
   desc "Run tests"
   task :test do
-    sh "turn"
+    suffix = "-n #{ENV['TEST']}" if ENV['TEST']
+    sh "turn test/*.rb #{suffix}"
   end
 else
   Rake::TestTask.new do |t|

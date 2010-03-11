@@ -172,7 +172,7 @@ end_section
   RailsEnv production
 </VirtualHost>
 data
-    template = File.read("examples/passenger.conf")
+    template = File.read(File.dirname(__FILE__) + "/fixtures/passenger.conf")
     assert_equal expected, Mustache.render(template, :stage => 'production',
                                                      :server => 'example.com',
                                                      :deploy_to => '/var/www/example.com' )
@@ -265,7 +265,7 @@ data
 
   def test_knows_when_its_been_compiled_when_using_a_file_template
     klass = Class.new(Simple)
-    klass.template_file = File.dirname(__FILE__) + '/../examples/simple.mustache'
+    klass.template_file = File.dirname(__FILE__) + '/fixtures/simple.mustache'
 
     assert ! klass.compiled?
     klass.render

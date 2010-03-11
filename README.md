@@ -358,6 +358,8 @@ Meta
 * Test: <http://runcoderun.com/defunkt/mustache>
 * Gems: <http://rubygems.org/gems/mustache>
 
+You can also find us in `#{` on irc.freenode.net.
+
 [1]: http://code.google.com/p/google-ctemplate/
 [2]: http://www.ivan.fomichev.name/2008/05/erlang-template-engine-prototype.html
 [3]: http://google-ctemplate.googlecode.com/svn/trunk/doc/howto.html

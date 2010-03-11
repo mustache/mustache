@@ -29,7 +29,7 @@ class Mustache
       if @mustache.respond_to? :partial
         @mustache.partial(name)
       else
-        Mustache.render(@mustache.class.render_file(name), self)
+        @mustache.class.render_file(name, self)
       end
     end
 

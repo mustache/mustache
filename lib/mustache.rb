@@ -93,8 +93,11 @@ class Mustache
     templateify(template).to_s
   end
 
-  def self.render_file(name)
-    File.read("#{template_path}/#{name}.#{template_extension}")
+  # Given a file name and an optional context, attempts to load and
+  # render the file as a template.
+  def self.render_file(name, context = {})
+    data = File.read("#{template_path}/#{name}.#{template_extension}")
+    render(data, context)
   end
 
   # The template path informs your Mustache subclass where to look for its

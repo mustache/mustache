@@ -120,7 +120,7 @@ class Mustache
     # Partials are basically a way to render views from inside other views.
     def compile_partial(name)
       name = name.to_s.to_sym.inspect
-      ev("compile(ctx.partial(#{name}))")
+      ev("ctx.partial(#{name})")
     end
 
     # Generate a temporary id, used when compiling code.

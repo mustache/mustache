@@ -18,6 +18,21 @@ class Mustache
       @stack = [@mustache]
     end
 
+    # A {{>partial}} tag translates into a call to the context's
+    # `partial` method, which would be this sucker right here.
+    #
+    # If the Mustache view handling the rendering (e.g. the view
+    # representing your profile page or some other template) responds
+    # to `partial`, we call it and use the result. Otherwise we render
+    # and compile the partial as its own view and return the result.
+    def partial(name)
+      if @mustache.respond_to? :partial
+        @mustache.partial(name)
+      else
+        Mustache.render(@mustache.class.render_file(name), self)
+      end
+    end
+
     # Adds a new object to the context's internal stack.
     #
     # Returns the Context.
@@ -36,10 +51,6 @@ class Mustache
       self
     end
 
-    def partial(name)
-      @mustache.class.render_file(name)
-    end
-
     # Can be used to add a value to the context in a hash-like way.
     #
     # context[:name] = "Chris"
@@ -50,6 +61,14 @@ class Mustache
     # Alias for `fetch`.
     def [](name)
       fetch(name, nil)
+    end
+
+    # Do we know about a particular key? In other words, will calling
+    # `context[key]` give us a result that was set. Basically.
+    def has_key?(key)
+      !!fetch(key)
+    rescue ContextMiss
+      false
     end
 
     # Similar to Hash#fetch, finds a value by `name` in the context's

@@ -275,4 +275,4 @@
 (add-to-list 'auto-mode-alist '("\\.mustache$" . tpl-mode))
 (add-hook 'tpl-mode-hook '(lambda () (font-lock-mode 1)))
 
-(provide 'tpl-mode)
+(provide 'mustache-mode)

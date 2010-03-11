@@ -1,3 +1,9 @@
+## 0.7.0 (2010-03-??)
+
+* `Mustache.compile` for compiling a template into Ruby.
+* `mustache -c FILE` to see a template's compiled Ruby.
+* Recursive partial support.
+
 ## 0.6.0 (2010-03-08)
 
 * Ruby objects can be used in sections, not just hashes. See

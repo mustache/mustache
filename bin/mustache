@@ -3,11 +3,41 @@
 require 'mustache'
 require 'yaml'
 
-if !$stdin.tty?
+def help
+  puts <<-usage
+Usage:
+  $ cat data.yml template.mustache | mustache
+  $ mustache data.yml template.mustache
+  $ cat <<data | druby mustache - template.mustache
+---
+name: Bob
+age: 30
+---
+data
+
+See compiled Ruby string:
+  $ mustache -c FILE
+
+Help:
+  $ mustache -h
+
+See mustache(1) or http://defunkt.github.com/mustache/mustache.1.html
+for an overview.
+usage
+end
+
+if (ARGV.delete('-c') || ARGV.delete('--compile')) && (file = ARGV[0])
+  puts Mustache.compile(File.read(file))
+
+elsif ($stdin.tty? && ARGV.empty?) || ARGV.delete('-h') || ARGV.delete('--help')
+  help
+
+else
   # Not at a terminal, read from STDIN and print rendered templates to
   # STDOUT.
-  doc = $stdin.read
-  if doc =~ /^(\s*---(.*)---\s*)/m
+  doc = ARGF.read
+
+  if doc =~ /^(\s*---(.+)---\s*)/m
     yaml = $2.strip
     template = doc.sub($1, '')
 
@@ -17,14 +47,5 @@ if !$stdin.tty?
   else
     puts doc
   end
-elsif (ARGV.delete('-c') || ARGV.delete('--compile')) && (file = ARGV[0])
-  puts Mustache.compile(File.read(file))
-else
-  puts <<-usage
-Usage: cat data.yml template.mustache | mustache
-Usage: mustache -c FILE
-
-See mustache(1) or http://defunkt.github.com/mustache/mustache.1.html
-for an overview.
-usage
+  exit
 end

@@ -54,6 +54,9 @@ no `name` method, an exception will be raised.
 All variables are HTML escaped by default. If you want to return
 unescaped HTML, use the triple mustache: `{{{name}}}`.
 
+You can also use `&` to unescape a variable: `{{& name}}`. This may be
+useful when changing delimiters (see "Set Delimter" below).
+
 By default a variable "miss" returns an empty string. This can usually
 be configured in your Mustache library.
 

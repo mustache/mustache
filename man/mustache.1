@@ -1,5 +1,5 @@
-.\" generated with Ron/v0.3
-.\" http://github.com/rtomayko/ron/
+.\" generated with Ronn/v0.4.1
+.\" http://github.com/rtomayko/ronn/
 .
 .TH "MUSTACHE" "1" "March 2010" "DEFUNKT" "Mustache Manual"
 .
@@ -19,16 +19,15 @@ frontmatter from standard input and prints one or more documents to
 standard output.
 .
 .P
-YAML frontmatter beings with \fB---\fR on a single line, followed by YAML,
-ending with another \fB---\fR on a single line, e.g.
+YAML frontmatter beings with \fB\-\-\-\fR on a single line, followed by YAML,
+ending with another \fB\-\-\-\fR on a single line, e.g.
 .
 .IP "" 4
 .
 .nf
-
-\fB---
+\-\-\-
 names: [ {name: chris}, {name: mark}, {name: scott} ]
---- \fR
+\-\-\-
 .
 .fi
 .
@@ -48,10 +47,9 @@ For example:
 .IP "" 4
 .
 .nf
-
-\fB{{#names}}
+{{#names}}
   Hi {{name}}!
-{{/names}} \fR
+{{/names}}
 .
 .fi
 .
@@ -63,28 +61,25 @@ Now let's combine them.
 .IP "" 4
 .
 .nf
-
-\fB$ cat data.yml
----
+$ cat data.yml
+\-\-\-
 names: [ {name: chris}, {name: mark}, {name: scott} ]
---- 
+\-\-\-
 $ cat template.mustache
 {{#names}}
   Hi {{name}}!
 {{/names}}
-
 $ cat data.yml template.mustache | mustache
 Hi chris!
 Hi mark!
 Hi scott!
-\fR
 .
 .fi
 .
 .IP "" 0
 .
 .P
-If you provide multiple YAML documents (as delimited by \fB---\fR), your
+If you provide multiple YAML documents (as delimited by \fB\-\-\-\fR), your
 template will be rendered multiple times. Like a mail merge.
 .
 .P
@@ -93,23 +88,20 @@ For example:
 .IP "" 4
 .
 .nf
-
-\fB$ cat data.yml
----
+$ cat data.yml
+\-\-\-
 name: chris
----
+\-\-\-
 name: mark
----
+\-\-\-
 name: scott
---- 
+\-\-\-
 $ cat template.mustache
 Hi {{name}}!
-
 $ cat data.yml template.mustache | mustache
 Hi chris!
 Hi mark!
 Hi scott!
-\fR
 .
 .fi
 .
@@ -121,8 +113,7 @@ If you have RubyGems installed:
 .IP "" 4
 .
 .nf
-
-\fBgem install mustache \fR
+gem install mustache
 .
 .fi
 .

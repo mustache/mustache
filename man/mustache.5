@@ -1,5 +1,5 @@
-.\" generated with Ron/v0.3
-.\" http://github.com/rtomayko/ron/
+.\" generated with Ronn/v0.4.1
+.\" http://github.com/rtomayko/ronn/
 .
 .TH "MUSTACHE" "5" "March 2010" "DEFUNKT" "Mustache Manual"
 .
@@ -12,12 +12,11 @@ A typical Mustache template:
 .IP "" 4
 .
 .nf
-
-\fBHello {{name}}
+Hello {{name}}
 You have just won ${{value}}!
 {{#in_ca}}
 Well, ${{taxed_value}}, after taxes.
-{{/in_ca}} \fR
+{{/in_ca}}
 .
 .fi
 .
@@ -29,13 +28,12 @@ Given the following hash:
 .IP "" 4
 .
 .nf
-
-\fB{
+{
   "name": "Chris",
   "value": 10000,
-  "taxed_value": 10000 - (10000 * 0.4),
+  "taxed_value": 10000 \- (10000 * 0.4),
   "in_ca": true
-} \fR
+}
 .
 .fi
 .
@@ -47,10 +45,9 @@ Will produce the following:
 .IP "" 4
 .
 .nf
-
-\fBHello Chris
+Hello Chris
 You have just won $10000!
-Well, $6000.0, after taxes. \fR
+Well, $6000.0, after taxes.
 .
 .fi
 .
@@ -81,6 +78,10 @@ All variables are HTML escaped by default. If you want to return
 unescaped HTML, use the triple mustache: \fB{{{name}}}\fR.
 .
 .P
+You can also use \fB&\fR to unescape a variable: \fB{{& name}}\fR. This may be
+useful when changing delimiters (see "Set Delimter" below).
+.
+.P
 By default a variable "miss" returns an empty string. This can usually
 be configured in your Mustache library.
 .
@@ -90,11 +91,10 @@ Template:
 .IP "" 4
 .
 .nf
-
-\fB* {{name}}
+* {{name}}
 * {{age}}
 * {{company}}
-* {{{company}}} \fR
+* {{{company}}}
 .
 .fi
 .
@@ -106,11 +106,10 @@ Hash:
 .IP "" 4
 .
 .nf
-
-\fB{
+{
   "name": "Chris",
   "company": "<b>GitHub</b>"
-} \fR
+}
 .
 .fi
 .
@@ -122,11 +121,10 @@ Output:
 .IP "" 4
 .
 .nf
-
-\fB* Chris
+* Chris
 *
 * &lt;b&gt;GitHub&lt;/b&gt;
-* <b>GitHub</b> \fR
+* <b>GitHub</b>
 .
 .fi
 .
@@ -149,13 +147,12 @@ Template:
 .IP "" 4
 .
 .nf
-
-\fB{{#person}}
+{{#person}}
   Shown!
 {{/person}}
 {{#anything_else}}
   Never shown!
-{{/anything_else}} \fR
+{{/anything_else}}
 .
 .fi
 .
@@ -167,10 +164,9 @@ Hash:
 .IP "" 4
 .
 .nf
-
-\fB{
+{
   "person": true
-} \fR
+}
 .
 .fi
 .
@@ -182,8 +178,7 @@ Output:
 .IP "" 4
 .
 .nf
-
-\fBShown! \fR
+Shown!
 .
 .fi
 .
@@ -206,10 +201,9 @@ Template:
 .IP "" 4
 .
 .nf
-
-\fB{{#repo}}
+{{#repo}}
   <b>{{name}}</b>
-{{/repo}} \fR
+{{/repo}}
 .
 .fi
 .
@@ -221,14 +215,13 @@ Hash:
 .IP "" 4
 .
 .nf
-
-\fB{
+{
   "repo": [
     { "name": "resque" },
     { "name": "hub" },
     { "name": "rip" },
   ]
-} \fR
+}
 .
 .fi
 .
@@ -240,10 +233,9 @@ Output:
 .IP "" 4
 .
 .nf
-
-\fB<b>resque</b>
+<b>resque</b>
 <b>hub</b>
-<b>rip</b> \fR
+<b>rip</b>
 .
 .fi
 .
@@ -255,8 +247,7 @@ Comments begin with a bang and are ignored. The following template:
 .IP "" 4
 .
 .nf
-
-\fB<h1>Today{{! ignore me }}.</h1> \fR
+<h1>Today{{! ignore me }}.</h1>
 .
 .fi
 .
@@ -268,8 +259,7 @@ Will render as follows:
 .IP "" 4
 .
 .nf
-
-\fB<h1>Today.</h1> \fR
+<h1>Today.</h1>
 .
 .fi
 .
@@ -289,15 +279,13 @@ For example, this template and partial:
 .IP "" 4
 .
 .nf
-
-\fBbase.mustache:
+base.mustache:
 <h2>Names</h2>
 {{# names }}
   {{> user }}
-{{/ names }} 
+{{/ names }}
 user.mustache:
 <strong>{{ name }}</strong>
-\fR
 .
 .fi
 .
@@ -309,11 +297,10 @@ Can be thought of as a single, expanded template:
 .IP "" 4
 .
 .nf
-
-\fB<h2>Names</h2>
+<h2>Names</h2>
 {{# names }}
   <strong>{{ name }}</strong>
-{{/ names }} \fR
+{{/ names }}
 .
 .fi
 .
@@ -329,12 +316,11 @@ Consider the following contrived example:
 .IP "" 4
 .
 .nf
-
-\fB* {{ default_tags }}
+* {{ default_tags }}
 {{=<% %>=}}
 * <% erb_style_tags %>
 <%={{ }}=%>
-* {{ default_tags_again }} \fR
+* {{ default_tags_again }}
 .
 .fi
 .

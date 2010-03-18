@@ -94,7 +94,7 @@ class Mustache
     # 4. Partial tags - {{> partial_name }}
     def compile_tags(src)
       res = ""
-      while src =~ /#{otag}(#|=|!|<|>|\{)?(.+?)\1?#{ctag}+/m
+      while src =~ /#{otag}(#|=|!|<|>|&|\{)?(.+?)\1?#{ctag}+/m
         res << str($`)
         case $1
         when '#'
@@ -107,7 +107,7 @@ class Mustache
           self.otag, self.ctag = $2.strip.split(' ', 2)
         when '>', '<'
           res << compile_partial($2.strip)
-        when '{'
+        when '{', '&'
           res << utag($2.strip)
         else
           res << etag($2.strip)
@@ -157,6 +157,7 @@ class Mustache
     end
 
     # {{{}}} - an unescaped tag
+    # Aliased as & - {{&name}}
     def utag(s)
       ev("ctx[#{s.strip.to_sym.inspect}]")
     end

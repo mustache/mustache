@@ -88,7 +88,7 @@ end
 # end
 
 desc "Publish to GitHub Pages"
-task :pages => [ "build:man" ] do
+task :pages => [ "man:build" ] do
   Dir['man/*.html'].each do |f|
     cp f, File.basename(f).sub('.html', '.newhtml')
   end

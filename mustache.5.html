@@ -2,7 +2,7 @@
 <html>
 <head>
   <meta http-equiv='content-type' value='text/html;charset=utf8'>
-  <meta name='generator' value='Ron/v0.3'>
+  <meta name='generator' value='Ronn/v0.4.1'>
   <title>mustache(5) -- Logic-less templates.</title>
   <style type='text/css'>
     body {margin:0}
@@ -64,6 +64,7 @@
 
 <h2 id='NAME'>NAME</h2>
 <p><code>mustache</code> -- Logic-less templates.</p>
+
 <h2>SYNOPSIS</h2>
 
 <p>A typical Mustache template:</p>
@@ -116,6 +117,9 @@ no <code>name</code> method, an exception will be raised.</p>
 
 <p>All variables are HTML escaped by default. If you want to return
 unescaped HTML, use the triple mustache: <code>{{{name}}}</code>.</p>
+
+<p>You can also use <code>&amp;</code> to unescape a variable: <code>{{&amp; name}}</code>. This may be
+useful when changing delimiters (see "Set Delimter" below).</p>
 
 <p>By default a variable "miss" returns an empty string. This can usually
 be configured in your Mustache library.</p>
@@ -261,9 +265,9 @@ delimiters from {{ and }} to custom strings.</p>
 <p>Consider the following contrived example:</p>
 
 <pre><code>* {{ default_tags }}
-{{=&lt;% %&gt;=}}
-* &lt;% erb_style_tags %&gt;
-&lt;%={{ }}=%&gt;
+{{=&lt;% %>=}}
+* &lt;% erb_style_tags %>
+&lt;%={{ }}=%>
 * {{ default_tags_again }}
 </code></pre>
 
@@ -288,6 +292,7 @@ markup."</p>
 
 <p>mustache(1), mustache(7), gem(1),
 <a href="http://defunkt.github.com/mustache/">http://defunkt.github.com/mustache/</a></p>
+
 
 <ol class='foot man'>
   <li class='tl'>DEFUNKT</li>

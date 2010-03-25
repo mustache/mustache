@@ -203,9 +203,12 @@ data
     instance[:list] = [ :item => 1234 ]
     instance.template = '{{#list}} <li>{{item}}</li> {{/gist}}'
 
-    assert_raise Mustache::Template::UnclosedSection do
+    begin
       instance.render
+    rescue => e
     end
+
+    assert e.message.include?('Unclosed section')
   end
 
   def test_unclosed_sections_reports_the_line_number
@@ -218,7 +221,7 @@ data
     rescue => e
     end
 
-    assert e.message.include?('line 3')
+    assert e.message.include?('Line 3')
   end
 
   def test_enumerable_sections_accept_a_hash_as_a_context

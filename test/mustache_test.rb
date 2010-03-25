@@ -108,8 +108,9 @@ end_simple
 * It worked the first time.
 
 * And it worked the second time.
+* As well as the third.
 
-* Then, surprisingly, it worked the third time.
+* Then, surprisingly, it worked the final time.
 end_template
   end
 

@@ -314,9 +314,15 @@ data
     assert_equal Mustache::Parser.new.compile(string), Mustache.tokenize(string)
   end
 
-  def xtest_lots_of_staches
+  def test_lots_of_staches
     template = "{{{{foo}}}}"
-    assert_equal "defunkt", Mustache.render(template, :foo => "defunkt")
+
+    begin
+      Mustache.render(template, :foo => "defunkt")
+    rescue => e
+    end
+
+    assert e.message.include?("Illegal content in tag")
   end
 
   def test_liberal_tag_names

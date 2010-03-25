@@ -15,6 +15,9 @@ age: 30
 ---
 data
 
+See tokenized output:
+  $ mustache -t FILE
+
 See compiled Ruby string:
   $ mustache -c FILE
 
@@ -28,6 +31,10 @@ end
 
 if (ARGV.delete('-c') || ARGV.delete('--compile')) && (file = ARGV[0])
   puts Mustache.compile(File.read(file))
+
+elsif (ARGV.delete('-t') || ARGV.delete('--tokens')) && (file = ARGV[0])
+  require 'pp'
+  pp Mustache.tokenize(File.read(file))
 
 elsif ($stdin.tty? && ARGV.empty?) || ARGV.delete('-h') || ARGV.delete('--help')
   help

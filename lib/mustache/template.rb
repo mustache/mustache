@@ -39,9 +39,12 @@ class Mustache
     # Does the dirty work of transforming a Mustache template into an
     # interpolation-friendly Ruby string.
     def compile(src = @source)
-      exp = Parser.new.compile(src)
-      Generator.new.compile(exp)
+      Generator.new.compile(tokens)
     end
     alias_method :to_s, :compile
+
+    def tokens(src = @source)
+      Parser.new.compile(src)
+    end
   end
 end

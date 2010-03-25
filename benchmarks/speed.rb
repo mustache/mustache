@@ -7,9 +7,9 @@ $LOAD_PATH.unshift File.dirname(__FILE__) + '/../test/fixtures'
 require 'complex_view'
 
 ## erb
-template = File.read(File.dirname(__FILE__) + '/complex.erb')
-
 unless ENV['NOERB']
+  template = File.read(File.dirname(__FILE__) + '/complex.erb')
+
   erb =  ERB.new(template)
   erb_scope = ComplexView.new
   erb_scope.instance_eval("def render_erb; #{erb.src}; end")
@@ -27,10 +27,10 @@ end
 
 
 ## haml
-require 'haml'
-template = File.read(File.dirname(__FILE__) + '/complex.haml')
-
 unless ENV['NOHAML']
+  require 'haml'
+  template = File.read(File.dirname(__FILE__) + '/complex.haml')
+
   haml = Haml::Engine.new(template, :ugly => true)
   haml_scope = ComplexView.new
   haml.def_method(haml_scope, :render_haml)

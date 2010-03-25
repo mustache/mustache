@@ -29,7 +29,7 @@ end
 # Ron
 #
 
-if command? :ron
+if command? :ronn
   desc "Show the manual"
   task :man => "man:build" do
     exec "man man/mustache.1"
@@ -37,7 +37,7 @@ if command? :ron
 
   desc "Build the manual"
   task "man:build" do
-    sh "ron -br5 --organization=DEFUNKT --manual='Mustache Manual' man/*.ron"
+    sh "ronn -br5 --organization=DEFUNKT --manual='Mustache Manual' man/*.ron"
   end
 end
 

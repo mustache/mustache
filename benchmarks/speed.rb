@@ -3,7 +3,7 @@ require 'erb'
 $LOAD_PATH.unshift File.dirname(__FILE__)
 require 'helper'
 
-$LOAD_PATH.unshift File.dirname(__FILE__) + '/../examples'
+$LOAD_PATH.unshift File.dirname(__FILE__) + '/../test/fixtures'
 require 'complex_view'
 
 ## erb

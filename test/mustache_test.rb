@@ -309,6 +309,27 @@ data
       Mustache.compile("Hi, {{person}}!")
   end
 
+  def test_tokenize
+    string = "Hi, {{person}}!"
+    assert_equal Mustache::Parser.new.compile(string), Mustache.tokenize(string)
+  end
+
+  def xtest_lots_of_staches
+    template = "{{{{foo}}}}"
+    assert_equal "defunkt", Mustache.render(template, :foo => "defunkt")
+  end
+
+  def test_liberal_tag_names
+    template = "{{first-name}} {{middle_name}} {{last23name}}"
+    hash = {
+      'first-name' => 'chris',
+      'middle_name' => 'j',
+      'last23name' => 'strath'
+    }
+
+    assert_equal "chris j strath", Mustache.render(template, hash)
+  end
+
   def test_nested_sections_same_names
     template = <<template
 {{#items}}

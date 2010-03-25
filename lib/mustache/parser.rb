@@ -23,8 +23,11 @@ EOF
     # After these types of tags, all whitespace will be skipped.
     SKIP_WHITESPACE = [ '#', '/' ]
 
+    # The content allowed in a tag name.
+    ALLOWED_CONTENT = /(\w|-)*/
+
     # These types of tags allow any content,
-    # the rest only allow \w+.
+    # the rest only allow ALLOWED_CONTENT.
     ANY_CONTENT = [ '!', '=' ]
 
     attr_reader :scanner, :result
@@ -78,7 +81,7 @@ EOF
         r = /\s*#{regexp(type)}?#{regexp(current_ctag)}/
         content = scan_until_exclusive(r)
       else
-        content = @scanner.scan(/\w*/)
+        content = @scanner.scan(ALLOWED_CONTENT)
       end
 
       error "Illegal content in tag" if content.empty?

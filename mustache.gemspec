@@ -1,7 +1,9 @@
+require 'mustache/version'
+
 Gem::Specification.new do |s|
   s.name              = "mustache"
-  s.version           = "0.7.0"
-  s.date              = "2010-03-08"
+  s.version           = Mustache::Version
+  s.date              = Time.now.strftime('%Y-%m-%d')
   s.summary           =
         "Mustache is a framework-agnostic way to render logic-free views."
   s.homepage          = "http://github.com/defunkt/mustache"

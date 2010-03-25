@@ -326,11 +326,11 @@ data
   end
 
   def test_liberal_tag_names
-    template = "{{first-name}} {{middle_name}} {{last23name}}"
+    template = "{{first-name}} {{middle_name!}} {{lastName?}}"
     hash = {
       'first-name' => 'chris',
-      'middle_name' => 'j',
-      'last23name' => 'strath'
+      'middle_name!' => 'j',
+      'lastName?' => 'strath'
     }
 
     assert_equal "chris j strath", Mustache.render(template, hash)

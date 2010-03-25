@@ -24,7 +24,7 @@ EOF
     SKIP_WHITESPACE = [ '#', '/' ]
 
     # The content allowed in a tag name.
-    ALLOWED_CONTENT = /(\w|-)*/
+    ALLOWED_CONTENT = /(\w|[?!-])*/
 
     # These types of tags allow any content,
     # the rest only allow ALLOWED_CONTENT.

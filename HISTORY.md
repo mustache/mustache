@@ -1,9 +1,10 @@
-## 0.7.0 (2010-03-??)
+## 0.7.0 (2010-03-25)
 
 * `Mustache.compile` for compiling a template into Ruby.
 * `mustache -c FILE` to see a template's compiled Ruby.
 * Recursive partial support.
 * Added `&` as an alias for the triple mustache (unescaped HTML).
+* Simpler examples. Old examples are now test fixtures.
 
 ## 0.6.0 (2010-03-08)
 

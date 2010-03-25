@@ -308,4 +308,42 @@ data
     assert_equal '"Hi, #{CGI.escapeHTML(ctx[:person].to_s)}!"',
       Mustache.compile("Hi, {{person}}!")
   end
+
+  def test_nested_sections_same_names
+    template = <<template
+{{#items}}
+start
+{{#items}}
+  {{a}}
+{{/items}}
+end
+{{/items}}
+template
+
+    data = {
+      "items" => [
+        { "items" => [ {"a" => 1}, {"a" => 2}, {"a" => 3} ] },
+        { "items" => [ {"a" => 4}, {"a" => 5}, {"a" => 6} ] },
+        { "items" => [ {"a" => 7}, {"a" => 8}, {"a" => 9} ] }
+      ]
+    }
+
+    assert_equal <<expected, Mustache.render(template, data)
+start
+1
+2
+3
+end
+start
+4
+5
+6
+end
+start
+7
+8
+9
+end
+expected
+  end
 end

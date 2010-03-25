@@ -322,7 +322,16 @@ class Mustache
   # Parses our fancy pants template file and returns normal file with
   # all special {{tags}} and {{#sections}}replaced{{/sections}}.
   def render(data = template, ctx = {})
-    templateify(data).render(context.update(ctx))
+    tpl = templateify(data)
+
+    return tpl.render(context) if ctx == {}
+
+    begin
+      context.push(ctx)
+      tpl.render(context)
+    ensure
+      context.pop
+    end
   end
   alias_method :to_html, :render
   alias_method :to_text, :render

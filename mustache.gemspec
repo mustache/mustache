@@ -1,6 +1,6 @@
 Gem::Specification.new do |s|
   s.name              = "mustache"
-  s.version           = "0.6.0"
+  s.version           = "0.7.0"
   s.date              = "2010-03-08"
   s.summary           =
         "Mustache is a framework-agnostic way to render logic-free views."

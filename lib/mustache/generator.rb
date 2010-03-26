@@ -20,6 +20,12 @@ class Mustache
   #
   # >> puts Mustache::Generator.new.compile(tokens)
   # "Hi #{CGI.escapeHTML(ctx[:thing].to_s)}!\n"
+  #
+  # You can see the generated Ruby string for any template with the
+  # mustache(1) command line tool:
+  #
+  #   $ mustache --compile test.mustache
+  #   "Hi #{CGI.escapeHTML(ctx[:thing].to_s)}!\n"
   class Generator
     # Options are unused for now but may become useful in the future.
     def initialize(options = {})

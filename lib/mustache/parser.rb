@@ -1,7 +1,31 @@
 require 'strscan'
 
 class Mustache
+  # The Parser is responsible for taking a string template and
+  # converting it into an array of tokens and, really, expressions. It
+  # raises SyntaxError if there is anything it doesn't understand and
+  # knows which sigil corresponds to which tag type.
+  #
+  # For example, given this template:
+  #
+  #   Hi {{thing}}!
+  #
+  # Run through the Parser we'll get these tokens:
+  #
+  #   [:multi,
+  #     [:static, "Hi "],
+  #     [:mustache, :etag, "thing"],
+  #     [:static, "!\n"]]
+  #
+  # You can see the array of tokens for any template with the
+  # mustache(1) command line tool:
+  #
+  #   $ mustache --tokens test.mustache
+  #   [:multi, [:static, "Hi "], [:mustache, :etag, "thing"], [:static, "!\n"]]
   class Parser
+    # A SyntaxError is raised when the Parser comes across unclosed
+    # tags, sections, illegal content in tags, or anything of that
+    # sort.
     class SyntaxError < StandardError
       def initialize(message, position)
         @message = message
@@ -33,33 +57,35 @@ EOF
     attr_reader :scanner, :result
     attr_writer :otag, :ctag
 
+    # Accepts an options hash which does nothing but may be used in
+    # the future.
     def initialize(options = {})
       @options = {}
     end
 
-    def regexp(thing)
-      /#{Regexp.escape(thing)}/
-    end
-
+    # The opening tag delimiter. This may be changed at runtime.
     def otag
       @otag ||= '{{'
     end
 
+    # The closing tag delimiter. This too may be changed at runtime.
     def ctag
       @ctag ||= '}}'
     end
 
-    def compile(data)
+    # Given a string template, returns an array of tokens.
+    def compile(template)
       # Keeps information about opened sections.
       @sections = []
       @result = [:multi]
-      @scanner = StringScanner.new(data)
+      @scanner = StringScanner.new(template)
 
+      # Scan until the end of the template.
       until @scanner.eos?
         scan_tags || scan_text
       end
 
-      unless @sections.empty?
+      if !@sections.empty?
         # We have parsed the whole file, but there's still opened sections.
         type, pos, result = @sections.pop
         error "Unclosed section #{type.inspect}", pos
@@ -68,7 +94,9 @@ EOF
       @result
     end
 
+    # Find {{mustaches}} and add them to the @result array.
     def scan_tags
+      # Scan until we hit an opening delimiter.
       return unless @scanner.scan(regexp(otag))
 
       # Since {{= rewrites ctag, we store the ctag which should be used
@@ -77,6 +105,8 @@ EOF
       type = @scanner.scan(/#|\/|=|!|<|>|&|\{/)
       @scanner.skip(/\s*/)
 
+      # ANY_CONTENT tags allow any character inside of them, while
+      # other tags (such as variables) are more strict.
       if ANY_CONTENT.include?(type)
         r = /\s*#{regexp(type)}?#{regexp(current_ctag)}/
         content = scan_until_exclusive(r)
@@ -84,8 +114,10 @@ EOF
         content = @scanner.scan(ALLOWED_CONTENT)
       end
 
+      # We found {{ but we can't figure out what's going on inside.
       error "Illegal content in tag" if content.empty?
 
+      # Based on the sigil, do what needs to be done.
       case type
       when '#'
         block = [:multi]
@@ -108,22 +140,29 @@ EOF
       when '>', '<'
         @result << [:mustache, :partial, content]
       when '{', '&'
+        # The closing } in unescaped tags is just a hack for
+        # aesthetics.
         type = "}" if type == "{"
         @result << [:mustache, :utag, content]
       else
         @result << [:mustache, :etag, content]
       end
 
+      # Skip whitespace and any balancing sigils after the content
+      # inside this tag.
       @scanner.skip(/\s+/)
       @scanner.skip(regexp(type)) if type
 
+      # Try to find the closing tag.
       unless close = @scanner.scan(regexp(current_ctag))
         error "Unclosed tag"
       end
 
+      # Skip whitespace following this tag if we need to.
       @scanner.skip(/\s+/) if SKIP_WHITESPACE.include?(type)
     end
 
+    # Try to find static text, e.g. raw HTML with no {{mustaches}}.
     def scan_text
       text = scan_until_exclusive(regexp(otag))
 
@@ -161,6 +200,15 @@ EOF
       [ lines.size, lines.last.size - 1, lines.last + rest ]
     end
 
+    # Used to quickly convert a string into a regular expression
+    # usable by the string scanner.
+    def regexp(thing)
+      /#{Regexp.escape(thing)}/
+    end
+
+    # Raises a SyntaxError. The message should be the name of the
+    # error - other details such as line number and position are
+    # handled for you.
     def error(message, pos = position)
       raise SyntaxError.new(message, pos)
     end

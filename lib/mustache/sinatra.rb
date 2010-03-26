@@ -43,6 +43,9 @@ class Mustache
     module Helpers
       # Call this in your Sinatra routes.
       def mustache(template, options={}, locals={})
+        # Locals can be passed as options under the :locals key.
+        locals.update(options.delete(:locals) || {})
+
         # Grab any user-defined settings.
         if settings.respond_to?(:mustache)
           options = settings.send(:mustache).merge(options)
@@ -57,7 +60,15 @@ class Mustache
         # one.
         if options[:layout] != false
           # If they passed a layout name use that.
-          layout = mustache_class(options[:layout] || :layout, options).new
+          layout = mustache_class(options[:layout] || :layout, options)
+
+          # If it's just an anonymous subclass then don't bother, otherwise
+          # give us a layout instance.
+          if layout.name.empty?
+            layout = nil
+          else
+            layout = layout.new
+          end
 
           # Does the view subclass the layout? If so we'll use the
           # view to render the layout so you can override layout
@@ -98,7 +109,7 @@ class Mustache
       # Given a view name and settings, finds and prepares an
       # appropriate view class for this view.
       def compile_mustache(view, options = {})
-        options[:templates] ||= self.views
+        options[:templates] ||= settings.views if settings.respond_to?(:views)
         options[:namespace] ||= self.class
 
         factory = Class.new(Mustache) do
@@ -124,7 +135,7 @@ class Mustache
         end
 
         # Set the template path and return our class.
-        klass.template_path = options[:templates]
+        klass.template_path = options[:templates] if options[:templates]
         klass
       end
     end

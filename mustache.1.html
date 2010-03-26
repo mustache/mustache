@@ -67,7 +67,10 @@
 
 <h2>SYNOPSIS</h2>
 
-<p><code>cat data.yml template.mustache | mustache</code></p>
+<pre><code>mustache &lt;YAML> &lt;FILE>
+mustache --compile &lt;FILE>
+mustache --tokens &lt;FILE>
+</code></pre>
 
 <h2>DESCRIPTION</h2>
 
@@ -140,11 +143,42 @@ Hi mark!
 Hi scott!
 </code></pre>
 
+<h2>OPTIONS</h2>
+
+<p>By default <code>mustache</code> will try to render a Mustache template using the
+YAML frontmatter you provide. It can do a few other things, however.</p>
+
+<dl>
+<dt><code>-c</code>, <code>--compile</code></dt><dd><p>Print the compiled Ruby version of a given template. This is the
+code that is actually used when rendering a template into a
+string. Useful for debugging but only if you are familiar with
+Mustache's internals.</p></dd>
+<dt><code>-t</code>, <code>--tokens</code></dt><dd><p>Print the tokenized form of a given Mustache template. This can be
+used to understand how Mustache parses a template. The tokens are
+handed to a generator which compiles them into a Ruby
+string. Syntax errors and confused tags, therefor, can probably be
+identified by examining the tokens produced.</p></dd>
+</dl>
+
+
 <h2>INSTALLATION</h2>
 
 <p>If you have RubyGems installed:</p>
 
 <pre><code>gem install mustache
+</code></pre>
+
+<h2>EXAMPLES</h2>
+
+<pre><code>$ mustache data.yml template.mustache
+$ cat data.yml | mustache - template.mustache
+$ mustache -c template.mustache
+$ cat &lt;&lt;data | ruby mustache - template.mustache
+---
+name: Bob
+age: 30
+---
+data
 </code></pre>
 
 <h2>COPYRIGHT</h2>

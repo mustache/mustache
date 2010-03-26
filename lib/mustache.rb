@@ -137,7 +137,7 @@ class Mustache
   # The template file is the absolute path of the file Mustache will
   # use as its template. By default it's ./class_name.mustache
   def self.template_file
-    @template_file || "#{path}/#{underscore}.#{template_extension}"
+    @template_file || "#{path}/#{template_name}.#{template_extension}"
   end
 
   def self.template_file=(template_file)

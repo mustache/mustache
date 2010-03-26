@@ -1,10 +1,10 @@
-## 0.8.0 (2010-03-??)
+## 0.9.0 (2010-03-??)
 
 * New, cleaner parser by Magnus Holm!
 * Improved error messages!
 * Bugfixes!
 * Faster runtime!
-* Sinatra 1.0 compatibility!
+* Sinatra 1.0 compatibility with layout tag overriding!
 
 ## 0.7.0 (2010-03-25)
 

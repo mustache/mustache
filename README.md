@@ -273,8 +273,8 @@ Sinatra
 
 Mustache ships with Sinatra integration. Please see
 `lib/mustache/sinatra.rb` or
-<http://defunkt.github.com/mustache/classes/Mustache/Sinatra.html> for
-complete documentation.
+<http://github.com/defunkt/mustache/blob/master/lib/mustache/sinatra.rb>
+for complete documentation.
 
 An example Sinatra application is also provided:
 <http://github.com/defunkt/mustache-sinatra-example>
@@ -305,6 +305,7 @@ is included under the contrib/ directory.
 
 See <http://gist.github.com/323622> for installation instructions.
 
+
 Emacs
 -----
 
@@ -323,12 +324,14 @@ TextMate
 
 See <http://gist.github.com/323624> for installation instructions.
 
+
 Command Line
 ------------
 
 See `mustache(1)` man page or
 <http://defunkt.github.com/mustache/mustache.1.html>
 for command line docs.
+
 
 Installation
 ------------
@@ -341,11 +344,15 @@ Installation
 
     $ rip install git://github.com/defunkt/mustache.git
 
+
 Acknowledgements
 ----------------
 
 Thanks to [Tom Preston-Werner](http://github.com/mojombo) for showing
 me ctemplate and [Leah Culver](http://github.com/leah) for the name "Mustache."
+
+Special thanks to [Magnus Holm](http://judofyr.net/) for all his
+awesome work on Mustache's parser.
 
 
 Meta

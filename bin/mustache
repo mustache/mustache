@@ -1,58 +1,90 @@
 #!/usr/bin/env ruby
 
-require 'mustache'
 require 'yaml'
+require 'optparse'
 
-def help
-  puts <<-usage
-Usage:
-  $ cat data.yml template.mustache | mustache
-  $ mustache data.yml template.mustache
-  $ cat <<data | druby mustache - template.mustache
----
-name: Bob
-age: 30
----
-data
+require 'mustache'
+require 'mustache/version'
 
-See tokenized output:
-  $ mustache -t FILE
+class Mustache
+  class CLI
+    # Return a structure describing the options.
+    def self.parse_options(args)
+      opts = OptionParser.new do |opts|
+        opts.banner = "Usage: mustache [-c] [-t] FILE ..."
 
-See compiled Ruby string:
-  $ mustache -c FILE
+        opts.separator " "
 
-Help:
-  $ mustache -h
+        opts.separator "Examples:"
+        opts.separator "  $ mustache data.yml template.mustache"
+        opts.separator "  $ cat data.yml | mustache - template.mustache"
+        opts.separator "  $ mustache -c template.mustache"
 
-See mustache(1) or http://defunkt.github.com/mustache/mustache.1.html
-for an overview.
-usage
-end
+        opts.separator " "
 
-if (ARGV.delete('-c') || ARGV.delete('--compile')) && (file = ARGV[0])
-  puts Mustache::Template.new(File.read(file)).compile
+        opts.separator "  See mustache(1) or " +
+          "http://defunkt.github.com/mustache/mustache.1.html"
+        opts.separator "  for more details."
 
-elsif (ARGV.delete('-t') || ARGV.delete('--tokens')) && (file = ARGV[0])
-  require 'pp'
-  pp Mustache::Template.new(File.read(file)).tokens
+        opts.separator " "
+        opts.separator "Options:"
 
-elsif ($stdin.tty? && ARGV.empty?) || ARGV.delete('-h') || ARGV.delete('--help')
-  help
+        opts.on("-c", "--compile FILE",
+          "Print the compiled Ruby for a given template.") do |file|
+          puts Mustache::Template.new(File.read(file)).compile
+          exit
+        end
 
-else
-  # Not at a terminal, read from STDIN and print rendered templates to
-  # STDOUT.
-  doc = ARGF.read
+        opts.on("-t", "--tokens FILE",
+          "Print the tokenized form of a given template.") do |file|
+          require 'pp'
+          pp Mustache::Template.new(File.read(file)).tokens
+          exit
+        end
 
-  if doc =~ /^(\s*---(.+)---\s*)/m
-    yaml = $2.strip
-    template = doc.sub($1, '')
+        opts.separator "Common Options:"
 
-    YAML.each_document(yaml) do |data|
-      puts Mustache.render(template, data)
+        opts.on("-v", "--version", "Print the version") do |v|
+          puts "Mustache v#{Mustache::Version}"
+          exit
+        end
+
+        opts.on_tail("-h", "--help", "Show this message") do
+          puts opts
+          exit
+        end
+      end
+
+      opts.separator ""
+
+      opts.parse!(args)
     end
-  else
-    puts doc
+
+    # Does the dirty work of reading files from STDIN and the command
+    # line then processing them. The meat of this script, if you will.
+    def self.process_files(input_stream)
+      doc = input_stream.read
+
+      if doc =~ /^(\s*---(.+)---\s*)/m
+        yaml = $2.strip
+        template = doc.sub($1, '')
+
+        YAML.each_document(yaml) do |data|
+          puts Mustache.render(template, data)
+        end
+      else
+        puts doc
+      end
+    end
   end
-  exit
 end
+
+# Help is the default.
+ARGV << '-h' if ARGV.empty? && $stdin.tty?
+
+# Process options
+Mustache::CLI.parse_options(ARGV) if $stdin.tty?
+
+# Still here - process ARGF
+Mustache::CLI.process_files(ARGF)
+

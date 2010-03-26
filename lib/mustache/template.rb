@@ -4,20 +4,21 @@ require 'mustache/parser'
 require 'mustache/generator'
 
 class Mustache
-  # A Template is a compiled version of a Mustache template.
+  # A Template represents a Mustache template. It compiles and caches
+  # a raw string template into something usable.
   #
   # The idea is this: when handed a Mustache template, convert it into
   # a Ruby string by transforming Mustache tags into interpolated
   # Ruby.
   #
-  # You shouldn't use this class directly.
+  # You shouldn't use this class directly, instead:
+  #
+  # Mustache.render(template, hash)
   class Template
     # Expects a Mustache template as a string along with a template
     # path, which it uses to find partials.
-    def initialize(source, template_path = '.', template_extension = 'mustache')
+    def initialize(source)
       @source = source
-      @template_path = template_path
-      @template_extension = template_extension
       @tmpid = 0
     end
 

@@ -275,7 +275,7 @@ class Mustache
     if obj.is_a?(Template)
       obj
     else
-      Template.new(obj.to_s, template_path, template_extension)
+      Template.new(obj.to_s)
     end
   end
 

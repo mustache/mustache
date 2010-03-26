@@ -1,3 +1,11 @@
+## 0.8.0 (2010-03-??)
+
+* New, cleaner parser by Magnus Holm!
+* Improved error messages!
+* Bugfixes!
+* Faster runtime!
+* Sinatra 1.0 compatibility!
+
 ## 0.7.0 (2010-03-25)
 
 * `Mustache.compile` for compiling a template into Ruby.

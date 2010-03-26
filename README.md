@@ -279,6 +279,13 @@ for complete documentation.
 An example Sinatra application is also provided:
 <http://github.com/defunkt/mustache-sinatra-example>
 
+If you are upgrading to Sinatra 1.0 and Mustache 0.9.0+ from Mustache
+0.7.0 or lower, the settings have changed. But not that much.
+
+See [this diff](http://gist.github.com/345490) for what you need to
+do. Basically, things are named properly now and all should be
+contained in a hash set using `set :mustache, hash`.
+
 
 [Rack::Bug][4]
 --------------

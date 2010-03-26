@@ -85,18 +85,6 @@ class Mustache
     render(*args)
   end
 
-  # Compiles a string template and returns it as a string for use as
-  # an interpolated Ruby string (not fully rendered HTML), e.g.
-  # >> Mustache.compile("Hi, {{person}}!")
-  # => "Hi, #{CGI.escapeHTML(ctx[:person].to_s)}!"
-  def self.compile(template)
-    templateify(template).to_s
-  end
-
-  def self.tokenize(template)
-    templateify(template).tokens
-  end
-
   # Given a file name and an optional context, attempts to load and
   # render the file as a template.
   def self.render_file(name, context = {})

@@ -44,6 +44,7 @@ class Mustache
     end
     alias_method :to_s, :compile
 
+    # Returns an array of tokens for a given template.
     def tokens(src = @source)
       Parser.new.compile(src)
     end

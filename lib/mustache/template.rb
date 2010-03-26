@@ -13,7 +13,7 @@ class Mustache
   #
   # You shouldn't use this class directly, instead:
   #
-  # Mustache.render(template, hash)
+  # >> Mustache.render(template, hash)
   class Template
     # Expects a Mustache template as a string along with a template
     # path, which it uses to find partials.
@@ -24,6 +24,11 @@ class Mustache
 
     # Renders the `@source` Mustache template using the given
     # `context`, which should be a simple hash keyed with symbols.
+    #
+    # The first time a template is rendered, this method is overriden
+    # and from then on it is "compiled". Subsequent calls will skip
+    # the compilation step and run the Ruby version of the template
+    # directly.
     def render(context)
       # Compile our Mustache template into a Ruby string
       compiled = "def render(ctx) #{compile} end"

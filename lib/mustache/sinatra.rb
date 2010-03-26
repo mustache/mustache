@@ -9,21 +9,21 @@ class Mustache
   #   class Hurl < Sinatra::Base
   #     register Mustache::Sinatra
   #
-  #     # Should be the path to your .mustache template files.
-  #     set :views, "path/to/mustache/templates"
+  #     set :mustache, {
+  #       # Should be the path to your .mustache template files.
+  #       :templates => "path/to/mustache/templates",
   #
-  #     # Should be the path to your .rb Mustache view files.
-  #     # Only needed if different from the `views` setting
-  #     set :mustaches, "path/to/mustache/views"
+  #       # Should be the path to your .rb Mustache view files.
+  #       :views => "path/to/mustache/views",
   #
-  #     # This tells Mustache where to look for the Views module,
-  #     # under which your View classes should live. By default it's
-  #     # the class of your app - in this case `Hurl`. That is, for an :index
-  #     # view Mustache will expect Hurl::Views::Index by default.
-  #
-  #     # If our Sinatra::Base subclass was instead Hurl::App,
-  #     # we'd want to do `set :namespace, Hurl::App`
-  #     set :namespace, Hurl
+  #       # This tells Mustache where to look for the Views module,
+  #       # under which your View classes should live. By default it's
+  #       # the class of your app - in this case `Hurl`. That is, for an :index
+  #       # view Mustache will expect Hurl::Views::Index by default.
+  #       # If our Sinatra::Base subclass was instead Hurl::App,
+  #       # we'd want to do `set :namespace, Hurl::App`
+  #       :namespace => Hurl
+  #     }
   #
   #     get '/stats' do
   #       mustache :stats
@@ -43,32 +43,29 @@ class Mustache
     module Helpers
       # Call this in your Sinatra routes.
       def mustache(template, options={}, locals={})
-        render :mustache, template, options, locals
-      end
-
-      # This is called by Sinatra's `render` with the proper paths
-      # and, potentially, a block containing a sub-view
-      def render_mustache(template, data, opts, locals, &block)
-        # If you have Hurl::App::Views, namespace should be set to Hurl::App.
-        Mustache.view_namespace = options.namespace
-
-        # This is probably the same as options.views, but we'll set it anyway.
-        # It's used to tell Mustache where to look for view classes.
-        Mustache.view_path = options.mustaches
-
-        # Grab the class!
-        klass = Mustache.view_class(template)
-
-        # Only cache the data if this isn't the generic base class.
-        klass.template = data unless klass == Mustache
-
-        # Confusingly Sinatra's `views` setting tells Mustache where the
-        # templates are found. It's fine, blame Chris.
-        if klass.template_path != options.views
-          klass.template_path = options.views
+        # Grab any user-defined settings.
+        if settings.respond_to?(:mustache)
+          options = settings.send(:mustache).merge(options)
         end
 
-        # Create a new instance for playing with
+        # Find and cache the view class we want. This ensures the
+        # compiled template is cached, too - no looking up and
+        # compiling templates on each page load.
+        klass = mustache_class(template, options)
+
+        # If they aren't explicitly diabling layouts, try to find
+        # one.
+        if options[:layout] != false
+          # If they passed a layout name use that.
+          layout = mustache_class(options[:layout] || :layout, options).new
+
+          # Does the view subclass the layout? If so we'll use the
+          # view to render the layout so you can override layout
+          # methods in your view - tricky.
+          view_subclasses_layout = klass < layout.class if layout
+        end
+
+        # Create a new instance for playing with.
         instance = klass.new
 
         # Copy instance variables set in Sinatra to the view
@@ -76,24 +73,65 @@ class Mustache
           instance.instance_variable_set(name, instance_variable_get(name))
         end
 
-        # Locals get added to the view's context
-        locals.each do |local, value|
-          instance[local] = value
+        # Render with locals.
+        rendered = instance.render(instance.template, locals)
+
+        # Now render the layout with the view we just rendered, if we
+        # need to.
+        if layout && view_subclasses_layout
+          rendered = instance.render(layout.template, :yield => rendered)
+        elsif layout
+          rendered = layout.render(layout.template, :yield => rendered)
         end
 
-        # If we're paseed a block it's a subview. Sticking it in yield
-        # lets us use {{yield}} in layout.html to render the actual page.
-        instance[:yield] = block.call if block
+        # That's it.
+        rendered
+      end
 
-        instance.template = data unless instance.compiled?
-        instance.to_html
+      # Returns a View class for a given template name.
+      def mustache_class(template, options)
+        @template_cache.fetch(:mustache, template) do
+          compile_mustache(template, options)
+        end
+      end
+
+      # Given a view name and settings, finds and prepares an
+      # appropriate view class for this view.
+      def compile_mustache(view, options = {})
+        options[:templates] ||= self.views
+        options[:namespace] ||= self.class
+
+        factory = Class.new(Mustache) do
+          self.view_namespace = options[:namespace]
+          self.view_path      = options[:views]
+        end
+
+        # Try to find the view class for a given view, e.g.
+        # :view => Hurl::Views::Index.
+        klass = factory.view_class(view)
+
+        # If there is no view class, issue a warning and use the one
+        # we just generated to cache the compiled template.
+        if klass == Mustache
+          warn "No view class found for #{view} in #{factory.view_path}"
+          klass = factory
+
+          # If this is a generic view class make sure we set the
+          # template name as it was given. That is, an anonymous
+          # subclass of Mustache won't know how to find the
+          # "index.mustache" template unless we tell it to.
+          klass.template_name = view.to_s
+        end
+
+        # Set the template path and return our class.
+        klass.template_path = options[:templates]
+        klass
       end
     end
 
+    # Called when you `register Mustache::Sinatra` in your Sinatra app.
     def self.registered(app)
       app.helpers Mustache::Sinatra::Helpers
-      app.set :mustaches, app.views
-      app.set :namespace, app
     end
   end
 end

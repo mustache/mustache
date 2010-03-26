@@ -304,16 +304,6 @@ data
     assert instance.compiled?
   end
 
-  def test_compile
-    assert_equal '"Hi, #{CGI.escapeHTML(ctx[:person].to_s)}!"',
-      Mustache.compile("Hi, {{person}}!")
-  end
-
-  def test_tokenize
-    string = "Hi, {{person}}!"
-    assert_equal Mustache::Parser.new.compile(string), Mustache.tokenize(string)
-  end
-
   def test_lots_of_staches
     template = "{{{{foo}}}}"
 

@@ -7,7 +7,13 @@
 \fBmustache\fR \-\- Mustache processor
 .
 .SH "SYNOPSIS"
-\fBcat data.yml template.mustache | mustache\fR
+.
+.nf
+mustache <YAML> <FILE>
+mustache \-\-compile <FILE>
+mustache \-\-tokens <FILE>
+.
+.fi
 .
 .SH "DESCRIPTION"
 Mustache is a logic\-less templating system for HTML, config files,
@@ -107,6 +113,25 @@ Hi scott!
 .
 .IP "" 0
 .
+.SH "OPTIONS"
+By default \fBmustache\fR will try to render a Mustache template using the
+YAML frontmatter you provide. It can do a few other things, however.
+.
+.TP
+\fB\-c\fR, \fB\-\-compile\fR
+Print the compiled Ruby version of a given template. This is the
+code that is actually used when rendering a template into a
+string. Useful for debugging but only if you are familiar with
+Mustache's internals.
+.
+.TP
+\fB\-t\fR, \fB\-\-tokens\fR
+Print the tokenized form of a given Mustache template. This can be
+used to understand how Mustache parses a template. The tokens are
+handed to a generator which compiles them into a Ruby
+string. Syntax errors and confused tags, therefor, can probably be
+identified by examining the tokens produced.
+.
 .SH "INSTALLATION"
 If you have RubyGems installed:
 .
@@ -118,6 +143,21 @@ gem install mustache
 .fi
 .
 .IP "" 0
+.
+.SH "EXAMPLES"
+.
+.nf
+$ mustache data.yml template.mustache
+$ cat data.yml | mustache \- template.mustache
+$ mustache \-c template.mustache
+$ cat <<data | druby mustache \- template.mustache
+\-\-\-
+name: Bob
+age: 30
+\-\-\-
+data
+.
+.fi
 .
 .SH "COPYRIGHT"
 Mustache is Copyright (C) 2009 Chris Wanstrath

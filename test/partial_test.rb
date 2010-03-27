@@ -133,6 +133,10 @@ end_partial
     assert_equal "OuterThing InnerThing InnerThing",
       OuterThing.render('{{name}} {{#inner}}{{name}} {{> p}}{{/inner}}')
   end
+
+  def test_partials_render_returned_strings
+    assert_equal "ok", MiddleThing.render('{{> some_partial }}')
+  end
 end
 
 class InnerThing < Mustache
@@ -147,4 +151,9 @@ class OuterThing < Mustache
 
   def partial(p) self.class end
   def name;      self.class end
+end
+
+class MiddleThing < Mustache
+  def partial(name) "{{#{name}}}" end
+  def some_partial; "ok" end
 end

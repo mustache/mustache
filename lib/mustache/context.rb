@@ -30,7 +30,7 @@ class Mustache
 
       if mustache.respond_to? :partial
         # We found a mustache and it responds to `partial`, send it.
-        mustache.partial(name)
+        mustache.render(mustache.partial(name), self)
 
       elsif mustache
         # We found a mustache without `partial`, use it to render.
@@ -95,6 +95,10 @@ class Mustache
     # set to true), will raise a ContextMiss exception on miss.
     def fetch(name, default = :__raise)
       @stack.each do |frame|
+        # Prevent infinite recursion.
+        next if frame == self
+
+        # Is this frame a hash?
         hash = frame.respond_to?(:has_key?)
 
         if hash && frame.has_key?(name)

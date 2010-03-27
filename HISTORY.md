@@ -1,4 +1,4 @@
-## 0.9.1 (2010-03-??)
+## 0.9.1 (2010-03-27)
 
 * Bugfix: Partials use the nearest context when being rendered.
 * Bugfix: Partials returned by the partial method are now rendered.

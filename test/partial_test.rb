@@ -124,4 +124,27 @@ end_partial
 </html>
 end_partial
   end
+
+  def test_partials_use_proper_context
+    assert_equal "OuterThing OuterThing", OuterThing.render('{{name}} {{< p}}')
+
+    assert_equal "InnerThing InnerThing", InnerThing.render('{{name}} {{< p}}')
+
+    assert_equal "OuterThing InnerThing InnerThing",
+      OuterThing.render('{{name}} {{#inner}}{{name}} {{< p}}{{/inner}}')
+  end
+end
+
+class InnerThing < Mustache
+  def partial(p); self.class; end
+  def name;       self.class; end
+end
+
+class OuterThing < Mustache
+  def inner
+    InnerThing.new
+  end
+
+  def partial(p); self.class; end
+  def name;       self.class; end
 end

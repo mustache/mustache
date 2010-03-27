@@ -92,6 +92,12 @@ class Mustache
     render(data, context)
   end
 
+  # Given a file name and an optional context, attempts to load and
+  # render the file as a template.
+  def render_file(name, context = {})
+    self.class.render_file(name, context)
+  end
+
   # The template path informs your Mustache subclass where to look for its
   # corresponding template. By default it's the current directory (".")
   def self.template_path

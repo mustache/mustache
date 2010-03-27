@@ -14,8 +14,7 @@ class Mustache
   class Context
     # Expect to be passed an instance of `Mustache`.
     def initialize(mustache)
-      @mustache = mustache
-      @stack = [@mustache]
+      @stack = [mustache]
     end
 
     # A {{>partial}} tag translates into a call to the context's
@@ -26,10 +25,27 @@ class Mustache
     # to `partial`, we call it and use the result. Otherwise we render
     # and compile the partial as its own view and return the result.
     def partial(name)
-      if @mustache.respond_to? :partial
-        @mustache.partial(name)
+      # Look for any Mustaches in the stack.
+      mustache = mustache_in_stack
+
+      if mustache.respond_to? :partial
+        # We found a mustache and it responds to `partial`, send it.
+        mustache.partial(name)
+
+      elsif mustache
+        # We found a mustache without `partial`, use it to render.
+        mustache.render_file(name, self)
       else
-        @mustache.class.render_file(name, self)
+        # Can't find any staches, abort and use whatever we can..
+        raise "No Mustache views in stack."
+      end
+    end
+
+    # Find the first Mustache in the stack. If we're being rendered
+    # inside a Mustache object as a context, we'll use that one.
+    def mustache_in_stack
+      @stack.detect do |frame|
+        frame.is_a?(Mustache)
       end
     end
 
@@ -90,7 +106,7 @@ class Mustache
         end
       end
 
-      if default == :__raise || @mustache.raise_on_context_miss?
+      if default == :__raise || mustache_in_stack.raise_on_context_miss?
         raise ContextMiss.new("Can't find #{name} in #{@stack.inspect}")
       else
         default

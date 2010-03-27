@@ -1,4 +1,8 @@
-## 0.9.0 (2010-03-??)
+## 0.9.1 (2010-03-??)
+
+* Bugfix: Partials use the nearest context when being rendered.
+
+## 0.9.0 (2010-03-26)
 
 * New, cleaner parser by Magnus Holm!
 * Improved error messages!

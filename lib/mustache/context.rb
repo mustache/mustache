@@ -22,31 +22,19 @@ class Mustache
     #
     # If the Mustache view handling the rendering (e.g. the view
     # representing your profile page or some other template) responds
-    # to `partial`, we call it and use the result. Otherwise we render
-    # and compile the partial as its own view and return the result.
+    # to `partial`, we call it and render the result.
     def partial(name)
-      # Look for any Mustaches in the stack.
+      # Look for the first Mustache in the stack.
       mustache = mustache_in_stack
 
-      if mustache.respond_to? :partial
-        # We found a mustache and it responds to `partial`, send it.
-        mustache.render(mustache.partial(name), self)
-
-      elsif mustache
-        # We found a mustache without `partial`, use it to render.
-        mustache.render_file(name, self)
-      else
-        # Can't find any staches, abort and use whatever we can..
-        raise "No Mustache views in stack."
-      end
+      # Call its `partial` method and render the result.
+      mustache.render(mustache.partial(name), self)
     end
 
     # Find the first Mustache in the stack. If we're being rendered
     # inside a Mustache object as a context, we'll use that one.
     def mustache_in_stack
-      @stack.detect do |frame|
-        frame.is_a?(Mustache)
-      end
+      @stack.detect { |frame| frame.is_a?(Mustache) }
     end
 
     # Adds a new object to the context's internal stack.

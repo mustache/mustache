@@ -88,14 +88,29 @@ class Mustache
   # Given a file name and an optional context, attempts to load and
   # render the file as a template.
   def self.render_file(name, context = {})
-    data = File.read("#{template_path}/#{name}.#{template_extension}")
-    render(data, context)
+    render(partial(name), context)
   end
 
   # Given a file name and an optional context, attempts to load and
   # render the file as a template.
   def render_file(name, context = {})
     self.class.render_file(name, context)
+  end
+
+  # Given a name, attempts to read a file and return the contents as a
+  # string. The file is not rendered, so it might contain
+  # {{mustaches}}.
+  #
+  # Call `render` if you need to process it.
+  def self.partial(name)
+    File.read("#{template_path}/#{name}.#{template_extension}")
+  end
+
+  # Override this in your subclass if you want to do fun things like
+  # reading templates from a database. It will be rendered by the
+  # context, so all you need to do is return a string.
+  def partial(name)
+    self.class.partial(name)
   end
 
   # The template path informs your Mustache subclass where to look for its

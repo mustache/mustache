@@ -363,4 +363,19 @@ start
 end
 expected
   end
+
+  def test_id_with_nested_context
+    html = %(<div>{{id}}</div>\n<div>{{# has_a? }}{{id}}{{/ has_a? }}</div>\n<div>{{# has_b? }}{{id}}{{/ has_b? }}</div>)
+
+    instance = Mustache.new
+    instance.template = html
+    instance[:id] = 3
+    instance[:has_a?] = true
+    instance[:has_b?] = true
+    assert_equal <<-rendered.strip, instance.render
+<div>3</div>
+<div>3</div>
+<div>3</div>
+rendered
+  end
 end

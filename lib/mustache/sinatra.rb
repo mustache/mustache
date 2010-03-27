@@ -56,11 +56,17 @@ class Mustache
         # compiling templates on each page load.
         klass = mustache_class(template, options)
 
-        # If they aren't explicitly diabling layouts, try to find
+        # If they aren't explicitly disabling layouts, try to find
         # one.
         if options[:layout] != false
+          # Let the user pass in a layout name.
+          layout_name = options[:layout]
+
+          # If all they said was `true` (or nothing), default to :layout.
+          layout_name = :layout if layout_name == true || !layout_name
+
           # If they passed a layout name use that.
-          layout = mustache_class(options[:layout] || :layout, options)
+          layout = mustache_class(layout_name, options)
 
           # If it's just an anonymous subclass then don't bother, otherwise
           # give us a layout instance.

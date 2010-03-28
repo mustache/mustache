@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 $LOAD_PATH.unshift File.dirname(__FILE__)
 require 'helper'
 
@@ -376,6 +377,20 @@ expected
 <div>3</div>
 <div>3</div>
 <div>3</div>
+rendered
+  end
+
+  def test_utf8
+    klass = Class.new(Mustache)
+    klass.template_name = 'utf8'
+    klass.template_path = 'test/fixtures'
+    view = klass.new
+    view[:test] = "中文"
+
+    assert_equal <<-rendered, view.render
+<h1>中文 中文</h1>
+
+<h2>中文又来啦</h2>
 rendered
   end
 end

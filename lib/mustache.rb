@@ -1,3 +1,5 @@
+Encoding.default_external = 'BINARY' if defined? Encoding
+
 require 'mustache/template'
 require 'mustache/context'
 

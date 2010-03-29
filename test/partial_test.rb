@@ -12,6 +12,15 @@ You have just won $100000!
 end_partial
   end
 
+  def test_partial_with_slashes
+    klass = Class.new(Mustache)
+    klass.template = '{{> test/fixtures/inner_partial}}'
+    view = klass.new
+    view[:title] = 'success'
+
+    assert_equal "Again, success!", view.render
+  end
+
   def test_view_partial_inherits_context
     klass = Class.new(TemplatePartial)
     klass.template_path = File.dirname(__FILE__) + '/fixtures'

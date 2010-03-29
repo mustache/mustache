@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 $LOAD_PATH.unshift File.dirname(__FILE__)
 require 'helper'
 
@@ -384,12 +385,12 @@ rendered
     klass.template_name = 'utf8'
     klass.template_path = 'test/fixtures'
     view = klass.new
-    view[:test] = "\xE4\xB8\xAD\xE6\x96\x87"
+    view[:test] = "中文"
 
     assert_equal <<-rendered, view.render
-<h1>\xE4\xB8\xAD\xE6\x96\x87 \xE4\xB8\xAD\xE6\x96\x87</h1>
+<h1>中文 中文</h1>
 
-<h2>\xE4\xB8\xAD\xE6\x96\x87\xE5\x8F\x88\xE6\x9D\xA5\xE5\x95\xA6</h2>
+<h2>中文又来啦</h2>
 rendered
   end
 end

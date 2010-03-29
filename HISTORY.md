@@ -1,3 +1,10 @@
+## 0.9.2 (2010-03-29)
+
+* Sinatra: Bugfix for `mustache :view, :layout => true`
+* Mustache class now implements `partial` so you can call `super`
+  when providing a custom `partial` method.
+* Bugfix: Allow slashes in tags, especially partials.
+
 ## 0.9.1 (2010-03-27)
 
 * Bugfix: Partials use the nearest context when being rendered.

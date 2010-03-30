@@ -70,7 +70,7 @@ class Mustache
 
           # If it's just an anonymous subclass then don't bother, otherwise
           # give us a layout instance.
-          if layout.name.empty?
+          if layout.name && layout.name.empty?
             layout = nil
           else
             layout = layout.new

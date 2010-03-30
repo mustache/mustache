@@ -1,0 +1,26 @@
+<!DOCTYPE HTML>
+<html>
+  <head>
+    <title> projects </title>
+    <style>.row { width: {{width}}px; }</style>
+  </head>
+
+  <body>
+    <h1> projects </h1>
+
+    <div class="row">
+      {{#projects}}
+        <a href="{{url}}" class="block">
+          <h2> {{name}} </h2>
+          <p> {{description}} </p>
+        </a>
+      {{/projects}}
+    </div>
+
+    <div class="back">
+      <a href="/">
+      &#8617;
+      </a>
+    </div>
+ </body>
+</html>

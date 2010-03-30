@@ -1,0 +1,28 @@
+---
+projects:
+- name: resque
+  url: http://github.com/defunkt/resque
+  description: A Redis-backed Ruby library for queueing and working.
+- name: mustache
+  url: http://defunkt.github.com/mustache
+  description: Logic-less templates.
+- name: pystache
+  url: http://github.com/defunkt/pystache
+  description: Mustache in Python
+- name: hub
+  url: http://github.com/defunkt/hub
+  description: hub introduces git to GitHub
+- name: repl
+  url: http://github.com/defunkt/repl
+  description: sometimes you need a repl
+- name: gist
+  url: http://github.com/defunkt/gist
+  description: Absolutely the best command line gister.
+- name: gem-man
+  url: http://defunkt.github.com/gem-man/
+  description: "View a RubyGem's man page"
+- name: hurl
+  url: http://hurl.it/
+  description: Hurl makes HTTP requests
+width: 4968
+---

@@ -57,6 +57,16 @@ rendered
 rendered
   end
 
+  def test_single_line_inverted_sections
+    html = %(<p class="flash-notice" {{^ flash }}style="display: none;"{{/ flash }}>)
+
+    instance = Mustache.new
+    instance.template = html
+    assert_equal <<-rendered.strip, instance.render
+<p class="flash-notice" style="display: none;">
+rendered
+  end
+
   def test_simple
     assert_equal <<-end_simple, Simple.render
 Hello Chris

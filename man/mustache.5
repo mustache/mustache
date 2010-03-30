@@ -65,13 +65,12 @@ replaced with a value, some nothing, and others a series of
 values. This document explains the different types of Mustache tags.
 .
 .SH "TAG TYPES"
-Tags are indicated by the double mustaches. \fB{{name}}\fR is a tag. Let's
-talk about the different types of tags.
+Tags are indicated by the double mustaches. \fB{{name}}\fR is a tag, as is \fB{{#name}}\fR. Let's talk about the different types of tags.
 .
 .SS "Variables"
 The most basic tag is the variable. A \fB{{name}}\fR tag in a basic
-template will try to call the \fBname\fR method on your view. If there is
-no \fBname\fR method, an exception will be raised.
+template will try to find the \fBname\fR key or method on your view. If
+there is no \fBname\fR method, nothing will be rendered.
 .
 .P
 All variables are HTML escaped by default. If you want to return
@@ -83,7 +82,8 @@ useful when changing delimiters (see "Set Delimter" below).
 .
 .P
 By default a variable "miss" returns an empty string. This can usually
-be configured in your Mustache library.
+be configured in your Mustache library. The Ruby version of Mustache
+supports raising an exception in this situation, for instance.
 .
 .P
 Template:
@@ -241,6 +241,61 @@ Output:
 .
 .IP "" 0
 .
+.SS "Inverted Sections"
+An inverted section begins with a caret (hat) and ends with a
+slash. That is \fB{{^person}}\fR begins a "person" inverted section while \fB{{/person}}\fR ends it.
+.
+.P
+While sections can be used to render text one or more times based on the
+value of the key given, inverted sections may render text once based
+on the inverse value of the key given. That is, they will be rendered
+if the key doesn't exist, is false, or is an empty list.
+.
+.P
+Template:
+.
+.IP "" 4
+.
+.nf
+{{#repo}}
+  <b>{{name}}</b>
+{{/repo}}
+{{^repo}}
+  No repos :(
+{{/repo}}
+.
+.fi
+.
+.IP "" 0
+.
+.P
+Hash:
+.
+.IP "" 4
+.
+.nf
+{
+  "repo": []
+.
+.fi
+.
+.IP "" 0
+.
+.P
+   }
+.
+.P
+Output:
+.
+.IP "" 4
+.
+.nf
+No repos :(
+.
+.fi
+.
+.IP "" 0
+.
 .SS "Comments"
 Comments begin with a bang and are ignored. The following template:
 .
@@ -269,9 +324,40 @@ Will render as follows:
 Partials begin with a greater than sign, like \fB{{> box}}\fR.
 .
 .P
-It is useful to think of partials as a "template expansion" \- that is,
-the actual partial tag will be replaced with the content of the
-partial. Therefor partials share the current context.
+Partials are rendered at runtime (as opposed to compile time), so
+recursive partials are possible. Just avoid infinite loops.
+.
+.P
+They also inherit the calling context. Whereas in ERB you may have
+this:
+.
+.IP "" 4
+.
+.nf
+<%= partial :next_more, :start => start, :size => size %>
+.
+.fi
+.
+.IP "" 0
+.
+.P
+Mustache requires only this:
+.
+.IP "" 4
+.
+.nf
+{{> next_more}}
+.
+.fi
+.
+.IP "" 0
+.
+.P
+Why? Because the \fBnext_more.mustache\fR file will inherit the \fBsize\fR and \fBstart\fR methods from the calling context.
+.
+.P
+In this way you may want to think of partials as includes, or template
+expansion, even though it's not literally true.
 .
 .P
 For example, this template and partial:

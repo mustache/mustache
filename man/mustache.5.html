@@ -106,14 +106,14 @@ values. This document explains the different types of Mustache tags.</p>
 
 <h2>TAG TYPES</h2>
 
-<p>Tags are indicated by the double mustaches. <code>{{name}}</code> is a tag. Let's
-talk about the different types of tags.</p>
+<p>Tags are indicated by the double mustaches. <code>{{name}}</code> is a tag, as is
+<code>{{#name}}</code>. Let's talk about the different types of tags.</p>
 
 <h3>Variables</h3>
 
 <p>The most basic tag is the variable. A <code>{{name}}</code> tag in a basic
-template will try to call the <code>name</code> method on your view. If there is
-no <code>name</code> method, an exception will be raised.</p>
+template will try to find the <code>name</code> key or method on your view. If
+there is no <code>name</code> method, nothing will be rendered.</p>
 
 <p>All variables are HTML escaped by default. If you want to return
 unescaped HTML, use the triple mustache: <code>{{{name}}}</code>.</p>
@@ -122,7 +122,8 @@ unescaped HTML, use the triple mustache: <code>{{{name}}}</code>.</p>
 useful when changing delimiters (see "Set Delimter" below).</p>
 
 <p>By default a variable "miss" returns an empty string. This can usually
-be configured in your Mustache library.</p>
+be configured in your Mustache library. The Ruby version of Mustache
+supports raising an exception in this situation, for instance.</p>
 
 <p>Template:</p>
 
@@ -217,6 +218,40 @@ construct loops.</p>
 &lt;b&gt;rip&lt;/b&gt;
 </code></pre>
 
+<h3>Inverted Sections</h3>
+
+<p>An inverted section begins with a caret (hat) and ends with a
+slash. That is <code>{{^person}}</code> begins a "person" inverted section while
+<code>{{/person}}</code> ends it.</p>
+
+<p>While sections can be used to render text one or more times based on the
+value of the key given, inverted sections may render text once based
+on the inverse value of the key given. That is, they will be rendered
+if the key doesn't exist, is false, or is an empty list.</p>
+
+<p>Template:</p>
+
+<pre><code>{{#repo}}
+  &lt;b&gt;{{name}}&lt;/b&gt;
+{{/repo}}
+{{^repo}}
+  No repos :(
+{{/repo}}
+</code></pre>
+
+<p>Hash:</p>
+
+<pre><code>{
+  "repo": []
+</code></pre>
+
+<p>   }</p>
+
+<p>Output:</p>
+
+<pre><code>No repos :(
+</code></pre>
+
 <h3>Comments</h3>
 
 <p>Comments begin with a bang and are ignored. The following template:</p>
@@ -233,9 +268,25 @@ construct loops.</p>
 
 <p>Partials begin with a greater than sign, like <code>{{&gt; box}}</code>.</p>
 
-<p>It is useful to think of partials as a "template expansion" - that is,
-the actual partial tag will be replaced with the content of the
-partial. Therefor partials share the current context.</p>
+<p>Partials are rendered at runtime (as opposed to compile time), so
+recursive partials are possible. Just avoid infinite loops.</p>
+
+<p>They also inherit the calling context. Whereas in ERB you may have
+this:</p>
+
+<pre><code>&lt;%= partial :next_more, :start =&gt; start, :size =&gt; size %&gt;
+</code></pre>
+
+<p>Mustache requires only this:</p>
+
+<pre><code>{{&gt; next_more}}
+</code></pre>
+
+<p>Why? Because the <code>next_more.mustache</code> file will inherit the <code>size</code> and
+<code>start</code> methods from the calling context.</p>
+
+<p>In this way you may want to think of partials as includes, or template
+expansion, even though it's not literally true.</p>
 
 <p>For example, this template and partial:</p>
 

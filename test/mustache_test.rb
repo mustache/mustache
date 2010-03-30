@@ -123,6 +123,14 @@ end_template
 end_section
   end
 
+  def test_inverted_section
+    assert_equal <<-end_section.strip, InvertedSection.render.strip
+* first
+* second
+* third
+end_section
+  end
+
   def test_comments
     assert_equal "<h1>A Comedy of Errors</h1>\n", Comments.render
   end

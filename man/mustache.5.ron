@@ -41,15 +41,15 @@ values. This document explains the different types of Mustache tags.
 
 ## TAG TYPES
 
-Tags are indicated by the double mustaches. `{{name}}` is a tag. Let's
-talk about the different types of tags.
+Tags are indicated by the double mustaches. `{{name}}` is a tag, as is
+`{{#name}}`. Let's talk about the different types of tags.
 
 
 ### Variables
 
 The most basic tag is the variable. A `{{name}}` tag in a basic
-template will try to call the `name` method on your view. If there is
-no `name` method, an exception will be raised.
+template will try to find the `name` key or method on your view. If
+there is no `name` method, nothing will be rendered.
 
 All variables are HTML escaped by default. If you want to return
 unescaped HTML, use the triple mustache: `{{{name}}}`.
@@ -58,7 +58,8 @@ You can also use `&` to unescape a variable: `{{& name}}`. This may be
 useful when changing delimiters (see "Set Delimter" below).
 
 By default a variable "miss" returns an empty string. This can usually
-be configured in your Mustache library.
+be configured in your Mustache library. The Ruby version of Mustache
+supports raising an exception in this situation, for instance.
 
 Template:
 
@@ -80,6 +81,7 @@ Output:
     *
     * &lt;b&gt;GitHub&lt;/b&gt;
     * <b>GitHub</b>
+
 
 ### Boolean Sections
 
@@ -110,6 +112,7 @@ Hash:
 Output:
 
     Shown!
+
 
 ### Enumerable Sections
 
@@ -145,6 +148,37 @@ Output:
     <b>rip</b>
 
 
+### Inverted Sections
+
+An inverted section begins with a caret (hat) and ends with a
+slash. That is `{{^person}}` begins a "person" inverted section while
+`{{/person}}` ends it.
+
+While sections can be used to render text one or more times based on the
+value of the key given, inverted sections may render text once based
+on the inverse value of the key given. That is, they will be rendered
+if the key doesn't exist, is false, or is an empty list.
+
+Template:
+
+    {{#repo}}
+      <b>{{name}}</b>
+    {{/repo}}
+    {{^repo}}
+      No repos :(
+    {{/repo}}
+
+Hash:
+
+    {
+      "repo": []
+   }
+
+Output:
+
+    No repos :(
+
+
 ### Comments
 
 Comments begin with a bang and are ignored. The following template:
@@ -160,9 +194,23 @@ Will render as follows:
 
 Partials begin with a greater than sign, like `{{> box}}`.
 
-It is useful to think of partials as a "template expansion" - that is,
-the actual partial tag will be replaced with the content of the
-partial. Therefor partials share the current context.
+Partials are rendered at runtime (as opposed to compile time), so
+recursive partials are possible. Just avoid infinite loops.
+
+They also inherit the calling context. Whereas in ERB you may have
+this:
+
+    <%= partial :next_more, :start => start, :size => size %>
+
+Mustache requires only this:
+
+    {{> next_more}}
+
+Why? Because the `next_more.mustache` file will inherit the `size` and
+`start` methods from the calling context.
+
+In this way you may want to think of partials as includes, or template
+expansion, even though it's not literally true.
 
 For example, this template and partial:
 

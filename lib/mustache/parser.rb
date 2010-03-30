@@ -45,7 +45,7 @@ EOF
     end
 
     # After these types of tags, all whitespace will be skipped.
-    SKIP_WHITESPACE = [ '#', '/' ]
+    SKIP_WHITESPACE = [ '#', '^', '/' ]
 
     # The content allowed in a tag name.
     ALLOWED_CONTENT = /(\w|[?!\/-])*/
@@ -102,7 +102,7 @@ EOF
       # Since {{= rewrites ctag, we store the ctag which should be used
       # when parsing this specific tag.
       current_ctag = self.ctag
-      type = @scanner.scan(/#|\/|=|!|<|>|&|\{/)
+      type = @scanner.scan(/#|\^|\/|=|!|<|>|&|\{/)
       @scanner.skip(/\s*/)
 
       # ANY_CONTENT tags allow any character inside of them, while
@@ -122,6 +122,11 @@ EOF
       when '#'
         block = [:multi]
         @result << [:mustache, :section, content, block]
+        @sections << [content, position, @result]
+        @result = block
+      when '^'
+        block = [:multi]
+        @result << [:mustache, :inverted_section, content, block]
         @sections << [content, position, @result]
         @result = block
       when '/'

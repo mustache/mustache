@@ -50,8 +50,10 @@ i__p__ /  |  ##############  | | ####### |__l___xp____| ooooo |      |~~~~|
         <a href="http://github.com/janl/mustache.js">JavaScript</a>,
         <a href="http://github.com/defunkt/pystache">Python</a>,
         <a href="http://github.com/mojombo/mustache.erl">Erlang</a>,
+        <a href="http://github.com/bobthecow/mustache.php">PHP</a>,
         <a href="http://github.com/hoisie/mustache.go/">Go</a>,
         <a href="http://github.com/nrk/hige">Lua</a>,
+        <a href="http://github.com/joshthecoder/mustang">ooc</a>,
         and for
           <a href="http://github.com/raycmorgan/Mu">node.js</a>.
         </p>
@@ -78,6 +80,9 @@ i__p__ /  |  ##############  | | ####### |__l___xp____| ooooo |      |~~~~|
         <label>Mustache</label>
         <textarea class="template">
 <h1>{{header}}</h1>
+{{#bug}}
+{{/bug}}
+
 {{#items}}
   {{#first}}
     <li><strong>{{name}}</strong></li>
@@ -111,7 +116,6 @@ i__p__ /  |  ##############  | | ####### |__l___xp____| ooooo |      |~~~~|
     </div>
 
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
-    <script src="extras/coffee-script.js"></script>
     <script src="extras/mustache.js"></script>
     <script src="extras/highlight.js"></script>
     <script src="tom.js"></script>

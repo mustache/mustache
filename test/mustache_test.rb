@@ -393,4 +393,21 @@ rendered
 <h2>中文又来啦</h2>
 rendered
   end
+
+  def test_indentation
+    view = Mustache.new
+    view[:name] = 'indent'
+    view[:text] = 'puts :indented!'
+    view.template = <<template
+def {{name}}
+  {{text}}
+end
+template
+
+  assert_equal <<template, view.render
+def indent
+  puts :indented!
+end
+template
+  end
 end

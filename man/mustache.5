@@ -130,16 +130,27 @@ Output:
 .
 .IP "" 0
 .
-.SS "Boolean Sections"
+.SS "Sections"
+Sections render blocks of text one or more times, depending on the
+value of the referenced tag.
+.
+.P
 A section begins with a pound and ends with a slash. That is,\fB{{#person}}\fR begins a "person" section while \fB{{/person}}\fR ends it.
 .
 .P
-If the \fBperson\fR key exists and calling it returns false, the HTML
-between the pound and slash will not be displayed.
+If the \fBperson\fR key exists and calling it returns false or an empty
+list, the HTML between the pound and slash will not be displayed.
 .
 .P
-If the \fBperson\fR method exists and calling it returns true, the HTML
-between the pound and slash will be rendered and displayed.
+If the \fBperson\fR method exists and calling it returns true or an
+object, the HTML between the pound and slash will be rendered and
+displayed exactly one time. The object that was returned by the \fBperson\fR method will become the context of the block, as well.
+.
+.P
+If the \fBperson\fR method exists and calling it returns a non\-empty list,
+the text in the block will be displayed once for each item in the
+list. The context of the block will be set to the current item for
+each iteration. In this way we can loop over collections.
 .
 .P
 Template:
@@ -153,54 +164,6 @@ Template:
 {{#anything_else}}
   Never shown!
 {{/anything_else}}
-.
-.fi
-.
-.IP "" 0
-.
-.P
-Hash:
-.
-.IP "" 4
-.
-.nf
-{
-  "person": true
-}
-.
-.fi
-.
-.IP "" 0
-.
-.P
-Output:
-.
-.IP "" 4
-.
-.nf
-Shown!
-.
-.fi
-.
-.IP "" 0
-.
-.SS "Enumerable Sections"
-Enumerable sections are syntactically identical to boolean sections in
-that they begin with a pound and end with a slash. The difference,
-however, is in the view: if the method called returns an enumerable,
-the section is repeated as the enumerable is iterated over.
-.
-.P
-Each item in the enumerable is expected to be a hash which will then
-become the context of the corresponding iteration. In this way we can
-construct loops.
-.
-.P
-Template:
-.
-.IP "" 4
-.
-.nf
 {{#repo}}
   <b>{{name}}</b>
 {{/repo}}
@@ -216,6 +179,7 @@ Hash:
 .
 .nf
 {
+  "person": true,
   "repo": [
     { "name": "resque" },
     { "name": "hub" },
@@ -233,6 +197,7 @@ Output:
 .IP "" 4
 .
 .nf
+Shown!
 <b>resque</b>
 <b>hub</b>
 <b>rip</b>

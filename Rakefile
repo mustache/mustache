@@ -94,7 +94,7 @@ task :pages => [ "man:build" ] do
   end
 
   `git commit -am 'generated manual'`
-  `git checkout gh-pages`
+  `git checkout site`
 
   Dir['*.newhtml'].each do |f|
     mv f, f.sub('.newhtml', '.html')
@@ -102,7 +102,7 @@ task :pages => [ "man:build" ] do
 
   `git add .`
   `git commit -m updated`
-  `git push origin gh-pages`
+  `git push site site:master`
   `git checkout master`
   puts :done
 end

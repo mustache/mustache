@@ -347,10 +347,6 @@ Installation
 
     $ gem install mustache
 
-### [Rip](http://hellorip.com)
-
-    $ rip install git://github.com/defunkt/mustache.git
-
 
 Acknowledgements
 ----------------
@@ -362,13 +358,38 @@ Special thanks to [Magnus Holm](http://judofyr.net/) for all his
 awesome work on Mustache's parser.
 
 
+Contributing
+------------
+
+Once you've made your great commits:
+
+1. [Fork][fk] Mustache
+2. Create a topic branch - `git checkout -b my_branch`
+3. Push to your branch - `git push origin my_branch`
+4. Create an [Issue][is] with a link to your branch
+5. That's it!
+
+You might want to checkout Resque's [Contributing][cb] wiki page for information
+on coding standards, new features, etc.
+
+
+Mailing List
+------------
+
+To join the list simply send an email to <mustache@librelist.com>. This
+will subscribe you and send you information about your subscription,
+including unsubscribe information.
+
+The archive can be found at <http://librelist.com/browser/>.
+
+
 Meta
 ----
 
 * Code: `git clone git://github.com/defunkt/mustache.git`
 * Home: <http://defunkt.github.com/mustache>
 * Bugs: <http://github.com/defunkt/mustache/issues>
-* List: <http://groups.google.com/group/mustache-rb>
+* List: <mustache@librelist.com>
 * Test: <http://runcoderun.com/defunkt/mustache>
 * Gems: <http://rubygems.org/gems/mustache>
 
@@ -379,3 +400,6 @@ You can also find us in `#{` on irc.freenode.net.
 [3]: http://google-ctemplate.googlecode.com/svn/trunk/doc/howto.html
 [4]: http://github.com/brynary/rack-bug/
 [5]: http://img.skitch.com/20091027-n8pxwwx8r61tc318a15q1n6m14.png
+[cb]: http://wiki.github.com/defunkt/resque/contributing
+[fk]: http://help.github.com/forking/
+[is]: http://github.com/defunkt/mustache/issues

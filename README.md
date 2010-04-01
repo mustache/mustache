@@ -8,7 +8,7 @@ As ctemplates says, "It emphasizes separating logic from presentation:
 it is impossible to embed application logic in this template language."
 
 For a list of implementations (other than Ruby) and tips, see
-<http://defunkt.github.com/mustache/>.
+<http://mustache.github.com/>.
 
 
 Overview
@@ -99,7 +99,7 @@ Tag Types
 
 For a language-agnostic overview of Mustache's template syntax, see
 the `mustache(5)` manpage or
-<http://defunkt.github.com/mustache/mustache.5.html>.
+<http://mustache.github.com/mustache.5.html>.
 
 
 Escaping
@@ -336,7 +336,7 @@ Command Line
 ------------
 
 See `mustache(1)` man page or
-<http://defunkt.github.com/mustache/mustache.1.html>
+<http://mustache.github.com/mustache.1.html>
 for command line docs.
 
 
@@ -387,7 +387,7 @@ Meta
 ----
 
 * Code: `git clone git://github.com/defunkt/mustache.git`
-* Home: <http://defunkt.github.com/mustache>
+* Home: <http://mustache.github.com>
 * Bugs: <http://github.com/defunkt/mustache/issues>
 * List: <mustache@librelist.com>
 * Test: <http://runcoderun.com/defunkt/mustache>

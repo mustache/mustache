@@ -23,7 +23,7 @@ class Mustache
         opts.separator " "
 
         opts.separator "  See mustache(1) or " +
-          "http://defunkt.github.com/mustache/mustache.1.html"
+          "http://mustache.github.com/mustache.1.html"
         opts.separator "  for more details."
 
         opts.separator " "

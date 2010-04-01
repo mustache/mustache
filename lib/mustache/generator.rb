@@ -109,6 +109,23 @@ class Mustache
       compiled
     end
 
+    # Fired when we find an inverted section. Just like `on_section`,
+    # we're passed the inverted section name and the array of tokens.
+    def on_inverted_section(name, content)
+      # Convert the tokenized content of this section into a Ruby
+      # string we can use.
+      code = compile(content)
+
+      # Compile the Ruby for this inverted section now that we know
+      # what's inside.
+      ev(<<-compiled)
+      v = ctx[#{name.to_sym.inspect}]
+      if v.nil? || v == false || v.respond_to?(:empty?) && v.empty?
+        #{code}
+      end
+      compiled
+    end
+
     # Fired when the compiler finds a partial. We want to return code
     # which calls a partial at runtime instead of expanding and
     # including the partial's body to allow for recursive partials.

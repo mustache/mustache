@@ -1,3 +1,10 @@
+## 0.10.0 (2010-04-02)
+
+* Added Inverted Sections (^). See mustache(5) for details.
+* Added Template#source for accessing the template's string source.
+* Bugfix: 1.9 encoding fix
+* Sinatra Bugfix: 1.9 compat
+
 ## 0.9.2 (2010-03-29)
 
 * Sinatra: Bugfix for `mustache :view, :layout => true`

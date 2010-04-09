@@ -116,7 +116,7 @@ class Mustache
   # The template path informs your Mustache subclass where to look for its
   # corresponding template. By default it's the current directory (".")
   def self.template_path
-    @template_path ||= '.'
+    @template_path ||= inheritable_config_for :template_path, '.'
   end
 
   def self.template_path=(path)
@@ -136,7 +136,7 @@ class Mustache
 
   # A Mustache template's default extension is 'mustache'
   def self.template_extension
-    @template_extension ||= 'mustache'
+    @template_extension ||= inheritable_config_for :template_extension, 'mustache'
   end
 
   def self.template_extension=(template_extension)
@@ -182,7 +182,7 @@ class Mustache
   # `Object`, but it might be nice to set it to something like `Hurl::Views` if
   # your app's main namespace is `Hurl`.
   def self.view_namespace
-    @view_namespace || Object
+    @view_namespace ||= inheritable_config_for(:view_namespace, Object)
   end
 
   def self.view_namespace=(namespace)
@@ -192,7 +192,7 @@ class Mustache
   # Mustache searches the view path for .rb files to require when asked to find a
   # view class. Defaults to "."
   def self.view_path
-    @view_path ||= '.'
+    @view_path ||= inheritable_config_for(:view_path, '.')
   end
 
   def self.view_path=(path)
@@ -286,6 +286,17 @@ class Mustache
     else
       Template.new(obj.to_s)
     end
+  end
+
+  # Return the value of the configuration setting on the superclass, or return 
+  # the default.
+  #
+  # attr_name - Symbol name of the attribute.  It should match the instance variable.
+  # default   - Default value to use if the superclass does not respond.
+  #
+  # Returns the inherited or default configuration setting.
+  def self.inheritable_config_for(attr_name, default)
+    superclass.respond_to?(attr_name) ? superclass.send(attr_name) : default
   end
 
   def templateify(obj)

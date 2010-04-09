@@ -57,14 +57,8 @@ begin
   require 'mg'
   MG.new("mustache.gemspec")
 
-  desc "Build a gem."
-  task :gem => :package
-
-  # Ensure tests pass before pushing a gem.
-  task :gemcutter => :test
-
   desc "Push a new version to Gemcutter and publish docs."
-  task :publish => :gemcutter do
+  task :publish => "gem:publish" do
     require File.dirname(__FILE__) + '/lib/mustache/version'
 
     system "git tag v#{Mustache::Version}"

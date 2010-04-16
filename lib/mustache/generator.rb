@@ -101,6 +101,8 @@ class Mustache
       if v = ctx[#{name.to_sym.inspect}]
         if v == true
           #{code}
+        elsif v.is_a?(Proc)
+          v.call(#{code})
         else
           v = [v] unless v.is_a?(Array) # shortcut when passed non-array
           v.map { |h| ctx.push(h); r = #{code}; ctx.pop; r }.join

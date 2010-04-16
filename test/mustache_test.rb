@@ -323,6 +323,20 @@ data
     assert instance.compiled?
   end
 
+  def test_sections_returning_lambdas_get_called_with_text
+    view = Lambda.new
+    view[:name] = 'Chris'
+
+    assert_equal "Hi Chris.", view.render.chomp
+    assert_equal 1, view.calls
+
+    assert_equal "Hi Chris.", view.render.chomp
+    assert_equal 1, view.calls
+
+    assert_equal "Hi Chris.", view.render.chomp
+    assert_equal 1, view.calls
+  end
+
   def test_lots_of_staches
     template = "{{{{foo}}}}"
 

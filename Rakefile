@@ -1,9 +1,14 @@
 require 'rake/testtask'
 require 'rake/rdoctask'
 
+#
+# Helpers
+#
+
 def command?(command)
   system("type #{command} > /dev/null")
 end
+
 
 #
 # Tests
@@ -25,6 +30,15 @@ else
   end
 end
 
+if command? :kicker
+  desc "Launch Kicker (like autotest)"
+  task :kicker do
+    puts "Kicking... (ctrl+c to cancel)"
+    exec "kicker -e rake test lib examples"
+  end
+end
+
+
 #
 # Ron
 #
@@ -41,13 +55,6 @@ if command? :ronn
   end
 end
 
-if command? :kicker
-  desc "Launch Kicker (like autotest)"
-  task :kicker do
-    puts "Kicking... (ctrl+c to cancel)"
-    exec "kicker -e rake test lib examples"
-  end
-end
 
 #
 # Gems
@@ -75,11 +82,11 @@ end
 # Documentation
 #
 
-# begin
-#   require 'sdoc_helpers'
-# rescue LoadError
-#   warn "sdoc support not enabled. Please gem install sdoc-helpers."
-# end
+begin
+  require 'sdoc_helpers'
+rescue LoadError
+  warn "sdoc support not enabled. Please gem install sdoc-helpers."
+end
 
 desc "Publish to GitHub Pages"
 task :pages => [ "man:build" ] do

@@ -75,9 +75,9 @@ reference others, some return values, some return only booleans.
 Now let's write the template:
 
     Hello {{name}}
-    You have just won ${{value}}!
+    You have just won {{value}} dollars!
     {{#in_ca}}
-    Well, ${{taxed_value}}, after taxes.
+    Well, {{taxed_value}} dollars, after taxes.
     {{/in_ca}}
 
 This template references our view methods. To bring it all together,
@@ -88,8 +88,8 @@ here's the code to render actual HTML;
 Which returns the following:
 
     Hello Chris
-    You have just won $10000!
-    Well, $6000.0, after taxes.
+    You have just won 10000 dollars!
+    Well, 6000.0 dollars, after taxes.
 
 Simple.
 
@@ -125,7 +125,7 @@ class-based and this more procedural style at your leisure.
 Given this template (winner.mustache):
 
     Hello {{name}}
-    You have just won ${{value}}!
+    You have just won {{value}} bucks!
 
 We can fill in the values at will:
 
@@ -137,14 +137,14 @@ We can fill in the values at will:
 Which returns:
 
     Hello George
-    You have just won $100!
+    You have just won 100 bucks!
 
 We can re-use the same object, too:
 
     view[:name] = 'Tony'
     view.render
     Hello Tony
-    You have just won $100!
+    You have just won 100 bucks!
 
 
 Templates

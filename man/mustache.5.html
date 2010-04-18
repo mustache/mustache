@@ -70,9 +70,9 @@
 <p>A typical Mustache template:</p>
 
 <pre><code>Hello {{name}}
-You have just won ${{value}}!
+You have just won {{value}} dollars!
 {{#in_ca}}
-Well, ${{taxed_value}}, after taxes.
+Well, {{taxed_value}} dollars, after taxes.
 {{/in_ca}}
 </code></pre>
 
@@ -89,8 +89,8 @@ Well, ${{taxed_value}}, after taxes.
 <p>Will produce the following:</p>
 
 <pre><code>Hello Chris
-You have just won $10000!
-Well, $6000.0, after taxes.
+You have just won 10000 dollars!
+Well, 6000.0 dollars, after taxes.
 </code></pre>
 
 <h2>DESCRIPTION</h2>

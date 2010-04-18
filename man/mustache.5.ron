@@ -92,8 +92,31 @@ value of the key in the current context.
 A section begins with a pound and ends with a slash. That is,
 `{{#person}}` begins a "person" section while `{{/person}}` ends it.
 
+The behavior of the section is determined by the value of the key.
+
+**False Values or Empty Lists**
+
 If the `person` key exists and has a value of false or an empty
 list, the HTML between the pound and slash will not be displayed.
+
+Template:
+
+    Shown.
+    {{#nothin}}
+      Never shown!
+    {{/nothin}}
+
+Hash:
+
+    {
+      "person": true,
+    }
+
+Output:
+
+    Shown.
+
+**Non-Empty Lists**
 
 If the `person` key exists and has a non-false value, the HTML between
 the pound and slash will be rendered and displayed one or more times.
@@ -103,17 +126,8 @@ displayed once for each item in the list. The context of the block
 will be set to the current item for each iteration. In this way we can
 loop over collections.
 
-When the value is non-false but not a list, it will be used as the
-context for a single rendering of the block.
-
 Template:
 
-    {{#person}}
-      Shown!
-    {{/person}}
-    {{#anything_else}}
-      Never shown!
-    {{/anything_else}}
     {{#repo}}
       <b>{{name}}</b>
     {{/repo}}
@@ -121,7 +135,6 @@ Template:
 Hash:
 
     {
-      "person": true,
       "repo": [
         { "name": "resque" },
         { "name": "hub" },
@@ -131,10 +144,59 @@ Hash:
 
 Output:
 
-    Shown!
     <b>resque</b>
     <b>hub</b>
     <b>rip</b>
+
+**Lambdas**
+
+When the value is a callable object, such as a function or lambda, the
+object will be invoked and passed the block of text. The text passed
+is the literal block, unrendered. `{{tags}}` will not have been expanded
+- the lambda should do that on its own. In this way you can implement
+filters or caching.
+
+Template:
+
+    {{#wrapped}}
+      {{name}} is awesome.
+    {{/wrapped}}
+
+Hash:
+
+    {
+      "name": "Willy",
+      "wrapped": function() {
+        return function(text) {
+          return "<b>" + render(text) + "</b>"
+        }
+      }
+    }
+
+Output:
+
+    <b>Willy is awesome.</b>
+
+**Non-False Values**
+
+When the value is non-false but not a list, it will be used as the
+context for a single rendering of the block.
+
+Template:
+
+    {{#person?}}
+      Hi {{name}}!
+    {{/person?}}
+
+Hash:
+
+    {
+      "person?": { "name": "Jon" }
+    }
+
+Output:
+
+    Hi Jon!
 
 
 ### Inverted Sections

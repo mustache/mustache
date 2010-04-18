@@ -41,21 +41,22 @@ values. This document explains the different types of Mustache tags.
 
 ## TAG TYPES
 
-Tags are indicated by the double mustaches. `{{name}}` is a tag, as is
-`{{#name}}`. Let's talk about the different types of tags.
+Tags are indicated by the double mustaches. `{{person}}` is a tag, as
+is `{{#person}}`. In both examples, we'd refer to `person` as the key
+or tag key. Let's talk about the different types of tags.
 
 
 ### Variables
 
-The most basic tag is the variable. A `{{name}}` tag in a basic
-template will try to find the `name` key or method on your view. If
-there is no `name` method, nothing will be rendered.
+The most basic tag type is the variable. A `{{name}}` tag in a basic
+template will try to find the `name` key in the current context. If
+there is no `name` key, nothing will be rendered.
 
 All variables are HTML escaped by default. If you want to return
 unescaped HTML, use the triple mustache: `{{{name}}}`.
 
 You can also use `&` to unescape a variable: `{{& name}}`. This may be
-useful when changing delimiters (see "Set Delimter" below).
+useful when changing delimiters (see "Set Delimiter" below).
 
 By default a variable "miss" returns an empty string. This can usually
 be configured in your Mustache library. The Ruby version of Mustache
@@ -86,23 +87,24 @@ Output:
 ### Sections
 
 Sections render blocks of text one or more times, depending on the
-value of the referenced tag.
+value of the key in the current context.
 
 A section begins with a pound and ends with a slash. That is,
 `{{#person}}` begins a "person" section while `{{/person}}` ends it.
 
-If the `person` key exists and calling it returns false or an empty
+If the `person` key exists and has a value of false or an empty
 list, the HTML between the pound and slash will not be displayed.
 
-If the `person` method exists and calling it returns true or an
-object, the HTML between the pound and slash will be rendered and
-displayed exactly one time. The object that was returned by the
-`person` method will become the context of the block, as well.
+If the `person` key exists and has a non-false value, the HTML between
+the pound and slash will be rendered and displayed one or more times.
 
-If the `person` method exists and calling it returns a non-empty list,
-the text in the block will be displayed once for each item in the
-list. The context of the block will be set to the current item for
-each iteration. In this way we can loop over collections.
+When the value is a non-empty list, the text in the block will be
+displayed once for each item in the list. The context of the block
+will be set to the current item for each iteration. In this way we can
+loop over collections.
+
+When the value is non-false but not a list, it will be used as the
+context for a single rendering of the block.
 
 Template:
 
@@ -142,8 +144,8 @@ slash. That is `{{^person}}` begins a "person" inverted section while
 `{{/person}}` ends it.
 
 While sections can be used to render text one or more times based on the
-value of the key given, inverted sections may render text once based
-on the inverse value of the key given. That is, they will be rendered
+value of the key, inverted sections may render text once based
+on the inverse value of the key. That is, they will be rendered
 if the key doesn't exist, is false, or is an empty list.
 
 Template:
@@ -176,6 +178,8 @@ Will render as follows:
 
     <h1>Today.</h1>
 
+Comments may contain newlines.
+
 
 ### Partials
 
@@ -203,29 +207,29 @@ For example, this template and partial:
 
     base.mustache:
     <h2>Names</h2>
-    {{# names }}
-      {{> user }}
-    {{/ names }}
+    {{#names}}
+      {{> user}}
+    {{/names}}
 
     user.mustache:
-    <strong>{{ name }}</strong>
+    <strong>{{name}}</strong>
 
 Can be thought of as a single, expanded template:
 
     <h2>Names</h2>
-    {{# names }}
-      <strong>{{ name }}</strong>
-    {{/ names }}
+    {{#names}}
+      <strong>{{name}}</strong>
+    {{/names}}
 
 
 ### Set Delimiter
 
 Set Delimiter tags start with an equal sign and change the tag
-delimiters from {{ and }} to custom strings.
+delimiters from `{{` and `}}` to custom strings.
 
 Consider the following contrived example:
 
-    * {{ default_tags }}
+    * {{default_tags}}
     {{=<% %>=}}
     * <% erb_style_tags %>
     <%={{ }}=%>
@@ -254,5 +258,5 @@ Original CTemplate by Google
 
 ## SEE ALSO
 
-mustache(1), mustache(7), gem(1),
+mustache(1), mustache(7),
 <http://mustache.github.com/>

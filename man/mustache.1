@@ -1,4 +1,4 @@
-.\" generated with Ronn/v0.4.1
+.\" generated with Ronn/v0.5
 .\" http://github.com/rtomayko/ronn/
 .
 .TH "MUSTACHE" "1" "April 2010" "DEFUNKT" "Mustache Manual"
@@ -9,6 +9,7 @@
 .SH "SYNOPSIS"
 .
 .nf
+
 mustache <YAML> <FILE>
 mustache \-\-compile <FILE>
 mustache \-\-tokens <FILE>
@@ -31,6 +32,7 @@ ending with another \fB\-\-\-\fR on a single line, e.g.
 .IP "" 4
 .
 .nf
+
 \-\-\-
 names: [ {name: chris}, {name: mark}, {name: scott} ]
 \-\-\-
@@ -53,6 +55,7 @@ For example:
 .IP "" 4
 .
 .nf
+
 {{#names}}
   Hi {{name}}!
 {{/names}}
@@ -67,14 +70,17 @@ Now let's combine them.
 .IP "" 4
 .
 .nf
+
 $ cat data.yml
 \-\-\-
 names: [ {name: chris}, {name: mark}, {name: scott} ]
 \-\-\-
+
 $ cat template.mustache
 {{#names}}
   Hi {{name}}!
 {{/names}}
+
 $ cat data.yml template.mustache | mustache
 Hi chris!
 Hi mark!
@@ -94,6 +100,7 @@ For example:
 .IP "" 4
 .
 .nf
+
 $ cat data.yml
 \-\-\-
 name: chris
@@ -102,8 +109,10 @@ name: mark
 \-\-\-
 name: scott
 \-\-\-
+
 $ cat template.mustache
 Hi {{name}}!
+
 $ cat data.yml template.mustache | mustache
 Hi chris!
 Hi mark!
@@ -138,6 +147,7 @@ If you have RubyGems installed:
 .IP "" 4
 .
 .nf
+
 gem install mustache
 .
 .fi
@@ -147,6 +157,7 @@ gem install mustache
 .SH "EXAMPLES"
 .
 .nf
+
 $ mustache data.yml template.mustache
 $ cat data.yml | mustache \- template.mustache
 $ mustache \-c template.mustache
@@ -166,4 +177,4 @@ Mustache is Copyright (C) 2009 Chris Wanstrath
 Original CTemplate by Google
 .
 .SH "SEE ALSO"
-mustache(5), mustache(7), gem(1),\fIhttp://mustache.github.com/\fR
+mustache(5), mustache(7), gem(1), \fIhttp://mustache.github.com/\fR

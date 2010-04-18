@@ -1,4 +1,4 @@
-.\" generated with Ronn/v0.4.1
+.\" generated with Ronn/v0.5
 .\" http://github.com/rtomayko/ronn/
 .
 .TH "MUSTACHE" "5" "April 2010" "DEFUNKT" "Mustache Manual"
@@ -12,6 +12,7 @@ A typical Mustache template:
 .IP "" 4
 .
 .nf
+
 Hello {{name}}
 You have just won ${{value}}!
 {{#in_ca}}
@@ -28,6 +29,7 @@ Given the following hash:
 .IP "" 4
 .
 .nf
+
 {
   "name": "Chris",
   "value": 10000,
@@ -45,6 +47,7 @@ Will produce the following:
 .IP "" 4
 .
 .nf
+
 Hello Chris
 You have just won $10000!
 Well, $6000.0, after taxes.
@@ -65,12 +68,14 @@ replaced with a value, some nothing, and others a series of
 values. This document explains the different types of Mustache tags.
 .
 .SH "TAG TYPES"
-Tags are indicated by the double mustaches. \fB{{name}}\fR is a tag, as is \fB{{#name}}\fR. Let's talk about the different types of tags.
+Tags are indicated by the double mustaches. \fB{{person}}\fR is a tag, as
+is \fB{{#person}}\fR. In both examples, we'd refer to \fBperson\fR as the key
+or tag key. Let's talk about the different types of tags.
 .
 .SS "Variables"
-The most basic tag is the variable. A \fB{{name}}\fR tag in a basic
-template will try to find the \fBname\fR key or method on your view. If
-there is no \fBname\fR method, nothing will be rendered.
+The most basic tag type is the variable. A \fB{{name}}\fR tag in a basic
+template will try to find the \fBname\fR key in the current context. If
+there is no \fBname\fR key, nothing will be rendered.
 .
 .P
 All variables are HTML escaped by default. If you want to return
@@ -78,7 +83,7 @@ unescaped HTML, use the triple mustache: \fB{{{name}}}\fR.
 .
 .P
 You can also use \fB&\fR to unescape a variable: \fB{{& name}}\fR. This may be
-useful when changing delimiters (see "Set Delimter" below).
+useful when changing delimiters (see "Set Delimiter" below).
 .
 .P
 By default a variable "miss" returns an empty string. This can usually
@@ -91,6 +96,7 @@ Template:
 .IP "" 4
 .
 .nf
+
 * {{name}}
 * {{age}}
 * {{company}}
@@ -106,6 +112,7 @@ Hash:
 .IP "" 4
 .
 .nf
+
 {
   "name": "Chris",
   "company": "<b>GitHub</b>"
@@ -121,6 +128,7 @@ Output:
 .IP "" 4
 .
 .nf
+
 * Chris
 *
 * &lt;b&gt;GitHub&lt;/b&gt;
@@ -132,25 +140,20 @@ Output:
 .
 .SS "Sections"
 Sections render blocks of text one or more times, depending on the
-value of the referenced tag.
+value of the key in the current context.
 .
 .P
-A section begins with a pound and ends with a slash. That is,\fB{{#person}}\fR begins a "person" section while \fB{{/person}}\fR ends it.
+A section begins with a pound and ends with a slash. That is, \fB{{#person}}\fR begins a "person" section while \fB{{/person}}\fR ends it.
 .
 .P
-If the \fBperson\fR key exists and calling it returns false or an empty
+The behavior of the section is determined by the value of the key.
+.
+.P
+\fBFalse Values or Empty Lists\fR
+.
+.P
+If the \fBperson\fR key exists and has a value of false or an empty
 list, the HTML between the pound and slash will not be displayed.
-.
-.P
-If the \fBperson\fR method exists and calling it returns true or an
-object, the HTML between the pound and slash will be rendered and
-displayed exactly one time. The object that was returned by the \fBperson\fR method will become the context of the block, as well.
-.
-.P
-If the \fBperson\fR method exists and calling it returns a non\-empty list,
-the text in the block will be displayed once for each item in the
-list. The context of the block will be set to the current item for
-each iteration. In this way we can loop over collections.
 .
 .P
 Template:
@@ -158,12 +161,64 @@ Template:
 .IP "" 4
 .
 .nf
-{{#person}}
-  Shown!
-{{/person}}
-{{#anything_else}}
+
+Shown.
+{{#nothin}}
   Never shown!
-{{/anything_else}}
+{{/nothin}}
+.
+.fi
+.
+.IP "" 0
+.
+.P
+Hash:
+.
+.IP "" 4
+.
+.nf
+
+{
+  "person": true,
+}
+.
+.fi
+.
+.IP "" 0
+.
+.P
+Output:
+.
+.IP "" 4
+.
+.nf
+
+Shown.
+.
+.fi
+.
+.IP "" 0
+.
+.P
+\fBNon\-Empty Lists\fR
+.
+.P
+If the \fBperson\fR key exists and has a non\-false value, the HTML between
+the pound and slash will be rendered and displayed one or more times.
+.
+.P
+When the value is a non\-empty list, the text in the block will be
+displayed once for each item in the list. The context of the block
+will be set to the current item for each iteration. In this way we can
+loop over collections.
+.
+.P
+Template:
+.
+.IP "" 4
+.
+.nf
+
 {{#repo}}
   <b>{{name}}</b>
 {{/repo}}
@@ -178,8 +233,8 @@ Hash:
 .IP "" 4
 .
 .nf
+
 {
-  "person": true,
   "repo": [
     { "name": "resque" },
     { "name": "hub" },
@@ -197,10 +252,118 @@ Output:
 .IP "" 4
 .
 .nf
-Shown!
+
 <b>resque</b>
 <b>hub</b>
 <b>rip</b>
+.
+.fi
+.
+.IP "" 0
+.
+.P
+\fBLambdas\fR
+.
+.P
+When the value is a callable object, such as a function or lambda, the
+object will be invoked and passed the block of text. The text passed
+is the literal block, unrendered. \fB{{tags}}\fR will not have been expanded
+\- the lambda should do that on its own. In this way you can implement
+filters or caching.
+.
+.P
+Template:
+.
+.IP "" 4
+.
+.nf
+
+{{#wrapped}}
+  {{name}} is awesome.
+{{/wrapped}}
+.
+.fi
+.
+.IP "" 0
+.
+.P
+Hash:
+.
+.IP "" 4
+.
+.nf
+
+{
+  "name": "Willy",
+  "wrapped": function() {
+    return function(text) {
+      return "<b>" + render(text) + "</b>"
+    }
+  }
+}
+.
+.fi
+.
+.IP "" 0
+.
+.P
+Output:
+.
+.IP "" 4
+.
+.nf
+
+<b>Willy is awesome.</b>
+.
+.fi
+.
+.IP "" 0
+.
+.P
+\fBNon\-False Values\fR
+.
+.P
+When the value is non\-false but not a list, it will be used as the
+context for a single rendering of the block.
+.
+.P
+Template:
+.
+.IP "" 4
+.
+.nf
+
+{{#person?}}
+  Hi {{name}}!
+{{/person?}}
+.
+.fi
+.
+.IP "" 0
+.
+.P
+Hash:
+.
+.IP "" 4
+.
+.nf
+
+{
+  "person?": { "name": "Jon" }
+}
+.
+.fi
+.
+.IP "" 0
+.
+.P
+Output:
+.
+.IP "" 4
+.
+.nf
+
+Hi Jon!
 .
 .fi
 .
@@ -212,8 +375,8 @@ slash. That is \fB{{^person}}\fR begins a "person" inverted section while \fB{{/
 .
 .P
 While sections can be used to render text one or more times based on the
-value of the key given, inverted sections may render text once based
-on the inverse value of the key given. That is, they will be rendered
+value of the key, inverted sections may render text once based
+on the inverse value of the key. That is, they will be rendered
 if the key doesn't exist, is false, or is an empty list.
 .
 .P
@@ -222,6 +385,7 @@ Template:
 .IP "" 4
 .
 .nf
+
 {{#repo}}
   <b>{{name}}</b>
 {{/repo}}
@@ -239,6 +403,7 @@ Hash:
 .IP "" 4
 .
 .nf
+
 {
   "repo": []
 }
@@ -253,6 +418,7 @@ Output:
 .IP "" 4
 .
 .nf
+
 No repos :(
 .
 .fi
@@ -265,6 +431,7 @@ Comments begin with a bang and are ignored. The following template:
 .IP "" 4
 .
 .nf
+
 <h1>Today{{! ignore me }}.</h1>
 .
 .fi
@@ -277,11 +444,15 @@ Will render as follows:
 .IP "" 4
 .
 .nf
+
 <h1>Today.</h1>
 .
 .fi
 .
 .IP "" 0
+.
+.P
+Comments may contain newlines.
 .
 .SS "Partials"
 Partials begin with a greater than sign, like \fB{{> box}}\fR.
@@ -297,6 +468,7 @@ this:
 .IP "" 4
 .
 .nf
+
 <%= partial :next_more, :start => start, :size => size %>
 .
 .fi
@@ -309,6 +481,7 @@ Mustache requires only this:
 .IP "" 4
 .
 .nf
+
 {{> next_more}}
 .
 .fi
@@ -328,13 +501,15 @@ For example, this template and partial:
 .IP "" 4
 .
 .nf
+
 base.mustache:
 <h2>Names</h2>
-{{# names }}
-  {{> user }}
-{{/ names }}
+{{#names}}
+  {{> user}}
+{{/names}}
+
 user.mustache:
-<strong>{{ name }}</strong>
+<strong>{{name}}</strong>
 .
 .fi
 .
@@ -346,10 +521,11 @@ Can be thought of as a single, expanded template:
 .IP "" 4
 .
 .nf
+
 <h2>Names</h2>
-{{# names }}
-  <strong>{{ name }}</strong>
-{{/ names }}
+{{#names}}
+  <strong>{{name}}</strong>
+{{/names}}
 .
 .fi
 .
@@ -357,7 +533,7 @@ Can be thought of as a single, expanded template:
 .
 .SS "Set Delimiter"
 Set Delimiter tags start with an equal sign and change the tag
-delimiters from {{ and }} to custom strings.
+delimiters from \fB{{\fR and \fB}}\fR to custom strings.
 .
 .P
 Consider the following contrived example:
@@ -365,7 +541,8 @@ Consider the following contrived example:
 .IP "" 4
 .
 .nf
-* {{ default_tags }}
+
+* {{default_tags}}
 {{=<% %>=}}
 * <% erb_style_tags %>
 <%={{ }}=%>
@@ -396,4 +573,4 @@ Mustache is Copyright (C) 2009 Chris Wanstrath
 Original CTemplate by Google
 .
 .SH "SEE ALSO"
-mustache(1), mustache(7), gem(1),\fIhttp://mustache.github.com/\fR
+mustache(1), mustache(7), \fIhttp://mustache.github.com/\fR

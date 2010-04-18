@@ -2,7 +2,7 @@
 <html>
 <head>
   <meta http-equiv='content-type' value='text/html;charset=utf8'>
-  <meta name='generator' value='Ronn/v0.4.1'>
+  <meta name='generator' value='Ronn/v0.5'>
   <title>mustache(5) -- Logic-less templates.</title>
   <style type='text/css'>
     body {margin:0}
@@ -106,20 +106,21 @@ values. This document explains the different types of Mustache tags.</p>
 
 <h2>TAG TYPES</h2>
 
-<p>Tags are indicated by the double mustaches. <code>{{name}}</code> is a tag, as is
-<code>{{#name}}</code>. Let's talk about the different types of tags.</p>
+<p>Tags are indicated by the double mustaches. <code>{{person}}</code> is a tag, as
+is <code>{{#person}}</code>. In both examples, we'd refer to <code>person</code> as the key
+or tag key. Let's talk about the different types of tags.</p>
 
 <h3>Variables</h3>
 
-<p>The most basic tag is the variable. A <code>{{name}}</code> tag in a basic
-template will try to find the <code>name</code> key or method on your view. If
-there is no <code>name</code> method, nothing will be rendered.</p>
+<p>The most basic tag type is the variable. A <code>{{name}}</code> tag in a basic
+template will try to find the <code>name</code> key in the current context. If
+there is no <code>name</code> key, nothing will be rendered.</p>
 
 <p>All variables are HTML escaped by default. If you want to return
 unescaped HTML, use the triple mustache: <code>{{{name}}}</code>.</p>
 
 <p>You can also use <code>&amp;</code> to unescape a variable: <code>{{&amp; name}}</code>. This may be
-useful when changing delimiters (see "Set Delimter" below).</p>
+useful when changing delimiters (see "Set Delimiter" below).</p>
 
 <p>By default a variable "miss" returns an empty string. This can usually
 be configured in your Mustache library. The Ruby version of Mustache
@@ -152,33 +153,51 @@ supports raising an exception in this situation, for instance.</p>
 <h3>Sections</h3>
 
 <p>Sections render blocks of text one or more times, depending on the
-value of the referenced tag.</p>
+value of the key in the current context.</p>
 
 <p>A section begins with a pound and ends with a slash. That is,
 <code>{{#person}}</code> begins a "person" section while <code>{{/person}}</code> ends it.</p>
 
-<p>If the <code>person</code> key exists and calling it returns false or an empty
+<p>The behavior of the section is determined by the value of the key.</p>
+
+<p><strong>False Values or Empty Lists</strong></p>
+
+<p>If the <code>person</code> key exists and has a value of false or an empty
 list, the HTML between the pound and slash will not be displayed.</p>
-
-<p>If the <code>person</code> method exists and calling it returns true or an
-object, the HTML between the pound and slash will be rendered and
-displayed exactly one time. The object that was returned by the
-<code>person</code> method will become the context of the block, as well.</p>
-
-<p>If the <code>person</code> method exists and calling it returns a non-empty list,
-the text in the block will be displayed once for each item in the
-list. The context of the block will be set to the current item for
-each iteration. In this way we can loop over collections.</p>
 
 <p>Template:</p>
 
-<pre><code>{{#person}}
-  Shown!
-{{/person}}
-{{#anything_else}}
+<pre><code>Shown.
+{{#nothin}}
   Never shown!
-{{/anything_else}}
-{{#repo}}
+{{/nothin}}
+</code></pre>
+
+<p>Hash:</p>
+
+<pre><code>{
+  "person": true,
+}
+</code></pre>
+
+<p>Output:</p>
+
+<pre><code>Shown.
+</code></pre>
+
+<p><strong>Non-Empty Lists</strong></p>
+
+<p>If the <code>person</code> key exists and has a non-false value, the HTML between
+the pound and slash will be rendered and displayed one or more times.</p>
+
+<p>When the value is a non-empty list, the text in the block will be
+displayed once for each item in the list. The context of the block
+will be set to the current item for each iteration. In this way we can
+loop over collections.</p>
+
+<p>Template:</p>
+
+<pre><code>{{#repo}}
   &lt;b&gt;{{name}}&lt;/b&gt;
 {{/repo}}
 </code></pre>
@@ -186,7 +205,6 @@ each iteration. In this way we can loop over collections.</p>
 <p>Hash:</p>
 
 <pre><code>{
-  "person": true,
   "repo": [
     { "name": "resque" },
     { "name": "hub" },
@@ -197,10 +215,65 @@ each iteration. In this way we can loop over collections.</p>
 
 <p>Output:</p>
 
-<pre><code>Shown!
-&lt;b&gt;resque&lt;/b&gt;
+<pre><code>&lt;b&gt;resque&lt;/b&gt;
 &lt;b&gt;hub&lt;/b&gt;
 &lt;b&gt;rip&lt;/b&gt;
+</code></pre>
+
+<p><strong>Lambdas</strong></p>
+
+<p>When the value is a callable object, such as a function or lambda, the
+object will be invoked and passed the block of text. The text passed
+is the literal block, unrendered. <code>{{tags}}</code> will not have been expanded
+- the lambda should do that on its own. In this way you can implement
+filters or caching.</p>
+
+<p>Template:</p>
+
+<pre><code>{{#wrapped}}
+  {{name}} is awesome.
+{{/wrapped}}
+</code></pre>
+
+<p>Hash:</p>
+
+<pre><code>{
+  "name": "Willy",
+  "wrapped": function() {
+    return function(text) {
+      return "&lt;b&gt;" + render(text) + "&lt;/b&gt;"
+    }
+  }
+}
+</code></pre>
+
+<p>Output:</p>
+
+<pre><code>&lt;b&gt;Willy is awesome.&lt;/b&gt;
+</code></pre>
+
+<p><strong>Non-False Values</strong></p>
+
+<p>When the value is non-false but not a list, it will be used as the
+context for a single rendering of the block.</p>
+
+<p>Template:</p>
+
+<pre><code>{{#person?}}
+  Hi {{name}}!
+{{/person?}}
+</code></pre>
+
+<p>Hash:</p>
+
+<pre><code>{
+  "person?": { "name": "Jon" }
+}
+</code></pre>
+
+<p>Output:</p>
+
+<pre><code>Hi Jon!
 </code></pre>
 
 <h3>Inverted Sections</h3>
@@ -210,8 +283,8 @@ slash. That is <code>{{^person}}</code> begins a "person" inverted section while
 <code>{{/person}}</code> ends it.</p>
 
 <p>While sections can be used to render text one or more times based on the
-value of the key given, inverted sections may render text once based
-on the inverse value of the key given. That is, they will be rendered
+value of the key, inverted sections may render text once based
+on the inverse value of the key. That is, they will be rendered
 if the key doesn't exist, is false, or is an empty list.</p>
 
 <p>Template:</p>
@@ -248,6 +321,8 @@ if the key doesn't exist, is false, or is an empty list.</p>
 <pre><code>&lt;h1&gt;Today.&lt;/h1&gt;
 </code></pre>
 
+<p>Comments may contain newlines.</p>
+
 <h3>Partials</h3>
 
 <p>Partials begin with a greater than sign, like <code>{{&gt; box}}</code>.</p>
@@ -276,30 +351,30 @@ expansion, even though it's not literally true.</p>
 
 <pre><code>base.mustache:
 &lt;h2&gt;Names&lt;/h2&gt;
-{{# names }}
-  {{&gt; user }}
-{{/ names }}
+{{#names}}
+  {{&gt; user}}
+{{/names}}
 
 user.mustache:
-&lt;strong&gt;{{ name }}&lt;/strong&gt;
+&lt;strong&gt;{{name}}&lt;/strong&gt;
 </code></pre>
 
 <p>Can be thought of as a single, expanded template:</p>
 
 <pre><code>&lt;h2&gt;Names&lt;/h2&gt;
-{{# names }}
-  &lt;strong&gt;{{ name }}&lt;/strong&gt;
-{{/ names }}
+{{#names}}
+  &lt;strong&gt;{{name}}&lt;/strong&gt;
+{{/names}}
 </code></pre>
 
 <h3>Set Delimiter</h3>
 
 <p>Set Delimiter tags start with an equal sign and change the tag
-delimiters from {{ and }} to custom strings.</p>
+delimiters from <code>{{</code> and <code>}}</code> to custom strings.</p>
 
 <p>Consider the following contrived example:</p>
 
-<pre><code>* {{ default_tags }}
+<pre><code>* {{default_tags}}
 {{=&lt;% %>=}}
 * &lt;% erb_style_tags %>
 &lt;%={{ }}=%>
@@ -325,7 +400,7 @@ markup."</p>
 
 <h2>SEE ALSO</h2>
 
-<p>mustache(1), mustache(7), gem(1),
+<p>mustache(1), mustache(7),
 <a href="http://mustache.github.com/">http://mustache.github.com/</a></p>
 
 

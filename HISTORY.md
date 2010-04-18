@@ -1,3 +1,8 @@
+## 0.11.0 (2010-04-18)
+
+* Higher Order Sections. See mustache(5) for details.
+* Add inheritable class ivars on Mustache for @options.
+
 ## 0.10.0 (2010-04-02)
 
 * Added Inverted Sections (^). See mustache(5) for details.

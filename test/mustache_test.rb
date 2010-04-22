@@ -57,6 +57,22 @@ rendered
 rendered
   end
 
+  def test_multi_line_sections_preserve_trailing_newline
+    view = Mustache.new
+    view.template = <<template
+{{#something}}
+yay
+{{/something}}
+Howday.
+template
+
+    view[:something] = true
+    assert_equal <<-rendered.strip, view.render.strip
+yay
+Howday.
+rendered
+  end
+
   def test_single_line_inverted_sections
     html = %(<p class="flash-notice" {{^ flash }}style="display: none;"{{/ flash }}>)
 
@@ -448,7 +464,7 @@ template
     base = Class.new(Mustache)
     tmpl = Class.new(base)
 
-    {:template_path      => File.expand_path('./foo'), 
+    {:template_path      => File.expand_path('./foo'),
      :template_extension => 'stache',
      :view_namespace     => TestNamespace,
      :view_path          => './foo'

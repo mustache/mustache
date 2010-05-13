@@ -60,22 +60,14 @@ end
 # Gems
 #
 
-begin
-  require 'mg'
-  MG.new("mustache.gemspec")
+desc "Push a new version to Gemcutter and publish docs."
+task :publish do
+  require File.dirname(__FILE__) + '/lib/mustache/version'
 
-  desc "Push a new version to Gemcutter and publish docs."
-  task :publish => "gem:publish" do
-    require File.dirname(__FILE__) + '/lib/mustache/version'
-
-    system "git tag v#{Mustache::Version}"
-    sh "git push origin master --tags"
-    sh "git clean -fd"
-    exec "rake pages"
-  end
-rescue LoadError
-  warn "mg not available."
-  warn "Install it with: gem i mg"
+  system "git tag v#{Mustache::Version}"
+  sh "git push origin master --tags"
+  sh "git clean -fd"
+  exec "rake pages"
 end
 
 #

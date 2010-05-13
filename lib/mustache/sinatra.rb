@@ -123,6 +123,12 @@ class Mustache
           self.view_path      = options[:views]
         end
 
+        # If we were handed :"positions.atom" or some such as the
+        # template name, we need to remember the extension.
+        if view.to_s.include?('.')
+          view, ext = view.to_s.split('.')
+        end
+
         # Try to find the view class for a given view, e.g.
         # :view => Hurl::Views::Index.
         klass = factory.view_class(view)
@@ -138,6 +144,24 @@ class Mustache
           # subclass of Mustache won't know how to find the
           # "index.mustache" template unless we tell it to.
           klass.template_name = view.to_s
+        elsif ext
+          # We got an ext (like "atom"), so look for an "Atom" class
+          # under the current View's namespace.
+          #
+          # So if our template was "positions.atom", try to find
+          # Positions::Atom.
+          if klass.const_defined?(ext_class = ext.capitalize)
+            # Found Positions::Atom - set it
+            klass = klass.const_get(ext_class)
+          else
+            # Didn't find Positions::Atom - create it by creating an
+            # anonymous subclass of Positions and setting that to
+            # Positions::Atom.
+            new_class = Class.new(klass)
+            new_class.template_name = "#{view}.#{ext}"
+            klass.const_set(ext_class, new_class)
+            klass = new_class
+          end
         end
 
         # Set the template path and return our class.

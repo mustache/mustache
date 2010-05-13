@@ -1,3 +1,7 @@
+## 0.11.2 (2010-05-13)
+
+* Sinatra bugfix: `mustache :"TEMPLATE.atom"`
+
 ## 0.11.1 (2010-05-12)
 
 * mustache(1) bugfix: Render even without data.

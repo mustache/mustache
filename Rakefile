@@ -65,6 +65,8 @@ task :publish do
   require File.dirname(__FILE__) + '/lib/mustache/version'
 
   system "git tag v#{Mustache::Version}"
+  sh "gem build mustache.gemspec"
+  sh "gem push mustache-#{Mustache::Version}.gem"
   sh "git push origin master --tags"
   sh "git clean -fd"
   exec "rake pages"

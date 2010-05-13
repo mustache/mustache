@@ -1,3 +1,4 @@
+$LOAD_PATH.unshift 'lib'
 require 'mustache/version'
 
 Gem::Specification.new do |s|

@@ -73,7 +73,7 @@ class Mustache
           puts Mustache.render(template, data)
         end
       else
-        puts doc
+        puts Mustache.render(doc)
       end
     end
   end

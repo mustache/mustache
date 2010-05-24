@@ -473,4 +473,41 @@ template
       assert_equal value, tmpl.send(attr)
     end
   end
+    def test_array_of_arrays
+    template = <<template
+{{#items}}
+start
+{{#map}}
+  {{a}}
+{{/map}}
+end
+{{/items}}
+template
+
+    data = {
+      "items" => [
+        [ {"a" => 1}, {"a" => 2}, {"a" => 3} ],
+        [ {"a" => 4}, {"a" => 5}, {"a" => 6} ],
+        [ {"a" => 7}, {"a" => 8}, {"a" => 9} ]
+      ]
+    }
+
+    assert_equal <<expected, Mustache.render(template, data)
+start
+1
+2
+3
+end
+start
+4
+5
+6
+end
+start
+7
+8
+9
+end
+expected
+  end
 end

@@ -104,7 +104,9 @@ class Mustache
         elsif v.is_a?(Proc)
           v.call(#{code})
         else
-          v = [v] unless v.is_a?(Array) # shortcut when passed non-array
+          # Shortcut when passed non-array
+          v = [v] if v.respond_to?(:has_key?) || !v.respond_to?(:map)
+
           v.map { |h| ctx.push(h); r = #{code}; ctx.pop; r }.join
         end
       end

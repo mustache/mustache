@@ -510,4 +510,27 @@ start
 end
 expected
   end
+      def test_indentation
+    template = <<template
+SELECT
+  {{#cols}}
+    {{name}},
+  {{/cols}}
+FROM
+  DUMMY1
+template
+
+    view = Mustache.new
+    view[:cols] = [{:name => 'Name'}, {:name => 'Age'}, {:name => 'Weight'}]
+    view.template = template
+
+    assert_equal <<template, view.render
+SELECT
+  Name,
+  Age,
+  Weight,
+FROM
+  DUMMY1
+template
+  end
 end

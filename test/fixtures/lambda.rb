@@ -12,13 +12,17 @@ class Lambda < Mustache
     @cached = nil
   end
 
-  def cached
+  def rendered
     lambda do |text|
       return @cached if @cached
 
       @calls += 1
       @cached = render(text)
     end
+  end
+
+  def not_rendered
+    lambda { |text| text }
   end
 end
 

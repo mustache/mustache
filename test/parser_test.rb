@@ -51,4 +51,26 @@ EOF
 
     assert_equal expected, tokens
   end
+
+  def test_parser_errors
+    bad_templates = [
+      # Template             # Error line/column
+      ["{{ Hello World }}",  1, 9 ], # Space
+      ["{{ Hello\"World }}", 1, 8 ], # Quote
+      ["{{ <elloWorld }}",   1, 3 ], # Bad leading character
+      ["{{\n <elloWorld }}", 2, 1 ]  # Bad leading character after \n
+    ]
+
+    lexer = Mustache::Parser.new
+    bad_templates.each do |template, line, column|
+      exception = assert_raise Mustache::Parser::SyntaxError do
+        lexer.compile(template)
+      end
+
+      output = exception.to_s
+      assert_match /Line #{line}/, output
+      assert_match /^\s{#{column + 3}}\^/, output
+    end
+  end
+
 end

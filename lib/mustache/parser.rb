@@ -32,6 +32,7 @@ class Mustache
         @lineno, @column, @line = position
         @stripped_line = @line.strip
         @stripped_column = @column - (@line.size - @line.lstrip.size)
+        @stripped_column = 0 if @stripped_column < 0
       end
 
       def to_s

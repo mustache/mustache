@@ -533,4 +533,16 @@ FROM
   DUMMY1
 template
   end
+
+  def test_numeric_sections
+    html = %(<{{# count }}{{ count }} widgets{{/ count }}>)
+
+    instance = Mustache.new
+    instance.template = html
+    instance[:count] = 0
+    assert_equal '<>', instance.render
+
+    instance[:count] = 15
+    assert_equal '<15 widgets>', instance.render
+  end
 end

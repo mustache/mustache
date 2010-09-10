@@ -91,24 +91,9 @@ class Mustache
     # Callback fired when the compiler finds a section token. We're
     # passed the section name and the array of tokens.
     def on_section(name, content)
-      # Convert the tokenized content of this section into a Ruby
-      # string we can use.
-      code = compile(content)
-
-      # Compile the Ruby for this section now that we know what's
-      # inside the section.
       ev(<<-compiled)
-      if v = ctx[#{name.to_sym.inspect}]
-        if v == true
-          #{code}
-        elsif v.is_a?(Proc)
-          v.call(#{code})
-        else
-          # Shortcut when passed non-array
-          v = [v] if v.respond_to?(:has_key?) || !v.respond_to?(:map)
-
-          v.map { |h| ctx.push(h); r = #{code}; ctx.pop; r }.join
-        end
+      render_section(ctx, #{name.to_sym.inspect}) do
+        #{compile(content)}
       end
       compiled
     end
@@ -116,16 +101,9 @@ class Mustache
     # Fired when we find an inverted section. Just like `on_section`,
     # we're passed the inverted section name and the array of tokens.
     def on_inverted_section(name, content)
-      # Convert the tokenized content of this section into a Ruby
-      # string we can use.
-      code = compile(content)
-
-      # Compile the Ruby for this inverted section now that we know
-      # what's inside.
       ev(<<-compiled)
-      v = ctx[#{name.to_sym.inspect}]
-      if v.nil? || v == false || v.respond_to?(:empty?) && v.empty?
-        #{code}
+      render_inverted_section(ctx, #{name.to_sym.inspect}) do
+        #{compile(content)}
       end
       compiled
     end

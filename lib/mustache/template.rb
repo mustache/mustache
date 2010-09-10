@@ -55,5 +55,30 @@ class Mustache
     def tokens(src = @source)
       Parser.new.compile(src)
     end
+
+  private
+    # Render helper for {{# Key }} .. {{/ Key }}
+    def render_section(ctx, key)
+      v = ctx[key]
+      if v == true
+        yield
+      elsif v.is_a?(Proc)
+        v.call(yield)
+      elsif !hide_section?(v)
+        v = [v] unless v.is_a?(Array) # When passed non-array
+        v.map { |h| ctx.push(h); r = yield; ctx.pop; r }.join
+      end
+    end
+
+    # Render helper for {{^ Key }} .. {{/ Key }}
+    def render_inverted_section(ctx, key)
+      yield if hide_section?(ctx[key])
+    end
+
+    # Should the passed section be shown or hidden
+    def hide_section?(v)
+      v.nil? || v == false || v == 0 ||
+      v.respond_to?(:empty?) && v.empty?
+    end
   end
 end

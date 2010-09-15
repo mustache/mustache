@@ -11,7 +11,7 @@ class Mustache
     # Return a structure describing the options.
     def self.parse_options(args)
       opts = OptionParser.new do |opts|
-        opts.banner = "Usage: mustache [-c] [-t] FILE ..."
+        opts.banner = "Usage: mustache [-c] [-t] [-r library] FILE ..."
 
         opts.separator " "
 
@@ -40,6 +40,10 @@ class Mustache
           require 'pp'
           pp Mustache::Template.new(File.read(file)).tokens
           exit
+        end
+
+        opts.on('-r', '--require LIB', 'Require a Ruby library before running.') do |lib|
+          require lib
         end
 
         opts.separator "Common Options:"

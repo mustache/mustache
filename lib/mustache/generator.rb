@@ -139,12 +139,22 @@ class Mustache
 
     # An unescaped tag.
     def on_utag(name)
-      ev("ctx[#{name.to_sym.inspect}]")
+      ev(<<-compiled)
+        v = ctx[#{name.to_sym.inspect}]
+        v = v.call() if v.is_a?(Proc)
+        ctx.frame[ctx.key] = v if ctx.frame.is_a?(Hash)
+        v.to_s
+      compiled
     end
 
     # An escaped tag.
     def on_etag(name)
-      ev("CGI.escapeHTML(ctx[#{name.to_sym.inspect}].to_s)")
+      ev(<<-compiled)
+        v = ctx[#{name.to_sym.inspect}]
+        v = v.call() if v.is_a?(Proc)
+        ctx.frame[ctx.key] = v if ctx.frame.is_a?(Hash)
+        CGI.escapeHTML(v.to_s)
+      compiled
     end
 
     # An interpolation-friendly version of a string, for use within a

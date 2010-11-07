@@ -90,7 +90,7 @@ class Mustache
 
     # Callback fired when the compiler finds a section token. We're
     # passed the section name and the array of tokens.
-    def on_section(name, content)
+    def on_section(name, content, raw)
       # Convert the tokenized content of this section into a Ruby
       # string we can use.
       code = compile(content)
@@ -102,7 +102,7 @@ class Mustache
         if v == true
           #{code}
         elsif v.is_a?(Proc)
-          v.call(#{code})
+          v.call(#{raw.inspect})
         else
           # Shortcut when passed non-array
           v = [v] if v.respond_to?(:has_key?) || !v.respond_to?(:map)
@@ -115,7 +115,7 @@ class Mustache
 
     # Fired when we find an inverted section. Just like `on_section`,
     # we're passed the inverted section name and the array of tokens.
-    def on_inverted_section(name, content)
+    def on_inverted_section(name, content, raw)
       # Convert the tokenized content of this section into a Ruby
       # string we can use.
       code = compile(content)

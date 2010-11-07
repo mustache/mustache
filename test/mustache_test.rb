@@ -336,13 +336,13 @@ data
     view = Lambda.new
     view[:name] = 'Chris'
 
-    assert_equal "Hi Chris.\nHi {{name}}.", view.render.chomp
+    assert_equal "Hi Chris.\n\nHi {{name}}.", view.render.chomp
     assert_equal 1, view.calls
 
-    assert_equal "Hi Chris.\nHi {{name}}.", view.render.chomp
+    assert_equal "Hi Chris.\n\nHi {{name}}.", view.render.chomp
     assert_equal 1, view.calls
 
-    assert_equal "Hi Chris.\nHi {{name}}.", view.render.chomp
+    assert_equal "Hi Chris.\n\nHi {{name}}.", view.render.chomp
     assert_equal 1, view.calls
   end
 

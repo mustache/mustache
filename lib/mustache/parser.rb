@@ -29,7 +29,7 @@ class Mustache
     class SyntaxError < StandardError
       def initialize(message, position)
         @message = message
-        @lineno, @column, @line = position
+        @lineno, @column, @line, _ = position
         @stripped_line = @line.strip
         @stripped_column = @column - (@line.size - @line.lstrip.size)
       end
@@ -107,6 +107,8 @@ EOF
     def scan_tags
       # Scan until we hit an opening delimiter.
       start_of_line = @scanner.beginning_of_line?
+      pre_match_position = @scanner.pos
+
       return unless x = @scanner.scan(/([ \t]*)?#{Regexp.escape(otag)}/)
       padding = @scanner[1] || ''
 
@@ -149,7 +151,8 @@ EOF
         @result = block
       when '/'
         section, pos, result = @sections.pop
-        @result = result
+        raw = @scanner.pre_match[pos[3]...pre_match_position] + padding
+        (@result = result).last << raw
 
         if section.nil?
           error "Closing unopened #{content.inspect}"
@@ -191,6 +194,12 @@ EOF
           @result.insert(-2, [:static, padding]) unless padding.empty?
         end
       end
+
+      return unless @result == [:multi]
+
+      # Store off the current scanner position now that we've closed the tag
+      # and consumed any irrelevant whitespace.
+      @sections.last[1] << @scanner.pos unless @sections.empty?
     end
 
     # Try to find static text, e.g. raw HTML with no {{mustaches}}.
@@ -206,7 +215,7 @@ EOF
 
       text.force_encoding(@encoding) if @encoding
 
-      @result << [:static, text]
+      @result << [:static, text] unless text.empty?
     end
 
     # Scans the string until the pattern is matched. Returns the substring

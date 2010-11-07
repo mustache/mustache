@@ -1,0 +1,3 @@
+[submodule "ext/spec"]
+	path = ext/spec
+	url = https://github.com/pvande/Mustache-Spec.git

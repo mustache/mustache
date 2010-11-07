@@ -23,12 +23,15 @@ class Mustache
     # If the Mustache view handling the rendering (e.g. the view
     # representing your profile page or some other template) responds
     # to `partial`, we call it and render the result.
-    def partial(name)
+    def partial(name, indentation = '')
       # Look for the first Mustache in the stack.
       mustache = mustache_in_stack
 
       # Call its `partial` method and render the result.
-      mustache.render(mustache.partial(name), self)
+      result = mustache.render(mustache.partial(name), self)
+
+      # Indent the rendered partial by the given indentation.
+      result.gsub(/^/, indentation)
     end
 
     # Find the first Mustache in the stack. If we're being rendered

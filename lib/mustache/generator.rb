@@ -133,8 +133,8 @@ class Mustache
     # Fired when the compiler finds a partial. We want to return code
     # which calls a partial at runtime instead of expanding and
     # including the partial's body to allow for recursive partials.
-    def on_partial(name)
-      ev("ctx.partial(#{name.to_sym.inspect})")
+    def on_partial(name, indentation)
+      ev("ctx.partial(#{name.to_sym.inspect}, #{indentation.inspect})")
     end
 
     # An unescaped tag.

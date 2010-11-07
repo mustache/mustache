@@ -22,7 +22,7 @@ class Lambda < Mustache
   end
 
   def not_rendered
-    lambda { |text| text }
+    lambda { |text| "{{= | =}}#{text}" }
   end
 end
 

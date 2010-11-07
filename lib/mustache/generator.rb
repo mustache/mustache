@@ -102,7 +102,7 @@ class Mustache
         if v == true
           #{code}
         elsif v.is_a?(Proc)
-          v.call(#{raw.inspect})
+          Mustache::Template.new(v.call(#{raw.inspect}).to_s).render(ctx.dup)
         else
           # Shortcut when passed non-array
           v = [v] if v.respond_to?(:has_key?) || !v.respond_to?(:map)
@@ -141,7 +141,7 @@ class Mustache
     def on_utag(name)
       ev(<<-compiled)
         v = ctx[#{name.to_sym.inspect}]
-        v = v.call() if v.is_a?(Proc)
+        v = Mustache::Template.new(v.call.to_s).render(ctx.dup) if v.is_a?(Proc)
         ctx.frame[ctx.key] = v if ctx.frame.is_a?(Hash)
         v.to_s
       compiled
@@ -151,7 +151,7 @@ class Mustache
     def on_etag(name)
       ev(<<-compiled)
         v = ctx[#{name.to_sym.inspect}]
-        v = v.call() if v.is_a?(Proc)
+        v = Mustache::Template.new(v.call.to_s).render(ctx.dup) if v.is_a?(Proc)
         ctx.frame[ctx.key] = v if ctx.frame.is_a?(Hash)
         CGI.escapeHTML(v.to_s)
       compiled

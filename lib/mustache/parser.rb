@@ -182,7 +182,7 @@ EOF
         # Couldn't find any otag, which means the rest is just static text.
         text = @scanner.rest
         # Mark as done.
-        @scanner.clear
+        @scanner.terminate
       end
 
       text.force_encoding(@encoding) if @encoding

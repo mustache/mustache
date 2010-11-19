@@ -70,7 +70,10 @@ require 'mustache/context'
 # for files containing view classes when using the `view_class` method.
 #
 class Mustache
-  # Helper method for quickly instantiating and rendering a view.
+  # Instantiates an instance of this class and calls `render` with
+  # the passed args.
+  #
+  # Returns a rendered String version of a template
   def self.render(*args)
     new.render(*args)
   end
@@ -288,7 +291,7 @@ class Mustache
     end
   end
 
-  # Return the value of the configuration setting on the superclass, or return 
+  # Return the value of the configuration setting on the superclass, or return
   # the default.
   #
   # attr_name - Symbol name of the attribute.  It should match the instance variable.
@@ -341,8 +344,27 @@ class Mustache
 
   # Parses our fancy pants template file and returns normal file with
   # all special {{tags}} and {{#sections}}replaced{{/sections}}.
+  #
+  # data - A String template or a Hash context. If a Hash is given,
+  #        we'll try to figure out the template from the class.
+  #  ctx - A Hash context if `data` is a String template.
+  #
+  # Examples
+  #
+  #   @view.render("Hi {{thing}}!", :thing => :world)
+  #
+  #   View.template = "Hi {{thing}}!"
+  #   @view = View.new
+  #   @view.render(:thing => :world)
+  #
+  # Returns a rendered String version of a template
   def render(data = template, ctx = {})
-    tpl = templateify(data)
+    if data.is_a? Hash
+      ctx = data
+      tpl = templateify(template)
+    else
+      tpl = templateify(data)
+    end
 
     return tpl.render(context) if ctx == {}
 

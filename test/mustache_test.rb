@@ -3,6 +3,17 @@ $LOAD_PATH.unshift File.dirname(__FILE__)
 require 'helper'
 
 class MustacheTest < Test::Unit::TestCase
+  def test_instance_render
+    klass = Class.new(Mustache)
+    klass.template = "Hi {{thing}}!"
+    assert_equal "Hi world!", klass.render(:thing => :world)
+    assert_equal "Nice.", klass.render("{{compliment}}.", :compliment => "Nice")
+    assert_equal <<-end_simple, Simple.new.render(:name => "yo", :in_ca => false)
+Hello yo
+You have just won $10000!
+end_simple
+  end
+
   def test_passenger
     assert_equal <<-end_passenger, Passenger.to_text
 <VirtualHost *>

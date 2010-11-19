@@ -99,36 +99,36 @@ end_partial
   <body>
     <ul>
       <li>
-  1
-  <ul>
-    <li>
-  2
-  <ul>
-    <li>
-  3
-  <ul>
+        1
+        <ul>
+          <li>
+            2
+            <ul>
+              <li>
+                3
+                <ul>
+                </ul>
+              </li>
+            </ul>
+          </li>
+          <li>
+            4
+            <ul>
+              <li>
+                5
+                <ul>
+                  <li>
+                    6
+                    <ul>
+                    </ul>
+                  </li>
+                </ul>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </li>
     </ul>
-</li>
-    </ul>
-</li>
-    <li>
-  4
-  <ul>
-    <li>
-  5
-  <ul>
-    <li>
-  6
-  <ul>
-    </ul>
-</li>
-    </ul>
-</li>
-    </ul>
-</li>
-    </ul>
-</li>
-      </ul>
   </body>
 </html>
 end_partial

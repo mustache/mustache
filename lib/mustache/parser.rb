@@ -29,7 +29,7 @@ class Mustache
     class SyntaxError < StandardError
       def initialize(message, position)
         @message = message
-        @lineno, @column, @line = position
+        @lineno, @column, @line, _ = position
         @stripped_line = @line.strip
         @stripped_column = @column - (@line.size - @line.lstrip.size)
       end
@@ -44,8 +44,10 @@ EOF
       end
     end
 
-    # After these types of tags, all whitespace will be skipped.
-    SKIP_WHITESPACE = [ '#', '^', '/' ]
+    # After these types of tags, all whitespace until the end of the line will
+    # be skipped if they are the first (and only) non-whitespace content on
+    # the line.
+    SKIP_WHITESPACE = [ '#', '^', '/', '<', '>', '=', '!' ]
 
     # The content allowed in a tag name.
     ALLOWED_CONTENT = /(\w|[?!\/-])*/
@@ -104,7 +106,18 @@ EOF
     # Find {{mustaches}} and add them to the @result array.
     def scan_tags
       # Scan until we hit an opening delimiter.
-      return unless @scanner.scan(regexp(otag))
+      start_of_line = @scanner.beginning_of_line?
+      pre_match_position = @scanner.pos
+
+      return unless x = @scanner.scan(/([ \t]*)?#{Regexp.escape(otag)}/)
+      padding = @scanner[1] || ''
+
+      # Don't touch the preceding whitespace unless we're matching the start
+      # of a new line.
+      unless start_of_line
+        @result << [:static, padding] unless padding.empty?
+        padding = ''
+      end
 
       # Since {{= rewrites ctag, we store the ctag which should be used
       # when parsing this specific tag.
@@ -138,7 +151,8 @@ EOF
         @result = block
       when '/'
         section, pos, result = @sections.pop
-        @result = result
+        raw = @scanner.pre_match[pos[3]...pre_match_position] + padding
+        (@result = result).last << raw
 
         if section.nil?
           error "Closing unopened #{content.inspect}"
@@ -150,7 +164,7 @@ EOF
       when '='
         self.otag, self.ctag = content.split(' ', 2)
       when '>', '<'
-        @result << [:mustache, :partial, content]
+        @result << [:mustache, :partial, content, padding]
       when '{', '&'
         # The closing } in unescaped tags is just a hack for
         # aesthetics.
@@ -170,13 +184,27 @@ EOF
         error "Unclosed tag"
       end
 
-      # Skip whitespace following this tag if we need to.
-      @scanner.skip(/\s+/) if SKIP_WHITESPACE.include?(type)
+      # If this tag was the only non-whitespace content on this line, strip
+      # the remaining whitespace.  If not, but we've been hanging on to padding
+      # from the beginning of the line, re-insert the padding as static text.
+      if start_of_line
+        if SKIP_WHITESPACE.include?(type)
+          @scanner.skip(/[ \t]*\n/)
+        else
+          @result.insert(-2, [:static, padding]) unless padding.empty?
+        end
+      end
+
+      return unless @result == [:multi]
+
+      # Store off the current scanner position now that we've closed the tag
+      # and consumed any irrelevant whitespace.
+      @sections.last[1] << @scanner.pos unless @sections.empty?
     end
 
     # Try to find static text, e.g. raw HTML with no {{mustaches}}.
     def scan_text
-      text = scan_until_exclusive(regexp(otag))
+      text = scan_until_exclusive(/(^[ \t]*)?#{Regexp.escape(otag)}/)
 
       if text.nil?
         # Couldn't find any otag, which means the rest is just static text.
@@ -187,7 +215,7 @@ EOF
 
       text.force_encoding(@encoding) if @encoding
 
-      @result << [:static, text]
+      @result << [:static, text] unless text.empty?
     end
 
     # Scans the string until the pattern is matched. Returns the substring

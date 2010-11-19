@@ -90,7 +90,7 @@ class Mustache
 
     # Callback fired when the compiler finds a section token. We're
     # passed the section name and the array of tokens.
-    def on_section(name, content)
+    def on_section(name, content, raw)
       # Convert the tokenized content of this section into a Ruby
       # string we can use.
       code = compile(content)
@@ -102,7 +102,7 @@ class Mustache
         if v == true
           #{code}
         elsif v.is_a?(Proc)
-          v.call(#{code})
+          Mustache::Template.new(v.call(#{raw.inspect}).to_s).render(ctx.dup)
         else
           # Shortcut when passed non-array
           v = [v] if v.respond_to?(:has_key?) || !v.respond_to?(:map)
@@ -115,7 +115,7 @@ class Mustache
 
     # Fired when we find an inverted section. Just like `on_section`,
     # we're passed the inverted section name and the array of tokens.
-    def on_inverted_section(name, content)
+    def on_inverted_section(name, content, raw)
       # Convert the tokenized content of this section into a Ruby
       # string we can use.
       code = compile(content)
@@ -133,18 +133,28 @@ class Mustache
     # Fired when the compiler finds a partial. We want to return code
     # which calls a partial at runtime instead of expanding and
     # including the partial's body to allow for recursive partials.
-    def on_partial(name)
-      ev("ctx.partial(#{name.to_sym.inspect})")
+    def on_partial(name, indentation)
+      ev("ctx.partial(#{name.to_sym.inspect}, #{indentation.inspect})")
     end
 
     # An unescaped tag.
     def on_utag(name)
-      ev("ctx[#{name.to_sym.inspect}]")
+      ev(<<-compiled)
+        v = ctx[#{name.to_sym.inspect}]
+        v = Mustache::Template.new(v.call.to_s).render(ctx.dup) if v.is_a?(Proc)
+        ctx.frame[ctx.key] = v if ctx.frame.is_a?(Hash)
+        v.to_s
+      compiled
     end
 
     # An escaped tag.
     def on_etag(name)
-      ev("CGI.escapeHTML(ctx[#{name.to_sym.inspect}].to_s)")
+      ev(<<-compiled)
+        v = ctx[#{name.to_sym.inspect}]
+        v = Mustache::Template.new(v.call.to_s).render(ctx.dup) if v.is_a?(Proc)
+        ctx.frame[ctx.key] = v if ctx.frame.is_a?(Hash)
+        CGI.escapeHTML(v.to_s)
+      compiled
     end
 
     # An interpolation-friendly version of a string, for use within a

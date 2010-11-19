@@ -32,22 +32,27 @@ EOF
             :section,
             "first",
             [:multi,
-              [:static, "<li><strong>"],
+              [:static, "  <li><strong>"],
               [:mustache, :etag, "name"],
-              [:static, "</strong></li>\n"]]],
+              [:static, "</strong></li>\n"]],
+            %Q'  <li><strong>{{name}}</strong></li>\n'],
           [:mustache,
             :section,
             "link",
             [:multi,
-              [:static, "<li><a href=\""],
+              [:static, "  <li><a href=\""],
               [:mustache, :etag, "url"],
               [:static, "\">"],
               [:mustache, :etag, "name"],
-              [:static, "</a></li>\n"]]]]],
+              [:static, "</a></li>\n"]],
+            %Q'  <li><a href="{{url}}">{{name}}</a></li>\n']],
+        %Q'{{#first}}\n  <li><strong>{{name}}</strong></li>\n{{/first}}\n{{#link}}\n  <li><a href="{{url}}">{{name}}</a></li>\n{{/link}}\n'],
+      [:static, "\n"],
       [:mustache,
         :section,
         "empty",
-        [:multi, [:static, "<p>The list is empty.</p>\n"]]]]
+        [:multi, [:static, "<p>The list is empty.</p>\n"]],
+        %Q'<p>The list is empty.</p>\n']]
 
     assert_equal expected, tokens
   end

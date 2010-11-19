@@ -16,22 +16,24 @@ end_passenger
   def test_complex_view
     assert_equal <<-end_complex, ComplexView.render
 <h1>Colors</h1>
-<ul>
-  <li><strong>red</strong></li>
-    <li><a href="#Green">green</a></li>
-    <li><a href="#Blue">blue</a></li>
-    </ul>
+  <ul>
+      <li><strong>red</strong></li>
+      <li><a href="#Green">green</a></li>
+      <li><a href="#Blue">blue</a></li>
+  </ul>
+
 end_complex
   end
 
   def test_nested_objects
     assert_equal <<-end_complex, NestedObjects.render
 <h1>Colors</h1>
-<ul>
-  <li><strong>red</strong></li>
-    <li><a href="#Green">green</a></li>
-    <li><a href="#Blue">blue</a></li>
-    </ul>
+  <ul>
+      <li><strong>red</strong></li>
+      <li><a href="#Green">green</a></li>
+      <li><a href="#Blue">blue</a></li>
+  </ul>
+
 end_complex
   end
 
@@ -41,9 +43,7 @@ end_complex
     instance = Mustache.new
     instance.template = html
     instance[:no_flash] = true
-    assert_equal <<-rendered.strip, instance.render
-<p class="flash-notice" style="display: none;">
-rendered
+    assert_equal %Q'<p class="flash-notice" style="display: none;">', instance.render
   end
 
   def test_two_line_sections
@@ -52,9 +52,7 @@ rendered
     instance = Mustache.new
     instance.template = html
     instance[:no_flash] = true
-    assert_equal <<-rendered.strip, instance.render
-<p class="flash-notice" style="display: none;"\n>
-rendered
+    assert_equal %Q'<p class="flash-notice" style="display: none;"\n>', instance.render
   end
 
   def test_multi_line_sections_preserve_trailing_newline
@@ -67,7 +65,7 @@ Howday.
 template
 
     view[:something] = true
-    assert_equal <<-rendered.strip, view.render.strip
+    assert_equal <<-rendered, view.render
 yay
 Howday.
 rendered
@@ -78,9 +76,7 @@ rendered
 
     instance = Mustache.new
     instance.template = html
-    assert_equal <<-rendered.strip, instance.render
-<p class="flash-notice" style="display: none;">
-rendered
+    assert_equal %Q'<p class="flash-notice" style="display: none;">', instance.render
   end
 
   def test_simple
@@ -131,29 +127,26 @@ end_simple
 
   def test_delimiters
     assert_equal <<-end_template, Delimiters.render
-
 * It worked the first time.
-
 * And it worked the second time.
 * As well as the third.
-
 * Then, surprisingly, it worked the final time.
 end_template
   end
 
   def test_double_section
-    assert_equal <<-end_section.strip, DoubleSection.render.strip
-* first
+    assert_equal <<-end_section, DoubleSection.render
+  * first
 * second
-* third
+  * third
 end_section
   end
 
   def test_inverted_section
-    assert_equal <<-end_section.strip, InvertedSection.render.strip
-* first
+    assert_equal <<-end_section, InvertedSection.render
+  * first
 * second
-* third
+  * third
 end_section
   end
 
@@ -231,7 +224,7 @@ data
     end
     instance.template = '{{#show}} <li>{{die}}</li> {{/show}} yay'
 
-    assert_equal "yay", instance.render
+    assert_equal " yay", instance.render
   end
 
   def test_reports_unclosed_sections
@@ -265,7 +258,7 @@ data
     instance[:list] = { :item => 1234 }
     instance.template = '{{#list}} <li>{{item}}</li> {{/list}}'
 
-    assert_equal '<li>1234</li>', instance.render.strip
+    assert_equal ' <li>1234</li> ', instance.render
   end
 
   def test_enumerable_sections_accept_a_string_keyed_hash_as_a_context
@@ -273,14 +266,14 @@ data
     instance[:list] = { 'item' => 1234 }
     instance.template = '{{#list}} <li>{{item}}</li> {{/list}}'
 
-    assert_equal '<li>1234</li>', instance.render.strip
+    assert_equal ' <li>1234</li> ', instance.render
   end
 
   def test_not_found_in_context_renders_empty_string
     instance = Mustache.new
     instance.template = '{{#list}} <li>{{item}}</li> {{/list}}'
 
-    assert_equal '', instance.render.strip
+    assert_equal '', instance.render
   end
 
   def test_not_found_in_nested_context_renders_empty_string
@@ -288,7 +281,7 @@ data
     instance[:list] = { :item => 1234 }
     instance.template = '{{#list}} <li>{{prefix}}{{item}}</li> {{/list}}'
 
-    assert_equal '<li>1234</li>', instance.render.strip
+    assert_equal ' <li>1234</li> ', instance.render
   end
 
   def test_not_found_in_context_raises_when_asked_to
@@ -297,7 +290,7 @@ data
     instance.template = '{{#list}} <li>{{item}}</li> {{/list}}'
 
     assert_raises Mustache::ContextMiss do
-      instance.render.strip
+      instance.render
     end
   end
 
@@ -343,13 +336,13 @@ data
     view = Lambda.new
     view[:name] = 'Chris'
 
-    assert_equal "Hi Chris.\nHi {{name}}.", view.render.chomp
+    assert_equal "Hi Chris.\n\nHi {{name}}.", view.render.chomp
     assert_equal 1, view.calls
 
-    assert_equal "Hi Chris.\nHi {{name}}.", view.render.chomp
+    assert_equal "Hi Chris.\n\nHi {{name}}.", view.render.chomp
     assert_equal 1, view.calls
 
-    assert_equal "Hi Chris.\nHi {{name}}.", view.render.chomp
+    assert_equal "Hi Chris.\n\nHi {{name}}.", view.render.chomp
     assert_equal 1, view.calls
   end
 
@@ -380,7 +373,7 @@ data
 {{#items}}
 start
 {{#items}}
-  {{a}}
+{{a}}
 {{/items}}
 end
 {{/items}}
@@ -414,14 +407,14 @@ expected
   end
 
   def test_id_with_nested_context
-    html = %(<div>{{id}}</div>\n<div>{{# has_a? }}{{id}}{{/ has_a? }}</div>\n<div>{{# has_b? }}{{id}}{{/ has_b? }}</div>)
+    html = %(<div>{{id}}</div>\n<div>{{# has_a? }}{{id}}{{/ has_a? }}</div>\n<div>{{# has_b? }}{{id}}{{/ has_b? }}</div>\n)
 
     instance = Mustache.new
     instance.template = html
     instance[:id] = 3
     instance[:has_a?] = true
     instance[:has_b?] = true
-    assert_equal <<-rendered.strip, instance.render
+    assert_equal <<-rendered, instance.render
 <div>3</div>
 <div>3</div>
 <div>3</div>
@@ -478,7 +471,7 @@ template
 {{#items}}
 start
 {{#map}}
-  {{a}}
+{{a}}
 {{/map}}
 end
 {{/items}}
@@ -510,7 +503,7 @@ start
 end
 expected
   end
-      def test_indentation
+      def test_indentation_again
     template = <<template
 SELECT
   {{#cols}}
@@ -526,9 +519,9 @@ template
 
     assert_equal <<template, view.render
 SELECT
-  Name,
-  Age,
-  Weight,
+    Name,
+    Age,
+    Weight,
 FROM
   DUMMY1
 template

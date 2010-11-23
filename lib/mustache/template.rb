@@ -21,7 +21,6 @@ class Mustache
     # path, which it uses to find partials.
     def initialize(source)
       @source = source
-      @tmpid = 0
     end
 
     # Renders the `@source` Mustache template using the given

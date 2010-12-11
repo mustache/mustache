@@ -1,3 +1,9 @@
+## 0.12.0 (2010-12-10)
+
+* Passing the full draft Mustache spec.
+* Instance render: `@view.render(:thing => :world)`
+* Sinatra bugfix: 'layout not found' fix
+
 ## 0.11.2 (2010-05-13)
 
 * Sinatra bugfix: `mustache :"TEMPLATE.atom"`

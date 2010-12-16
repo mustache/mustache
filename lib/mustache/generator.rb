@@ -27,6 +27,15 @@ class Mustache
   #   $ mustache --compile test.mustache
   #   "Hi #{CGI.escapeHTML(ctx[:thing].to_s)}!\n"
   class Generator
+    # Customize the method used for escaping HTML content in Mustache tags.
+    def self.escape_html_method
+      @escape_html_method ||= "CGI.escapeHTML"
+    end
+
+    def self.escape_html_method=(method_name)
+      @escape_html_method = method_name
+    end
+
     # Options are unused for now but may become useful in the future.
     def initialize(options = {})
       @options = options
@@ -153,7 +162,7 @@ class Mustache
         v = ctx[#{name.to_sym.inspect}]
         v = Mustache::Template.new(v.call.to_s).render(ctx.dup) if v.is_a?(Proc)
         ctx.frame[ctx.key] = v if ctx.frame.is_a?(Hash)
-        CGI.escapeHTML(v.to_s)
+        #{self.class.escape_html_method}(v.to_s)
       compiled
     end
 

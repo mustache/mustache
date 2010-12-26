@@ -108,6 +108,7 @@ EOF
       # Scan until we hit an opening delimiter.
       start_of_line = @scanner.beginning_of_line?
       pre_match_position = @scanner.pos
+      last_index = @result.length
 
       return unless x = @scanner.scan(/([ \t]*)?#{Regexp.escape(otag)}/)
       padding = @scanner[1] || ''
@@ -188,10 +189,10 @@ EOF
       # the remaining whitespace.  If not, but we've been hanging on to padding
       # from the beginning of the line, re-insert the padding as static text.
       if start_of_line
-        if SKIP_WHITESPACE.include?(type)
+        if @scanner.peek(1) == "\n" && SKIP_WHITESPACE.include?(type)
           @scanner.skip(/[ \t]*\n/)
         else
-          @result.insert(-2, [:static, padding]) unless padding.empty?
+          @result.insert(last_index, [:static, padding]) unless padding.empty?
         end
       end
 

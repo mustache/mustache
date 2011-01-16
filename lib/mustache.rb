@@ -362,6 +362,9 @@ class Mustache
     if data.is_a? Hash
       ctx = data
       tpl = templateify(template)
+    elsif data.is_a? Symbol
+      self.class.template_name = data
+      tpl = templateify(template)
     else
       tpl = templateify(data)
     end

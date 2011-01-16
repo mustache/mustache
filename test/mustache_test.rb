@@ -233,6 +233,24 @@ data
                                                      :deploy_to => '/var/www/example.com' )
   end
 
+  def test_render_from_symbol
+    expected = <<-data
+<VirtualHost *>
+  ServerName example.com
+  DocumentRoot /var/www/example.com
+  RailsEnv production
+</VirtualHost>
+data
+    old_path, Mustache.template_path = Mustache.template_path, File.dirname(__FILE__) + "/fixtures"
+    old_extension, Mustache.template_extension = Mustache.template_extension, "conf"
+
+    assert_equal expected, Mustache.render(:passenger, :stage => 'production',
+                                                       :server => 'example.com',
+                                                       :deploy_to => '/var/www/example.com' )
+
+    Mustache.template_path, Mustache.template_extension = old_path, old_extension
+  end
+
   def test_doesnt_execute_what_it_doesnt_need_to
     instance = Mustache.new
     instance[:show] = false

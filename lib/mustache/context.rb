@@ -29,11 +29,11 @@ class Mustache
       # Look for the first Mustache in the stack.
       mustache = mustache_in_stack
 
-      # Call its `partial` method and render the result.
-      result = mustache.render(mustache.partial(name), self)
+      # Indent the partial template by the given indentation.
+      part = mustache.partial(name).to_s.gsub(/^/, indentation)
 
-      # Indent the rendered partial by the given indentation.
-      result.gsub(/^/, indentation)
+      # Call the Mustache's `partial` method and render the result.
+      result = mustache.render(part, self)
     end
 
     # Find the first Mustache in the stack. If we're being rendered

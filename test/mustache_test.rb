@@ -357,6 +357,26 @@ data
     assert_equal 1, view.calls
   end
 
+  def test_sections_which_refer_to_unary_method_call_them_as_proc
+    kls = Class.new(Mustache) {
+      def basic(arg)
+        "(#{arg})"
+      end
+      def default_arg(arg='default')
+        "(#{arg})"
+      end
+    }
+
+    str = kls.render("{{#basic}}test{{/basic}}")
+    assert_equal str, "(test)"
+    
+    str = kls.render("{{default_arg}}")
+    assert_equal str, "(default)"
+    
+    str = kls.render("{{#default_arg}}test{{/default_arg}}")
+    assert_equal str, "(test)"
+  end
+
   def test_lots_of_staches
     template = "{{{{foo}}}}"
 

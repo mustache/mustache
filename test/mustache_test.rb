@@ -64,7 +64,7 @@ end_complex
     {{#full_time}}full time{{/full_time}}
     html
 
-    assert_equal 'full time', instance.render
+    assert_equal "full time\n", instance.render
   end
 
   def test_two_line_sections

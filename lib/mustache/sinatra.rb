@@ -123,6 +123,10 @@ class Mustache
         options[:templates] ||= settings.views if settings.respond_to?(:views)
         options[:namespace] ||= self.class
 
+        unless options[:namespace].to_s.include? 'Views'
+          options[:namespace] = options[:namespace].const_get(:Views)
+        end
+
         factory = Class.new(Mustache) do
           self.view_namespace = options[:namespace]
           self.view_path      = options[:views]
@@ -137,6 +141,8 @@ class Mustache
         # Try to find the view class for a given view, e.g.
         # :view => Hurl::Views::Index.
         klass = factory.view_class(view)
+        klass.view_namespace = options[:namespace]
+        klass.view_path      = options[:views]
 
         # If there is no view class, issue a warning and use the one
         # we just generated to cache the compiled template.

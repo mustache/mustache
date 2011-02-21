@@ -218,24 +218,33 @@ class Mustache
     end
 
     file_name = underscore(name)
-    namespace = view_namespace
+    name = "#{view_namespace}::#{name}"
 
-    if namespace.const_defined?(:Views) && namespace::Views.const_defined?(name)
-      namespace::Views.const_get(name)
-    elsif namespace.const_defined?(name)
-      namespace.const_get(name)
+    if const = const_get!(name)
+      const
     elsif File.exists?(file = "#{view_path}/#{file_name}.rb")
       require "#{file}".chomp('.rb')
-      if namespace.const_defined?(:Views)
-        namespace::Views.const_get(name)
-      else
-        namespace.const_get(name)
-      end
+      const_get!(name) || Mustache
     else
       Mustache
     end
+  end
+
+  # Supercharged version of Module#const_get.
+  #
+  # Always searches under Object and can find constants by their full name,
+  #   e.g. Mustache::Views::Index
+  #
+  # name - The full constant name to find.
+  #
+  # Returns the constant if found
+  # Returns nil if nothing is found
+  def self.const_get!(name)
+    name.split('::').inject(Object) do |klass, name|
+      klass.const_get(name)
+    end
   rescue NameError
-    Mustache
+    nil
   end
 
   # Should an exception be raised when we cannot find a corresponding method
@@ -264,21 +273,28 @@ class Mustache
   end
 
   # template_partial => TemplatePartial
+  # template/partial => Template::Partial
   def self.classify(underscored)
-    underscored.split(/[-_]/).map do |part|
-      part[0] = part[0].chr.upcase; part
-    end.join
+    underscored.split('/').map do |namespace|
+      namespace.split(/[-_]/).map do |part|
+        part[0] = part[0].chr.upcase; part
+      end.join
+    end.join('::')
   end
 
-  # TemplatePartial => template_partial
+  #   TemplatePartial => template_partial
+  # Template::Partial => template/partial
   # Takes a string but defaults to using the current class' name.
   def self.underscore(classified = name)
     classified = name if classified.to_s.empty?
     classified = superclass.name if classified.to_s.empty?
 
-    string = classified.dup.split('::').last
-    string[0] = string[0].chr.downcase
-    string.gsub(/[A-Z]/) { |s| "_#{s.downcase}"}
+    string = classified.dup.split("#{view_namespace}::").last
+
+    string.split('::').map do |part|
+      part[0] = part[0].chr.downcase
+      part.gsub(/[A-Z]/) { |s| "_#{s.downcase}"}
+    end.join('/')
   end
 
   # Turns a string into a Mustache::Template. If passed a Template,

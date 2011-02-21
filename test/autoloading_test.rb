@@ -37,6 +37,10 @@ class AutoloadingTest < Test::Unit::TestCase
 end_render
   end
 
+  def test_folder_autoload
+    assert_equal TestViews::Namespaced, Mustache.view_class('test_views/namespaced')
+  end
+
   def test_namespaced_partial_autoload
     Mustache.view_namespace = TestViews
     klass = Mustache.view_class(:namespaced_with_partial)

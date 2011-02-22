@@ -1,3 +1,7 @@
+## 0.12.1 (2011-02-22)
+
+* Bugfixes!
+
 ## 0.12.0 (2010-12-10)
 
 * Passing the full draft Mustache spec.

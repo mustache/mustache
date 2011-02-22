@@ -145,11 +145,13 @@ EOF
         @result << [:mustache, :section, content, block]
         @sections << [content, position, @result]
         @result = block
+        last_index = 1
       when '^'
         block = [:multi]
         @result << [:mustache, :inverted_section, content, block]
         @sections << [content, position, @result]
         @result = block
+        last_index = 1
       when '/'
         section, pos, result = @sections.pop
         raw = @scanner.pre_match[pos[3]...pre_match_position] + padding

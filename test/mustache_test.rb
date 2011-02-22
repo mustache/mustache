@@ -62,7 +62,7 @@ end_complex
     instance[:full_time] = true
     instance.template = "\n {{#full_time}}full time{{/full_time}}\n"
 
-    assert_equal " full time\n", instance.render
+    assert_equal "\n full time\n", instance.render
   end
 
   def test_two_line_sections

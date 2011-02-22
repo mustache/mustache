@@ -60,7 +60,7 @@ end_complex
   def test_sassy_single_line_sections
     instance = Mustache.new
     instance[:full_time] = true
-    instance.template = " {{#full_time}}full time{{/full_time}}\n"
+    instance.template = "\n {{#full_time}}full time{{/full_time}}\n"
 
     assert_equal " full time\n", instance.render
   end

@@ -111,7 +111,7 @@ class Mustache
       end
 
       # Returns a View class for a given template name.
-      def mustache_class(template, options)
+      def mustache_class(template, options = {})
         @template_cache.fetch(:mustache, template) do
           compile_mustache(template, options)
         end

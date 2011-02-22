@@ -196,11 +196,11 @@ EOF
         end
       end
 
-      return unless @result == [:multi]
-
       # Store off the current scanner position now that we've closed the tag
       # and consumed any irrelevant whitespace.
       @sections.last[1] << @scanner.pos unless @sections.empty?
+
+      return unless @result == [:multi]
     end
 
     # Try to find static text, e.g. raw HTML with no {{mustaches}}.

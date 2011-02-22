@@ -60,11 +60,9 @@ end_complex
   def test_sassy_single_line_sections
     instance = Mustache.new
     instance[:full_time] = true
-    instance.template = <<-html
-    {{#full_time}}full time{{/full_time}}
-    html
+    instance.template = " {{#full_time}}full time{{/full_time}}\n"
 
-    assert_equal "full time\n", instance.render
+    assert_equal " full time\n", instance.render
   end
 
   def test_two_line_sections

@@ -1,3 +1,7 @@
+## 0.14.0 (2011-??-??)
+
+* Ability to customize escaping by overriding Mustache#escapeHTML
+
 ## 0.13.0 (2011-02-23)
 
 * Mustache.render accepts a symbol to specify a template name.

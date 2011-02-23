@@ -471,6 +471,14 @@ end
 template
   end
 
+  def test_struct
+    person = Struct.new(:name, :age)
+    view = Mustache.new
+    view[:person] = person.new('Marvin', 25)
+    view.template = '{{#person}}{{name}} is {{age}}{{/person}}'
+    assert_equal 'Marvin is 25', view.render
+  end
+
   def test_inherited_attributes
     Object.const_set :TestNamespace, Module.new
     base = Class.new(Mustache)

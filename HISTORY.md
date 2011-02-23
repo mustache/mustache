@@ -1,3 +1,8 @@
+## 0.13.0 (2011-02-23)
+
+* Mustache.render accepts a symbol to specify a template name.
+* Bugfix: Struct can be used as sections again
+
 ## 0.12.1 (2011-02-22)
 
 * Bugfixes!

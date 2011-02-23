@@ -61,7 +61,7 @@ We've got an `examples` folder but here's the canonical one:
       end
 
       def taxed_value
-        value - (value * 0.4)
+        value * 0.6
       end
 
       def in_ca
@@ -236,7 +236,7 @@ Then just include it:
       end
 
       def taxed_value
-        value - (value * 0.4)
+        value * 0.6
       end
 
       def in_ca

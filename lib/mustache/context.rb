@@ -42,6 +42,13 @@ class Mustache
       @stack.detect { |frame| frame.is_a?(Mustache) }
     end
 
+    # Allows customization of how Mustache escapes things.
+    #
+    # Returns a String.
+    def escapeHTML(str)
+      mustache_in_stack.escapeHTML(str)
+    end
+
     # Adds a new object to the context's internal stack.
     #
     # Returns the Context.

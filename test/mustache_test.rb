@@ -497,6 +497,17 @@ template
     assert_equal 'Marvin is 25', view.render
   end
 
+  def test_custom_escaping
+    view = Class.new(Mustache) do
+      def escapeHTML(str)
+        "pong"
+      end
+    end
+
+    assert_equal 'pong', view.render("{{thing}}", :thing => "nothing")
+    assert_equal 'nothing', Mustache.render("{{thing}}", :thing => "nothing")
+  end
+
   def test_inherited_attributes
     Object.const_set :TestNamespace, Module.new
     base = Class.new(Mustache)

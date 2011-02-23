@@ -153,7 +153,7 @@ class Mustache
         v = ctx[#{name.to_sym.inspect}]
         v = Mustache::Template.new(v.call.to_s).render(ctx.dup) if v.is_a?(Proc)
         ctx.frame[ctx.key] = v if ctx.frame.is_a?(Hash)
-        CGI.escapeHTML(v.to_s)
+        ctx.escapeHTML(v.to_s)
       compiled
     end
 

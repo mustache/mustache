@@ -363,8 +363,10 @@ class Mustache
       ctx = data
       tpl = templateify(template)
     elsif data.is_a? Symbol
+      old_template_name = self.class.template_name
       self.class.template_name = data
       tpl = templateify(template)
+      self.class.template_name = old_template_name
     else
       tpl = templateify(data)
     end

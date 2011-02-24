@@ -50,7 +50,7 @@ EOF
     SKIP_WHITESPACE = [ '#', '^', '/', '<', '>', '=', '!' ]
 
     # The content allowed in a tag name.
-    ALLOWED_CONTENT = /(\w|[?!\/-])*/
+    ALLOWED_CONTENT = /(\w|[?!\/.-])*/
 
     # These types of tags allow any content,
     # the rest only allow ALLOWED_CONTENT.
@@ -145,11 +145,13 @@ EOF
         @result << [:mustache, :section, content, block]
         @sections << [content, position, @result]
         @result = block
+        last_index = 1
       when '^'
         block = [:multi]
         @result << [:mustache, :inverted_section, content, block]
         @sections << [content, position, @result]
         @result = block
+        last_index = 1
       when '/'
         section, pos, result = @sections.pop
         raw = @scanner.pre_match[pos[3]...pre_match_position] + padding
@@ -172,7 +174,18 @@ EOF
         type = "}" if type == "{"
         @result << [:mustache, :utag, content]
       else
-        @result << [:mustache, :etag, content]
+        parts = content.to_s.split(".").reverse
+
+        if parts.size == 0
+          # implicit iterators - {{.}}
+          @result << [:mustache, :etag, "to_s"]
+        else
+          # dot notation - {{person.name}}
+          etag = [:mustache, :etag, parts.shift]
+          @result << parts.inject(etag) { |section, key|
+            [:mustache, :section, key, section, content]
+          }
+        end
       end
 
       # Skip whitespace and any balancing sigils after the content
@@ -196,11 +209,11 @@ EOF
         end
       end
 
-      return unless @result == [:multi]
-
       # Store off the current scanner position now that we've closed the tag
       # and consumed any irrelevant whitespace.
       @sections.last[1] << @scanner.pos unless @sections.empty?
+
+      return unless @result == [:multi]
     end
 
     # Try to find static text, e.g. raw HTML with no {{mustaches}}.

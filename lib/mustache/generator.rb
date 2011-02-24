@@ -105,7 +105,7 @@ class Mustache
           Mustache::Template.new(v.call(#{raw.inspect}).to_s).render(ctx.dup)
         else
           # Shortcut when passed non-array
-          v = [v] if v.respond_to?(:has_key?) || !v.respond_to?(:map)
+          v = [v] if v.respond_to?(:has_key?) || !v.respond_to?(:map) || v.is_a?(Struct)
 
           v.map { |h| ctx.push(h); r = #{code}; ctx.pop; r }.join
         end
@@ -153,7 +153,7 @@ class Mustache
         v = ctx[#{name.to_sym.inspect}]
         v = Mustache::Template.new(v.call.to_s).render(ctx.dup) if v.is_a?(Proc)
         ctx.frame[ctx.key] = v if ctx.frame.is_a?(Hash)
-        CGI.escapeHTML(v.to_s)
+        ctx.escapeHTML(v.to_s)
       compiled
     end
 

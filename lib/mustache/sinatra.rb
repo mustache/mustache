@@ -70,25 +70,29 @@ class Mustache
           else
             layout = layout.new
           end
-
         end
 
         # Find and cache the view class we want. This ensures the
         # compiled template is cached, too - no looking up and
         # compiling templates on each page load.
         klass = mustache_class(template, options)
-        
+
         # Does the view subclass the layout? If so we'll use the
         # view to render the layout so you can override layout
         # methods in your view - tricky.
         view_subclasses_layout = klass < layout.class if layout
-        
+
         # Create a new instance for playing with.
         instance = klass.new
 
         # Copy instance variables set in Sinatra to the view
         instance_variables.each do |name|
           instance.instance_variable_set(name, instance_variable_get(name))
+
+          # Automagic attr_readers for ivars you set in Sinatra routes.
+          if !instance.respond_to?(name)
+            (class << instance; self end).send(:attr_reader, name.to_s.sub('@',''))
+          end
         end
 
         # Render with locals.

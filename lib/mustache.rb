@@ -315,6 +315,19 @@ class Mustache
     @template = templateify(template)
   end
 
+  # Override this to provide custom escaping.
+  #
+  # class PersonView < Mustache
+  #   def escapeHTML(str)
+  #     my_html_escape_method(str)
+  #   end
+  # end
+  #
+  # Returns a String
+  def escapeHTML(str)
+    CGI.escapeHTML(str)
+  end
+
   # Instance level version of `Mustache.raise_on_context_miss?`
   def raise_on_context_miss?
     self.class.raise_on_context_miss? || @raise_on_context_miss
@@ -362,6 +375,11 @@ class Mustache
     if data.is_a? Hash
       ctx = data
       tpl = templateify(template)
+    elsif data.is_a? Symbol
+      old_template_name = self.class.template_name
+      self.class.template_name = data
+      tpl = templateify(template)
+      self.class.template_name = old_template_name
     else
       tpl = templateify(data)
     end

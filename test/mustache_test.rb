@@ -57,6 +57,14 @@ end_complex
     assert_equal %Q'<p class="flash-notice" style="display: none;">', instance.render
   end
 
+  def test_sassy_single_line_sections
+    instance = Mustache.new
+    instance[:full_time] = true
+    instance.template = "\n {{#full_time}}full time{{/full_time}}\n"
+
+    assert_equal "\n full time\n", instance.render
+  end
+
   def test_two_line_sections
     html = %(<p class="flash-notice" {{# no_flash }}style="display: none;"\n{{/ no_flash }}>)
 
@@ -223,6 +231,24 @@ data
     assert_equal expected, Mustache.render(template, :stage => 'production',
                                                      :server => 'example.com',
                                                      :deploy_to => '/var/www/example.com' )
+  end
+
+  def test_render_from_symbol
+    expected = <<-data
+<VirtualHost *>
+  ServerName example.com
+  DocumentRoot /var/www/example.com
+  RailsEnv production
+</VirtualHost>
+data
+    old_path, Mustache.template_path = Mustache.template_path, File.dirname(__FILE__) + "/fixtures"
+    old_extension, Mustache.template_extension = Mustache.template_extension, "conf"
+
+    assert_equal expected, Mustache.render(:passenger, :stage => 'production',
+                                                       :server => 'example.com',
+                                                       :deploy_to => '/var/www/example.com' )
+
+    Mustache.template_path, Mustache.template_extension = old_path, old_extension
   end
 
   def test_doesnt_execute_what_it_doesnt_need_to
@@ -481,6 +507,48 @@ def indent
   puts :indented!
 end
 template
+  end
+
+  def test_struct
+    person = Struct.new(:name, :age)
+    view = Mustache.new
+    view[:person] = person.new('Marvin', 25)
+    view.template = '{{#person}}{{name}} is {{age}}{{/person}}'
+    assert_equal 'Marvin is 25', view.render
+  end
+
+  def test_custom_escaping
+    view = Class.new(Mustache) do
+      def escapeHTML(str)
+        "pong"
+      end
+    end
+
+    assert_equal 'pong', view.render("{{thing}}", :thing => "nothing")
+    assert_equal 'nothing', Mustache.render("{{thing}}", :thing => "nothing")
+  end
+
+  def test_implicit_iterator
+    view = Mustache.new
+    view.template = "{{#people}}* {{.}}\n{{/people}}"
+    view[:people] = %w( Chris Mark Scott )
+
+    assert_equal <<text, view.render
+* Chris
+* Mark
+* Scott
+text
+  end
+
+  def test_dot_notation
+    assert_equal <<-text.chomp, DotNotation.render
+* Chris Firescythe
+* 24
+* Cincinnati, OH
+* Cincinnati, OH
+* Cincinnati, OH
+* Normal
+text
   end
 
   def test_inherited_attributes

@@ -174,7 +174,18 @@ EOF
         type = "}" if type == "{"
         @result << [:mustache, :utag, content]
       else
-        @result << [:mustache, :etag, content]
+        parts = content.to_s.split(".").reverse
+
+        if parts.size == 0
+          # implicit iterators - {{.}}
+          @result << [:mustache, :etag, "to_s"]
+        else
+          # dot notation - {{person.name}}
+          etag = [:mustache, :etag, parts.shift]
+          @result << parts.inject(etag) { |section, key|
+            [:mustache, :section, key, section, content]
+          }
+        end
       end
 
       # Skip whitespace and any balancing sigils after the content

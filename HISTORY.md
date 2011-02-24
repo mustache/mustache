@@ -1,4 +1,4 @@
-## 0.14.0 (2011-??-??)
+## 0.98.0 (2011-02-24)
 
 * Dot Notation: {{person.name}}
 * Implicit Iterators: {{# people}} {{.}} {{/ people}}

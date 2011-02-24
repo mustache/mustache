@@ -53,11 +53,11 @@ spec_files = File.join(File.dirname(__FILE__), '..', 'ext', 'spec', 'specs', '*.
 Dir[spec_files].each do |file|
   spec = YAML.load_file(file)
 
-  Class.new(MustacheSpec) do
-    define_method :name do
-      File.basename(file).sub(/^./, &:upcase)
-    end
+  klass_name = "Test" + File.basename(file, ".yml").sub(/~/, '').capitalize
+  instance_eval "class ::#{klass_name} < MustacheSpec; end"
+  test_suite = Kernel.const_get(klass_name)
 
+  test_suite.class_eval do
     spec['tests'].each do |test|
       define_method :"test - #{test['name']}" do
         setup_partials(test)

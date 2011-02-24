@@ -96,6 +96,17 @@ class Mustache
     def fetch(name, default = :__raise)
       @key = name
 
+      # support for dot.notation
+      if name.to_s.include? '.'
+        parts = name.to_s.split('.')
+
+        parts.each do |part|
+          push fetch(part.to_sym)
+        end
+
+        return @stack.shift(parts.size).first
+      end
+
       @stack.each do |frame|
         # Prevent infinite recursion.
         next if frame == self

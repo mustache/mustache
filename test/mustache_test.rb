@@ -508,6 +508,17 @@ template
     assert_equal 'nothing', Mustache.render("{{thing}}", :thing => "nothing")
   end
 
+  def test_dot_notation
+    assert_equal <<-text.chomp, DotNotation.render
+* Chris Firescythe
+* 24
+* Cincinnati, OH
+* Cincinnati, OH
+* Cincinnati, OH
+* Normal
+text
+  end
+
   def test_inherited_attributes
     Object.const_set :TestNamespace, Module.new
     base = Class.new(Mustache)

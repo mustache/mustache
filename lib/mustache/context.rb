@@ -94,24 +94,24 @@ class Mustache
     # If no second parameter is passed (or raise_on_context_miss is
     # set to true), will raise a ContextMiss exception on miss.
     def fetch(name, default = :__raise)
+      name = :to_s if name == :'.'
       @key = name
+
+      if name.to_s =~ /\./
+        parts = name.to_s.split('.').map { |x| x.to_sym }
+        v = fetch(parts.shift, default)
+        catch(:not_found) do
+          return parts.inject(v) { |acc,val| acc and fetch_from(acc, val) }
+        end
+
+        return ''
+      end
 
       @stack.each do |frame|
         # Prevent infinite recursion.
         next if frame == self
-        @frame = frame
-
-        # Is this frame a hash?
-        hash = frame.respond_to?(:has_key?)
-
-        if hash && frame.has_key?(name)
-          return frame[name]
-        elsif hash && frame.has_key?(name.to_s)
-          @key = name.to_s
-          return frame[name.to_s]
-        elsif !hash && frame.respond_to?(name)
-          @frame = nil
-          return frame.__send__(name)
+        catch(:not_found) do
+          return fetch_from(frame, name)
         end
       end
 
@@ -122,6 +122,26 @@ class Mustache
       else
         default
       end
+    end
+
+    private
+
+    def fetch_from(frame, name)
+      @frame = frame
+
+      # Is this frame a hash?
+      hash = frame.respond_to?(:has_key?)
+
+      if hash && frame.has_key?(name)
+        return frame[name]
+      elsif hash && frame.has_key?(name.to_s)
+        @key = name.to_s
+        return frame[name.to_s]
+      elsif !hash && frame.respond_to?(name)
+        @frame = nil
+        return frame.__send__(name)
+      end
+      throw :not_found
     end
   end
 end

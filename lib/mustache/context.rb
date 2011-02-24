@@ -96,20 +96,6 @@ class Mustache
     def fetch(name, default = :__raise)
       @key = name
 
-      if name == :'.'
-        # implicit iterators - {{.}}
-        name = :to_s
-      elsif name.to_s.include? '.'
-        # dot notation - {{person.name}}
-        parts = name.to_s.split('.')
-
-        parts.each do |part|
-          push fetch(part.to_sym)
-        end
-
-        return @stack.shift(parts.size).first
-      end
-
       @stack.each do |frame|
         # Prevent infinite recursion.
         next if frame == self

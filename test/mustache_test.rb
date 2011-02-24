@@ -520,14 +520,30 @@ template
 text
   end
 
+  def test_unescaped_implicit_iterator
+    view = Mustache.new
+    view.template = "{{#people}}* {{{.}}}\n{{/people}}"
+    view[:people] = %w( Chris Mark Scott )
+
+    assert_equal <<text, view.render
+* Chris
+* Mark
+* Scott
+text
+  end
+
   def test_dot_notation
-    assert_equal <<-text.chomp, DotNotation.render
+    assert_equal <<-text, DotNotation.render
 * Chris Firescythe
 * 24
 * Cincinnati, OH
 * Cincinnati, OH
 * Cincinnati, OH
+* Cincinnati, OH
 * Normal
+
+* Chris Firescythe
+* Cincinnati, OH
 text
   end
 

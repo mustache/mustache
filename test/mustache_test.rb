@@ -385,22 +385,13 @@ data
 
   def test_sections_which_refer_to_unary_method_call_them_as_proc
     kls = Class.new(Mustache) {
-      def basic(arg)
-        "(#{arg})"
-      end
-      def default_arg(arg='default')
+      def unary_method(arg)
         "(#{arg})"
       end
     }
-
-    str = kls.render("{{#basic}}test{{/basic}}")
-    assert_equal str, "(test)"
     
-    str = kls.render("{{default_arg}}")
-    assert_equal str, "(default)"
-    
-    str = kls.render("{{#default_arg}}test{{/default_arg}}")
-    assert_equal str, "(test)"
+    str = kls.render("{{#unary_method}}test{{/unary_method}}")
+    assert_equal "(test)", str
   end
 
   def test_lots_of_staches

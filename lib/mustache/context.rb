@@ -112,7 +112,7 @@ class Mustache
         elsif !hash && frame.respond_to?(name)
           @frame = nil
           meth = frame.method(name)
-          if meth.arity.abs==1
+          if meth.arity == 1
             return meth.to_proc
           else
             return meth[]

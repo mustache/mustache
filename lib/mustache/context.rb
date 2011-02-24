@@ -12,8 +12,6 @@ class Mustache
   # A Context represents the context which a Mustache template is
   # executed within. All Mustache tags reference keys in the Context.
   class Context
-    attr_accessor :frame, :key
-
     # Expect to be passed an instance of `Mustache`.
     def initialize(mustache)
       @stack = [mustache]
@@ -94,12 +92,9 @@ class Mustache
     # If no second parameter is passed (or raise_on_context_miss is
     # set to true), will raise a ContextMiss exception on miss.
     def fetch(name, default = :__raise)
-      @key = name
-
       @stack.each do |frame|
         # Prevent infinite recursion.
         next if frame == self
-        @frame = frame
 
         # Is this frame a hash?
         hash = frame.respond_to?(:has_key?)
@@ -114,8 +109,6 @@ class Mustache
           return frame.__send__(name)
         end
       end
-
-      @frame = @key = nil
 
       if default == :__raise || mustache_in_stack.raise_on_context_miss?
         raise ContextMiss.new("Can't find #{name} in #{@stack.inspect}")

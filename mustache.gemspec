@@ -9,7 +9,7 @@ Gem::Specification.new do |s|
         "Mustache is a framework-agnostic way to render logic-free views."
   s.homepage          = "http://github.com/defunkt/mustache"
   s.email             = "chris@ozmm.org"
-  s.authors           = [ "Chris Wanstrath" ]
+  s.authors           = [ "Chris Wanstrath", "Magnus Holm", "Pieter van de Bruggen" ]
   s.files             = %w( README.md Rakefile LICENSE )
   s.files            += Dir.glob("lib/**/*")
   s.files            += Dir.glob("bin/**/*")

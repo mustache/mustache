@@ -1,5 +1,8 @@
 ## 0.14.0 (2011-??-??)
 
+* Dot Notation: {{person.name}}
+* Implicit Iterators: {{# people}} {{.}} {{/ people}}
+* Automagic attr_readers for ivars you set in Sinatra routes.
 * Ability to customize escaping by overriding Mustache#escapeHTML
 
 ## 0.13.0 (2011-02-23)

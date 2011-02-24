@@ -508,6 +508,18 @@ template
     assert_equal 'nothing', Mustache.render("{{thing}}", :thing => "nothing")
   end
 
+  def test_implicit_iterator
+    view = Mustache.new
+    view.template = "{{#people}}* {{.}}\n{{/people}}"
+    view[:people] = %w( Chris Mark Scott )
+
+    assert_equal <<text, view.render
+* Chris
+* Mark
+* Scott
+text
+  end
+
   def test_dot_notation
     assert_equal <<-text.chomp, DotNotation.render
 * Chris Firescythe

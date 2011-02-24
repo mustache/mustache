@@ -96,8 +96,11 @@ class Mustache
     def fetch(name, default = :__raise)
       @key = name
 
-      # support for dot.notation
-      if name.to_s.include? '.'
+      if name == :'.'
+        # implicit iterators - {{.}}
+        name = :to_s
+      elsif name.to_s.include? '.'
+        # dot notation - {{person.name}}
         parts = name.to_s.split('.')
 
         parts.each do |part|

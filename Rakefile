@@ -27,6 +27,7 @@ else
     t.libs << 'lib'
     t.pattern = 'test/**/*_test.rb'
     t.verbose = false
+    t.warning = true
   end
 end
 

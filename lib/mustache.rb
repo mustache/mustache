@@ -150,7 +150,7 @@ class Mustache
   # The template name is the Mustache template file without any
   # extension or other information. Defaults to `class_name`.
   def self.template_name
-    @template_name || underscore
+    @template_name ||= underscore
   end
 
   def self.template_name=(template_name)
@@ -161,7 +161,7 @@ class Mustache
   # The template file is the absolute path of the file Mustache will
   # use as its template. By default it's ./class_name.mustache
   def self.template_file
-    @template_file || "#{path}/#{template_name}.#{template_extension}"
+    @template_file ||= "#{path}/#{template_name}.#{template_extension}"
   end
 
   def self.template_file=(template_file)
@@ -239,8 +239,8 @@ class Mustache
   #
   # Returns the constant if found
   # Returns nil if nothing is found
-  def self.const_get!(name)
-    name.split('::').inject(Object) do |klass, name|
+  def self.const_get!(sym)
+    sym.split('::').inject(Object) do |klass, name|
       klass.const_get(name)
     end
   rescue NameError
@@ -254,7 +254,7 @@ class Mustache
   # If set to true and there is a context miss, `Mustache::ContextMiss` will
   # be raised.
   def self.raise_on_context_miss?
-    @raise_on_context_miss
+    @raise_on_context_miss ||= false
   end
 
   def self.raise_on_context_miss=(boolean)
@@ -264,12 +264,12 @@ class Mustache
   # Has this template already been compiled? Compilation is somewhat
   # expensive so it may be useful to check this before attempting it.
   def self.compiled?
-    @template.is_a? Template
+    instance_variable_defined?(:'@template') && @template.is_a?(Template)
   end
 
   # Has this instance or its class already compiled a template?
   def compiled?
-    (@template && @template.is_a?(Template)) || self.class.compiled?
+    (instance_variable_defined?(:'@template') && @template && @template.is_a?(Template)) || self.class.compiled?
   end
 
   # template_partial => TemplatePartial
@@ -346,7 +346,7 @@ class Mustache
 
   # Instance level version of `Mustache.raise_on_context_miss?`
   def raise_on_context_miss?
-    self.class.raise_on_context_miss? || @raise_on_context_miss
+    self.class.raise_on_context_miss? || @raise_on_context_miss ||= false
   end
   attr_writer :raise_on_context_miss
 

@@ -95,6 +95,8 @@ class Mustache
       # string we can use.
       code = compile(content)
 
+      local = "h#{(rand*10000000).floor}"
+
       # Compile the Ruby for this section now that we know what's
       # inside the section.
       ev(<<-compiled)
@@ -107,7 +109,7 @@ class Mustache
           # Shortcut when passed non-array
           v = [v] if v.respond_to?(:has_key?) || !v.respond_to?(:map) || v.is_a?(Struct)
 
-          v.map { |h| ctx.push(h); r = #{code}; ctx.pop; r }.join
+          v.map { |#{local}| ctx.push(#{local}); r = #{code}; ctx.pop; r }.join
         end
       end
       compiled

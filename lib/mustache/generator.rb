@@ -90,7 +90,7 @@ class Mustache
 
     # Callback fired when the compiler finds a section token. We're
     # passed the section name and the array of tokens.
-    def on_section(name, content, raw)
+    def on_section(names, content, raw)
       # Convert the tokenized content of this section into a Ruby
       # string we can use.
       code = compile(content)
@@ -98,7 +98,7 @@ class Mustache
       # Compile the Ruby for this section now that we know what's
       # inside the section.
       ev(<<-compiled)
-      if v = ctx[#{name.to_sym.inspect}]
+      if v = #{fetch(names)}
         if v == true
           #{code}
         elsif v.is_a?(Proc)
@@ -115,7 +115,7 @@ class Mustache
 
     # Fired when we find an inverted section. Just like `on_section`,
     # we're passed the inverted section name and the array of tokens.
-    def on_inverted_section(name, content, raw)
+    def on_inverted_section(names, content, raw)
       # Convert the tokenized content of this section into a Ruby
       # string we can use.
       code = compile(content)
@@ -123,7 +123,7 @@ class Mustache
       # Compile the Ruby for this inverted section now that we know
       # what's inside.
       ev(<<-compiled)
-      v = ctx[#{name.to_sym.inspect}]
+      v = #{fetch(names)}
       if v.nil? || v == false || v.respond_to?(:empty?) && v.empty?
         #{code}
       end
@@ -138,9 +138,9 @@ class Mustache
     end
 
     # An unescaped tag.
-    def on_utag(name)
+    def on_utag(names)
       ev(<<-compiled)
-        v = ctx[#{name.to_sym.inspect}]
+        v = #{fetch(names)}
         if v.is_a?(Proc)
           v = Mustache::Template.new(v.call.to_s).render(ctx.dup)
         end
@@ -149,14 +149,31 @@ class Mustache
     end
 
     # An escaped tag.
-    def on_etag(name)
+    def on_etag(names)
       ev(<<-compiled)
-        v = ctx[#{name.to_sym.inspect}]
+        v = #{fetch(names)}
         if v.is_a?(Proc)
           v = Mustache::Template.new(v.call.to_s).render(ctx.dup)
         end
         ctx.escapeHTML(v.to_s)
       compiled
+    end
+
+    def fetch(names)
+      names = names.map { |n| n.to_sym }
+
+      if names.length == 0
+        "ctx[:to_s]"
+      elsif names.length == 1
+        "ctx[#{names.first.to_sym.inspect}]"
+      else
+        initial, *rest = names
+        <<-compiled
+          #{rest.inspect}.inject(ctx[#{initial.inspect}]) { |value, key|
+            value && Mustache.fetch(value, key)
+          }
+        compiled
+      end
     end
 
     # An interpolation-friendly version of a string, for use within a

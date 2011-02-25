@@ -96,22 +96,9 @@ class Mustache
         # Prevent infinite recursion.
         next if frame == self
 
-        # Is this frame a hash?
-        hash = frame.respond_to?(:has_key?)
-
-        if hash && frame.has_key?(name)
-          return frame[name]
-        elsif hash && frame.has_key?(name.to_s)
-          @key = name.to_s
-          return frame[name.to_s]
-        elsif !hash && frame.respond_to?(name)
-          @frame = nil
-          meth = frame.method(name)
-          if meth.arity == 1
-            return meth.to_proc
-          else
-            return meth[]
-          end
+        value = Mustache.fetch(frame, name, :__missing)
+        if value != :__missing
+          return value
         end
       end
 

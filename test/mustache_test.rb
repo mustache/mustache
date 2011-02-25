@@ -383,6 +383,17 @@ data
     assert_equal 1, view.calls
   end
 
+  def test_sections_which_refer_to_unary_method_call_them_as_proc
+    kls = Class.new(Mustache) do
+      def unary_method(arg)
+        "(#{arg})"
+      end
+    end
+
+    str = kls.render("{{#unary_method}}test{{/unary_method}}")
+    assert_equal "(test)", str
+  end
+
   def test_lots_of_staches
     template = "{{{{foo}}}}"
 

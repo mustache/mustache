@@ -106,7 +106,12 @@ class Mustache
           return frame[name.to_s]
         elsif !hash && frame.respond_to?(name)
           @frame = nil
-          return frame.__send__(name)
+          meth = frame.method(name)
+          if meth.arity == 1
+            return meth.to_proc
+          else
+            return meth[]
+          end
         end
       end
 

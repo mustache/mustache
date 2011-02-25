@@ -96,7 +96,7 @@ class Mustache
         # Prevent infinite recursion.
         next if frame == self
 
-        value = Mustache.fetch(frame, name, :__missing)
+        value = find(frame, name, :__missing)
         if value != :__missing
           return value
         end
@@ -104,6 +104,36 @@ class Mustache
 
       if default == :__raise || mustache_in_stack.raise_on_context_miss?
         raise ContextMiss.new("Can't find #{name} in #{@stack.inspect}")
+      else
+        default
+      end
+    end
+
+    # Finds a key in an object, using whatever method is most
+    # appropriate. If the object is a hash, does a simple hash lookup.
+    # If it's an object that responds to the key as a method call,
+    # invokes that method. You get the idea.
+    #
+    #     obj - The object to perform the lookup on.
+    #     key - The key whose value you want.
+    # default - An optional default value, to return if the
+    #           key is not found.
+    #
+    # Returns the value of key in obj if it is found and default otherwise.
+    def find(obj, key, default = nil)
+      hash = obj.respond_to?(:has_key?)
+
+      if hash && obj.has_key?(key)
+        obj[key]
+      elsif hash && obj.has_key?(key.to_s)
+        obj[key.to_s]
+      elsif !hash && obj.respond_to?(key)
+        meth = obj.method(key)
+        if meth.arity == 1
+          meth.to_proc
+        else
+          meth[]
+        end
       else
         default
       end

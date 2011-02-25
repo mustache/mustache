@@ -331,25 +331,6 @@ class Mustache
     @template = templateify(template)
   end
 
-  def self.fetch(obj, key, default = nil)
-    hash = obj.respond_to?(:has_key?)
-
-    if hash && obj.has_key?(key)
-      obj[key]
-    elsif hash && obj.has_key?(key.to_s)
-      obj[key.to_s]
-    elsif !hash && obj.respond_to?(key)
-      meth = obj.method(key)
-      if meth.arity == 1
-        meth.to_proc
-      else
-        meth[]
-      end
-    else
-      default
-    end
-  end
-
   # Override this to provide custom escaping.
   #
   # class PersonView < Mustache

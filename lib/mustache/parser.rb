@@ -138,17 +138,19 @@ EOF
       # We found {{ but we can't figure out what's going on inside.
       error "Illegal content in tag" if content.empty?
 
+      fetch = [:mustache, :fetch, content.split('.')]
+
       # Based on the sigil, do what needs to be done.
       case type
       when '#'
         block = [:multi]
-        @result << [:mustache, :section, content.split('.'), block]
+        @result << [:mustache, :section, fetch, block]
         @sections << [content, position, @result]
         @result = block
         last_index = 1
       when '^'
         block = [:multi]
-        @result << [:mustache, :inverted_section, content.split('.'), block]
+        @result << [:mustache, :inverted_section, fetch, block]
         @sections << [content, position, @result]
         @result = block
         last_index = 1
@@ -172,9 +174,9 @@ EOF
         # The closing } in unescaped tags is just a hack for
         # aesthetics.
         type = "}" if type == "{"
-        @result << [:mustache, :utag, content.split('.')]
+        @result << [:mustache, :utag, fetch]
       else
-        @result << [:mustache, :etag, content.split('.')]
+        @result << [:mustache, :etag, fetch]
       end
 
       # Skip whitespace and any balancing sigils after the content

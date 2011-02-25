@@ -90,7 +90,7 @@ class Mustache
 
     # Callback fired when the compiler finds a section token. We're
     # passed the section name and the array of tokens.
-    def on_section(names, content, raw)
+    def on_section(name, content, raw)
       # Convert the tokenized content of this section into a Ruby
       # string we can use.
       code = compile(content)
@@ -98,7 +98,7 @@ class Mustache
       # Compile the Ruby for this section now that we know what's
       # inside the section.
       ev(<<-compiled)
-      if v = #{fetch(names)}
+      if v = #{compile!(name)}
         if v == true
           #{code}
         elsif v.is_a?(Proc)
@@ -115,7 +115,7 @@ class Mustache
 
     # Fired when we find an inverted section. Just like `on_section`,
     # we're passed the inverted section name and the array of tokens.
-    def on_inverted_section(names, content, raw)
+    def on_inverted_section(name, content, raw)
       # Convert the tokenized content of this section into a Ruby
       # string we can use.
       code = compile(content)
@@ -123,7 +123,7 @@ class Mustache
       # Compile the Ruby for this inverted section now that we know
       # what's inside.
       ev(<<-compiled)
-      v = #{fetch(names)}
+      v = #{compile!(name)}
       if v.nil? || v == false || v.respond_to?(:empty?) && v.empty?
         #{code}
       end
@@ -138,9 +138,9 @@ class Mustache
     end
 
     # An unescaped tag.
-    def on_utag(names)
+    def on_utag(name)
       ev(<<-compiled)
-        v = #{fetch(names)}
+        v = #{compile!(name)}
         if v.is_a?(Proc)
           v = Mustache::Template.new(v.call.to_s).render(ctx.dup)
         end
@@ -149,9 +149,9 @@ class Mustache
     end
 
     # An escaped tag.
-    def on_etag(names)
+    def on_etag(name)
       ev(<<-compiled)
-        v = #{fetch(names)}
+        v = #{compile!(name)}
         if v.is_a?(Proc)
           v = Mustache::Template.new(v.call.to_s).render(ctx.dup)
         end
@@ -159,7 +159,7 @@ class Mustache
       compiled
     end
 
-    def fetch(names)
+    def on_fetch(names)
       names = names.map { |n| n.to_sym }
 
       if names.length == 0

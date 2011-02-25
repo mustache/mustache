@@ -140,10 +140,9 @@ class Mustache
     # An unescaped tag.
     def on_utag(name)
       ev(<<-compiled)
-        k = #{name.to_sym.inspect}
-        v = ctx[k]
+        v = ctx[#{name.to_sym.inspect}]
         if v.is_a?(Proc)
-          ctx[k] = v = Mustache::Template.new(v.call.to_s).render(ctx.dup)
+          v = Mustache::Template.new(v.call.to_s).render(ctx.dup)
         end
         v.to_s
       compiled
@@ -152,10 +151,9 @@ class Mustache
     # An escaped tag.
     def on_etag(name)
       ev(<<-compiled)
-        k = #{name.to_sym.inspect}
-        v = ctx[k]
+        v = ctx[#{name.to_sym.inspect}]
         if v.is_a?(Proc)
-          ctx[k] = v = Mustache::Template.new(v.call.to_s).render(ctx.dup)
+          v = Mustache::Template.new(v.call.to_s).render(ctx.dup)
         end
         ctx.escapeHTML(v.to_s)
       compiled

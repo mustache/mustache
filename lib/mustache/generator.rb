@@ -105,7 +105,7 @@ class Mustache
           Mustache::Template.new(v.call(#{raw.inspect}).to_s).render(ctx.dup)
         else
           # Shortcut when passed non-array
-          v = [v] if v.respond_to?(:has_key?) || !v.respond_to?(:map) || v.is_a?(Struct)
+          v = [v] unless v.is_a?(Array) || defined?(Enumerator) && v.is_a?(Enumerator)
 
           v.map { |h| ctx.push(h); r = #{code}; ctx.pop; r }.join
         end

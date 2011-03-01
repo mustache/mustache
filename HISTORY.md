@@ -1,3 +1,7 @@
+## 0.99.1 (2011-03-01)
+
+* Bugfix: Strings used in sections no longer enumerate.
+
 ## 0.99.0 (2011-02-28)
 
 * Unary methods of Mustache view can now be used in sections as procs.

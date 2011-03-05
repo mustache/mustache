@@ -139,6 +139,8 @@ EOF
       error "Illegal content in tag" if content.empty?
 
       fetch = [:mustache, :fetch, content.split('.')]
+      prev = @result
+      last_index = @result.size
 
       # Based on the sigil, do what needs to be done.
       case type
@@ -147,13 +149,11 @@ EOF
         @result << [:mustache, :section, fetch, block]
         @sections << [content, position, @result]
         @result = block
-        last_index = 1
       when '^'
         block = [:multi]
         @result << [:mustache, :inverted_section, fetch, block]
         @sections << [content, position, @result]
         @result = block
-        last_index = 1
       when '/'
         section, pos, result = @sections.pop
         raw = @scanner.pre_match[pos[3]...pre_match_position] + padding
@@ -196,7 +196,7 @@ EOF
         if @scanner.peek(1) == "\n" && SKIP_WHITESPACE.include?(type)
           @scanner.skip(/[ \t]*\n/)
         else
-          @result.insert(last_index, [:static, padding]) unless padding.empty?
+          prev.insert(last_index, [:static, padding]) unless padding.empty?
         end
       end
 

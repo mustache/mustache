@@ -74,6 +74,13 @@ end_complex
     assert_equal "\n full time\n", instance.render
   end
 
+  def test_sassier_single_line_sections
+    instance = Mustache.new
+    instance.template = "\t{{#list}}\r\n\t{{/list}}"
+
+    assert_equal "", instance.render
+  end
+
   def test_two_line_sections
     html = %(<p class="flash-notice" {{# no_flash }}style="display: none;"\n{{/ no_flash }}>)
 

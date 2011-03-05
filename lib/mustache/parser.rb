@@ -193,7 +193,7 @@ EOF
       # the remaining whitespace.  If not, but we've been hanging on to padding
       # from the beginning of the line, re-insert the padding as static text.
       if start_of_line
-        if @scanner.peek(1) == "\n" && SKIP_WHITESPACE.include?(type)
+        if @scanner.peek(2) =~ /\r?\n/ && SKIP_WHITESPACE.include?(type)
           @scanner.skip(/[ \t]*\n/)
         else
           prev.insert(last_index, [:static, padding]) unless padding.empty?

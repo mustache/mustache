@@ -194,7 +194,7 @@ EOF
       # from the beginning of the line, re-insert the padding as static text.
       if start_of_line
         if @scanner.peek(2) =~ /\r?\n/ && SKIP_WHITESPACE.include?(type)
-          @scanner.skip(/[ \t]*\r?\n/)
+          @scanner.skip(/\r?\n/)
         else
           prev.insert(last_index, [:static, padding]) unless padding.empty?
         end

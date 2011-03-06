@@ -1,3 +1,8 @@
+## 0.99.2 (2011-03-06)
+
+* Added some HTML5 tags to tpl-mode.el
+* Bugfix: {{#sections}} and whitespace
+
 ## 0.99.1 (2011-03-01)
 
 * Bugfix: Strings used in sections no longer enumerate.

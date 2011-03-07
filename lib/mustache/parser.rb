@@ -117,6 +117,7 @@ EOF
       # of a new line.
       unless start_of_line
         @result << [:static, padding] unless padding.empty?
+        pre_match_position += padding.length
         padding = ''
       end
 
@@ -140,7 +141,6 @@ EOF
 
       fetch = [:mustache, :fetch, content.split('.')]
       prev = @result
-      last_index = @result.size
 
       # Based on the sigil, do what needs to be done.
       case type
@@ -192,7 +192,7 @@ EOF
       # If this tag was the only non-whitespace content on this line, strip
       # the remaining whitespace.  If not, but we've been hanging on to padding
       # from the beginning of the line, re-insert the padding as static text.
-      if start_of_line
+      if start_of_line && !@scanner.eos?
         if @scanner.peek(2) =~ /\r?\n/ && SKIP_WHITESPACE.include?(type)
           @scanner.skip(/\r?\n/)
         else

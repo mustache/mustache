@@ -88,6 +88,13 @@ end_complex
     assert_equal "\taa", instance.render(:list => [1, 2])
   end
 
+  def test_padding_before_section_on_eos
+    instance = Mustache.new
+    instance.template = "{{#list}}\n\t{{/list}}"
+
+    assert_equal "", instance.render(:list => [1, 2])
+  end
+
   def test_two_line_sections
     html = %(<p class="flash-notice" {{# no_flash }}style="display: none;"\n{{/ no_flash }}>)
 

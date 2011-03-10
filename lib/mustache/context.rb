@@ -128,7 +128,7 @@ class Mustache
       elsif hash && obj.has_key?(key.to_s)
         obj[key.to_s]
       elsif !hash && obj.respond_to?(key)
-        meth = obj.method(key)
+        meth = obj.method(key) rescue proc { obj.send(key) }
         if meth.arity == 1
           meth.to_proc
         else

@@ -546,6 +546,10 @@ template
     assert_equal 'Marvin is 25', view.render
   end
 
+  def test_method_missing
+    assert_equal('[ 0 1 2 3 4 5 6 7 8 9 10 ]', MethodMissing.render)
+  end
+
   def test_custom_escaping
     view = Class.new(Mustache) do
       def escapeHTML(str)

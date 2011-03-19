@@ -1,3 +1,8 @@
+## 0.99.3 (2011-03-06)
+
+* Fixed method_missing support
+* Fixed whitespace errors
+
 ## 0.99.2 (2011-03-06)
 
 * Added some HTML5 tags to tpl-mode.el

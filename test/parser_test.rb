@@ -35,7 +35,8 @@ EOF
               [:static, "  <li><strong>"],
               [:mustache, :etag, [:mustache, :fetch, ["name"]]],
               [:static, "</strong></li>\n"]],
-            %Q'  <li><strong>{{name}}</strong></li>\n'],
+            %Q'  <li><strong>{{name}}</strong></li>\n',
+            %w[{{ }}]],
           [:mustache,
             :section,
             [:mustache, :fetch, ["link"]],
@@ -45,14 +46,17 @@ EOF
               [:static, "\">"],
               [:mustache, :etag, [:mustache, :fetch, ["name"]]],
               [:static, "</a></li>\n"]],
-            %Q'  <li><a href="{{url}}">{{name}}</a></li>\n']],
-        %Q'{{#first}}\n  <li><strong>{{name}}</strong></li>\n{{/first}}\n{{#link}}\n  <li><a href="{{url}}">{{name}}</a></li>\n{{/link}}\n'],
+            %Q'  <li><a href="{{url}}">{{name}}</a></li>\n',
+            %w[{{ }}]]],
+        %Q'{{#first}}\n  <li><strong>{{name}}</strong></li>\n{{/first}}\n{{#link}}\n  <li><a href="{{url}}">{{name}}</a></li>\n{{/link}}\n',
+        %w[{{ }}]],
       [:static, "\n"],
       [:mustache,
         :section,
         [:mustache, :fetch, ["empty"]],
         [:multi, [:static, "<p>The list is empty.</p>\n"]],
-        %Q'<p>The list is empty.</p>\n']]
+        %Q'<p>The list is empty.</p>\n',
+        %w[{{ }}]]]
 
     assert_equal expected, tokens
   end
@@ -66,7 +70,8 @@ EOF
         :section,
         [:mustache, :fetch, ["list"]],
         [:multi, [:static, "\t"]],
-        "\t"]]
+        "\t",
+        %w[{{ }}]]]
 
     assert_equal expected, tokens
   end

@@ -90,7 +90,7 @@ class Mustache
 
     # Callback fired when the compiler finds a section token. We're
     # passed the section name and the array of tokens.
-    def on_section(name, content, raw)
+    def on_section(name, content, raw, delims)
       # Convert the tokenized content of this section into a Ruby
       # string we can use.
       code = compile(content)
@@ -102,7 +102,13 @@ class Mustache
         if v == true
           #{code}
         elsif v.is_a?(Proc)
-          Mustache::Template.new(v.call(#{raw.inspect}).to_s).render(ctx.dup)
+          t = Mustache::Template.new(v.call(#{raw.inspect}).to_s)
+          def t.tokens(src=@source)
+            p = Parser.new
+            p.otag, p.ctag = #{delims.inspect}
+            p.compile(src)
+          end
+          t.render(ctx.dup)
         else
           # Shortcut when passed non-array
           v = [v] unless v.is_a?(Array) || defined?(Enumerator) && v.is_a?(Enumerator)
@@ -115,7 +121,7 @@ class Mustache
 
     # Fired when we find an inverted section. Just like `on_section`,
     # we're passed the inverted section name and the array of tokens.
-    def on_inverted_section(name, content, raw)
+    def on_inverted_section(name, content, raw, _)
       # Convert the tokenized content of this section into a Ruby
       # string we can use.
       code = compile(content)

@@ -157,7 +157,7 @@ EOF
       when '/'
         section, pos, result = @sections.pop
         raw = @scanner.pre_match[pos[3]...pre_match_position] + padding
-        (@result = result).last << raw
+        (@result = result).last << raw << [self.otag, self.ctag]
 
         if section.nil?
           error "Closing unopened #{content.inspect}"

@@ -41,6 +41,12 @@ class Mustache
   # set to the `yield` variable and made available to you.
   module Sinatra
     module Helpers
+      # Call this in your Sinatra routes
+      def hamlbar(template, options={}, locals={})
+        require 'haml'
+        haml mustache(template, options, locals)
+      end
+      
       # Call this in your Sinatra routes.
       def mustache(template, options={}, locals={})
         # Locals can be passed as options under the :locals key.

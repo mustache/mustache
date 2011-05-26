@@ -1,3 +1,7 @@
+## 0.99.4 (2011-05-26)
+
+* Reverted automatically attr_accessors in Sinatra. Too much magic.
+
 ## 0.99.3 (2011-03-06)
 
 * Fixed method_missing support

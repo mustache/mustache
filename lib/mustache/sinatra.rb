@@ -88,11 +88,6 @@ class Mustache
         # Copy instance variables set in Sinatra to the view
         instance_variables.each do |name|
           instance.instance_variable_set(name, instance_variable_get(name))
-
-          # Automagic attr_readers for ivars you set in Sinatra routes.
-          if !instance.respond_to?(name)
-            (class << instance; self end).send(:attr_reader, name.to_s.sub('@',''))
-          end
         end
 
         # Render with locals.

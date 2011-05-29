@@ -40,7 +40,7 @@ require 'mustache/settings'
 #
 # * template_file
 #
-# You can tell Mustache exactly which template to us with this
+# You can tell Mustache exactly which template to use with this
 # setting. It can be a relative or absolute path.
 #
 # * template

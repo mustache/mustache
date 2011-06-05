@@ -42,7 +42,7 @@ class Mustache
   #
   # If you don't want the Sinatra extension to look up your view class,
   # maybe because you've already loaded it or you're pulling it in from
-  # a gem, you can hand the `mustache` helper a Mustache subclas directly:
+  # a gem, you can hand the `mustache` helper a Mustache subclass directly:
   #
   #   # Assuming `class Omnigollum::Login < Mustache`
   #   get '/login' do

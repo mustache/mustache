@@ -1,112 +1,111 @@
-;;; tpl-mode.el -- a major mode for editing Google CTemplate files.
-;;; By Tony Gentilcore, July 2006
-;;;
-;;; Very minor, backwards compatible changes added for Mustache compatibility
-;;; by Chris Wanstrath, October 2009
-;;;
-;;; TO USE:
-;;; 1) Copy this file somewhere you in emacs load-path.  To see what
-;;;    your load-path is, run inside emacs: C-h v load-path<RET>
-;;; 2) Add the following two lines to your .emacs file:
-;;;    (setq auto-mode-alist (cons '("\\.tpl$" . tpl-mode) auto-mode-alist))
-;;;    (autoload 'tpl-mode "tpl-mode" "Major mode for editing CTemplate files." t)
-;;; 3) Optionally (but recommended), add this third line as well:
-;;;    (add-hook 'tpl-mode-hook '(lambda () (font-lock-mode 1)))
-;;; ---
-;;;
-;;; While the Mustache language can be used for any types of text,
-;;; this mode is intended for using Mustache to write HTML.
-;;;
-;;; The indentation still has minor bugs due to the fact that
-;;; templates do not require valid HTML.
-;;;
-;;; It would be nice to be able to highlight attributes of HTML tags,
-;;; however this is difficult due to the presence of CTemplate symbols
-;;; embedded within attributes.
+;;; mustache-mode.el --- A major mode for editing Mustache files.
+
+;; Author: Tony Gentilcore
+;;       Chris Wanstrath
+;;       Daniel Hackney
+
+;; Version: 1.2
+
+;; This file is not part of Emacs
+
+;; This file is free software; you can redistribute it and/or modify
+;; it under the terms of the GNU General Public License as published by
+;; the Free Software Foundation; either version 2, or (at your option)
+;; any later version.
+
+;; This file is distributed in the hope that it will be useful,
+;; but WITHOUT ANY WARRANTY; without even the implied warranty of
+;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+;; GNU General Public License for more details.
+
+;; You should have received a copy of the GNU General Public License
+;; along with GNU Emacs; see the file COPYING.  If not, write to
+;; the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
+;; Boston, MA 02111-1307, USA.
+
+;;; Commentary:
+
+;; 1) Copy this file somewhere in your Emacs `load-path'.  To see what
+;;    your `load-path' is, run inside emacs: C-h v load-path<RET>
+;;
+;; 2) Add the following to your .emacs file:
+;;
+;;    (require 'mustache-mode)
+
+;; While the Mustache language can be used for any types of text,
+;; this mode is intended for using Mustache to write HTML.
+
+;;; Known Bugs:
+
+;; The indentation still has minor bugs due to the fact that
+;; templates do not require valid HTML.
+
+;; It would be nice to be able to highlight attributes of HTML tags,
+;; however this is difficult due to the presence of CTemplate symbols
+;; embedded within attributes.
 
 (eval-when-compile
   (require 'font-lock))
 
-(defgroup tpl-mode nil
-  "Major mode for editing Google CTemplate and Mustache files"
-  :group 'languages)
+(defvar mustache-mode-version "1.2"
+  "Version of `mustache-mode.el'.")
 
-(defvar tpl-mode-version "1.1"
-  "Version of `tpl-mode.el'.")
+(defvar mustache-mode-map
+  (let ((map (make-sparse-keymap)))
+    (define-key map "\C-m" 'reindent-then-newline-and-indent)
+    (define-key map "\C-ct" 'mustache-insert-tag)
+    (define-key map "\C-cv" 'mustache-insert-variable)
+    (define-key map "\C-cs" 'mustache-insert-section)
+    map)
+  "Keymap for mustache-mode major mode")
 
-(defvar tpl-mode-abbrev-table nil
-  "Abbrev table for use in tpl-mode buffers.")
+(defvar mustache-mode-syntax-table
+  (let ((st (make-syntax-table)))
+    (modify-syntax-entry ?<  "(>  " st)
+    (modify-syntax-entry ?>  ")<  " st)
+    (modify-syntax-entry ?\" ".   " st)
+    (modify-syntax-entry ?\\ ".   " st)
+    (modify-syntax-entry ?'  "w   " st)
+    st)
+  "Syntax table in use in mustache-mode buffers.")
 
-(define-abbrev-table 'tpl-mode-abbrev-table ())
-
-(defcustom tpl-mode-hook nil
-  "*Hook that runs upon entering tpl-mode."
-  :type 'hook)
-
-(defvar tpl-mode-map nil
-  "Keymap for tpl-mode major mode")
-
-(if tpl-mode-map
-    nil
-  (setq tpl-mode-map (make-sparse-keymap)))
-
-(define-key tpl-mode-map "\t" 'tpl-indent-command)
-(define-key tpl-mode-map "\C-m" 'reindent-then-newline-and-indent)
-(define-key tpl-mode-map "\C-ct" 'tpl-insert-tag)
-(define-key tpl-mode-map "\C-cv" 'tpl-insert-variable)
-(define-key tpl-mode-map "\C-cs" 'tpl-insert-section)
-
-
-(defvar tpl-mode-syntax-table nil
-  "Syntax table in use in tpl-mode buffers.")
-
-;; Syntax table.
-(if tpl-mode-syntax-table
-    nil
-  (setq tpl-mode-syntax-table (make-syntax-table text-mode-syntax-table))
-  (modify-syntax-entry ?<  "(>  " tpl-mode-syntax-table)
-  (modify-syntax-entry ?>  ")<  " tpl-mode-syntax-table)
-  (modify-syntax-entry ?\" ".   " tpl-mode-syntax-table)
-  (modify-syntax-entry ?\\ ".   " tpl-mode-syntax-table)
-  (modify-syntax-entry ?'  "w   " tpl-mode-syntax-table))
-
-(defvar tpl-basic-offset 2
+(defvar mustache-basic-offset 2
   "The basic indentation offset.")
 
 ;; Constant regular expressions to identify template elements.
-(defconst tpl-mode-tpl-token "[a-zA-Z_.][a-zA-Z0-9_:=\?!.-]*?")
-(defconst tpl-mode-section (concat "\\({{[#^/]\s*"
-                                   tpl-mode-tpl-token
+(defconst mustache-mode-mustache-token "[a-zA-Z_.][a-zA-Z0-9_:=\?!.-]*?")
+(defconst mustache-mode-section (concat "\\({{[#^/]\s*"
+                                   mustache-mode-mustache-token
                                    "\s*}}\\)"))
-(defconst tpl-mode-open-section (concat "\\({{#\s*"
-                                        tpl-mode-tpl-token
+(defconst mustache-mode-open-section (concat "\\({{#\s*"
+                                        mustache-mode-mustache-token
                                         "\s*}}\\)"))
-(defconst tpl-mode-close-section (concat "{{/\\(\s*"
-                                         tpl-mode-tpl-token
+(defconst mustache-mode-close-section (concat "{{/\\(\s*"
+                                         mustache-mode-mustache-token
                                          "\s*\\)}}"))
 ;; TODO(tonyg) Figure out a way to support multiline comments.
-(defconst tpl-mode-comment "\\({{!.*?}}\\)")
-(defconst tpl-mode-include (concat "\\({{[><]\s*"
-                                   tpl-mode-tpl-token
+(defconst mustache-mode-comment "\\({{!.*?}}\\)")
+(defconst mustache-mode-include (concat "\\({{[><]\s*"
+                                   mustache-mode-mustache-token
                                    "\s*}}\\)"))
-(defconst tpl-mode-variable (concat "\\({{\s*"
-                                    tpl-mode-tpl-token
+(defconst mustache-mode-variable (concat "\\({{\s*"
+                                    mustache-mode-mustache-token
                                     "\s*}}\\)"))
-(defconst tpl-mode-builtins
+(defconst mustache-mode-builtins
   (concat
    "\\({{\\<\s*"
    (regexp-opt
     '("BI_NEWLINE" "BI_SPACE")
     t)
    "\s*\\>}}\\)"))
-(defconst tpl-mode-close-section-at-start (concat "^[ \t]*?"
-                                                  tpl-mode-close-section))
+(defconst mustache-mode-close-section-at-start (concat "^[ \t]*?"
+                                                  mustache-mode-close-section))
 
 ;; Constant regular expressions to identify html tags.
 ;; Taken from HTML 4.01 / XHTML 1.0 Reference found at:
 ;; http://www.w3schools.com/tags/default.asp.
-(defconst tpl-mode-html-constant "\\(&#?[a-z0-9]\\{2,5\\};\\)")
-(defconst tpl-mode-pair-tag
+(defconst mustache-mode-html-constant "\\(&#?[a-z0-9]\\{2,5\\};\\)")
+(defconst mustache-mode-pair-tag
   (concat
    "\\<"
    (regexp-opt
@@ -123,63 +122,57 @@
       "tfoot" "th" "thead" "title" "tr" "tt" "u" "ul" "var")
     t)
    "\\>"))
-(defconst tpl-mode-standalone-tag
+(defconst mustache-mode-standalone-tag
   (concat
    "\\<"
    (regexp-opt
     '("base" "br" "hr" "img" "input" "meta" "param")
     t)
    "\\>"))
-(defconst tpl-mode-open-tag (concat "<\\("
-                                    tpl-mode-pair-tag
+(defconst mustache-mode-open-tag (concat "<\\("
+                                    mustache-mode-pair-tag
                                     "\\)"))
-(defconst tpl-mode-close-tag (concat "</\\("
-                                     tpl-mode-pair-tag
+(defconst mustache-mode-close-tag (concat "</\\("
+                                     mustache-mode-pair-tag
                                      "\\)>"))
-(defconst tpl-mode-close-tag-at-start (concat "^[ \t]*?"
-                                              tpl-mode-close-tag))
+(defconst mustache-mode-close-tag-at-start (concat "^[ \t]*?"
+                                              mustache-mode-close-tag))
 
-(defconst tpl-mode-blank-line "^[ \t]*?$")
-(defconst tpl-mode-dangling-open (concat "\\("
-                                         tpl-mode-open-section
+(defconst mustache-mode-blank-line "^[ \t]*?$")
+(defconst mustache-mode-dangling-open (concat "\\("
+                                         mustache-mode-open-section
                                          "\\)\\|\\("
-                                         tpl-mode-open-tag
+                                         mustache-mode-open-tag
                                          "\\)[^/]*$"))
 
-(defun tpl-indent-command ()
-  "Command for indenting text. Just calls tpl-indent."
-  (interactive)
-  (tpl-indent))
-
-(defun tpl-insert-tag (tag)
+(defun mustache-insert-tag (tag)
   "Inserts an HTML tag."
   (interactive "sTag: ")
-  (tpl-indent)
+  (mustache-indent)
   (insert (concat "<" tag ">"))
   (insert "\n\n")
   (insert (concat "</" tag ">"))
-  (tpl-indent)
+  (mustache-indent)
   (forward-line -1)
-  (tpl-indent))
+  (mustache-indent))
 
-(defun tpl-insert-variable (variable)
+(defun mustache-insert-variable (variable)
   "Inserts a tpl variable."
   (interactive "sVariable: ")
   (insert (concat "{{" variable "}}")))
 
-(defun tpl-insert-section (section)
+(defun mustache-insert-section (section)
   "Inserts a tpl section."
   (interactive "sSection: ")
-  (tpl-indent)
+  (mustache-indent)
   (insert (concat "{{#" section "}}\n"))
   (insert "\n")
   (insert (concat "{{/" section "}}"))
-  (tpl-indent)
+  (mustache-indent)
   (forward-line -1)
-  (tpl-indent))
+  (mustache-indent))
 
-;; Function to control indenting.
-(defun tpl-indent ()
+(defun mustache-indent ()
   "Indent current line"
   ;; Set the point to beginning of line.
   (beginning-of-line)
@@ -191,9 +184,9 @@
       (progn
         ;; Determine if this is a template line or an html line.
         (if (looking-at "^[ \t]*?{{")
-            (setq close-at-start tpl-mode-close-section-at-start
+            (setq close-at-start mustache-mode-close-section-at-start
                   open-token "{{#")
-          (setq close-at-start tpl-mode-close-tag-at-start
+          (setq close-at-start mustache-mode-close-tag-at-start
                 open-token "<"))
         ;; If there is a closing tag at the start of the line, search back
         ;; for its opener and indent to that level.
@@ -224,56 +217,33 @@
             ;; Keep moving back until we find a line that is not blank
             (while (progn
                      (forward-line -1)
-                     (and (not (bobp)) (looking-at tpl-mode-blank-line))))
+                     (and (not (bobp)) (looking-at mustache-mode-blank-line))))
             (setq cur-indent (current-indentation))
-            (if (re-search-forward tpl-mode-dangling-open old-pnt t)
-                (setq cur-indent (+ cur-indent tpl-basic-offset)))))
+            (if (re-search-forward mustache-mode-dangling-open old-pnt t)
+                (setq cur-indent (+ cur-indent mustache-basic-offset)))))
         ;; Finally, we execute the actual indentation.
         (if (> cur-indent 0)
             (indent-line-to cur-indent)
           (indent-line-to 0))))))
 
-;; controls highlighting
-(defconst tpl-mode-font-lock-keywords
-  (list
-   (list tpl-mode-section
-         '(1 font-lock-keyword-face))
-   (list tpl-mode-comment
-         '(1 font-lock-comment-face))
-   (list tpl-mode-include
-         '(1 font-lock-function-name-face))
-   (list tpl-mode-builtins
-         '(1 font-lock-variable-name-face))
-   (list tpl-mode-variable
-         '(1 font-lock-reference-face))
-   (list (concat "</?\\(" tpl-mode-pair-tag "\\)")
-         '(1 font-lock-function-name-face))
-   (list (concat "<\\(" tpl-mode-standalone-tag "\\)")
-         '(1 font-lock-function-name-face))
-   (list tpl-mode-html-constant
-         '(1 font-lock-variable-name-face))))
+(defconst mustache-mode-font-lock-keywords
+  `((,mustache-mode-section (1 font-lock-keyword-face))
+    (,mustache-mode-comment (1 font-lock-comment-face))
+    (,mustache-mode-include (1 font-lock-function-name-face))
+    (,mustache-mode-builtins (1 font-lock-variable-name-face))
+    (,mustache-mode-variable (1 font-lock-reference-face))
+    (,(concat "</?\\(" mustache-mode-pair-tag "\\)") (1 font-lock-function-name-face))
+    (,(concat "<\\(" mustache-mode-standalone-tag "\\)") (1 font-lock-function-name-face))
+    (,mustache-mode-html-constant (1 font-lock-variable-name-face))))
 
-(put 'tpl-mode 'font-lock-defaults '(tpl-font-lock-keywords nil t))
+;;;###autoload
+(define-derived-mode mustache-mode fundamental-mode "Mustache"
+  (set (make-local-variable 'indent-line-function) 'mustache-indent)
+  (set (make-local-variable 'indent-tabs-mode) nil)
+  (set (make-local-variable 'font-lock-defaults) '(mustache-mode-font-lock-keywords)))
 
-(defun tpl-mode ()
-  "Major mode for editing Google CTemplate file."
-  (interactive)
-  (kill-all-local-variables)
-  (use-local-map tpl-mode-map)
-  (setq major-mode 'tpl-mode)
-  (setq mode-name "tpl-mode")
-  (setq local-abbrev-table tpl-mode-abbrev-table)
-  (setq indent-tabs-mode nil)
-  (set-syntax-table tpl-mode-syntax-table)
-  ;; show trailing whitespace, but only when the user can fix it
-  (setq show-trailing-whitespace (not buffer-read-only))
-  (make-local-variable 'indent-line-function)
-  (setq indent-line-function 'tpl-indent)
-  (setq font-lock-defaults '(tpl-mode-font-lock-keywords))
-  (run-hooks 'tpl-mode-hook))
-
-;; Automatically load tpl-mode for .mustache files.
-(add-to-list 'auto-mode-alist '("\\.mustache$" . tpl-mode))
-(add-hook 'tpl-mode-hook '(lambda () (font-lock-mode 1)))
+(add-to-list 'auto-mode-alist '("\\.mustache$" . mustache-mode))
 
 (provide 'mustache-mode)
+
+;;; mustache-mode.el ends here

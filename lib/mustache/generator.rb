@@ -145,24 +145,36 @@ class Mustache
 
     # An unescaped tag.
     def on_utag(name)
-      ev(<<-compiled)
-        v = #{compile!(name)}
-        if v.is_a?(Proc)
-          v = Mustache::Template.new(v.call.to_s).render(ctx.dup)
-        end
-        v.to_s
-      compiled
+      if name[2].first =~ /^_(.*)/ and self.respond_to?( $1 )
+        method, args = $1, name[2]
+        args.shift
+        str( self.send( method, *args ) )
+      else
+        ev(<<-compiled)
+          v = #{compile!(name)}
+          if v.is_a?(Proc)
+            v = Mustache::Template.new(v.call.to_s).render(ctx.dup)
+          end
+          v.to_s
+        compiled
+      end
     end
 
     # An escaped tag.
     def on_etag(name)
-      ev(<<-compiled)
-        v = #{compile!(name)}
-        if v.is_a?(Proc)
-          v = Mustache::Template.new(v.call.to_s).render(ctx.dup)
-        end
-        ctx.escapeHTML(v.to_s)
-      compiled
+      if name[2].first =~ /^_(.*)/ and self.respond_to?( $1 )
+        method, args = $1, name[2]
+        args.shift
+        CGI.escapeHTML str( "#{self.send( method, *args )}" )
+      else
+        ev(<<-compiled)
+          v = #{compile!(name)}
+          if v.is_a?(Proc)
+            v = Mustache::Template.new(v.call.to_s).render(ctx.dup)
+          end
+          ctx.escapeHTML(v.to_s)
+        compiled
+      end
     end
 
     def on_fetch(names)

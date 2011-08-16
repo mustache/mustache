@@ -326,12 +326,7 @@ See <http://gist.github.com/323622> for installation instructions.
 Emacs
 -----
 
-mustache-mode.el is included under the contrib/ directory for any
-Emacs users. Based on Google's tpl-mode for ctemplates, it adds
-support for Mustache's more lenient tag values and includes a few
-commands for your editing pleasure.
-
-See <http://gist.github.com/323619> for installation instructions.
+mustache-mode.el is available at https://github.com/mustache/emacs
 
 
 TextMate

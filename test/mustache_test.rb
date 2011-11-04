@@ -614,7 +614,8 @@ text
       assert_equal value, tmpl.send(attr)
     end
   end
-    def test_array_of_arrays
+
+  def test_array_of_arrays
     template = <<template
 {{#items}}
 start
@@ -651,7 +652,8 @@ start
 end
 expected
   end
-      def test_indentation_again
+
+  def test_indentation_again
     template = <<template
 SELECT
   {{#cols}}

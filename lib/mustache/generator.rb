@@ -64,17 +64,22 @@ class Mustache
     #
     #   [:multi,
     #    [:static, "Hello "],
-    #    [:mustache, :etag, "name"],
+    #    [:mustache, :etag,
+    #     [:mustache, :fetch, ["name"]]],
     #    [:static, "\nYou have just won $"],
-    #    [:mustache, :etag, "value"],
-    #    [:static, "!\n"],
-    #    [:mustache,
-    #     :section,
-    #     "in_ca",
-    #     [:multi,
-    #      [:static, "Well, $"],
-    #      [:mustache, :etag, "taxed_value"],
-    #      [:static, ", after taxes.\n"]]]]
+    #   [:mustache, :etag,
+    #    [:mustache, :fetch, ["value"]]],
+    #   [:static, "!\n"],
+    #   [:mustache,
+    #    :section,
+    #    [:mustache, :fetch, ["in_ca"]],
+    #   [:multi,
+    #    [:static, "Well, $"],
+    #    [:mustache, :etag,
+    #     [:mustache, :fetch, ["taxed_value"]]],
+    #    [:static, ", after taxes.\n"]],
+    #    "Well, ${{taxed_value}}, after taxes.\n",
+    #    ["{{", "}}"]]]
     def compile!(exp)
       case exp.first
       when :multi

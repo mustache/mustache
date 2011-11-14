@@ -73,7 +73,7 @@ class Mustache
         yaml = $2.strip
         template = doc.sub($1, '')
 
-        YAML.each_document(yaml) do |data|
+        YAML.load_stream(yaml).each do |data|
           puts Mustache.render(template, data)
         end
       else

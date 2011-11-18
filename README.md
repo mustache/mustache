@@ -395,7 +395,6 @@ Meta
 * Home: <http://mustache.github.com>
 * Bugs: <http://github.com/defunkt/mustache/issues>
 * List: <mustache@librelist.com>
-* Test: <http://runcoderun.com/defunkt/mustache>
 * Gems: <http://rubygems.org/gems/mustache>
 
 You can also find us in `#{` on irc.freenode.net.

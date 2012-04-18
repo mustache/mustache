@@ -53,6 +53,12 @@ class Mustache
   #
   module Sinatra
     module Helpers
+      # Call this in your Sinatra routes
+      def hamlbar(template, options={}, locals={})
+        require 'haml'
+        haml mustache(template, options, locals)
+      end
+      
       # Call this in your Sinatra routes.
       def mustache(template, options={}, locals={})
         # Locals can be passed as options under the :locals key.

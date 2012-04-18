@@ -283,11 +283,11 @@ Sinatra
 
 Mustache ships with Sinatra integration. Please see
 `lib/mustache/sinatra.rb` or
-<http://github.com/defunkt/mustache/blob/master/lib/mustache/sinatra.rb>
+<http://github.com/licensetoil/mustache/blob/master/lib/mustache/sinatra.rb>
 for complete documentation.
 
 An example Sinatra application is also provided:
-<http://github.com/defunkt/mustache-sinatra-example>
+<http://github.com/licensetoil/mustache-sinatra-example>
 
 If you are upgrading to Sinatra 1.0 and Mustache 0.9.0+ from Mustache
 0.7.0 or lower, the settings have changed. But not that much.

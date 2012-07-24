@@ -90,7 +90,7 @@ class Mustache
 
     # Callback fired when the compiler finds a section token. We're
     # passed the section name and the array of tokens.
-    def on_section(name, content, raw, delims)
+    def on_section(name, offset, content, raw, delims)
       # Convert the tokenized content of this section into a Ruby
       # string we can use.
       code = compile(content)
@@ -121,7 +121,7 @@ class Mustache
 
     # Fired when we find an inverted section. Just like `on_section`,
     # we're passed the inverted section name and the array of tokens.
-    def on_inverted_section(name, content, raw, _)
+    def on_inverted_section(name, offset, content, raw, delims)
       # Convert the tokenized content of this section into a Ruby
       # string we can use.
       code = compile(content)
@@ -139,12 +139,12 @@ class Mustache
     # Fired when the compiler finds a partial. We want to return code
     # which calls a partial at runtime instead of expanding and
     # including the partial's body to allow for recursive partials.
-    def on_partial(name, indentation)
+    def on_partial(name, offset, indentation)
       ev("ctx.partial(#{name.to_sym.inspect}, #{indentation.inspect})")
     end
 
     # An unescaped tag.
-    def on_utag(name)
+    def on_utag(name, offset)
       ev(<<-compiled)
         v = #{compile!(name)}
         if v.is_a?(Proc)
@@ -155,7 +155,7 @@ class Mustache
     end
 
     # An escaped tag.
-    def on_etag(name)
+    def on_etag(name, offset)
       ev(<<-compiled)
         v = #{compile!(name)}
         if v.is_a?(Proc)

@@ -146,12 +146,12 @@ EOF
       case type
       when '#'
         block = [:multi]
-        @result << [:mustache, :section, fetch, block]
+        @result << [:mustache, :section, fetch, offset, block]
         @sections << [content, position, @result]
         @result = block
       when '^'
         block = [:multi]
-        @result << [:mustache, :inverted_section, fetch, block]
+        @result << [:mustache, :inverted_section, fetch, offset, block]
         @sections << [content, position, @result]
         @result = block
       when '/'
@@ -169,14 +169,14 @@ EOF
       when '='
         self.otag, self.ctag = content.split(' ', 2)
       when '>', '<'
-        @result << [:mustache, :partial, content, padding]
+        @result << [:mustache, :partial, content, offset, padding]
       when '{', '&'
         # The closing } in unescaped tags is just a hack for
         # aesthetics.
         type = "}" if type == "{"
-        @result << [:mustache, :utag, fetch]
+        @result << [:mustache, :utag, fetch, offset]
       else
-        @result << [:mustache, :etag, fetch]
+        @result << [:mustache, :etag, fetch, offset]
       end
 
       # Skip whitespace and any balancing sigils after the content
@@ -232,6 +232,10 @@ EOF
         @scanner.pos -= @scanner.matched.size
         @scanner.pre_match[pos..-1]
       end
+    end
+
+    def offset
+      position[0, 2]
     end
 
     # Returns [lineno, column, line]

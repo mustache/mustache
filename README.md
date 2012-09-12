@@ -251,7 +251,7 @@ Then just include it:
 Great, but what about that `@ssl` ivar in `gravatar_host`? There are
 many ways we can go about setting it.
 
-Here's on example which illustrates a key feature of Mustache: you
+Here's an example which illustrates a key feature of Mustache: you
 are free to use the `initialize` method just as you would in any
 normal class.
 

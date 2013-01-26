@@ -52,4 +52,8 @@ end_render
   def test_bad_constant_name
     assert_equal Mustache, Mustache.view_class(404)
   end
+
+  def test_const_get!
+    assert_equal nil, Mustache.const_get!('TestViews::TestViews')
+  end
 end

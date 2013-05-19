@@ -56,13 +56,17 @@ EOF
     # the rest only allow ALLOWED_CONTENT.
     ANY_CONTENT = [ '!', '=' ]
 
+    # We want to expand partials when we are in translate-only mode, since we
+    # need to translate content in the partials, too.
+    TRANSLATE_TYPES = [ '%', '$', '<', '>' ]
+
     attr_reader :scanner, :result
     attr_writer :otag, :ctag
 
     # Accepts an options hash which does nothing but may be used in
     # the future.
     def initialize(options = {})
-      @options = {}
+      @options = options
     end
 
     # The opening tag delimiter. This may be changed at runtime.
@@ -111,6 +115,14 @@ EOF
       last_index = @result.length
 
       return unless x = @scanner.scan(/([ \t]*)?#{Regexp.escape(otag)}/)
+
+      if @options[:translate_only] # "Undo" the match if we won't expand
+        unless TRANSLATE_TYPES.include?(@scanner.peek(1))
+          @scanner.pos = pre_match_position
+          return
+        end
+      end
+
       padding = @scanner[1] || ''
 
       # Don't touch the preceding whitespace unless we're matching the start
@@ -124,7 +136,7 @@ EOF
       # Since {{= rewrites ctag, we store the ctag which should be used
       # when parsing this specific tag.
       current_ctag = self.ctag
-      type = @scanner.scan(/#|\^|\/|=|!|<|>|&|\{/)
+      type = @scanner.scan(/#|\^|\/|=|!|<|>|&|\{|%|\$/)
       @scanner.skip(/\s*/)
 
       # ANY_CONTENT tags allow any character inside of them, while
@@ -170,6 +182,10 @@ EOF
         self.otag, self.ctag = content.split(' ', 2)
       when '>', '<'
         @result << [:mustache, :partial, content, offset, padding]
+      when '$'
+        @result << [:mustache, :ui18n, content]
+      when '%'
+        @result << [:mustache, :ei18n, content]
       when '{', '&'
         # The closing } in unescaped tags is just a hack for
         # aesthetics.
@@ -209,7 +225,13 @@ EOF
 
     # Try to find static text, e.g. raw HTML with no {{mustaches}}.
     def scan_text
-      text = scan_until_exclusive(/(^[ \t]*)?#{Regexp.escape(otag)}/)
+      if @options[:translate_only]
+        text = scan_until_exclusive(
+          /(^[ \t]*)?#{Regexp.escape(otag)}[#{Regexp.escape(TRANSLATE_TYPES.join)}]/
+        )
+      else
+        text = scan_until_exclusive(/(^[ \t]*)?#{Regexp.escape(otag)}/)
+      end
 
       if text.nil?
         # Couldn't find any otag, which means the rest is just static text.

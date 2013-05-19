@@ -224,6 +224,24 @@ end_section
     assert_equal '<h1>Bear > Shark</h1>', view.render
   end
 
+  def test_translation
+    assert_equal <<end_template, Translation.render
+<h1>Bear &gt; Shark</h1>
+<p>Unless the shark has laser beams.</p>
+<p>PEW PEW!</p>
+end_template
+  end
+
+  def test_translation_only
+    view = Translation.new
+    view.translate_only = true
+    assert_equal <<end_template, view.render
+<h1>Bear &gt; Shark</h1>
+<p>Unless the shark has {{item}}.</p>
+<p>{{exclamation}}</p>
+end_template
+  end
+
   def test_classify
     assert_equal 'TemplatePartial', Mustache.classify('template_partial')
     assert_equal 'Admin::TemplatePartial', Mustache.classify('admin/template_partial')
@@ -285,7 +303,7 @@ data
     assert_equal expected, Mustache.render(:passenger, :stage => 'production',
                                                        :server => 'example.com',
                                                        :deploy_to => '/var/www/example.com' )
-
+  ensure
     Mustache.template_path, Mustache.template_extension = old_path, old_extension
   end
 

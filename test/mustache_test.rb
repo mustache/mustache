@@ -224,6 +224,45 @@ end_section
     assert_equal '<h1>Bear > Shark</h1>', view.render
   end
 
+  def test_translation
+    assert_equal <<end_template, Translation.render
+<h1>Bear &gt; Shark</h1>
+<p>Unless the shark has laser beams.</p>
+<p>PEW PEW!</p>
+end_template
+  end
+
+  def test_translation_locale_change
+    view = Translation.new
+    assert_equal <<end_template, view.render
+<h1>Bear &gt; Shark</h1>
+<p>Unless the shark has laser beams.</p>
+<p>PEW PEW!</p>
+end_template
+    view.locale = :es
+    view[:item] = "rayos láser"
+    assert_equal <<end_template, view.render
+<h1>Oso &gt; Tiburón</h1>
+<p>A menos que el tiburón tiene rayos láser.</p>
+<p>PEW PEW!</p>
+end_template
+  end
+
+  def test_translation_namespace_change
+    view = Translation.new
+    assert_equal <<end_template, view.render
+<h1>Bear &gt; Shark</h1>
+<p>Unless the shark has laser beams.</p>
+<p>PEW PEW!</p>
+end_template
+    view.i18n_namespace = 'mustache_alternate'
+    assert_equal <<end_template, view.render
+<h1>Bear &gt; Smaller Bear</h1>
+<p>Duh.</p>
+<p>PEW PEW!</p>
+end_template
+  end
+
   def test_classify
     assert_equal 'TemplatePartial', Mustache.classify('template_partial')
     assert_equal 'Admin::TemplatePartial', Mustache.classify('admin/template_partial')
@@ -285,7 +324,7 @@ data
     assert_equal expected, Mustache.render(:passenger, :stage => 'production',
                                                        :server => 'example.com',
                                                        :deploy_to => '/var/www/example.com' )
-
+  ensure
     Mustache.template_path, Mustache.template_extension = old_path, old_extension
   end
 

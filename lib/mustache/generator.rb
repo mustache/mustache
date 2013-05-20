@@ -103,11 +103,7 @@ class Mustache
           #{code}
         elsif v.is_a?(Proc)
           t = Mustache::Template.new(v.call(#{raw.inspect}).to_s)
-          def t.tokens(src=@source)
-            p = Parser.new
-            p.otag, p.ctag = #{delims.inspect}
-            p.compile(src)
-          end
+          t.tokenizer.otag, t.tokenizer.ctag = #{delims.inspect}
           t.render(ctx.dup)
         else
           # Shortcut when passed non-array
@@ -141,6 +137,22 @@ class Mustache
     # including the partial's body to allow for recursive partials.
     def on_partial(name, offset, indentation)
       ev("ctx.partial(#{name.to_sym.inspect}, #{indentation.inspect})")
+    end
+
+    # An unescaped i18n tag.
+    def on_ui18n(name)
+      ev(<<-compiled)
+        v = ctx.translate(#{name.inspect}).to_s
+        Mustache::Template.new(v).render(ctx.dup)
+      compiled
+    end
+
+    # An escaped i18n tag.
+    def on_ei18n(name)
+      ev(<<-compiled)
+        v = ctx.escapeHTML(ctx.translate(#{name.inspect}).to_s)
+        Mustache::Template.new(v).render(ctx.dup)
+      compiled
     end
 
     # An unescaped tag.

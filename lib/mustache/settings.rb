@@ -162,6 +162,49 @@ class Mustache
     @template = templateify(template)
   end
 
+  #
+  # Translation
+  #
+
+  # I18n translations should be namespaced. The default is "mustache".
+  # This is because these translations may include Mustache utags and etags,
+  # which will at best, not be understood by I18n, and at worst, conflict with
+  # older versions of I18n's use of {{}}. If you just don't care, and feel like
+  # getting wild and crazy, set this value to nil, which will remove the default
+  # namespace.
+
+  def self.i18n_namespace
+    @i18n_namespace ||= 'mustache'
+  end
+
+  def self.i18n_namespace=(key)
+    @i18n_namespace = key
+  end
+
+  def i18n_namespace
+    @i18n_namespace || self.class.i18n_namespace
+  end
+
+  attr_writer :i18n_namespace
+
+  # The locale for translation will by default be the current I18n locale. We
+  # don't want to memoize this at the class level, because it's likely to be
+  # assumed that a change to I18n.locale would be reflected here if one were not
+  # explicitly configured. Also, threads are a thing.
+
+  def self.locale
+    @locale || I18n.locale
+  end
+
+  def self.locale=(locale)
+    @locale = locale
+  end
+
+  def locale
+    @locale ||= self.class.locale
+  end
+
+  attr_writer :locale
 
   #
   # Raise on context miss

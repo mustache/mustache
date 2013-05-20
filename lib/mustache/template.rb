@@ -17,8 +17,7 @@ class Mustache
   class Template
     attr_reader :source
 
-    # Expects a Mustache template as a string along with a template
-    # path, which it uses to find partials.
+    # Expects a Mustache template as a String.
     def initialize(source)
       @source = source
     end
@@ -52,7 +51,12 @@ class Mustache
 
     # Returns an array of tokens for a given template.
     def tokens(src = @source)
-      Parser.new.compile(src)
+      tokenizer.compile(src)
+    end
+
+    # Returns a Parser for the template
+    def tokenizer
+      @tokenizer ||= Parser.new
     end
   end
 end

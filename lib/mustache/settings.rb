@@ -180,17 +180,13 @@ class Mustache
 
   def self.i18n_namespace=(key)
     @i18n_namespace = key
-    @template = nil
   end
 
   def i18n_namespace
     @i18n_namespace || self.class.i18n_namespace
   end
 
-  def i18n_namespace=(key)
-    @i18n_namespace = key
-    @template = nil
-  end
+  attr_writer :i18n_namespace
 
   # The locale for translation will by default be the current I18n locale. We
   # don't want to memoize this at the class level, because it's likely to be

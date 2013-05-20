@@ -8,6 +8,10 @@ I18n.backend.store_translations(
   :mustache => {
     :title => 'Bear > Shark',
     :body => '<p>Unless the shark has {{item}}.</p>'
+  },
+  :mustache_alternate => {
+    :title => 'Bear > Smaller Bear',
+    :body => '<p>Duh.</p>'
   }
 )
 

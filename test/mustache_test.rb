@@ -258,6 +258,21 @@ end_template
 end_template
   end
 
+  def test_translation_namespace_change
+    view = Translation.new
+    assert_equal <<end_template, view.render
+<h1>Bear &gt; Shark</h1>
+<p>Unless the shark has laser beams.</p>
+<p>PEW PEW!</p>
+end_template
+    view.i18n_namespace = 'mustache_alternate'
+    assert_equal <<end_template, view.render
+<h1>Bear &gt; Smaller Bear</h1>
+<p>Duh.</p>
+<p>PEW PEW!</p>
+end_template
+  end
+
   def test_classify
     assert_equal 'TemplatePartial', Mustache.classify('template_partial')
     assert_equal 'Admin::TemplatePartial', Mustache.classify('admin/template_partial')

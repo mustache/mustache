@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 $LOAD_PATH.unshift File.dirname(__FILE__) + '/../lib'
 require 'i18n'
 require 'mustache'
@@ -7,6 +8,14 @@ I18n.backend.store_translations(
   :mustache => {
     :title => 'Bear > Shark',
     :body => '<p>Unless the shark has {{item}}.</p>'
+  }
+)
+
+I18n.backend.store_translations(
+  :es,
+  :mustache => {
+    :title => 'Oso > Tiburón',
+    :body => '<p>A menos que el tiburón tiene {{item}}.</p>'
   }
 )
 

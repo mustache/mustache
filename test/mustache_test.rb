@@ -242,6 +242,22 @@ end_template
 end_template
   end
 
+  def test_translation_locale_change
+    view = Translation.new
+    assert_equal <<end_template, view.render
+<h1>Bear &gt; Shark</h1>
+<p>Unless the shark has laser beams.</p>
+<p>PEW PEW!</p>
+end_template
+    view.locale = :es
+    view[:item] = "rayos láser"
+    assert_equal <<end_template, view.render
+<h1>Oso &gt; Tiburón</h1>
+<p>A menos que el tiburón tiene rayos láser.</p>
+<p>PEW PEW!</p>
+end_template
+  end
+
   def test_classify
     assert_equal 'TemplatePartial', Mustache.classify('template_partial')
     assert_equal 'Admin::TemplatePartial', Mustache.classify('admin/template_partial')

@@ -203,17 +203,13 @@ class Mustache
 
   def self.locale=(locale)
     @locale = locale
-    @template = nil
   end
 
   def locale
     @locale ||= self.class.locale
   end
 
-  def locale=(locale)
-    @locale = locale
-    @template = nil
-  end
+  attr_writer :locale
 
   # Because translation may not be supported in all implementations of Mustache,
   # it is useful in a multi-pass rendering scenario to allow for partial

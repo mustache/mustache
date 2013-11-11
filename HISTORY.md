@@ -1,3 +1,10 @@
+## 0.99.5 (2013-11-11)
+
+* Added line offsets to parser ast
+* Sinatra: `mustache` takes a View class to skip lookups
+* Fixed warning for shadowing outer local variable
+* Fixed typos
+
 ## 0.99.4 (2011-05-26)
 
 * Reverted automatically attr_accessors in Sinatra. Too much magic.

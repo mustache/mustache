@@ -109,7 +109,7 @@ Template:
 Hash:
 
     {
-      "person": true,
+      "person": true
     }
 
 Output:
@@ -138,7 +138,7 @@ Hash:
       "repo": [
         { "name": "resque" },
         { "name": "hub" },
-        { "name": "rip" },
+        { "name": "rip" }
       ]
     }
 

@@ -58,6 +58,36 @@ require 'mustache/settings'
 #   view[:person] = 'Mom'
 #   view.render # => Hi, mom!
 #
+# * i18n_namespace
+#
+# The `i18n_namespace` setting determines the namespace Mustache uses when
+# translating `{{% }}` and `{{$ }}` tags. By default this is "mustache".
+# Given the locale file:
+#
+#   en:
+#     mustache:
+#       greeting: 'Hello {{planet}}'
+#
+#   >> Mustache.render("{{%greeting}}", :planet => "World!")
+#   => "Hello World!"
+#
+# * locale
+#
+# The locale used when translating. By default this is the current value of
+# `I18n.locale`.
+#
+# * translate_only
+#
+# Allows for a two-pass rendering setup if true. The default is false. If true,
+# when render is called, i18n keys and partials will be expanded, but other
+# rendering will not occur. Note that this does mean that recursive partials
+# will blow the stack, since there is no way to terminate the recursion. Use
+# with caution. Using the locale from the previous example:
+#
+#   view = Mustache.new
+#   view.translate_only = true
+#   view.render("{{%greeting}}", :planet => "World!") # => "Hello {{planet}}"
+#
 # * view_namespace
 #
 # To make life easy on those developing Mustache plugins for web frameworks or
@@ -191,6 +221,12 @@ class Mustache
     CGI.escapeHTML(str)
   end
 
+  # Override this to provide custom translation.
+  #
+  # Returns a String
+  def translate(key)
+    I18n.translate([i18n_namespace, key].compact.join('.'), :locale => locale)
+  end
 
   #
   # Private API
@@ -279,16 +315,16 @@ class Mustache
 
   # Turns a string into a Mustache::Template. If passed a Template,
   # returns it.
-  def self.templateify(obj)
+  def self.templateify(obj, translate = translate_only)
     if obj.is_a?(Template)
       obj
     else
-      Template.new(obj.to_s)
+      Template.new(obj.to_s, translate)
     end
   end
 
-  def templateify(obj)
-    self.class.templateify(obj)
+  def templateify(obj, translate = translate_only)
+    self.class.templateify(obj, translate)
   end
 
   # Return the value of the configuration setting on the superclass, or return

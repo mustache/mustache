@@ -102,12 +102,8 @@ class Mustache
         if v == true
           #{code}
         elsif v.is_a?(Proc)
-          t = Mustache::Template.new(v.call(#{raw.inspect}).to_s)
-          def t.tokens(src=@source)
-            p = Parser.new
-            p.otag, p.ctag = #{delims.inspect}
-            p.compile(src)
-          end
+          t = ctx.templateify(v.call(#{raw.inspect}).to_s)
+          t.tokenizer.otag, t.tokenizer.ctag = #{delims.inspect}
           t.render(ctx.dup)
         else
           # Shortcut when passed non-array
@@ -143,12 +139,36 @@ class Mustache
       ev("ctx.partial(#{name.to_sym.inspect}, #{indentation.inspect})")
     end
 
+    # An unescaped i18n tag.
+    def on_ui18n(name)
+      ev(<<-compiled)
+        v = ctx.translate(#{name.inspect}).to_s
+        if ctx.translate_only?
+          v
+        else
+          ctx.templateify(v).render(ctx.dup)
+        end
+      compiled
+    end
+
+    # An escaped i18n tag.
+    def on_ei18n(name)
+      ev(<<-compiled)
+        v = ctx.escapeHTML(ctx.translate(#{name.inspect}).to_s)
+        if ctx.translate_only?
+          v
+        else
+          ctx.templateify(v).render(ctx.dup)
+        end
+      compiled
+    end
+
     # An unescaped tag.
     def on_utag(name, offset)
       ev(<<-compiled)
         v = #{compile!(name)}
         if v.is_a?(Proc)
-          v = Mustache::Template.new(v.call.to_s).render(ctx.dup)
+          v = ctx.templateify(v.call.to_s).render(ctx.dup)
         end
         v.to_s
       compiled
@@ -159,7 +179,7 @@ class Mustache
       ev(<<-compiled)
         v = #{compile!(name)}
         if v.is_a?(Proc)
-          v = Mustache::Template.new(v.call.to_s).render(ctx.dup)
+          v = ctx.templateify(v.call.to_s).render(ctx.dup)
         end
         ctx.escapeHTML(v.to_s)
       compiled

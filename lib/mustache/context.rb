@@ -34,6 +34,26 @@ class Mustache
       result = mustache.render(part, self)
     end
 
+    # Whether or not this context is in translate_only mode, as determined by
+    # its Mustache. See Mustache.translate_only
+    #
+    # Returns a boolean.
+    def translate_only?
+      mustache_in_stack.translate_only?
+    end
+
+    # Delegate translation duties to the Mustache in this Context's stack.
+    #
+    # Returns a String.
+    def translate(key)
+      mustache_in_stack.translate(key)
+    end
+
+    # Return a Mustache::Template configured by this Context's Mustache.
+    def templateify(obj)
+      mustache_in_stack.templateify(obj)
+    end
+
     # Find the first Mustache in the stack. If we're being rendered
     # inside a Mustache object as a context, we'll use that one.
     def mustache_in_stack

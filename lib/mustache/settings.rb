@@ -151,7 +151,8 @@ class Mustache
     return @template if @template
 
     # If they sent any instance-level options use that instead of the class's.
-    if @template_path || @template_extension || @template_name || @template_file
+    if @template_path || @template_extension || @template_name ||
+      @template_file || @translate_only
       @template = templateify(File.read(template_file))
     else
       @template = self.class.template
@@ -162,6 +163,82 @@ class Mustache
     @template = templateify(template)
   end
 
+  #
+  # Translation
+  #
+
+  # I18n translations should be namespaced. The default is "mustache".
+  # This is because these translations may include Mustache utags and etags,
+  # which will at best, not be understood by I18n, and at worst, conflict with
+  # older versions of I18n's use of {{}}. If you just don't care, and feel like
+  # getting wild and crazy, set this value to nil, which will remove the default
+  # namespace.
+
+  def self.i18n_namespace
+    @i18n_namespace ||= 'mustache'
+  end
+
+  def self.i18n_namespace=(key)
+    @i18n_namespace = key
+  end
+
+  def i18n_namespace
+    @i18n_namespace || self.class.i18n_namespace
+  end
+
+  attr_writer :i18n_namespace
+
+  # The locale for translation will by default be the current I18n locale. We
+  # don't want to memoize this at the class level, because it's likely to be
+  # assumed that a change to I18n.locale would be reflected here if one were not
+  # explicitly configured. Also, threads are a thing.
+
+  def self.locale
+    @locale || I18n.locale
+  end
+
+  def self.locale=(locale)
+    @locale = locale
+  end
+
+  def locale
+    @locale ||= self.class.locale
+  end
+
+  attr_writer :locale
+
+  # Because translation may not be supported in all implementations of Mustache,
+  # it is useful in a multi-pass rendering scenario to allow for partial
+  # rendering of a Mustache template. This allows localization to be handled
+  # server-side, for instance, while other rendering may happen client-side.
+  # If enabled, this option will only expand partials and translations, leaving
+  # other parts of the template untouched.
+  #
+  # IMPORTANT: This will blow up your stack if you use recursive partials, for
+  # obvious reasons. Don't do that.
+
+  def self.translate_only
+    @translate_only ||= false
+  end
+
+  def self.translate_only?
+    translate_only
+  end
+
+  def self.translate_only=(boolean)
+    @translate_only = boolean
+    @template = nil
+  end
+
+  def translate_only
+    @translate_only ||= self.class.translate_only
+  end
+  alias_method :translate_only?, :translate_only
+
+  def translate_only=(boolean)
+    @translate_only = boolean
+    @template = nil
+  end
 
   #
   # Raise on context miss

@@ -34,6 +34,13 @@ class Mustache
       result = mustache.render(part, self)
     end
 
+    # Delegate translation duties to the Mustache in this Context's stack.
+    #
+    # Returns a String.
+    def translate(key)
+      mustache_in_stack.translate(key)
+    end
+
     # Find the first Mustache in the stack. If we're being rendered
     # inside a Mustache object as a context, we'll use that one.
     def mustache_in_stack

@@ -62,7 +62,7 @@ EOF
     # Accepts an options hash which does nothing but may be used in
     # the future.
     def initialize(options = {})
-      @options = {}
+      @options = options
     end
 
     # The opening tag delimiter. This may be changed at runtime.
@@ -124,7 +124,7 @@ EOF
       # Since {{= rewrites ctag, we store the ctag which should be used
       # when parsing this specific tag.
       current_ctag = self.ctag
-      type = @scanner.scan(/#|\^|\/|=|!|<|>|&|\{/)
+      type = @scanner.scan(/#|\^|\/|=|!|<|>|&|\{|%|\$/)
       @scanner.skip(/\s*/)
 
       # ANY_CONTENT tags allow any character inside of them, while
@@ -170,6 +170,10 @@ EOF
         self.otag, self.ctag = content.split(' ', 2)
       when '>', '<'
         @result << [:mustache, :partial, content, offset, padding]
+      when '$'
+        @result << [:mustache, :ui18n, content]
+      when '%'
+        @result << [:mustache, :ei18n, content]
       when '{', '&'
         # The closing } in unescaped tags is just a hack for
         # aesthetics.

@@ -167,7 +167,7 @@ Hash:
     {
       "name": "Willy",
       "wrapped": function() {
-        return function(text) {
+        return function(text, render) {
           return "<b>" + render(text) + "</b>"
         }
       }

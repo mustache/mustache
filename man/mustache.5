@@ -1,7 +1,7 @@
 .\" generated with Ronn/v0.7.3
 .\" http://github.com/rtomayko/ronn/tree/0.7.3
 .
-.TH "MUSTACHE" "5" "August 2011" "DEFUNKT" "Mustache Manual"
+.TH "MUSTACHE" "5" "February 2014" "DEFUNKT" "Mustache Manual"
 .
 .SH "NAME"
 \fBmustache\fR \- Logic\-less templates\.
@@ -273,7 +273,7 @@ Hash:
 {
   "name": "Willy",
   "wrapped": function() {
-    return function(text) {
+    return function(text, render) {
       return "<b>" + render(text) + "</b>"
     }
   }

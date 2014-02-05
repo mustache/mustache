@@ -8,7 +8,7 @@ As ctemplates says, "It emphasizes separating logic from presentation:
 it is impossible to embed application logic in this template language."
 
 For a list of implementations (other than Ruby) and tips, see
-<http://mustache.github.com/>.
+<http://mustache.github.io/>.
 
 
 Overview
@@ -99,7 +99,7 @@ Tag Types
 
 For a language-agnostic overview of Mustache's template syntax, see
 the `mustache(5)` manpage or
-<http://mustache.github.com/mustache.5.html>.
+<http://mustache.github.io/mustache.5.html>.
 
 
 Escaping
@@ -283,16 +283,16 @@ Sinatra
 
 Mustache ships with Sinatra integration. Please see
 `lib/mustache/sinatra.rb` or
-<http://github.com/defunkt/mustache/blob/master/lib/mustache/sinatra.rb>
+<https://github.com/defunkt/mustache/blob/master/lib/mustache/sinatra.rb>
 for complete documentation.
 
 An example Sinatra application is also provided:
-<http://github.com/defunkt/mustache-sinatra-example>
+<https://github.com/defunkt/mustache-sinatra-example>
 
 If you are upgrading to Sinatra 1.0 and Mustache 0.9.0+ from Mustache
 0.7.0 or lower, the settings have changed. But not that much.
 
-See [this diff](http://gist.github.com/345490) for what you need to
+See [this diff](https://gist.github.com/defunkt/345490) for what you need to
 do. Basically, things are named properly now and all should be
 contained in a hash set using `set :mustache, hash`.
 
@@ -317,10 +317,10 @@ Using Rails? Add this to your initializer or environment file:
 Vim
 ---
 
-Thanks to [Juvenn Woo](http://github.com/juvenn) for mustache.vim. It
+Thanks to [Juvenn Woo](https://github.com/juvenn) for mustache.vim. It
 is included under the contrib/ directory.
 
-See <http://gist.github.com/323622> for installation instructions.
+See <https://gist.github.com/defunkt/323622> for installation instructions.
 
 
 Emacs
@@ -332,16 +332,16 @@ mustache-mode.el is available at https://github.com/mustache/emacs
 TextMate
 --------
 
-[Mustache.tmbundle](http://github.com/defunkt/Mustache.tmbundle)
+[Mustache.tmbundle](https://github.com/defunkt/Mustache.tmbundle)
 
-See <http://gist.github.com/323624> for installation instructions.
+See <https://gist.github.com/defunkt/323624> for installation instructions.
 
 
 Command Line
 ------------
 
 See `mustache(1)` man page or
-<http://mustache.github.com/mustache.1.html>
+<http://mustache.github.io/mustache.1.html>
 for command line docs.
 
 
@@ -356,8 +356,8 @@ Installation
 Acknowledgements
 ----------------
 
-Thanks to [Tom Preston-Werner](http://github.com/mojombo) for showing
-me ctemplate and [Leah Culver](http://github.com/leah) for the name "Mustache."
+Thanks to [Tom Preston-Werner](https://github.com/mojombo) for showing
+me ctemplate and [Leah Culver](https://github.com/leah) for the name "Mustache."
 
 Special thanks to [Magnus Holm](http://judofyr.net/) for all his
 awesome work on Mustache's parser.
@@ -391,9 +391,9 @@ The archive can be found at <http://librelist.com/browser/>.
 Meta
 ----
 
-* Code: `git clone git://github.com/defunkt/mustache.git`
-* Home: <http://mustache.github.com>
-* Bugs: <http://github.com/defunkt/mustache/issues>
+* Code: `git clone https://github.com/defunkt/mustache.git`
+* Home: <http://mustache.github.io>
+* Bugs: <https://github.com/defunkt/mustache/issues>
 * List: <mustache@librelist.com>
 * Gems: <http://rubygems.org/gems/mustache>
 
@@ -402,8 +402,8 @@ You can also find us in `#{` on irc.freenode.net.
 [1]: http://code.google.com/p/google-ctemplate/
 [2]: http://www.ivan.fomichev.name/2008/05/erlang-template-engine-prototype.html
 [3]: http://google-ctemplate.googlecode.com/svn/trunk/doc/howto.html
-[4]: http://github.com/brynary/rack-bug/
+[4]: https://github.com/brynary/rack-bug/
 [5]: http://img.skitch.com/20091027-n8pxwwx8r61tc318a15q1n6m14.png
 [cb]: http://wiki.github.com/defunkt/resque/contributing
 [fk]: http://help.github.com/forking/
-[is]: http://github.com/defunkt/mustache/issues
+[is]: https://github.com/defunkt/mustache/issues

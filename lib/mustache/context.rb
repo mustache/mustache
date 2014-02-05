@@ -31,7 +31,7 @@ class Mustache
       part = mustache.partial(name).to_s.gsub(/^/, indentation)
 
       # Call the Mustache's `partial` method and render the result.
-      result = mustache.render(part, self)
+      mustache.render(part, self)
     end
 
     # Find the first Mustache in the stack. If we're being rendered
@@ -97,9 +97,7 @@ class Mustache
         next if frame == self
 
         value = find(frame, name, :__missing)
-        if value != :__missing
-          return value
-        end
+        return value if value != :__missing
       end
 
       if default == :__raise || mustache_in_stack.raise_on_context_miss?

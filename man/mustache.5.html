@@ -159,7 +159,7 @@ supports raising an exception in this situation, for instance.</p>
 
 <h3 id="Sections">Sections</h3>
 
-<p>Sections render blocks of text one or more times, depending on the
+<p>Sections render blocks of text zero or more times, depending on the
 value of the key in the current context.</p>
 
 <p>A section begins with a pound and ends with a slash. That is,
@@ -289,7 +289,7 @@ context for a single rendering of the block.</p>
 slash. That is <code>{{^person}}</code> begins a "person" inverted section while
 <code>{{/person}}</code> ends it.</p>
 
-<p>While sections can be used to render text one or more times based on the
+<p>While sections can be used to render text zero or more times based on the
 value of the key, inverted sections may render text once based
 on the inverse value of the key. That is, they will be rendered
 if the key doesn't exist, is false, or is an empty list.</p>

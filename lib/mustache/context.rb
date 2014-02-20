@@ -122,6 +122,11 @@ class Mustache
       hash = obj.respond_to?(:to_hash)
 
       if !hash
+        # If a class, we need to find tags (methods) per Parser::ALLOWED_CONTENT.
+        if key.to_s.include?('-')
+          key = key.to_s.gsub('-', '_')
+        end
+
         if obj.respond_to?(key)
           meth = obj.method(key) rescue proc { obj.send(key) }
           if meth.arity == 1

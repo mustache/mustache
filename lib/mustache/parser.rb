@@ -308,11 +308,6 @@ EOF
     end
     alias_method :'scan_tag_<', :'scan_tag_>'
 
-    define_method 'scan_tag_>' do |content, fetch, padding, pre_match_position|
-      @result << [:mustache, :partial, content, offset, padding]
-    end
-    alias_method :'scan_tag_<', :'scan_tag_>'
-
     define_method 'scan_tag_{' do |content, fetch, padding, pre_match_position|
       @result << [:mustache, :utag, fetch, offset]
     end

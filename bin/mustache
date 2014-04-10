@@ -64,23 +64,33 @@ class Mustache
       opts.parse!(args)
     end
 
-    # Does the dirty work of reading files from STDIN and the command
-    # line then processing them. The meat of this script, if you will.
-    def self.process_files(input_stream)
-      doc = input_stream.read
+    def self.yaml_is_array?(yaml)
+        yaml.is_a? Array and yaml.length == 1 and yaml[0].is_a? Array
+    end
 
-      if doc =~ /^(\s*---(.+)---\s*)/m
-        yaml = $2.strip
-        template = doc.sub($1, '')
+    def self.yaml_is_object?(yaml)
+        yaml.is_a? Array and yaml.length == 1 and yaml[0].is_a? Hash
+    end
 
-        if RUBY_VERSION >= '1.9.3'
-          YAML.load_stream(yaml) do |data|
-            puts Mustache.render(template, data)
-          end
+    # Does the dirty work of reading files from the command line then
+    # processing them. The meat of this script, if you will.
+    def self.process_files(input_files)
+      doc = File.read(input_files.shift).strip
+
+      yaml = nil
+      begin
+        yaml = RUBY_VERSION >= '1.9.3' ? YAML.load_stream(doc) : YAML.each_document(doc)
+      rescue
+        puts "Unable to parse yaml!"
+      end
+      if not yaml.nil?
+        template = File.read(input_files.shift)
+        if self.yaml_is_array?(yaml)
+          puts Mustache.render(template, yaml[0].reduce({}) {|hash, currentHash| hash.merge(currentHash)})
+        elsif self.yaml_is_object?(yaml)
+          puts Mustache.render(template, yaml[0])
         else
-          YAML.each_document(yaml) do |data|
-            puts Mustache.render(template, data)
-          end
+          puts Mustache.render(template, yaml)
         end
       else
         puts Mustache.render(doc)
@@ -95,6 +105,6 @@ ARGV << '-h' if ARGV.empty? && $stdin.tty?
 # Process options
 Mustache::CLI.parse_options(ARGV) if $stdin.tty?
 
-# Still here - process ARGF
-Mustache::CLI.process_files(ARGF)
+# Still here - process rest of ARGV
+Mustache::CLI.process_files(ARGV)
 

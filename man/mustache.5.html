@@ -121,7 +121,9 @@ or tag key. Let's talk about the different types of tags.</p>
 
 <p>The most basic tag type is the variable. A <code>{{name}}</code> tag in a basic
 template will try to find the <code>name</code> key in the current context. If
-there is no <code>name</code> key, nothing will be rendered.</p>
+there is no <code>name</code> key, the parent contexts will be checked recursively.
+If the top context is reached and the <code>name</code> key is still not found,
+nothing will be rendered.</p>
 
 <p>All variables are HTML escaped by default. If you want to return
 unescaped HTML, use the triple mustache: <code>{{{name}}}</code>.</p>
@@ -413,7 +415,7 @@ markup."</p>
 
   <ol class='man-decor man-foot man foot'>
     <li class='tl'>DEFUNKT</li>
-    <li class='tc'>February 2014</li>
+    <li class='tc'>April 2014</li>
     <li class='tr'>mustache(5)</li>
   </ol>
 

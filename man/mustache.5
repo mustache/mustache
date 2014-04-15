@@ -1,7 +1,7 @@
 .\" generated with Ronn/v0.7.3
 .\" http://github.com/rtomayko/ronn/tree/0.7.3
 .
-.TH "MUSTACHE" "5" "February 2014" "DEFUNKT" "Mustache Manual"
+.TH "MUSTACHE" "5" "April 2014" "DEFUNKT" "Mustache Manual"
 .
 .SH "NAME"
 \fBmustache\fR \- Logic\-less templates\.
@@ -66,7 +66,7 @@ We call it "logic\-less" because there are no if statements, else clauses, or fo
 Tags are indicated by the double mustaches\. \fB{{person}}\fR is a tag, as is \fB{{#person}}\fR\. In both examples, we\'d refer to \fBperson\fR as the key or tag key\. Let\'s talk about the different types of tags\.
 .
 .SS "Variables"
-The most basic tag type is the variable\. A \fB{{name}}\fR tag in a basic template will try to find the \fBname\fR key in the current context\. If there is no \fBname\fR key, nothing will be rendered\.
+The most basic tag type is the variable\. A \fB{{name}}\fR tag in a basic template will try to find the \fBname\fR key in the current context\. If there is no \fBname\fR key, the parent contexts will be checked recursively\. If the top context is reached and the \fBname\fR key is still not found, nothing will be rendered\.
 .
 .P
 All variables are HTML escaped by default\. If you want to return unescaped HTML, use the triple mustache: \fB{{{name}}}\fR\.

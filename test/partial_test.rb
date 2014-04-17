@@ -87,7 +87,7 @@ Welcome
 end_partial
   end
 
-  def test_recursive_paritals
+  def test_recursive_partials
     assert_equal <<-end_partial, Recursive.render
 It works!
 end_partial

@@ -511,6 +511,12 @@ Benvolio is 15
     assert_equal "chris j strath", Mustache.render(template, hash)
   end
 
+  def test_liberal_tag_names_in_class
+    assert_equal <<-end_liberal, Liberal.render
+kevin j sheurs
+end_liberal
+  end
+
   def test_nested_sections_same_names
     template = <<template
 {{#items}}

@@ -50,7 +50,9 @@ or tag key. Let's talk about the different types of tags.
 
 The most basic tag type is the variable. A `{{name}}` tag in a basic
 template will try to find the `name` key in the current context. If
-there is no `name` key, nothing will be rendered.
+there is no `name` key, the parent contexts will be checked recursively.
+If the top context is reached and the `name` key is still not found,
+nothing will be rendered.
 
 All variables are HTML escaped by default. If you want to return
 unescaped HTML, use the triple mustache: `{{{name}}}`.
@@ -102,14 +104,14 @@ list, the HTML between the pound and slash will not be displayed.
 Template:
 
     Shown.
-    {{#nothin}}
+    {{#person}}
       Never shown!
-    {{/nothin}}
+    {{/person}}
 
 Hash:
 
     {
-      "person": true,
+      "person": false
     }
 
 Output:
@@ -138,7 +140,7 @@ Hash:
       "repo": [
         { "name": "resque" },
         { "name": "hub" },
-        { "name": "rip" },
+        { "name": "rip" }
       ]
     }
 
@@ -167,7 +169,7 @@ Hash:
     {
       "name": "Willy",
       "wrapped": function() {
-        return function(text) {
+        return function(text, render) {
           return "<b>" + render(text) + "</b>"
         }
       }
@@ -321,4 +323,4 @@ Original CTemplate by Google
 ## SEE ALSO
 
 mustache(1),
-<http://mustache.github.com/>
+<http://mustache.github.io/>

@@ -73,8 +73,14 @@ class Mustache
         yaml = $2.strip
         template = doc.sub($1, '')
 
-        YAML.each_document(yaml) do |data|
-          puts Mustache.render(template, data)
+        if RUBY_VERSION >= '1.9.3'
+          YAML.load_stream(yaml) do |data|
+            puts Mustache.render(template, data)
+          end
+        else
+          YAML.each_document(yaml) do |data|
+            puts Mustache.render(template, data)
+          end
         end
       else
         puts Mustache.render(doc)

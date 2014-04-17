@@ -44,6 +44,34 @@ EOF
       end
     end
 
+    # The sigil types which are valid after an opening `{{`
+    VALID_TYPES = [ '#', '^', '/', '=', '!', '<', '>', '&', '{' ]
+
+    def self.valid_types
+      @valid_types ||= Regexp.new(VALID_TYPES.map { |t| Regexp.escape(t) }.join('|') )
+    end
+
+    # Add a supported sigil type (with optional aliases) to the Parser.
+    #
+    # Requires a block, which will be sent the following parameters:
+    #
+    # * content - The raw content of the tag
+    # * fetch- A mustache context fetch expression for the content
+    # * padding - Indentation whitespace from the currently-parsed line
+    # * pre_match_position - Location of the scanner before a match was made
+    #
+    # The provided block will be evaluated against the current instance of
+    # Parser, and may append to the Parser's @result as needed.
+    def self.add_type(*types, &block)
+      types = types.map(&:to_s)
+      type, *aliases = types
+      method_name = "scan_tag_#{type}".to_sym
+      define_method(method_name, &block)
+      aliases.each { |a| alias_method "scan_tag_#{a}", method_name }
+      types.each { |t| VALID_TYPES << t unless VALID_TYPES.include?(t) }
+      @valid_types = nil
+    end
+
     # After these types of tags, all whitespace until the end of the line will
     # be skipped if they are the first (and only) non-whitespace content on
     # the line.
@@ -124,7 +152,7 @@ EOF
       # Since {{= rewrites ctag, we store the ctag which should be used
       # when parsing this specific tag.
       current_ctag = self.ctag
-      type = @scanner.scan(/#|\^|\/|=|!|<|>|&|\{/)
+      type = @scanner.scan(self.class.valid_types)
       @scanner.skip(/\s*/)
 
       # ANY_CONTENT tags allow any character inside of them, while
@@ -143,41 +171,16 @@ EOF
       prev = @result
 
       # Based on the sigil, do what needs to be done.
-      case type
-      when '#'
-        block = [:multi]
-        @result << [:mustache, :section, fetch, block]
-        @sections << [content, position, @result]
-        @result = block
-      when '^'
-        block = [:multi]
-        @result << [:mustache, :inverted_section, fetch, block]
-        @sections << [content, position, @result]
-        @result = block
-      when '/'
-        section, pos, result = @sections.pop
-        raw = @scanner.pre_match[pos[3]...pre_match_position] + padding
-        (@result = result).last << raw << [self.otag, self.ctag]
-
-        if section.nil?
-          error "Closing unopened #{content.inspect}"
-        elsif section != content
-          error "Unclosed section #{section.inspect}", pos
-        end
-      when '!'
-        # ignore comments
-      when '='
-        self.otag, self.ctag = content.split(' ', 2)
-      when '>', '<'
-        @result << [:mustache, :partial, content, padding]
-      when '{', '&'
-        # The closing } in unescaped tags is just a hack for
-        # aesthetics.
-        type = "}" if type == "{"
-        @result << [:mustache, :utag, fetch]
+      if type
+        # Method#call proves much faster than using send
+        method("scan_tag_#{type}").
+          call(content, fetch, padding, pre_match_position)
       else
-        @result << [:mustache, :etag, fetch]
+        @result << [:mustache, :etag, fetch, offset]
       end
+      # The closing } in unescaped tags is just a hack for
+      # aesthetics.
+      type = "}" if type == "{"
 
       # Skip whitespace and any balancing sigils after the content
       # inside this tag.
@@ -234,6 +237,10 @@ EOF
       end
     end
 
+    def offset
+      position[0, 2]
+    end
+
     # Returns [lineno, column, line]
     def position
       # The rest of the current line
@@ -259,5 +266,52 @@ EOF
     def error(message, pos = position)
       raise SyntaxError.new(message, pos)
     end
+
+    # These methods are called in `scan_tags`. Because they contain nonstandard
+    # characters in their method names, they are defined using define_method.
+
+    define_method 'scan_tag_#' do |content, fetch, padding, pre_match_position|
+      block = [:multi]
+      @result << [:mustache, :section, fetch, offset, block]
+      @sections << [content, position, @result]
+      @result = block
+    end
+
+    define_method 'scan_tag_^' do |content, fetch, padding, pre_match_position|
+      block = [:multi]
+      @result << [:mustache, :inverted_section, fetch, offset, block]
+      @sections << [content, position, @result]
+      @result = block
+    end
+
+    define_method 'scan_tag_/' do |content, fetch, padding, pre_match_position|
+      section, pos, result = @sections.pop
+      raw = @scanner.pre_match[pos[3]...pre_match_position] + padding
+      (@result = result).last << raw << [self.otag, self.ctag]
+
+      if section.nil?
+        error "Closing unopened #{content.inspect}"
+      elsif section != content
+        error "Unclosed section #{section.inspect}", pos
+      end
+    end
+
+    define_method 'scan_tag_!' do |content, fetch, padding, pre_match_position|
+    end
+
+    define_method 'scan_tag_=' do |content, fetch, padding, pre_match_position|
+      self.otag, self.ctag = content.split(' ', 2)
+    end
+
+    define_method 'scan_tag_>' do |content, fetch, padding, pre_match_position|
+      @result << [:mustache, :partial, content, offset, padding]
+    end
+    alias_method :'scan_tag_<', :'scan_tag_>'
+
+    define_method 'scan_tag_{' do |content, fetch, padding, pre_match_position|
+      @result << [:mustache, :utag, fetch, offset]
+    end
+    alias_method :'scan_tag_&', :'scan_tag_{'
+
   end
 end

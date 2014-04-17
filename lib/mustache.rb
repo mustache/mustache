@@ -203,14 +203,10 @@ class Mustache
   #   Mustache.view_namespace = Hurl::Views
   #   Mustache.view_class(:Partial) # => Hurl::Views::Partial
   def self.view_class(name)
-    if name != classify(name.to_s)
-      name = classify(name.to_s)
-    end
+    name = classify(name.to_s)
 
     # Emptiness begets emptiness.
-    if name.to_s == ''
-      return Mustache
-    end
+    return Mustache if name.to_s == ''
 
     file_name = underscore(name)
     name = "#{view_namespace}::#{name}"
@@ -281,11 +277,7 @@ class Mustache
   # Turns a string into a Mustache::Template. If passed a Template,
   # returns it.
   def self.templateify(obj)
-    if obj.is_a?(Template)
-      obj
-    else
-      Template.new(obj.to_s)
-    end
+    obj.is_a?(Template) ? obj : Template.new(obj.to_s)
   end
 
   def templateify(obj)

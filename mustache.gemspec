@@ -10,6 +10,7 @@ Gem::Specification.new do |s|
   s.homepage          = "http://github.com/defunkt/mustache"
   s.email             = "chris@ozmm.org"
   s.authors           = [ "Chris Wanstrath", "Magnus Holm", "Pieter van de Bruggen" ]
+  s.license           = "MIT"
   s.files             = %w( README.md Rakefile LICENSE )
   s.files            += Dir.glob("lib/**/*")
   s.files            += Dir.glob("bin/**/*")

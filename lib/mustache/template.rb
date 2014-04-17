@@ -54,5 +54,57 @@ class Mustache
     def tokens(src = @source)
       Parser.new.compile(src)
     end
+
+    # Simple recursive iterator for tokens
+    def self.recursor(toks, section, &block)
+      toks.map do |token|
+        next unless token.is_a? Array
+        if token[0] == :mustache
+          new_token, new_section, result, stop = yield(token, section)
+          [ result ] + ( stop ? [] : recursor(new_token, new_section, &block))
+        else
+          recursor(token, section, &block)
+        end
+      end
+    end
+
+    # Returns an array of tags
+    # Tags that belong to sections will be of the form `section1.tag`
+    def tags
+      Template.recursor(tokens, []) do |token, section|
+        if [:etag, :utag].include?(token[1])
+          [ new_token=nil, new_section=nil, result=((section + [token[2][2][0]]).join('.')), stop=true ]
+        elsif [:section, :inverted_section].include?(token[1]) 
+          [ new_token=token[4], new_section=(section + [token[2][2][0]]), result=nil, stop=false ]
+        else
+          [ new_token=token, new_section=section, result=nil, stop=false ]
+        end
+      end.flatten.reject(&:nil?).uniq
+    end
+
+    # Returns an array of sections
+    # Sections that belong to other sections will be of the form `section1.childsection`
+    def sections
+      Template.recursor(tokens, []) do |token, section|
+        if [:section, :inverted_section].include?(token[1])
+          new_section=(section + [token[2][2][0]])
+          [ new_token=token[4], new_section, result=new_section.join('.'), stop=false ]
+        else
+          [ new_token=token, new_section=section, result=nil, stop=false ]
+        end
+      end.flatten.reject(&:nil?).uniq
+    end
+
+    # Returns an array of partials
+    # Partials that belong to sections are included, but the section name is not preserved
+    def partials
+      Template.recursor(tokens, []) do |token, section|
+        if token[1] == :partial
+          [ new_token=token, new_section=section, result=token[2], stop=true ]
+        else
+          [ new_token=token, new_section=section, result=nil, stop=false ]
+        end
+      end.flatten.reject(&:nil?).uniq
+    end
   end
 end

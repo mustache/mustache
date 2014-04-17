@@ -17,7 +17,7 @@ The `mustache` command processes a Mustache template preceded by YAML
 frontmatter from standard input and prints one or more documents to
 standard output.
 
-YAML frontmatter beings with `---` on a single line, followed by YAML,
+YAML frontmatter begins with `---` on a single line, followed by YAML,
 ending with another `---` on a single line, e.g.
 
     ---
@@ -90,7 +90,7 @@ YAML frontmatter you provide. It can do a few other things, however.
     Print the tokenized form of a given Mustache template. This can be
     used to understand how Mustache parses a template. The tokens are
     handed to a generator which compiles them into a Ruby
-    string. Syntax errors and confused tags, therefor, can probably be
+    string. Syntax errors and confused tags, therefore, can probably be
     identified by examining the tokens produced.
 
 
@@ -124,4 +124,4 @@ Original CTemplate by Google
 ## SEE ALSO
 
 mustache(5), gem(1),
-<http://mustache.github.com/>
+<http://mustache.github.io/>

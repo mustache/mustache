@@ -31,7 +31,7 @@ class Mustache
       part = mustache.partial(name).to_s.gsub(/^/, indentation)
 
       # Call the Mustache's `partial` method and render the result.
-      result = mustache.render(part, self)
+      mustache.render(part, self)
     end
 
     # Find the first Mustache in the stack. If we're being rendered
@@ -80,7 +80,7 @@ class Mustache
     # Do we know about a particular key? In other words, will calling
     # `context[key]` give us a result that was set. Basically.
     def has_key?(key)
-      !!fetch(key)
+      !!fetch(key, false)
     rescue ContextMiss
       false
     end
@@ -97,9 +97,7 @@ class Mustache
         next if frame == self
 
         value = find(frame, name, :__missing)
-        if value != :__missing
-          return value
-        end
+        return value if value != :__missing
       end
 
       if default == :__raise || mustache_in_stack.raise_on_context_miss?
@@ -121,22 +119,37 @@ class Mustache
     #
     # Returns the value of key in obj if it is found and default otherwise.
     def find(obj, key, default = nil)
-      hash = obj.respond_to?(:has_key?)
+      hash = obj.respond_to?(:to_hash)
 
-      if hash && obj.has_key?(key)
+      if !hash
+        # If a class, we need to find tags (methods) per Parser::ALLOWED_CONTENT.
+        if key.to_s.include?('-')
+          key = key.to_s.gsub('-', '_')
+        end
+
+        if obj.respond_to?(key)
+          meth = obj.method(key) rescue proc { obj.send(key) }
+          if meth.arity == 1
+            meth.to_proc
+          else
+            meth[]
+          end
+        else
+          default
+        end
+      elsif hash && obj.has_key?(key)
         obj[key]
       elsif hash && obj.has_key?(key.to_s)
         obj[key.to_s]
-      elsif !hash && obj.respond_to?(key)
-        meth = obj.method(key) rescue proc { obj.send(key) }
-        if meth.arity == 1
-          meth.to_proc
-        else
-          meth[]
-        end
       else
-        default
+        obj[key] || default
       end
     end
   end
+end
+
+class Hash
+  def to_hash
+    self
+  end unless method_defined?(:to_hash)
 end

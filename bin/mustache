@@ -75,7 +75,7 @@ class Mustache
     # Does the dirty work of reading files from the command line then
     # processing them. The meat of this script, if you will.
     def self.process_files(input_files)
-      doc = File.read(input_files.shift).strip
+      doc = input_files.file.read
 
       yaml = nil
       begin
@@ -83,8 +83,12 @@ class Mustache
       rescue
         puts "Unable to parse yaml!"
       end
-      if not yaml.nil?
-        template = File.read(input_files.shift)
+
+      if yaml.nil?
+        puts Mustache.render(doc)
+      else
+        template = input_files.skip.file.read
+
         if self.yaml_is_array?(yaml)
           puts Mustache.render(template, yaml[0].reduce({}) {|hash, currentHash| hash.merge(currentHash)})
         elsif self.yaml_is_object?(yaml)
@@ -92,8 +96,6 @@ class Mustache
         else
           puts Mustache.render(template, yaml)
         end
-      else
-        puts Mustache.render(doc)
       end
     end
   end
@@ -105,6 +107,6 @@ ARGV << '-h' if ARGV.empty? && $stdin.tty?
 # Process options
 Mustache::CLI.parse_options(ARGV) if $stdin.tty?
 
-# Still here - process rest of ARGV
-Mustache::CLI.process_files(ARGV)
+# Still here - process rest of ARGF
+Mustache::CLI.process_files(ARGF)
 

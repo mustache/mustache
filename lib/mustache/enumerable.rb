@@ -1,3 +1,3 @@
 class Mustache
-	Enumerable = Module.new
+  Enumerable = Module.new
 end

@@ -138,7 +138,7 @@ class Mustache
         options[:namespace] ||= self.class
 
         unless options[:namespace].to_s.include? 'Views'
-          options[:namespace] = options[:namespace].const_get(:Views)
+          options[:namespace] = options[:namespace].const_get(:Views) rescue Object
         end
 
         factory = Class.new(Mustache) do

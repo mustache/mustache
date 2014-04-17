@@ -317,11 +317,7 @@ Using Rails? Add this to your initializer or environment file:
 Vim
 ---
 
-Thanks to [Juvenn Woo](https://github.com/juvenn) for mustache.vim. It
-is included under the contrib/ directory.
-
-See <https://gist.github.com/defunkt/323622> for installation instructions.
-
+vim-mustache-handlebars is available at https://github.com/mustache/vim-mustache-handlebars
 
 Emacs
 -----

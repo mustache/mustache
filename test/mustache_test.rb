@@ -344,6 +344,63 @@ data
     assert_equal ' <li>1234</li> ', instance.render
   end
 
+  def test_enumerable_sections_enumerate_mustache_enumerables
+    person = Struct.new(:name, :age)
+    people_array = []
+    people_array << person.new('Juliet', 13)
+    people_array << person.new('Romeo', 16)
+    people = Class.new do
+      include Enumerable
+      include Mustache::Enumerable
+
+      def initialize array
+        @people = array
+      end
+
+      def each *args, &block
+        @people.each *args, &block
+      end
+    end
+
+    view = Mustache.new
+    view[:people] = people.new(people_array)
+    view.template = <<-TEMPLATE
+{{#people}}
+{{name}} is {{age}}
+{{/people}}
+    TEMPLATE
+    assert_equal <<-EXPECTED, view.render
+Juliet is 13
+Romeo is 16
+    EXPECTED
+  end
+
+  def test_enumerable_sections_do_not_enumerate_untagged_enumerables
+    people = Struct.new(:first, :second, :third)
+    person = Struct.new(:name, :age)
+
+    view = Mustache.new
+    view[:people] = people.new(person.new("Mercutio", 17), person.new("Tybalt", 20), person.new("Benvolio", 15))
+    view.template = <<-TEMPLATE
+{{#people}}
+{{#first}}
+{{name}} is {{age}}
+{{/first}}
+{{#second}}
+{{name}} is {{age}}
+{{/second}}
+{{#third}}
+{{name}} is {{age}}
+{{/third}}
+{{/people}}
+    TEMPLATE
+    assert_equal <<-EXPECTED, view.render
+Mercutio is 17
+Tybalt is 20
+Benvolio is 15
+    EXPECTED
+  end
+
   def test_not_found_in_context_renders_empty_string
     instance = Mustache.new
     instance.template = '{{#list}} <li>{{item}}</li> {{/list}}'

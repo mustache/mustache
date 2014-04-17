@@ -1,3 +1,4 @@
+require 'mustache/enumerable'
 require 'mustache/template'
 require 'mustache/context'
 require 'mustache/settings'

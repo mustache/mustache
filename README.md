@@ -106,9 +106,9 @@ Escaping
 --------
 
 Mustache does escape all values when using the standard double
-Mustache syntax. Characters which will be escaped: `& \ " < >`. To
-disable escaping, simply use triple mustaches like
-`{{{unescaped_variable}}}`.
+Mustache syntax. Characters which will be escaped: `& \ " < >` (as 
+well as `'` in Ruby `>= 2.0`). To disable escaping, simply use triple
+mustaches like `{{{unescaped_variable}}}`.
 
 Example: Using `{{variable}}` inside a template for `5 > 2` will
 result in `5 &gt; 2`, where as the usage of `{{{variable}}}` will

@@ -17,6 +17,17 @@ class Mustache
   class Template
     attr_reader :source
 
+    class << self
+      alias_method :uncached_new, :new
+      def new(source)
+        cache[source.hash] ||= uncached_new(source)
+      end
+
+      def cache
+        @cache ||= {}
+      end
+    end
+
     # Expects a Mustache template as a string along with a template
     # path, which it uses to find partials.
     def initialize(source)
@@ -74,7 +85,7 @@ class Mustache
       Template.recursor(tokens, []) do |token, section|
         if [:etag, :utag].include?(token[1])
           [ new_token=nil, new_section=nil, result=((section + [token[2][2][0]]).join('.')), stop=true ]
-        elsif [:section, :inverted_section].include?(token[1]) 
+        elsif [:section, :inverted_section].include?(token[1])
           [ new_token=token[4], new_section=(section + [token[2][2][0]]), result=nil, stop=false ]
         else
           [ new_token=token, new_section=section, result=nil, stop=false ]

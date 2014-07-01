@@ -1,3 +1,4 @@
+require 'digest'
 require 'cgi'
 
 require 'mustache/parser'
@@ -20,7 +21,7 @@ class Mustache
     class << self
       alias_method :uncached_new, :new
       def new(source)
-        cache[source.hash] ||= uncached_new(source)
+        cache[Digest::SHA1.hexdigest(source)] ||= uncached_new(source)
       end
 
       def cache

@@ -4,4 +4,5 @@ gemspec
 
 group :development do
   gem "rake"
+  gem "rdoc"
 end

@@ -30,4 +30,10 @@ consisting of ERB or HAML with random helpers and arbitrary logic,
 your views are broken into two parts: a Ruby class and an HTML
 template.
 desc
+
+  s.add_development_dependency 'bundler', '~> 1.0'
+  s.add_development_dependency 'rake'
+  s.add_development_dependency 'rdoc'
+  s.add_development_dependency 'turn'
+  s.add_development_dependency 'ronn'
 end

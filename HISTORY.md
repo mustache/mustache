@@ -1,3 +1,18 @@
+## 0.99.6 (2014-07-22)
+
+* Fixed and updated documentation
+* Added license to gemspec
+* Allows Hash default proc to work in context
+* Avoids raising ContextMiss when testing for key presence
+* Refactored Parser to allow for better extensibility
+* 1.9.3+ YAML compatibility
+* Support allowed liberal tag names in classes
+* Removed redundant Parser#scan_tag> code
+* Mustache command works with pure json files
+* Enumerate any object tagged with Mustache::Enumerable
+* Rescue NameError when Views module isn't found
+* Adds Gemfile
+
 ## 0.99.5 (2013-11-11)
 
 * Added line offsets to parser ast

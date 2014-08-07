@@ -4,11 +4,7 @@ require 'yaml'
 require 'test/unit'
 
 # Calls appropriate method on YAML. See: https://gist.github.com/tenderlove/958999ab4240b93bd3cd
-if RUBY_VERSION > "1.8"
-  YAML.add_domain_type(nil, 'code') { |_, val| eval(val['ruby']) }
-else
-  YAML.add_builtin_type('code') { |_, val| eval(val['ruby']) }
-end
+YAML.add_domain_type(nil, 'code') { |_, val| eval(val['ruby']) }
 
 # A simple base class for Mustache specs.
 # Creates a partials directory, then points a (dynamic) subclass of Mustache at

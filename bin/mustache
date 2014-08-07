@@ -79,7 +79,7 @@ class Mustache
 
       yaml = nil
       begin
-        yaml = RUBY_VERSION >= '1.9.3' ? YAML.load_stream(doc) : YAML.each_document(doc)
+        yaml = YAML.load_stream(doc)
       rescue
         puts "Unable to parse yaml!"
       end

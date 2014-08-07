@@ -41,6 +41,8 @@ your views are broken into two parts: a Ruby class and an HTML
 template.
 desc
 
+  s.required_ruby_version = '>= 1.9.3'
+
   s.add_development_dependency 'bundler', '~> 1.6'
   s.add_development_dependency 'rake', '~> 10.3'
   s.add_development_dependency 'rdoc', '~> 4.1'

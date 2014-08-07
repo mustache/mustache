@@ -7,7 +7,7 @@ Gem::Specification.new do |s|
   s.date              = Time.now.strftime('%Y-%m-%d')
   s.summary           =
         "Mustache is a framework-agnostic way to render logic-free views."
-  s.homepage          = "http://github.com/defunkt/mustache"
+  s.homepage          = "http://github.com/mustache/mustache"
   s.email             = "chris@ozmm.org"
   s.authors           = [ "Chris Wanstrath", "Magnus Holm", "Pieter van de Bruggen" ]
   s.license           = "MIT"

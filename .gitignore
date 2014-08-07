@@ -1,2 +1,3 @@
 docs
 Gemfile.lock
+*.gem

@@ -171,20 +171,16 @@ class Mustache
     end
 
     def on_fetch(names)
+      return "ctx[:to_s]" if names.empty?
+
       names = names.map { |n| n.to_sym }
 
-      if names.length == 0
-        "ctx[:to_s]"
-      elsif names.length == 1
-        "ctx[#{names.first.to_sym.inspect}]"
-      else
-        initial, *rest = names
-        <<-compiled
-          #{rest.inspect}.reduce(ctx[#{initial.inspect}]) { |value, key|
-            value && ctx.find(value, key)
-          }
-        compiled
-      end
+      initial, *rest = names
+      <<-compiled
+        #{rest.inspect}.reduce(ctx[#{initial.inspect}]) { |value, key|
+          value && ctx.find(value, key)
+        }
+      compiled
     end
 
     # An interpolation-friendly version of a string, for use within a

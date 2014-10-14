@@ -157,11 +157,11 @@ EOF
 
       # ANY_CONTENT tags allow any character inside of them, while
       # other tags (such as variables) are more strict.
-      if ANY_CONTENT.include?(type)
+      content = if ANY_CONTENT.include?(type)
         r = /\s*#{regexp(type)}?#{regexp(current_ctag)}/
-        content = scan_until_exclusive(r)
+        scan_until_exclusive(r)
       else
-        content = @scanner.scan(ALLOWED_CONTENT)
+        @scanner.scan(ALLOWED_CONTENT)
       end
 
       # We found {{ but we can't figure out what's going on inside.

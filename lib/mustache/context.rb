@@ -129,11 +129,8 @@ class Mustache
 
         if obj.respond_to?(key)
           meth = obj.method(key) rescue proc { obj.send(key) }
-          if meth.arity == 1
-            meth.to_proc
-          else
-            meth[]
-          end
+
+          meth.arity == 1 ? meth.to_proc : meth[]
         else
           default
         end

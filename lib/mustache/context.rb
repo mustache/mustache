@@ -137,9 +137,9 @@ class Mustache
         else
           default
         end
-      elsif hash && obj.has_key?(key)
+      elsif obj.has_key?(key)
         obj[key]
-      elsif hash && obj.has_key?(key.to_s)
+      elsif obj.has_key?(key.to_s)
         obj[key.to_s]
       else
         obj[key] || default

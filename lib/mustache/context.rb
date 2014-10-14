@@ -123,9 +123,7 @@ class Mustache
 
       if !hash
         # If a class, we need to find tags (methods) per Parser::ALLOWED_CONTENT.
-        if key.to_s.include?('-')
-          key = key.to_s.gsub('-', '_')
-        end
+        key = key.to_s.tr('-', '_') if key.to_s.include?('-')
 
         if obj.respond_to?(key)
           meth = obj.method(key) rescue proc { obj.send(key) }

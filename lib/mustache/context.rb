@@ -119,9 +119,7 @@ class Mustache
     #
     # Returns the value of key in obj if it is found and default otherwise.
     def find(obj, key, default = nil)
-      hash = obj.respond_to?(:to_hash)
-
-      if !hash
+      if !obj.respond_to?(:to_hash)
         # If a class, we need to find tags (methods) per Parser::ALLOWED_CONTENT.
         key = key.to_s.tr('-', '_') if key.to_s.include?('-')
 

@@ -180,7 +180,7 @@ class Mustache
       else
         initial, *rest = names
         <<-compiled
-          #{rest.inspect}.inject(ctx[#{initial.inspect}]) { |value, key|
+          #{rest.inspect}.reduce(ctx[#{initial.inspect}]) { |value, key|
             value && ctx.find(value, key)
           }
         compiled

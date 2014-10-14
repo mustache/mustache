@@ -65,7 +65,7 @@ module Rack
 
       # The string used for our tab in Rack::Bug's navigation bar
       def heading
-        "{{%.2fms}}" % self.class.times.values.inject(0.0) do |sum, obj|
+        "{{%.2fms}}" % self.class.times.values.reduce(0.0) do |sum, obj|
           sum + obj
         end
       end

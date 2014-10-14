@@ -232,7 +232,7 @@ class Mustache
   # Returns the constant if found
   # Returns nil if nothing is found
   def self.const_get!(name)
-    name.split('::').inject(Object) do |klass, cname|
+    name.split('::').reduce(Object) do |klass, cname|
       klass.const_get(cname)
     end
   rescue NameError

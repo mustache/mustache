@@ -107,14 +107,15 @@ class Mustache
   #
   # Returns a rendered String version of a template
   def render(data = template, ctx = {})
-    if data.is_a? Hash
+    tpl = case data
+    when Hash
       ctx = data
-      tpl = templateify(template)
-    elsif data.is_a? Symbol
+      templateify(template)
+    when Symbol
       self.template_name = data
-      tpl = templateify(template)
+      templateify(template)
     else
-      tpl = templateify(data)
+      templateify(data)
     end
 
     return tpl.render(context) if ctx == {}

@@ -59,6 +59,7 @@ class Mustache
     def self.recursor(toks, section, &block)
       toks.map do |token|
         next unless token.is_a? Array
+
         if token[0] == :mustache
           new_token, new_section, result, stop = yield(token, section)
           [ result ] + ( stop ? [] : recursor(new_token, new_section, &block))
@@ -74,7 +75,7 @@ class Mustache
       Template.recursor(tokens, []) do |token, section|
         if [:etag, :utag].include?(token[1])
           [ new_token=nil, new_section=nil, result=((section + [token[2][2][0]]).join('.')), stop=true ]
-        elsif [:section, :inverted_section].include?(token[1]) 
+        elsif [:section, :inverted_section].include?(token[1])
           [ new_token=token[4], new_section=(section + [token[2][2][0]]), result=nil, stop=false ]
         else
           [ new_token=token, new_section=section, result=nil, stop=false ]

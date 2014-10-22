@@ -64,14 +64,6 @@ class Mustache
       opts.parse!(args)
     end
 
-    def self.yaml_is_array?(yaml)
-        yaml.is_a? Array and yaml.length == 1 and yaml[0].is_a? Array
-    end
-
-    def self.yaml_is_object?(yaml)
-        yaml.is_a? Array and yaml.length == 1 and yaml[0].is_a? Hash
-    end
-
     # Does the dirty work of reading files from the command line then
     # processing them. The meat of this script, if you will.
     def self.process_files(input_files)
@@ -89,13 +81,7 @@ class Mustache
       else
         template = input_files.skip.file.read
 
-        if self.yaml_is_array?(yaml)
-          puts Mustache.render(template, yaml[0].reduce({}) {|hash, currentHash| hash.merge(currentHash)})
-        elsif self.yaml_is_object?(yaml)
-          puts Mustache.render(template, yaml[0])
-        else
-          puts Mustache.render(template, yaml)
-        end
+        puts Mustache.render template, yaml.compact.reduce(&:merge)
       end
     end
   end

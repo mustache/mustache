@@ -428,7 +428,7 @@ Benvolio is 15
   def test_knows_when_its_been_compiled_when_set_with_string
     klass = Class.new(Mustache)
 
-    assert ! klass.compiled?
+    refute klass.compiled?
     klass.template = 'Hi, {{person}}!'
     assert klass.compiled?
   end
@@ -437,7 +437,7 @@ Benvolio is 15
     klass = Class.new(Simple)
     klass.template_file = File.dirname(__FILE__) + '/fixtures/simple.mustache'
 
-    assert ! klass.compiled?
+    refute klass.compiled?
     klass.render
     assert klass.compiled?
   end
@@ -445,8 +445,8 @@ Benvolio is 15
   def test_an_instance_knows_when_its_class_is_compiled
     instance = Simple.new
 
-    assert ! Simple.compiled?
-    assert ! instance.compiled?
+    refute Simple.compiled?
+    refute instance.compiled?
 
     Simple.render
 
@@ -458,7 +458,7 @@ Benvolio is 15
     klass = Class.new(Mustache)
     instance = klass.new
 
-    assert ! instance.compiled?
+    refute instance.compiled?
     instance.template = 'Hi, {{person}}!'
     assert instance.compiled?
   end

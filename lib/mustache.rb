@@ -222,37 +222,25 @@ class Mustache
     end
   end
 
-  # Ruby 1.9 introduced an optional argument for Module#const_get and
-  # Module#const_defined? and changed their default behavior.
-  if Module.method(:const_get).arity == 1
-    # Supercharged version of Module#const_get.
-    #
-    # Always searches under Object and can find constants by their full name,
-    #   e.g. Mustache::Views::Index
-    #
-    # name - The full constant name to find.
-    #
-    # Returns the constant if found
-    # Returns nil if nothing is found
-    def self.const_get!(name)
-      name.split('::').inject(Object) do |klass, cname|
-        if klass.const_defined?(cname)
-          klass.const_get(cname)
-        else
-          klass.const_missing(cname)
-        end
+  # Supercharged version of Module#const_get.
+  #
+  # Always searches under Object and can find constants by their full name,
+  #   e.g. Mustache::Views::Index
+  #
+  # name - The full constant name to find.
+  #
+  # Returns the constant if found
+  # Returns nil if nothing is found
+  def self.const_get!(name) #:nodoc:
+    name.split('::').inject(Object) do |klass, cname|
+      if klass.const_defined?(cname)
+        klass.const_get(cname)
+      else
+        klass.const_missing(cname)
       end
-    rescue NameError
-      nil
     end
-  else
-    def self.const_get!(name) #:nodoc:
-      name.split('::').inject(Object) do |klass, cname|
-        klass.const_get(cname, false)
-      end
-    rescue NameError
-      nil
-    end
+  rescue NameError
+    nil
   end
 
   # Has this template already been compiled? Compilation is somewhat

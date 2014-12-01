@@ -443,14 +443,15 @@ Benvolio is 15
   end
 
   def test_an_instance_knows_when_its_class_is_compiled
-    instance = Simple.new
+    klass = Class.new(Simple)
+    instance = klass.new
 
-    refute Simple.compiled?, "Simple was already compiled (from class)."
+    refute klass.compiled?, "Simple was already compiled (from class)."
     refute instance.compiled?, "Simple was already compiled (from instance)."
 
-    Simple.render
+    klass.render
 
-    assert Simple.compiled?, "Simple was not compiled (from class)."
+    assert klass.compiled?, "Simple was not compiled (from class)."
     assert instance.compiled?, "Simple was not compiled (from instance)."
   end
 

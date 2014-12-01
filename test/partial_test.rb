@@ -1,5 +1,4 @@
-$LOAD_PATH.unshift File.dirname(__FILE__)
-require 'helper'
+require_relative 'helper'
 
 class PartialTest < Test::Unit::TestCase
   def test_view_partial

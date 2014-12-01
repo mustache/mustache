@@ -1,5 +1,4 @@
-$LOAD_PATH.unshift File.dirname(__FILE__)
-require 'helper'
+require_relative 'helper'
 
 class ParserTest < Test::Unit::TestCase
 

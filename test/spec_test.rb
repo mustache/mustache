@@ -1,7 +1,7 @@
 require 'mustache'
 require 'tmpdir'
 require 'yaml'
-require 'test/unit'
+require 'minitest/autorun'
 
 # Calls appropriate method on YAML. See: https://gist.github.com/tenderlove/958999ab4240b93bd3cd
 YAML.add_domain_type(nil, 'code') { |_, val| eval(val['ruby']) }

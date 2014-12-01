@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
-$LOAD_PATH.unshift File.dirname(__FILE__)
-require 'helper'
+require_relative 'helper'
 
 class MustacheTest < Test::Unit::TestCase
   def test_instance_render

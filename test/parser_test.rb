@@ -1,6 +1,6 @@
 require_relative 'helper'
 
-class ParserTest < Test::Unit::TestCase
+class ParserTest < Minitest::Test
 
   def test_parser_extension
     parser = Mustache::Parser.new

@@ -2,7 +2,7 @@ require_relative 'helper'
 
 module TestViews; end
 
-class AutoloadingTest < Test::Unit::TestCase
+class AutoloadingTest < Minitest::Test
   def setup
     Mustache.view_path = File.dirname(__FILE__) + '/fixtures'
   end

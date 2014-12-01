@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 require_relative 'helper'
 
-class MustacheTest < Test::Unit::TestCase
+class MustacheTest < Minitest::Test
   def test_instance_render
     klass = Class.new(Mustache)
     klass.template = "Hi {{thing}}!"

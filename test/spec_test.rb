@@ -10,7 +10,7 @@ YAML.add_domain_type(nil, 'code') { |_, val| eval(val['ruby']) }
 # Creates a partials directory, then points a (dynamic) subclass of Mustache at
 # that directory before each test; the partials directory is destroyed after
 # each test is run.
-class MustacheSpec < Test::Unit::TestCase
+class MustacheSpec < Minitest::Test
   def setup
     @partials = File.join(File.dirname(__FILE__), 'partials')
     Dir.mkdir(@partials)

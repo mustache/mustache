@@ -1,6 +1,6 @@
 require_relative 'helper'
 
-class PartialTest < Test::Unit::TestCase
+class PartialTest < Minitest::Test
   def test_view_partial
     assert_equal <<-end_partial.strip, PartialWithModule.render
 <h1>Welcome</h1>

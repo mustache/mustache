@@ -1,6 +1,6 @@
 require_relative 'helper'
 
-class TemplateTest < Test::Unit::TestCase
+class TemplateTest < Minitest::Test
   def test_compile
     assert_equal %("foo"), Mustache::Template.new("foo").compile
   end
@@ -18,7 +18,7 @@ class TemplateTest < Test::Unit::TestCase
   end
 end
 
-class TemplateTest2 < Test::Unit::TestCase
+class TemplateTest2 < Minitest::Test
   def setup
     @@template_text ||= File.read(File.dirname(__FILE__) + "/fixtures/simply_complicated.mustache")
     @template = Mustache::Template.new(@@template_text)

@@ -73,7 +73,7 @@ class Mustache
       begin
         yaml = YAML.load_stream(doc)
       rescue
-        puts "Unable to parse yaml!"
+        abort "Unable to parse yaml!"
       end
 
       if yaml.nil?

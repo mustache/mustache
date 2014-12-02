@@ -273,8 +273,8 @@ class Mustache
     string = classified.dup.split("#{view_namespace}::").last
 
     string.split('::').map do |part|
-      part.gsub(/[A-Z]/) { |s| "_#{s.downcase}"}
       part[0] = part.chars.first.downcase
+      part.gsub(/[A-Z]/) { |s| "_" << s.downcase }
     end.join('/')
   end
 

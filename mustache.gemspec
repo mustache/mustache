@@ -13,7 +13,7 @@ end
 
 Gem::Specification.new do |s|
   s.name              = "mustache"
-  s.version           = Mustache::Version
+  s.version           = Mustache::VERSION
   s.date              = Time.now.strftime('%Y-%m-%d')
   s.summary           =
         "Mustache is a framework-agnostic way to render logic-free views."

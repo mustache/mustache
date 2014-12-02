@@ -112,31 +112,36 @@ class Mustache
     # If it's an object that responds to the key as a method call,
     # invokes that method. You get the idea.
     #
-    #     obj - The object to perform the lookup on.
-    #     key - The key whose value you want.
-    # default - An optional default value, to return if the
-    #           key is not found.
+    # @param [Object] obj The object to perform the lookup on.
+    # @param [String,Symbol] key The key whose value you want
+    # @param [Object] default An optional default value, to return if the key is not found.
     #
-    # Returns the value of key in obj if it is found and default otherwise.
+    # @return [Object] The value of key in object if it is found, and default otherwise.
     def find(obj, key, default = nil)
-      if !obj.respond_to?(:to_hash)
-        # If a class, we need to find tags (methods) per Parser::ALLOWED_CONTENT.
-        key = key.to_s.tr('-', '_') if key.to_s.include?('-')
-
-        if obj.respond_to?(key)
-          meth = obj.method(key) rescue proc { obj.send(key) }
-
-          meth.arity == 1 ? meth.to_proc : meth[]
-        else
-          default
-        end
-      elsif obj.has_key?(key)
-        obj[key]
-      elsif obj.has_key?(key.to_s)
-        obj[key.to_s]
-      else
-        obj[key] || default
+      if obj.respond_to?(:to_hash)
+        return find_in_hash(obj, key, default)
       end
+
+      key = to_tag(key)
+
+      return default unless obj.respond_to?(key)
+
+      meth = obj.method(key) rescue proc { obj.send(key) }
+      meth.arity == 1 ? meth.to_proc : meth.call
+    end
+
+    private
+
+    # If a class, we need to find tags (methods) per Parser::ALLOWED_CONTENT.
+    def to_tag key
+      key.to_s.include?('-') ? key.to_s.tr('-', '_') : key
+    end
+
+    def find_in_hash obj, key, default
+      return obj[key]      if obj.has_key?(key)
+      return obj[key.to_s] if obj.has_key?(key.to_s)
+
+      obj.fetch(key, default)
     end
   end
 end

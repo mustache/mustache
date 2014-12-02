@@ -268,7 +268,6 @@ class Mustache
   # Template::Partial => template/partial
   # Takes a string but defaults to using the current class' name.
   def self.underscore(classified = name)
-    classified = name if classified.to_s.empty?
     classified = superclass.name if classified.to_s.empty?
 
     string = classified.dup.split("#{view_namespace}::").last

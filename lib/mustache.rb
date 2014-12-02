@@ -259,7 +259,7 @@ class Mustache
   def self.classify(underscored)
     underscored.split('/').map do |namespace|
       namespace.split(/[-_]/).map do |part|
-        part[0] = part[0].chr.upcase; part
+        part[0] = part.chars.first.upcase; part
       end.join
     end.join('::')
   end
@@ -274,8 +274,8 @@ class Mustache
     string = classified.dup.split("#{view_namespace}::").last
 
     string.split('::').map do |part|
-      part[0] = part[0].chr.downcase
       part.gsub(/[A-Z]/) { |s| "_#{s.downcase}"}
+      part[0] = part.chars.first.downcase
     end.join('/')
   end
 

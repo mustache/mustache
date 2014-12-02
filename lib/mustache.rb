@@ -259,7 +259,8 @@ class Mustache
   def self.classify(underscored)
     underscored.split('/').map do |namespace|
       namespace.split(/[-_]/).map do |part|
-        part[0] = part.chars.first.upcase; part
+        part[0] = part.chars.first.upcase
+        part
       end.join
     end.join('::')
   end

@@ -98,12 +98,17 @@ class Mustache
   # @param [Hash] ctx A Hash context if `data` is a String template.
   # @return Returns a rendered String version of a template.
   def render(data = template, ctx = {})
-    tpl = case data
+    case data
     when Hash
       ctx = data
-      templateify(template)
     when Symbol
       self.template_name = data
+    end
+
+    tpl = case data
+    when Hash
+      templateify(template)
+    when Symbol
       templateify(template)
     else
       templateify(data)
@@ -260,7 +265,7 @@ class Mustache
   # Turns a string into a Mustache::Template. If passed a Template,
   # returns it.
   def self.templateify(obj)
-    obj.is_a?(Template) ? obj : Template.new(obj.to_s)
+    obj.is_a?(Template) ? obj : Template.new(obj)
   end
 
   def templateify(obj)

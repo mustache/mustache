@@ -207,7 +207,7 @@ class Mustache
     name = classify(name.to_s)
 
     # Emptiness begets emptiness.
-    return Mustache if name.to_s == ''
+    return Mustache if name.to_s.empty?
 
     file_name = underscore(name)
     name = "#{view_namespace}::#{name}"

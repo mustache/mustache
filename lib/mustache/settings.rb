@@ -24,6 +24,7 @@ class Mustache
   def template_path
     @template_path ||= self.class.template_path
   end
+  alias_method :path, :template_path
 
   def template_path=(path)
     @template_path = File.expand_path(path)
@@ -34,7 +35,6 @@ class Mustache
   def self.path
     template_path
   end
-  alias_method :path, :template_path
 
   # Alias for `template_path`
   def self.path=(path)

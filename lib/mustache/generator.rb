@@ -37,6 +37,10 @@ class Mustache
       "\"#{compile!(exp)}\""
     end
 
+
+    private
+
+
     # Given an array of tokens, converts them into Ruby code. In
     # particular there are three types of expressions we are concerned
     # with:

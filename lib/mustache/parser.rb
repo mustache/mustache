@@ -131,6 +131,10 @@ EOF
       @result
     end
 
+
+    private
+
+
     # Find {{mustaches}} and add them to the @result array.
     def scan_tags
       # Scan until we hit an opening delimiter.

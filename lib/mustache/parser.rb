@@ -178,6 +178,7 @@ EOF
       else
         @result << [:mustache, :etag, fetch, offset]
       end
+
       # The closing } in unescaped tags is just a hack for
       # aesthetics.
       type = "}" if type == "{"

@@ -145,9 +145,3 @@ class Mustache
     end
   end
 end
-
-class Hash
-  def to_hash
-    self
-  end unless method_defined?(:to_hash)
-end

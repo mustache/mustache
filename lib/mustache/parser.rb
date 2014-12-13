@@ -75,14 +75,14 @@ EOF
     # After these types of tags, all whitespace until the end of the line will
     # be skipped if they are the first (and only) non-whitespace content on
     # the line.
-    SKIP_WHITESPACE = [ '#', '^', '/', '<', '>', '=', '!' ].map &:freeze
+    SKIP_WHITESPACE = [ '#', '^', '/', '<', '>', '=', '!' ].map(&:freeze)
 
     # The content allowed in a tag name.
     ALLOWED_CONTENT = /(\w|[?!\/.-])*/
 
     # These types of tags allow any content,
     # the rest only allow ALLOWED_CONTENT.
-    ANY_CONTENT = [ '!', '=' ].map &:freeze
+    ANY_CONTENT = [ '!', '=' ].map(&:freeze)
 
     attr_reader :scanner, :result
     attr_writer :otag, :ctag

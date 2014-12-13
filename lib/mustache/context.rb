@@ -4,8 +4,13 @@ class Mustache
 
   # A Context represents the context which a Mustache template is
   # executed within. All Mustache tags reference keys in the Context.
+  #
   class Context
-    # Expect to be passed an instance of `Mustache`.
+
+    # Initializes a Mustache::Context.
+    #
+    # @param [Mustache] mustache A Mustache instance.
+    #
     def initialize(mustache)
       @stack = [mustache]
     end
@@ -16,6 +21,7 @@ class Mustache
     # If the Mustache view handling the rendering (e.g. the view
     # representing your profile page or some other template) responds
     # to `partial`, we call it and render the result.
+    #
     def partial(name, indentation = '')
       # Look for the first Mustache in the stack.
       mustache = mustache_in_stack
@@ -27,31 +33,43 @@ class Mustache
       mustache.render(part, self)
     end
 
-    # Find the first Mustache in the stack. If we're being rendered
-    # inside a Mustache object as a context, we'll use that one.
+    # Find the first Mustache in the stack.
+    #
+    # If we're being rendered inside a Mustache object as a context,
+    # we'll use that one.
+    #
+    # @return [Mustache] First Mustache in the stack.
+    #
     def mustache_in_stack
       @stack.find { |frame| frame.is_a?(Mustache) }
     end
 
     # Allows customization of how Mustache escapes things.
     #
-    # Returns a String.
+    # @param [String] str String to escape.
+    #
+    # @return [String] Escaped HTML string.
+    #
     def escapeHTML(str)
       mustache_in_stack.escapeHTML(str)
     end
 
     # Adds a new object to the context's internal stack.
     #
-    # Returns the Context.
-    def push(new)
-      @stack.unshift(new)
+    # @param [Object] new_obj Object to be added to the internal stack.
+    #
+    # @return [Context] Returns the Context.
+    #
+    def push(new_obj)
+      @stack.unshift(new_obj)
       self
     end
 
     # Removes the most recently added object from the context's
     # internal stack.
     #
-    # Returns the Context.
+    # @return [Context] Returns the Context.
+    #
     def pop
       @stack.shift
       self
@@ -109,6 +127,7 @@ class Mustache
     # @param [Object] default An optional default value, to return if the key is not found.
     #
     # @return [Object] The value of key in object if it is found, and default otherwise.
+    #
     def find(obj, key, default = nil)
       if obj.respond_to?(:to_hash)
         return find_in_hash(obj, key, default)

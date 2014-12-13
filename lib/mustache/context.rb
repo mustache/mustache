@@ -128,7 +128,9 @@ class Mustache
       meth.arity == 1 ? meth.to_proc : meth.call
     end
 
+
     private
+
 
     # If a class, we need to find tags (methods) per Parser::ALLOWED_CONTENT.
     def to_tag key

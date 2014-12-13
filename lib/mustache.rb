@@ -209,38 +209,28 @@ class Mustache
     # Emptiness begets emptiness.
     return Mustache if name.to_s.empty?
 
-    file_name = underscore(name)
     name = "#{view_namespace}::#{name}"
+    const = rescued_const_get(name)
 
-    if const = const_get!(name)
-      const
-    elsif File.exists?(file = "#{view_path}/#{file_name}.rb")
-      require "#{file}".chomp('.rb')
-      const_get!(name) || Mustache
-    else
-      Mustache
-    end
+    return const if const
+
+    const_from_file(name)
   end
 
-  # Supercharged version of Module#const_get.
-  #
-  # Always searches under Object and can find constants by their full name,
-  #   e.g. Mustache::Views::Index
-  #
-  # name - The full constant name to find.
-  #
-  # Returns the constant if found
-  # Returns nil if nothing is found
-  def self.const_get!(name) #:nodoc:
-    name.split('::').inject(Object) do |klass, cname|
-      if klass.const_defined?(cname)
-        klass.const_get(cname)
-      else
-        klass.const_missing(cname)
-      end
-    end
+  def self.rescued_const_get name
+    const_get(name, true) || Mustache
   rescue NameError
     nil
+  end
+
+  def self.const_from_file name
+    file_name = underscore(name)
+    file_path = "#{view_path}/#{file_name}.rb"
+
+    return Mustache unless File.exists?(file_path)
+
+    require file_path.chomp('.rb')
+    rescued_const_get(name)
   end
 
   # Has this template already been compiled? Compilation is somewhat

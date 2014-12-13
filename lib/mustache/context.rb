@@ -37,7 +37,7 @@ class Mustache
     # Find the first Mustache in the stack. If we're being rendered
     # inside a Mustache object as a context, we'll use that one.
     def mustache_in_stack
-      @stack.detect { |frame| frame.is_a?(Mustache) }
+      @stack.find { |frame| frame.is_a?(Mustache) }
     end
 
     # Allows customization of how Mustache escapes things.

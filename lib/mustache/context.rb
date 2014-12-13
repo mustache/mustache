@@ -54,7 +54,6 @@ class Mustache
       @stack.unshift(new)
       self
     end
-    alias_method :update, :push
 
     # Removes the most recently added object from the context's
     # internal stack.

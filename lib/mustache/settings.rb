@@ -40,7 +40,6 @@ class Mustache
   def self.path=(path)
     self.template_path = path
   end
-  alias_method :path=, :template_path=
 
 
   #

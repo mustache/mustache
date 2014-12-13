@@ -129,9 +129,7 @@ class Mustache
     # @return [Object] The value of key in object if it is found, and default otherwise.
     #
     def find(obj, key, default = nil)
-      if obj.respond_to?(:to_hash)
-        return find_in_hash(obj, key, default)
-      end
+      return find_in_hash(obj, key, default) if obj.respond_to?(:to_hash)
 
       key = to_tag(key)
       return default unless obj.respond_to?(key)

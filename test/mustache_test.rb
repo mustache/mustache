@@ -14,7 +14,7 @@ end_simple
   end
 
   def test_passenger
-    assert_equal <<-end_passenger, Passenger.to_text
+    assert_equal <<-end_passenger, Passenger.render
 <VirtualHost *>
   ServerName example.com
   DocumentRoot /var/www/example.com

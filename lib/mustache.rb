@@ -85,11 +85,6 @@ class Mustache
     new.render(*args)
   end
 
-  class << self
-    alias_method :to_html, :render
-    alias_method :to_text, :render
-  end
-
   # Parses our fancy pants template file and returns normal file with
   # all special {{tags}} and {{#sections}}replaced{{/sections}}.
   #
@@ -127,9 +122,6 @@ class Mustache
       context.pop
     end
   end
-
-  alias_method :to_html, :render
-  alias_method :to_text, :render
 
   # Context accessors.
   #

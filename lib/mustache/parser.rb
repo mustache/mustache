@@ -105,11 +105,11 @@ EOF
 
     # Given a string template, returns an array of tokens.
     def compile(template)
+      @encoding = nil
+
       if template.respond_to?(:encoding)
         @encoding = template.encoding
         template = template.dup.force_encoding("BINARY")
-      else
-        @encoding = nil
       end
 
       # Keeps information about opened sections.

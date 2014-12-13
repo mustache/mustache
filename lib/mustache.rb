@@ -97,7 +97,7 @@ class Mustache
   #                           out the template from the class.
   # @param [Hash] ctx A Hash context if `data` is a String template.
   #
-  # @return Returns a rendered String version of a template.
+  # @return [String] Returns a rendered version of a template.
   def render(data = template, ctx = {})
     case data
     when Hash

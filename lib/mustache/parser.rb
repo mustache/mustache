@@ -272,8 +272,14 @@ EOF
       raise SyntaxError.new(message, pos)
     end
 
+
+    #
+    # Scan tags
+    #
     # These methods are called in `scan_tags`. Because they contain nonstandard
-    # characters in their method names, they are defined using define_method.
+    # characters in their method names, they are aliased to
+    # better named methods.
+    #
 
 
     def scan_tag_block content, fetch, padding, pre_match_position

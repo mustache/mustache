@@ -51,26 +51,19 @@ class Mustache
     alias_method :to_s, :compile
 
     # Returns an array of tokens for a given template.
+    #
+    # @return [Array] Array of tokens.
+    #
     def tokens(src = @source)
       Parser.new.compile(src)
     end
 
-    # Simple recursive iterator for tokens
-    def self.recursor(toks, section, &block)
-      toks.map do |token|
-        next unless token.is_a? Array
-
-        if token[0] == :mustache
-          new_token, new_section, result, stop = yield(token, section)
-          [ result ] + ( stop ? [] : recursor(new_token, new_section, &block))
-        else
-          recursor(token, section, &block)
-        end
-      end
-    end
-
-    # Returns an array of tags
-    # Tags that belong to sections will be of the form `section1.tag`
+    # Returns an array of tags.
+    #
+    # Tags that belong to sections will be of the form `section1.tag`.
+    #
+    # @return [Array] Returns an array of tags.
+    #
     def tags
       Template.recursor(tokens, []) do |token, section|
         if [:etag, :utag].include?(token[1])
@@ -83,8 +76,12 @@ class Mustache
       end.flatten.reject(&:nil?).uniq
     end
 
-    # Returns an array of sections
+    # Returns an array of sections.
+    #
     # Sections that belong to other sections will be of the form `section1.childsection`
+    #
+    # @return [Array] Returns an array of section.
+    #
     def sections
       Template.recursor(tokens, []) do |token, section|
         if [:section, :inverted_section].include?(token[1])
@@ -96,8 +93,12 @@ class Mustache
       end.flatten.reject(&:nil?).uniq
     end
 
-    # Returns an array of partials
+    # Returns an array of partials.
+    #
     # Partials that belong to sections are included, but the section name is not preserved
+    #
+    # @return [Array] Returns an array of partials.
+    #
     def partials
       Template.recursor(tokens, []) do |token, section|
         if token[1] == :partial
@@ -106,6 +107,24 @@ class Mustache
           [ new_token=token, new_section=section, result=nil, stop=false ]
         end
       end.flatten.reject(&:nil?).uniq
+    end
+
+
+    private
+
+
+    # Simple recursive iterator for tokens
+    def self.recursor(toks, section, &block)
+      toks.map do |token|
+        next unless token.is_a? Array
+
+        if token.first == :mustache
+          new_token, new_section, result, stop = yield(token, section)
+          [ result ] + ( stop ? [] : recursor(new_token, new_section, &block))
+        else
+          recursor(token, section, &block)
+        end
+      end
     end
   end
 end

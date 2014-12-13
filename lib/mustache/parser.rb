@@ -271,21 +271,26 @@ EOF
     # These methods are called in `scan_tags`. Because they contain nonstandard
     # characters in their method names, they are defined using define_method.
 
-    define_method 'scan_tag_#' do |content, fetch, padding, pre_match_position|
+
+    def scan_tag_block content, fetch, padding, pre_match_position
       block = [:multi]
       @result << [:mustache, :section, fetch, offset, block]
       @sections << [content, position, @result]
       @result = block
     end
+    alias_method :'scan_tag_#', :scan_tag_block
 
-    define_method 'scan_tag_^' do |content, fetch, padding, pre_match_position|
+
+    def scan_tag_inverted content, fetch, padding, pre_match_position
       block = [:multi]
       @result << [:mustache, :inverted_section, fetch, offset, block]
       @sections << [content, position, @result]
       @result = block
     end
+    alias_method :'scan_tag_^', :scan_tag_inverted
 
-    define_method 'scan_tag_/' do |content, fetch, padding, pre_match_position|
+
+    def scan_tag_close content, fetch, padding, pre_match_position
       section, pos, result = @sections.pop
       raw = @scanner.pre_match[pos[3]...pre_match_position] + padding
       (@result = result).last << raw << [self.otag, self.ctag]
@@ -296,23 +301,32 @@ EOF
         error "Unclosed section #{section.inspect}", pos
       end
     end
+    alias_method :'scan_tag_/', :scan_tag_close
 
-    define_method 'scan_tag_!' do |content, fetch, padding, pre_match_position|
+
+    def scan_tag_comment content, fetch, padding, pre_match_position
     end
+    alias_method :'scan_tag_!', :scan_tag_comment
 
-    define_method 'scan_tag_=' do |content, fetch, padding, pre_match_position|
+
+    def scan_tag_delimiter content, fetch, padding, pre_match_position
       self.otag, self.ctag = content.split(' ', 2)
     end
+    alias_method :'scan_tag_=', :scan_tag_delimiter
 
-    define_method 'scan_tag_>' do |content, fetch, padding, pre_match_position|
+
+    def scan_tag_open_partial content, fetch, padding, pre_match_position
       @result << [:mustache, :partial, content, offset, padding]
     end
-    alias_method :'scan_tag_<', :'scan_tag_>'
+    alias_method :'scan_tag_<', :scan_tag_open_partial
+    alias_method :'scan_tag_>', :scan_tag_open_partial
 
-    define_method 'scan_tag_{' do |content, fetch, padding, pre_match_position|
+
+    def scan_tag_unescaped content, fetch, padding, pre_match_position
       @result << [:mustache, :utag, fetch, offset]
     end
-    alias_method :'scan_tag_&', :'scan_tag_{'
+    alias_method :'scan_tag_{', :'scan_tag_unescaped'
+    alias_method :'scan_tag_&', :'scan_tag_unescaped'
 
   end
 end

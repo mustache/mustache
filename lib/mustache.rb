@@ -88,7 +88,7 @@ class Mustache
   # Parses our fancy pants template file and returns normal file with
   # all special {{tags}} and {{#sections}}replaced{{/sections}}.
   #
-  # data - A String template or a Hash context. If a Hash is given,
+  #  data - A String template or a Hash context. If a Hash is given,
   #        we'll try to figure out the template from the class.
   #  ctx - A Hash context if `data` is a String template.
   #

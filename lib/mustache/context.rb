@@ -122,7 +122,6 @@ class Mustache
       end
 
       key = to_tag(key)
-
       return default unless obj.respond_to?(key)
 
       meth = obj.method(key) rescue proc { obj.send(key) }

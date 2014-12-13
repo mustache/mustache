@@ -73,10 +73,6 @@ require 'mustache/settings'
 #
 class Mustache
 
-  #
-  # Public API
-  #
-
   # Instantiates an instance of this class and calls `render` with
   # the passed args.
   #
@@ -185,10 +181,14 @@ class Mustache
     CGI.escapeHTML(str)
   end
 
+  # Has this instance or its class already compiled a template?
+  def compiled?
+    (@template && @template.is_a?(Template)) || self.class.compiled?
+  end
 
-  #
-  # Private API
-  #
+
+  private
+
 
   # When given a symbol or string representing a class, will try to produce an
   # appropriate view class.
@@ -231,10 +231,6 @@ class Mustache
     @template.is_a? Template
   end
 
-  # Has this instance or its class already compiled a template?
-  def compiled?
-    (@template && @template.is_a?(Template)) || self.class.compiled?
-  end
 
   # template_partial => TemplatePartial
   # template/partial => Template::Partial

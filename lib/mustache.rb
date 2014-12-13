@@ -96,6 +96,7 @@ class Mustache
   #                           If a Hash is given, we'll try to figure
   #                           out the template from the class.
   # @param [Hash] ctx A Hash context if `data` is a String template.
+  #
   # @return Returns a rendered String version of a template.
   def render(data = template, ctx = {})
     case data
@@ -126,10 +127,11 @@ class Mustache
 
   # Context accessors.
   #
-  # view = Mustache.new
-  # view[:name] = "Jon"
-  # view.template = "Hi, {{name}}!"
-  # view.render # => "Hi, Jon!"
+  # Example:
+  #     view = Mustache.new
+  #     view[:name] = "Jon"
+  #     view.template = "Hi, {{name}}!"
+  #     view.render # => "Hi, Jon!"
   def [](key)
     context[key.to_sym]
   end
@@ -175,13 +177,17 @@ class Mustache
 
   # Override this to provide custom escaping.
   #
-  # class PersonView < Mustache
-  #   def escapeHTML(str)
-  #     my_html_escape_method(str)
-  #   end
-  # end
+  # Example:
   #
-  # Returns a String
+  #   class PersonView < Mustache
+  #     def escapeHTML(str)
+  #       my_html_escape_method(str)
+  #     end
+  #   end
+  #
+  # @param [String] str String to escape.
+  #
+  # @return [String] Escaped HTML.
   def escapeHTML(str)
     CGI.escapeHTML(str)
   end
@@ -262,8 +268,7 @@ class Mustache
     end.join('/')
   end
 
-  # Turns a string into a Mustache::Template. If passed a Template,
-  # returns it.
+  # @param [Template,String] obj Turns `obj` into a template
   def self.templateify(obj)
     obj.is_a?(Template) ? obj : Template.new(obj)
   end
@@ -275,10 +280,12 @@ class Mustache
   # Return the value of the configuration setting on the superclass, or return
   # the default.
   #
-  # attr_name - Symbol name of the attribute.  It should match the instance variable.
-  # default   - Default value to use if the superclass does not respond.
+  # @param [Symbol] attr_name Name of the attribute. It should match
+  #                           the instance variable.
+  # @param [Object] default Default value to use if the superclass does
+  #                         not respond.
   #
-  # Returns the inherited or default configuration setting.
+  # @return Inherited or default configuration setting.
   def self.inheritable_config_for(attr_name, default)
     superclass.respond_to?(attr_name) ? superclass.send(attr_name) : default
   end

@@ -36,6 +36,17 @@ I don't like writing ERB, Haml, Liquid, Django Templates, putting Ruby
 in my HTML, or putting JavaScript in my HTML.
 
 
+## Installation
+
+Install the gem locally with:
+
+    $ gem install mustache
+    
+Or add it to your `gemspec`:
+
+    s.add_dependency "mustache", "~> 1.0"
+
+
 ## Usage
 
 Quick example:
@@ -325,14 +336,6 @@ See <https://gist.github.com/defunkt/323624> for installation instructions.
 See `mustache(1)` man page or
 <http://mustache.github.io/mustache.1.html>
 for command line docs.
-
-
-Installation
-------------
-
-### [RubyGems](http://rubygems.org/)
-
-    $ gem install mustache
 
 
 ## Acknowledgements

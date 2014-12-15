@@ -285,7 +285,7 @@ Finally, our template might look like this:
 
 Mustache ships with Sinatra integration. Please see
 `lib/mustache/sinatra.rb` or
-<https://github.com/defunkt/mustache/blob/master/lib/mustache/sinatra.rb>
+<https://github.com/mustache/mustache/blob/master/lib/mustache/sinatra.rb>
 for complete documentation.
 
 An example Sinatra application is also provided:
@@ -294,7 +294,7 @@ An example Sinatra application is also provided:
 If you are upgrading to Sinatra 1.0 and Mustache 0.9.0+ from Mustache
 0.7.0 or lower, the settings have changed. But not that much.
 
-See [this diff](https://gist.github.com/defunkt/345490) for what you need to
+See [this diff][diff] for what you need to
 do. Basically, things are named properly now and all should be
 contained in a hash set using `set :mustache, hash`.
 
@@ -312,21 +312,21 @@ Using Rails? Add this to your initializer or environment file:
     require 'rack/bug/panels/mustache_panel'
     config.middleware.use "Rack::Bug::MustachePanel"
 
-[![Rack::Bug](http://img.skitch.com/20091027-xyf4h1yxnefpp7usyddrcmc7dn.png)][5]
+![Rack::Bug][5]
 
 
 ### Vim
 
-vim-mustache-handlebars is available at https://github.com/mustache/vim-mustache-handlebars
+vim-mustache-handlebars is available at [mustache/vim-mustache-handlebars][vim]
 
 ### Emacs
 
-mustache-mode.el is available at https://github.com/mustache/emacs
+mustache-mode.el is available at [mustache/emacs][emacs]
 
 
 ### TextMate
 
-[Mustache.tmbundle](https://github.com/defunkt/Mustache.tmbundle)
+[Mustache.tmbundle][tmbundle]
 
 See <https://gist.github.com/defunkt/323624> for installation instructions.
 
@@ -372,13 +372,14 @@ The archive can be found at <http://librelist.com/browser/>.
 
 ## Meta
 
-* Code: `git clone https://github.com/defunkt/mustache.git`
+* Code: `git clone https://github.com/mustache/mustache.git`
 * Home: <http://mustache.github.io>
-* Bugs: <https://github.com/defunkt/mustache/issues>
+* Bugs: <https://github.com/mustache/mustache/issues>
 * List: <mustache@librelist.com>
 * Gems: <http://rubygems.org/gems/mustache>
 
-You can also find us in `#{` on irc.freenode.net.
+You can also find us in #{ on [irc.freenode.net][irc].
+
 
 [1]: http://code.google.com/p/google-ctemplate/
 [2]: http://www.ivan.fomichev.name/2008/05/erlang-template-engine-prototype.html
@@ -388,3 +389,8 @@ You can also find us in `#{` on irc.freenode.net.
 [cb]: http://wiki.github.com/defunkt/resque/contributing
 [fk]: http://help.github.com/forking/
 [is]: https://github.com/defunkt/mustache/issues
+[irc]: irc://irc.freenode.net/#{
+[vim]: https://github.com/mustache/vim-mustache-handlebars
+[emacs]: https://github.com/mustache/vim-mustache-handlebars
+[tmbundle]: https://github.com/defunkt/Mustache.tmbundle
+[diff]: https://gist.github.com/defunkt/345490

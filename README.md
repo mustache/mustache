@@ -1,5 +1,4 @@
-Mustache
-=========
+# Mustache
 
 Inspired by [ctemplate][1] and [et][2], Mustache is a
 framework-agnostic way to render logic-free views.
@@ -11,8 +10,7 @@ For a list of implementations (other than Ruby) and tips, see
 <http://mustache.github.io/>.
 
 
-Overview
---------
+## Overview
 
 Think of Mustache as a replacement for your views. Instead of views
 consisting of ERB or HAML with random helpers and arbitrary logic,
@@ -30,8 +28,7 @@ This strict separation makes it easier to write clean templates,
 easier to test your views, and more fun to work on your app's front end.
 
 
-Why?
-----
+## Why?
 
 I like writing Ruby. I like writing HTML. I like writing JavaScript.
 
@@ -39,8 +36,7 @@ I don't like writing ERB, Haml, Liquid, Django Templates, putting Ruby
 in my HTML, or putting JavaScript in my HTML.
 
 
-Usage
------
+## Usage
 
 Quick example:
 
@@ -94,16 +90,14 @@ Which returns the following:
 Simple.
 
 
-Tag Types
----------
+## Tag Types
 
 For a language-agnostic overview of Mustache's template syntax, see
 the `mustache(5)` manpage or
 <http://mustache.github.io/mustache.5.html>.
 
 
-Escaping
---------
+## Escaping
 
 Mustache does escape all values when using the standard double
 Mustache syntax. Characters which will be escaped: `& \ " < >` (as 
@@ -115,8 +109,7 @@ result in `5 &gt; 2`, where as the usage of `{{{variable}}}` will
 result in `5 > 2`.
 
 
-Dict-Style Views
-----------------
+## Dict-Style Views
 
 ctemplate and friends want you to hand a dictionary to the template
 processor. Mustache supports a similar concept. Feel free to mix the
@@ -147,8 +140,7 @@ We can re-use the same object, too:
     You have just won 100 bucks!
 
 
-Templates
----------
+## Templates
 
 A word on templates. By default, a view will try to find its template
 on disk by searching for an HTML file in the current directory that
@@ -190,8 +182,7 @@ Or set a different template for a single instance:
 Whatever works.
 
 
-Views
------
+## Views
 
 Mustache supports a bit of magic when it comes to views. If you're
 authoring a plugin or extension for a web framework (Sinatra, Rails,
@@ -199,8 +190,7 @@ etc), check out the `view_namespace` and `view_path` settings on the
 `Mustache` class. They will surely provide needed assistance.
 
 
-Helpers
--------
+## Helpers
 
 What about global helpers? Maybe you have a nifty `gravatar` function
 you want to use in all your views? No problem.
@@ -278,8 +268,9 @@ Finally, our template might look like this:
     </ul>
 
 
-Sinatra
--------
+## Integrations
+
+### Sinatra
 
 Mustache ships with Sinatra integration. Please see
 `lib/mustache/sinatra.rb` or
@@ -297,8 +288,7 @@ do. Basically, things are named properly now and all should be
 contained in a hash set using `set :mustache, hash`.
 
 
-[Rack::Bug][4]
---------------
+### [Rack::Bug][4]
 
 Mustache also ships with a `Rack::Bug` panel. In your `config.ru` add
 the following code:
@@ -314,27 +304,23 @@ Using Rails? Add this to your initializer or environment file:
 [![Rack::Bug](http://img.skitch.com/20091027-xyf4h1yxnefpp7usyddrcmc7dn.png)][5]
 
 
-Vim
----
+### Vim
 
 vim-mustache-handlebars is available at https://github.com/mustache/vim-mustache-handlebars
 
-Emacs
------
+### Emacs
 
 mustache-mode.el is available at https://github.com/mustache/emacs
 
 
-TextMate
---------
+### TextMate
 
 [Mustache.tmbundle](https://github.com/defunkt/Mustache.tmbundle)
 
 See <https://gist.github.com/defunkt/323624> for installation instructions.
 
 
-Command Line
-------------
+### Command Line
 
 See `mustache(1)` man page or
 <http://mustache.github.io/mustache.1.html>
@@ -349,8 +335,7 @@ Installation
     $ gem install mustache
 
 
-Acknowledgements
-----------------
+## Acknowledgements
 
 Thanks to [Tom Preston-Werner](https://github.com/mojombo) for showing
 me ctemplate and [Leah Culver](https://github.com/leah) for the name "Mustache."
@@ -359,8 +344,7 @@ Special thanks to [Magnus Holm](http://judofyr.net/) for all his
 awesome work on Mustache's parser.
 
 
-Contributing
-------------
+## Contributing
 
 Once you've made your great commits:
 
@@ -374,8 +358,7 @@ You might want to checkout Resque's [Contributing][cb] wiki page for information
 on coding standards, new features, etc.
 
 
-Mailing List
-------------
+## Mailing List
 
 To join the list simply send an email to <mustache@librelist.com>. This
 will subscribe you and send you information about your subscription,
@@ -384,8 +367,7 @@ including unsubscribe information.
 The archive can be found at <http://librelist.com/browser/>.
 
 
-Meta
-----
+## Meta
 
 * Code: `git clone https://github.com/defunkt/mustache.git`
 * Home: <http://mustache.github.io>

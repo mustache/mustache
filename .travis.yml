@@ -1,15 +1,23 @@
 language: ruby
 rvm:
-  - 1.9.3
-  - 2.1.0
-  - jruby-19mode
-  - jruby-head
-  - rbx-2
+- 1.9.3
+- 2.1.0
+- jruby-19mode
+- jruby-head
+- rbx-2
 matrix:
   allow_failures:
-    - rvm:
-      - 1.9.3
-      - jruby-19mode
+  - rvm:
+    - 1.9.3
+    - jruby-19mode
 addons:
   code_climate:
     repo_token: 197d6b3eb448e97f94a63414e2f6b6a96d0bf0d44514cf57100be14483302d12
+deploy:
+  provider: rubygems
+  api_key:
+    secure: mRAdriYspBlUjzvhZGr81MKNG3l/4aDr89RSRg64eJEQNStNy3nFWgHTxtKxemhUg9TLFRx82tlI0sAKhoCrKH/1d49P4mFW/aebY+nMFpMPIWJ8MSIKl0knoPvd/8usrBZ/wPFrqBuWoGCwwDBHgo1PO/JeRQ0aCaAxaVKofAU=
+  gem: mustache
+  on:
+    tags: true
+    repo: mustache/mustache

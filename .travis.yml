@@ -8,8 +8,8 @@ rvm:
 matrix:
   allow_failures:
     - rvm:
-      - jruby-head
-      - rbx-2
+      - 1.9.3
+      - jruby-19mode
 addons:
   code_climate:
     repo_token: 197d6b3eb448e97f94a63414e2f6b6a96d0bf0d44514cf57100be14483302d12

@@ -283,7 +283,7 @@ Finally, our template might look like this:
 
 ### Sinatra
 
-Mustache ships with Sinatra integration. Please see
+Mustache provides Sinatra integration. Please see
 `lib/mustache/sinatra.rb` or
 <https://github.com/mustache/mustache/blob/master/lib/mustache/sinatra.rb>
 for complete documentation.
@@ -301,8 +301,8 @@ contained in a hash set using `set :mustache, hash`.
 
 ### [Rack::Bug][4]
 
-Mustache also ships with a `Rack::Bug` panel. In your `config.ru` add
-the following code:
+Mustache also provides a `Rack::Bug` panel.
+First you have to install the `rack-bug-mustache_panel` gem, then in your `config.ru` add  the following code:
 
     require 'rack/bug/panels/mustache_panel'
     use Rack::Bug::MustachePanel
@@ -333,8 +333,7 @@ See <https://gist.github.com/defunkt/323624> for installation instructions.
 
 ### Command Line
 
-See `mustache(1)` man page or
-<http://mustache.github.io/mustache.1.html>
+See `mustache(1)` man page or <http://mustache.github.io/mustache.1.html>
 for command line docs.
 
 
@@ -357,9 +356,6 @@ Once you've made your great commits:
 4. Create an [Issue][is] with a link to your branch
 5. That's it!
 
-You might want to checkout Resque's [Contributing][cb] wiki page for information
-on coding standards, new features, etc.
-
 
 ## Mailing List
 
@@ -367,7 +363,7 @@ To join the list simply send an email to <mustache@librelist.com>. This
 will subscribe you and send you information about your subscription,
 including unsubscribe information.
 
-The archive can be found at <http://librelist.com/browser/>.
+The archive can be found at <http://librelist.com/browser/mustache/>.
 
 
 ## Meta
@@ -386,7 +382,6 @@ You can also find us in #{ on [irc.freenode.net][irc].
 [3]: http://google-ctemplate.googlecode.com/svn/trunk/doc/howto.html
 [4]: https://github.com/brynary/rack-bug/
 [5]: http://img.skitch.com/20091027-n8pxwwx8r61tc318a15q1n6m14.png
-[cb]: http://wiki.github.com/defunkt/resque/contributing
 [fk]: http://help.github.com/forking/
 [is]: https://github.com/defunkt/mustache/issues
 [irc]: irc://irc.freenode.net/#{

@@ -25,14 +25,21 @@ class Mustache
     def partial(name, indentation = '')
       # Look for the first Mustache in the stack.
       mustache = mustache_in_stack
-
       # Indent the partial template by the given indentation.
       part = mustache.partial(name).to_s.gsub(/^/, indentation)
-
       # Call the Mustache's `partial` method and render the result.
       mustache.render(part, self)
     end
 
+    #
+    # Load and render a template. 
+    # In case of template inheritance it ist used to load the parent template.
+    def load_render(name)
+      mustache = mustache_in_stack
+      mustache.template_name =name
+      # Call the Mustache's `partial` method and render the result.
+      mustache.render
+    end
     # Find the first Mustache in the stack.
     #
     # If we're being rendered inside a Mustache object as a context,
@@ -73,7 +80,8 @@ class Mustache
     def pop
       @stack.shift
       self
-    end
+    end      
+
 
     # Can be used to add a value to the context in a hash-like way.
     #

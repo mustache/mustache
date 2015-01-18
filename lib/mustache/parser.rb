@@ -45,7 +45,7 @@ EOF
     end
 
     # The sigil types which are valid after an opening `{{`
-    VALID_TYPES = [ '#', '^', '/', '=', '!', '<', '>', '&', '{' ].map &:freeze
+    VALID_TYPES = ['%', '#', '^', '/', '=', '!', '<', '>', '&', '{' ].map &:freeze
 
     def self.valid_types
       @valid_types ||= Regexp.new(VALID_TYPES.map { |t| Regexp.escape(t) }.join('|') )
@@ -55,7 +55,7 @@ EOF
     #
     # Requires a block, which will be sent the following parameters:
     #
-    # * content - The raw content of the tag
+    # * content - The raw content of the tag{{%content}}
     # * fetch- A mustache context fetch expression for the content
     # * padding - Indentation whitespace from the currently-parsed line
     # * pre_match_position - Location of the scanner before a match was made
@@ -75,7 +75,7 @@ EOF
     # After these types of tags, all whitespace until the end of the line will
     # be skipped if they are the first (and only) non-whitespace content on
     # the line.
-    SKIP_WHITESPACE = [ '#', '^', '/', '<', '>', '=', '!' ].map(&:freeze)
+    SKIP_WHITESPACE = ['%', '#', '^', '/', '<', '>', '=', '!'].map(&:freeze)
 
     # The content allowed in a tag name.
     ALLOWED_CONTENT = /(\w|[?!\/.-])*/
@@ -290,6 +290,15 @@ EOF
     end
     alias_method :'scan_tag_#', :scan_tag_block
 
+    def scan_tag_blockvar content, fetch, padding, pre_match_position
+      block = [:multi]
+      @result << [:mustache, :blockvar, fetch, offset, block]
+      @sections << [content, position, @result]
+      @result = block
+    end
+    alias_method :'scan_tag_%', :scan_tag_blockvar
+
+    
 
     def scan_tag_inverted content, fetch, padding, pre_match_position
       block = [:multi]
@@ -325,11 +334,19 @@ EOF
     alias_method :'scan_tag_=', :scan_tag_delimiter
 
 
-    def scan_tag_open_partial content, fetch, padding, pre_match_position
-      @result << [:mustache, :partial, content, offset, padding]
+    def scan_tag_parent content, fetch, padding, pre_match_position
+      block = [:multi]
+      @result << [:mustache, :parent, fetch, offset, block]
+      @sections << [content, position, @result]
+      @result = block    
     end
-    alias_method :'scan_tag_<', :scan_tag_open_partial
-    alias_method :'scan_tag_>', :scan_tag_open_partial
+    alias_method :'scan_tag_<', :scan_tag_parent
+    
+    
+    def scan_tag_open_partial2 content, fetch, padding, pre_match_position
+       @result << [:mustache, :partial, content, offset, padding]
+    end
+    alias_method :'scan_tag_>', :scan_tag_open_partial2
 
 
     def scan_tag_unescaped content, fetch, padding, pre_match_position

@@ -94,4 +94,22 @@ EOF
 
     assert_equal expected, tokens
   end
+                          
+  def test_inheritance
+    lexer = Mustache::Parser.new
+    tokens = lexer.compile("{{%content}}test\tinheritance{{/content}}")
+    puts tokens.to_s
+  end
+  
+  def test_inheritance2
+    lexer = Mustache::Parser.new
+    tokens = lexer.compile("{{<super}}{{%content}}This content will be replaced{{/content}}{{/super}}")
+   puts tokens.to_s
+  end
+                          
+    def test_inheritance3
+    lexer = Mustache::Parser.new
+    tokens = lexer.compile("{{#super}}Some Content{{#content}}Some Content{{/content}}{{/super}}")
+    puts tokens.to_s
+  end                        
 end

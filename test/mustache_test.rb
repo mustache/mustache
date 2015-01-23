@@ -739,4 +739,20 @@ FROM
   DUMMY1
 template
   end
+
+  def test_cast_to_hash_in_context
+    hashlike = Object.new
+    def hashlike.title
+      'title'
+    end
+    def hashlike.to_hash
+      { title: 'title' }
+    end
+
+    template = '%%{{title}}%%'
+
+    assert_equal '%%title%%', Mustache.render(template, hashlike)
+
+  end
+
 end

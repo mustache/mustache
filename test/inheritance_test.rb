@@ -17,7 +17,5 @@ class InheritanceTest < Minitest::Test
     view.template_path = File.dirname(__FILE__) + '/fixtures/inheritance'
     view.template_name="grandchild"
     result = view.render
-    puts "result of redering grandchild"
-    puts result
   end
 end

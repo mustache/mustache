@@ -158,16 +158,13 @@ class Mustache
     def on_parent(name, offset, content, raw, delims)
       result = ""  
       parent_name = name[2].first  
-      content.each { |x| 
-        case 
-	  when x != :multi && x[0] === :mustache && x[1] === :blockvar
-              varname =   x[2][2].first.to_s 
+      content.each do |x| 
+        if x != :multi && x[0] === :mustache && x[1] === :blockvar then
+              varname = x[2][2].first.to_s 
               code = compile!(x[4])
               result << "ctx[:#{varname}] = \"#{code}\"; "
-	  else
-              #ignore    
         end
-      }
+     end
               
      # load and process parent template
      ev(<<-compiled)

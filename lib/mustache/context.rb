@@ -33,7 +33,7 @@ class Mustache
 
     #
     # Load and render a template. 
-    # In case of template inheritance it ist used to load the parent template.
+    # In case of template inheritance it is used to load the parent template.
     def load_render(name)
       mustache = mustache_in_stack
       mustache.template_name =name

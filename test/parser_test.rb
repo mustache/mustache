@@ -97,15 +97,15 @@ EOF
                           
   def test_inheritance
     lexer = Mustache::Parser.new
-    tokens = lexer.compile("{{%content}}test\tinheritance{{/content}}")
+    tokens = lexer.compile("{{$content}}test\tinheritance{{/content}}")
   end
   
   def test_inheritance2
     lexer = Mustache::Parser.new
-    tokens = lexer.compile("{{<super}}{{%content}}This content will be replaced{{/content}}{{/super}}")
+    tokens = lexer.compile("{{<super}}{{$content}}This content will be replaced{{/content}}{{/super}}")
   end
                           
-    def test_inheritance3
+  def test_inheritance3
     lexer = Mustache::Parser.new
     tokens = lexer.compile("{{#super}}Some Content{{#content}}Some Content{{/content}}{{/super}}")
   end                        

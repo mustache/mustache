@@ -45,7 +45,7 @@ EOF
     end
 
     # The sigil types which are valid after an opening `{{`
-    VALID_TYPES = ['%', '#', '^', '/', '=', '!', '<', '>', '&', '{' ].map &:freeze
+    VALID_TYPES = ['$', '#', '^', '/', '=', '!', '<', '>', '&', '{' ].map &:freeze
 
     def self.valid_types
       @valid_types ||= Regexp.new(VALID_TYPES.map { |t| Regexp.escape(t) }.join('|') )
@@ -75,7 +75,7 @@ EOF
     # After these types of tags, all whitespace until the end of the line will
     # be skipped if they are the first (and only) non-whitespace content on
     # the line.
-    SKIP_WHITESPACE = ['%', '#', '^', '/', '<', '>', '=', '!'].map(&:freeze)
+    SKIP_WHITESPACE = ['$', '#', '^', '/', '<', '>', '=', '!'].map(&:freeze)
 
     # The content allowed in a tag name.
     ALLOWED_CONTENT = /(\w|[?!\/.-])*/
@@ -296,7 +296,7 @@ EOF
       @sections << [content, position, @result]
       @result = block
     end
-    alias_method :'scan_tag_%', :scan_tag_blockvar
+    alias_method :'scan_tag_$', :scan_tag_blockvar
 
     
 

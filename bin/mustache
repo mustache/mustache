@@ -49,7 +49,7 @@ class Mustache
         opts.separator "Common Options:"
 
         opts.on("-v", "--version", "Print the version") do |v|
-          puts "Mustache v#{Mustache::Version}"
+          puts "Mustache v#{Mustache::VERSION}"
           exit
         end
 

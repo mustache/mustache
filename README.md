@@ -1,5 +1,7 @@
 # Mustache
 
+[![Join the chat at https://gitter.im/mustache/mustache](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/mustache/mustache?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
 Inspired by [ctemplate][1] and [et][2], Mustache is a
 framework-agnostic way to render logic-free views.
 

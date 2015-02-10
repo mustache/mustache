@@ -283,10 +283,8 @@ Finally, our template might look like this:
 
 ### Sinatra
 
-Mustache provides Sinatra integration. Please see
-`lib/mustache/sinatra.rb` or
-<https://github.com/mustache/mustache/blob/master/lib/mustache/sinatra.rb>
-for complete documentation.
+Sinatra integration is available with the 
+[mustache-sinatra gem](https://github.com/mustache/mustache-sinatra).
 
 An example Sinatra application is also provided:
 <https://github.com/defunkt/mustache-sinatra-example>

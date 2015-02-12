@@ -124,7 +124,7 @@ EOF
 
       if !@sections.empty?
         # We have parsed the whole file, but there's still opened sections.
-        type, pos, result = @sections.pop
+        type, pos, _ = @sections.pop
         error "Unclosed section #{type.inspect}", pos
       end
 

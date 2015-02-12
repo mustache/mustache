@@ -147,6 +147,9 @@ EOF
       send("scan_tag_#{type}", content, fetch, padding, pre_match_position)
     end
 
+    def find_closing_tag scanner, current_ctag
+      error "Unclosed tag" unless scanner.scan(regexp(current_ctag))
+    end
 
     # Find {{mustaches}} and add them to the @result array.
     def scan_tags
@@ -193,10 +196,7 @@ EOF
       @scanner.skip(/\s+/)
       @scanner.skip(regexp(type)) if type
 
-      # Try to find the closing tag.
-      unless close = @scanner.scan(regexp(current_ctag))
-        error "Unclosed tag"
-      end
+      find_closing_tag(scanner, current_ctag)
 
       # If this tag was the only non-whitespace content on this line, strip
       # the remaining whitespace.  If not, but we've been hanging on to padding

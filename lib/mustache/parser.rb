@@ -134,6 +134,24 @@ EOF
 
     private
 
+    def content_tags type, current_ctag
+      if ANY_CONTENT.include?(type)
+        r = /\s*#{regexp(type)}?#{regexp(current_ctag)}/
+        scan_until_exclusive(r)
+      else
+        @scanner.scan(ALLOWED_CONTENT)
+      end
+    end
+
+    def dispatch_based_on_tag type, content, fetch, padding, pre_match_position, offset
+      if type
+        # Method#call proves much faster than using send
+        send("scan_tag_#{type}", content, fetch, padding, pre_match_position)
+      else
+        @result << [:mustache, :etag, fetch, offset]
+      end
+    end
+
 
     # Find {{mustaches}} and add them to the @result array.
     def scan_tags
@@ -161,12 +179,7 @@ EOF
 
       # ANY_CONTENT tags allow any character inside of them, while
       # other tags (such as variables) are more strict.
-      content = if ANY_CONTENT.include?(type)
-        r = /\s*#{regexp(type)}?#{regexp(current_ctag)}/
-        scan_until_exclusive(r)
-      else
-        @scanner.scan(ALLOWED_CONTENT)
-      end
+      content = content_tags(type, current_ctag)
 
       # We found {{ but we can't figure out what's going on inside.
       error "Illegal content in tag" if content.empty?
@@ -175,13 +188,7 @@ EOF
       prev = @result
 
       # Based on the sigil, do what needs to be done.
-      if type
-        # Method#call proves much faster than using send
-        method("scan_tag_#{type}").
-          call(content, fetch, padding, pre_match_position)
-      else
-        @result << [:mustache, :etag, fetch, offset]
-      end
+      dispatch_based_on_tag(type, content, fetch, padding, pre_match_position, offset)
 
       # The closing } in unescaped tags is just a hack for
       # aesthetics.

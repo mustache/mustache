@@ -84,7 +84,6 @@ EOF
     # the rest only allow ALLOWED_CONTENT.
     ANY_CONTENT = [ '!', '=' ].map(&:freeze)
 
-    attr_reader :scanner, :result
     attr_writer :otag, :ctag
 
     # Accepts an options hash which does nothing but may be used in
@@ -196,7 +195,7 @@ EOF
       @scanner.skip(/\s+/)
       @scanner.skip(regexp(type)) if type
 
-      find_closing_tag(scanner, current_ctag)
+      find_closing_tag(@scanner, current_ctag)
 
       # If this tag was the only non-whitespace content on this line, strip
       # the remaining whitespace.  If not, but we've been hanging on to padding

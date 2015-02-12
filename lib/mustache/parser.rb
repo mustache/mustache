@@ -144,11 +144,7 @@ EOF
     end
 
     def dispatch_based_on_tag type, content, fetch, padding, pre_match_position, offset
-      if type.nil?
-        send("scan_tag_#{type}", content, fetch, padding, pre_match_position)
-      else
-        send("scan_tag_#{type}", content, fetch, padding, pre_match_position)
-      end
+      send("scan_tag_#{type}", content, fetch, padding, pre_match_position)
     end
 
 
@@ -288,6 +284,8 @@ EOF
     #
 
 
+    # This function handles the cases where the scanned tag does not have
+    # a type.
     def scan_tag_ content, fetch, padding, pre_match_position
       @result << [:mustache, :etag, fetch, offset]
     end

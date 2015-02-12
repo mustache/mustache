@@ -143,7 +143,7 @@ EOF
       end
     end
 
-    def dispatch_based_on_tag type, content, fetch, padding, pre_match_position, offset
+    def dispatch_based_on_type type, content, fetch, padding, pre_match_position, offset
       send("scan_tag_#{type}", content, fetch, padding, pre_match_position)
     end
 
@@ -182,8 +182,7 @@ EOF
       fetch = [:mustache, :fetch, content.split('.')]
       prev = @result
 
-      # Based on the sigil, do what needs to be done.
-      dispatch_based_on_tag(type, content, fetch, padding, pre_match_position, offset)
+      dispatch_based_on_type(type, content, fetch, padding, pre_match_position, offset)
 
       # The closing } in unescaped tags is just a hack for
       # aesthetics.

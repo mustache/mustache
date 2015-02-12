@@ -133,6 +133,7 @@ EOF
 
     private
 
+
     def content_tags type, current_ctag
       if ANY_CONTENT.include?(type)
         r = /\s*#{regexp(type)}?#{regexp(current_ctag)}/

@@ -144,10 +144,10 @@ EOF
     end
 
     def dispatch_based_on_tag type, content, fetch, padding, pre_match_position, offset
-      if type
-        send("scan_tag_#{type}", content, fetch, padding, pre_match_position)
-      else
+      if type.nil?
         @result << [:mustache, :etag, fetch, offset]
+      else
+        send("scan_tag_#{type}", content, fetch, padding, pre_match_position)
       end
     end
 

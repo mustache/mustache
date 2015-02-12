@@ -143,7 +143,7 @@ EOF
       end
     end
 
-    def dispatch_based_on_type type, content, fetch, padding, pre_match_position, offset
+    def dispatch_based_on_type type, content, fetch, padding, pre_match_position
       send("scan_tag_#{type}", content, fetch, padding, pre_match_position)
     end
 
@@ -185,7 +185,7 @@ EOF
       fetch = [:mustache, :fetch, content.split('.')]
       prev = @result
 
-      dispatch_based_on_type(type, content, fetch, padding, pre_match_position, offset)
+      dispatch_based_on_type(type, content, fetch, padding, pre_match_position)
 
       # The closing } in unescaped tags is just a hack for
       # aesthetics.

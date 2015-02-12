@@ -145,7 +145,6 @@ EOF
 
     def dispatch_based_on_tag type, content, fetch, padding, pre_match_position, offset
       if type
-        # Method#call proves much faster than using send
         send("scan_tag_#{type}", content, fetch, padding, pre_match_position)
       else
         @result << [:mustache, :etag, fetch, offset]

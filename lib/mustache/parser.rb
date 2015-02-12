@@ -145,7 +145,7 @@ EOF
 
     def dispatch_based_on_tag type, content, fetch, padding, pre_match_position, offset
       if type.nil?
-        @result << [:mustache, :etag, fetch, offset]
+        send("scan_tag_#{type}", content, fetch, padding, pre_match_position)
       else
         send("scan_tag_#{type}", content, fetch, padding, pre_match_position)
       end
@@ -286,6 +286,11 @@ EOF
     # characters in their method names, they are aliased to
     # better named methods.
     #
+
+
+    def scan_tag_ content, fetch, padding, pre_match_position
+      @result << [:mustache, :etag, fetch, offset]
+    end
 
 
     def scan_tag_block content, fetch, padding, pre_match_position

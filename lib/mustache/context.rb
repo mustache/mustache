@@ -41,7 +41,7 @@ class Mustache
     # @return [Mustache] First Mustache in the stack.
     #
     def mustache_in_stack
-      @stack.find { |frame| frame.is_a?(Mustache) }
+      @mustache_in_stack ||= @stack.find { |frame| frame.is_a?(Mustache) }
     end
 
     # Allows customization of how Mustache escapes things.
@@ -62,6 +62,7 @@ class Mustache
     #
     def push(new_obj)
       @stack.unshift(new_obj)
+      @mustache_in_stack = nil
       self
     end
 
@@ -72,6 +73,7 @@ class Mustache
     #
     def pop
       @stack.shift
+      @mustache_in_stack = nil
       self
     end
 

@@ -22,8 +22,7 @@ template = """
 """
 
 # Uncomment to measure object allocations. Requires ruby 2.0.0
-RubyProf.measure_mode = RubyProf::ALLOCATIONS
-
+# RubyProf.measure_mode = RubyProf::ALLOCATIONS
 
 RubyProf.start
 

@@ -2,6 +2,7 @@ require 'mustache/enumerable'
 require 'mustache/template'
 require 'mustache/context'
 require 'mustache/settings'
+require 'mustache/utils'
 
 # Mustache is the base class from which your Mustache subclasses
 # should inherit (though it can be used on its own).
@@ -246,12 +247,7 @@ class Mustache
   # template_partial => TemplatePartial
   # template/partial => Template::Partial
   def self.classify(underscored)
-    underscored.split('/').map do |namespace|
-      namespace.split(/[-_]/).map do |part|
-        part[0] = part.chars.first.upcase
-        part
-      end.join
-    end.join('::')
+    Mustache::Utils::String.new(underscored).classify
   end
 
   #   TemplatePartial => template_partial
@@ -260,12 +256,7 @@ class Mustache
   def self.underscore(classified = name)
     classified = superclass.name if classified.to_s.empty?
 
-    string = classified.dup.split("#{view_namespace}::").last
-
-    string.split('::').map do |part|
-      part[0] = part[0].downcase
-      part.gsub(/[A-Z]/) { |s| "_" << s.downcase }
-    end.join('/')
+    Mustache::Utils::String.new(classified).underscore(view_namespace)
   end
 
   # @param [Template,String] obj Turns `obj` into a template

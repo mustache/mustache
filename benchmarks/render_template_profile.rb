@@ -53,7 +53,3 @@ printer = RubyProf::GraphHtmlPrinter.new(result)
 Pathname.new(FileUtils.pwd).join("benchmarks/render_template_profile.html").open("w+") do |file|
   printer.print(file, {})
 end
-
-
-
-

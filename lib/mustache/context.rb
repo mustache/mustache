@@ -51,7 +51,7 @@ class Mustache
     # @return [String] Escaped HTML string.
     #
     def escapeHTML(str)
-      CGI.escapeHTML(str)
+      mustache_in_stack.escapeHTML(str)
     end
 
     # Adds a new object to the context's internal stack.

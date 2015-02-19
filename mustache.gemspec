@@ -46,6 +46,7 @@ desc
   s.add_development_dependency 'bundler', '~> 1.6'
   s.add_development_dependency 'rake', '~> 10.3'
   s.add_development_dependency 'minitest', '~> 5.4'
+  s.add_development_dependency 'benchmark-ips'
   s.add_development_dependency 'rdoc', '~> 4.1'
   s.add_development_dependency 'ronn', '~> 0.7' unless RubyVersion.rbx? || RubyVersion.jruby?
 end

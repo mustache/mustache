@@ -8,3 +8,5 @@ Gemfile.lock
 # Docs
 .yardoc
 doc/*
+
+benchmarks/*.html

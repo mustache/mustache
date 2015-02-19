@@ -19,10 +19,12 @@ class Mustache
           .dup
           .split("#{view_namespace}::")
           .last
-          .split('::').map do |part|
+          .split('::')
+          .map do |part|
             part[0] = part[0].downcase
             part.gsub(/[A-Z]/) { |s| "_" << s.downcase }
-          end.join('/')
+          end
+          .join('/')
       end
     end
   end

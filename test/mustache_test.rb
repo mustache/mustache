@@ -278,14 +278,19 @@ data
   RailsEnv production
 </VirtualHost>
 data
-    old_path, Mustache.template_path = Mustache.template_path, File.dirname(__FILE__) + "/fixtures"
-    old_extension, Mustache.template_extension = Mustache.template_extension, "conf"
+    old_path = Mustache.template_path
+    old_extension = Mustache.template_extension
 
-    assert_equal expected, Mustache.render(:passenger, :stage => 'production',
-                                                       :server => 'example.com',
-                                                       :deploy_to => '/var/www/example.com' )
+    begin
+      Mustache.template_path = File.dirname(__FILE__) + "/fixtures"
+      Mustache.template_extension = "conf"
 
-    Mustache.template_path, Mustache.template_extension = old_path, old_extension
+      assert_equal expected, Mustache.render(:passenger, :stage => 'production',
+                                                         :server => 'example.com',
+                                                         :deploy_to => '/var/www/example.com')
+    ensure
+      Mustache.template_path, Mustache.template_extension = old_path, old_extension
+    end
   end
 
   def test_doesnt_execute_what_it_doesnt_need_to

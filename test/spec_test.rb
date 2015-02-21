@@ -59,7 +59,7 @@ Dir[spec_files].each do |file|
 
   test_suite.class_eval do
     spec['tests'].each do |test|
-      define_method :"test - #{test['name']}" do
+      define_method :"test_spec - #{test['name']}" do
         setup_partials(test)
         assert_mustache_spec(test)
       end

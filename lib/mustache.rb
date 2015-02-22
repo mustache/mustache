@@ -166,14 +166,21 @@ class Mustache
   #
   # Call `render` if you need to process it.
   def self.partial(name)
-    File.read("#{template_path}/#{name}.#{template_extension}")
+    self.new.partial(name)
   end
 
   # Override this in your subclass if you want to do fun things like
   # reading templates from a database. It will be rendered by the
   # context, so all you need to do is return a string.
   def partial(name)
-    self.class.partial(name)
+    path = "#{template_path}/#{name}.#{template_extension}"
+
+    begin
+      File.read(path)
+    rescue
+      raise if raise_on_context_miss?
+      ""
+    end
   end
 
   # Override this to provide custom escaping.

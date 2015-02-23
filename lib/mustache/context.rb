@@ -140,6 +140,10 @@ class Mustache
       meth.arity == 1 ? meth.to_proc : meth.call
     end
 
+    def current
+      @stack.first
+    end
+
 
     private
 

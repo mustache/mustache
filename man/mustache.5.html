@@ -125,10 +125,10 @@ there is no <code>name</code> key, the parent contexts will be checked recursive
 If the top context is reached and the <code>name</code> key is still not found,
 nothing will be rendered.</p>
 
-<p>All variables are HTML escaped by default. If you want to return
-unescaped HTML, use the triple mustache: <code>{{{name}}}</code>.</p>
+<p>All variables are HTML escaped by default. If you want to return raw contents
+without escaping, use the triple mustache: <code>{{{name}}}</code>.</p>
 
-<p>You can also use <code>&amp;</code> to unescape a variable: <code>{{&amp; name}}</code>. This may be
+<p>You can also use <code>&amp;</code> to return its raw contents: <code>{{&amp; name}}</code>. This may be
 useful when changing delimiters (see "Set Delimiter" below).</p>
 
 <p>By default a variable "miss" returns an empty string. This can usually
@@ -415,7 +415,7 @@ markup."</p>
 
   <ol class='man-decor man-foot man foot'>
     <li class='tl'>DEFUNKT</li>
-    <li class='tc'>October 2014</li>
+    <li class='tc'>February 2015</li>
     <li class='tr'>mustache(5)</li>
   </ol>
 

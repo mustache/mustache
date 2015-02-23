@@ -1,7 +1,7 @@
 .\" generated with Ronn/v0.7.3
 .\" http://github.com/rtomayko/ronn/tree/0.7.3
 .
-.TH "MUSTACHE" "5" "October 2014" "DEFUNKT" "Mustache Manual"
+.TH "MUSTACHE" "5" "February 2015" "DEFUNKT" "Mustache Manual"
 .
 .SH "NAME"
 \fBmustache\fR \- Logic\-less templates\.
@@ -69,10 +69,10 @@ Tags are indicated by the double mustaches\. \fB{{person}}\fR is a tag, as is \f
 The most basic tag type is the variable\. A \fB{{name}}\fR tag in a basic template will try to find the \fBname\fR key in the current context\. If there is no \fBname\fR key, the parent contexts will be checked recursively\. If the top context is reached and the \fBname\fR key is still not found, nothing will be rendered\.
 .
 .P
-All variables are HTML escaped by default\. If you want to return unescaped HTML, use the triple mustache: \fB{{{name}}}\fR\.
+All variables are HTML escaped by default\. If you want to return raw contents without escaping, use the triple mustache: \fB{{{name}}}\fR\.
 .
 .P
-You can also use \fB&\fR to unescape a variable: \fB{{& name}}\fR\. This may be useful when changing delimiters (see "Set Delimiter" below)\.
+You can also use \fB&\fR to return its raw contents: \fB{{& name}}\fR\. This may be useful when changing delimiters (see "Set Delimiter" below)\.
 .
 .P
 By default a variable "miss" returns an empty string\. This can usually be configured in your Mustache library\. The Ruby version of Mustache supports raising an exception in this situation, for instance\.

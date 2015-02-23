@@ -2,6 +2,7 @@
 
 * Always cast to hash on hash-like object lookups (#187)
 * Fixed -v option in the binary (#189)
+* Missing partial returns "" per the spec (#200)
 
 # 1.0.0 (2015-01-11)
 

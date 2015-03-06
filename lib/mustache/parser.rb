@@ -45,7 +45,7 @@ EOF
     end
 
     # The sigil types which are valid after an opening `{{`
-    VALID_TYPES = [ '#', '^', '/', '=', '!', '<', '>', '&', '{' ].map &:freeze
+    VALID_TYPES = [ '#', '^', '/', '=', '!', '<', '>', '&', '{' ].map(&:freeze)
 
     def self.valid_types
       @valid_types ||= Regexp.new(VALID_TYPES.map { |t| Regexp.escape(t) }.join('|') )
@@ -158,7 +158,7 @@ EOF
       pre_match_position = @scanner.pos
       last_index = @result.length
 
-      return unless x = @scanner.scan(/([ \t]*)?#{Regexp.escape(otag)}/)
+      return unless @scanner.scan(/([ \t]*)?#{Regexp.escape(otag)}/)
       padding = @scanner[1] || ''
 
       # Don't touch the preceding whitespace unless we're matching the start

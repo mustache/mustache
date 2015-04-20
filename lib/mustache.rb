@@ -2,6 +2,7 @@ require 'mustache/enumerable'
 require 'mustache/template'
 require 'mustache/context'
 require 'mustache/settings'
+require 'mustache/utils'
 
 # Mustache is the base class from which your Mustache subclasses
 # should inherit (though it can be used on its own).
@@ -165,14 +166,21 @@ class Mustache
   #
   # Call `render` if you need to process it.
   def self.partial(name)
-    File.read("#{template_path}/#{name}.#{template_extension}")
+    self.new.partial(name)
   end
 
   # Override this in your subclass if you want to do fun things like
   # reading templates from a database. It will be rendered by the
   # context, so all you need to do is return a string.
   def partial(name)
-    self.class.partial(name)
+    path = "#{template_path}/#{name}.#{template_extension}"
+
+    begin
+      File.read(path)
+    rescue
+      raise if raise_on_context_miss?
+      ""
+    end
   end
 
   # Override this to provide custom escaping.
@@ -246,12 +254,7 @@ class Mustache
   # template_partial => TemplatePartial
   # template/partial => Template::Partial
   def self.classify(underscored)
-    underscored.split('/').map do |namespace|
-      namespace.split(/[-_]/).map do |part|
-        part[0] = part.chars.first.upcase
-        part
-      end.join
-    end.join('::')
+    Mustache::Utils::String.new(underscored).classify
   end
 
   #   TemplatePartial => template_partial
@@ -260,12 +263,7 @@ class Mustache
   def self.underscore(classified = name)
     classified = superclass.name if classified.to_s.empty?
 
-    string = classified.dup.split("#{view_namespace}::").last
-
-    string.split('::').map do |part|
-      part[0] = part[0].downcase
-      part.gsub(/[A-Z]/) { |s| "_" << s.downcase }
-    end.join('/')
+    Mustache::Utils::String.new(classified).underscore(view_namespace)
   end
 
   # @param [Template,String] obj Turns `obj` into a template

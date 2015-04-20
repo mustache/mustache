@@ -48,7 +48,7 @@ class Mustache
     # @return [Mustache] First Mustache in the stack.
     #
     def mustache_in_stack
-      @stack.find { |frame| frame.is_a?(Mustache) }
+      @mustache_in_stack ||= @stack.find { |frame| frame.is_a?(Mustache) }
     end
 
     # Allows customization of how Mustache escapes things.
@@ -69,6 +69,7 @@ class Mustache
     #
     def push(new_obj)
       @stack.unshift(new_obj)
+      @mustache_in_stack = nil
       self
     end
 
@@ -79,6 +80,7 @@ class Mustache
     #
     def pop
       @stack.shift
+      @mustache_in_stack = nil
       self
     end      
 
@@ -137,13 +139,17 @@ class Mustache
     # @return [Object] The value of key in object if it is found, and default otherwise.
     #
     def find(obj, key, default = nil)
-      return find_in_hash(obj, key, default) if obj.respond_to?(:to_hash)
+      return find_in_hash(obj.to_hash, key, default) if obj.respond_to?(:to_hash)
 
       key = to_tag(key)
       return default unless obj.respond_to?(key)
 
       meth = obj.method(key) rescue proc { obj.send(key) }
       meth.arity == 1 ? meth.to_proc : meth.call
+    end
+
+    def current
+      @stack.first
     end
 
 
@@ -155,7 +161,8 @@ class Mustache
       key.to_s.include?('-') ? key.to_s.tr('-', '_') : key
     end
 
-    def find_in_hash obj, key, default
+    # Fetches a hash key if it exists, or returns the given default.
+    def find_in_hash(obj, key, default)
       return obj[key]      if obj.has_key?(key)
       return obj[key.to_s] if obj.has_key?(key.to_s)
 

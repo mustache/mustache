@@ -1,5 +1,8 @@
 # Mustache
 
+[![Gem Version](https://badge.fury.io/rb/mustache.svg)](http://badge.fury.io/rb/mustache)
+[![Build Status](https://travis-ci.org/mustache/mustache.svg?branch=master)](https://travis-ci.org/mustache/mustache)
+
 Inspired by [ctemplate][1] and [et][2], Mustache is a
 framework-agnostic way to render logic-free views.
 
@@ -283,10 +286,8 @@ Finally, our template might look like this:
 
 ### Sinatra
 
-Mustache provides Sinatra integration. Please see
-`lib/mustache/sinatra.rb` or
-<https://github.com/mustache/mustache/blob/master/lib/mustache/sinatra.rb>
-for complete documentation.
+Sinatra integration is available with the 
+[mustache-sinatra gem](https://github.com/mustache/mustache-sinatra).
 
 An example Sinatra application is also provided:
 <https://github.com/defunkt/mustache-sinatra-example>
@@ -359,12 +360,18 @@ Once you've made your great commits:
 
 ## Mailing List
 
-To join the list simply send an email to <mustache@librelist.com>. This
+~~To join the list simply send an email to <mustache@librelist.com>. This
 will subscribe you and send you information about your subscription,
 including unsubscribe information.
 
-The archive can be found at <http://librelist.com/browser/mustache/>.
+The archive can be found at <http://librelist.com/browser/mustache/>.~~
 
+The mailing list hasn't been updated in quite a while, please join us on Gitter
+or IRC:
+
+[![Join the chat at https://gitter.im/mustache/mustache](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/mustache/mustache?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
+[#{ on Freenode][irc]
 
 ## Meta
 
@@ -373,9 +380,6 @@ The archive can be found at <http://librelist.com/browser/mustache/>.
 * Bugs: <https://github.com/mustache/mustache/issues>
 * List: <mustache@librelist.com>
 * Gems: <http://rubygems.org/gems/mustache>
-
-You can also find us in #{ on [irc.freenode.net][irc].
-
 
 [1]: http://code.google.com/p/google-ctemplate/
 [2]: http://www.ivan.fomichev.name/2008/05/erlang-template-engine-prototype.html

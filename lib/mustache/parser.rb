@@ -84,7 +84,6 @@ EOF
     # the rest only allow ALLOWED_CONTENT.
     ANY_CONTENT = [ '!', '=' ].map(&:freeze)
 
-    attr_reader :scanner, :result
     attr_writer :otag, :ctag
 
     # Accepts an options hash which does nothing but may be used in
@@ -124,7 +123,7 @@ EOF
 
       if !@sections.empty?
         # We have parsed the whole file, but there's still opened sections.
-        type, pos, result = @sections.pop
+        type, pos, _ = @sections.pop
         error "Unclosed section #{type.inspect}", pos
       end
 
@@ -135,6 +134,23 @@ EOF
     private
 
 
+    def content_tags type, current_ctag
+      if ANY_CONTENT.include?(type)
+        r = /\s*#{regexp(type)}?#{regexp(current_ctag)}/
+        scan_until_exclusive(r)
+      else
+        @scanner.scan(ALLOWED_CONTENT)
+      end
+    end
+
+    def dispatch_based_on_type type, content, fetch, padding, pre_match_position
+      send("scan_tag_#{type}", content, fetch, padding, pre_match_position)
+    end
+
+    def find_closing_tag scanner, current_ctag
+      error "Unclosed tag" unless scanner.scan(regexp(current_ctag))
+    end
+
     # Find {{mustaches}} and add them to the @result array.
     def scan_tags
       # Scan until we hit an opening delimiter.
@@ -142,7 +158,7 @@ EOF
       pre_match_position = @scanner.pos
       last_index = @result.length
 
-      return unless x = @scanner.scan(/([ \t]*)?#{Regexp.escape(otag)}/)
+      return unless @scanner.scan(/([ \t]*)?#{Regexp.escape(otag)}/)
       padding = @scanner[1] || ''
 
       # Don't touch the preceding whitespace unless we're matching the start
@@ -161,12 +177,7 @@ EOF
 
       # ANY_CONTENT tags allow any character inside of them, while
       # other tags (such as variables) are more strict.
-      content = if ANY_CONTENT.include?(type)
-        r = /\s*#{regexp(type)}?#{regexp(current_ctag)}/
-        scan_until_exclusive(r)
-      else
-        @scanner.scan(ALLOWED_CONTENT)
-      end
+      content = content_tags(type, current_ctag)
 
       # We found {{ but we can't figure out what's going on inside.
       error "Illegal content in tag" if content.empty?
@@ -174,14 +185,7 @@ EOF
       fetch = [:mustache, :fetch, content.split('.')]
       prev = @result
 
-      # Based on the sigil, do what needs to be done.
-      if type
-        # Method#call proves much faster than using send
-        method("scan_tag_#{type}").
-          call(content, fetch, padding, pre_match_position)
-      else
-        @result << [:mustache, :etag, fetch, offset]
-      end
+      dispatch_based_on_type(type, content, fetch, padding, pre_match_position)
 
       # The closing } in unescaped tags is just a hack for
       # aesthetics.
@@ -192,10 +196,7 @@ EOF
       @scanner.skip(/\s+/)
       @scanner.skip(regexp(type)) if type
 
-      # Try to find the closing tag.
-      unless close = @scanner.scan(regexp(current_ctag))
-        error "Unclosed tag"
-      end
+      find_closing_tag(@scanner, current_ctag)
 
       # If this tag was the only non-whitespace content on this line, strip
       # the remaining whitespace.  If not, but we've been hanging on to padding
@@ -280,6 +281,13 @@ EOF
     # characters in their method names, they are aliased to
     # better named methods.
     #
+
+
+    # This function handles the cases where the scanned tag does not have
+    # a type.
+    def scan_tag_ content, fetch, padding, pre_match_position
+      @result << [:mustache, :etag, fetch, offset]
+    end
 
 
     def scan_tag_block content, fetch, padding, pre_match_position

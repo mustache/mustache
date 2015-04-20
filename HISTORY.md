@@ -1,3 +1,16 @@
+## 1.0.1 (2015-02-23)
+
+* Always cast to hash on hash-like object lookups (#187)
+* Fixed -v option in the binary (#189)
+* Missing partial returns "" per the spec (#200)
+
+# 1.0.0 (2015-01-11)
+
+* Bugfixes
+* Now requires Ruby >= 2.0
+* Removed mustache_sinatra to separate gem
+* Removed rack-bug-mustache_panel to separate gem
+
 ## 0.99.6 (2014-07-22)
 
 * Fixed and updated documentation

@@ -203,7 +203,7 @@ class Mustache
     end
 
     def on_fetch(names)
-      return "ctx[:to_s]" if names.empty?
+      return "ctx.current" if names.empty?
 
       names = names.map { |n| n.to_sym }
 

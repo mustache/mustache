@@ -1,3 +1,10 @@
+## 1.0.2 (2015-06-24)
+
+* Adds benchmarks (#197)
+* Clarify documentation around content without HTML escaping (#203)
+* Fix some Ruby warnings (#204)
+* Improve performance when using partials inside loops (#205)
+
 ## 1.0.1 (2015-02-23)
 
 * Always cast to hash on hash-like object lookups (#187)

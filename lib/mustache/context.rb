@@ -13,6 +13,7 @@ class Mustache
     #
     def initialize(mustache)
       @stack = [mustache]
+      @partial_template_cache = {}
     end
 
     # A {{>partial}} tag translates into a call to the context's
@@ -27,8 +28,13 @@ class Mustache
       mustache = mustache_in_stack
       # Indent the partial template by the given indentation.
       part = mustache.partial(name).to_s.gsub(/^/, indentation)
-      # Call the Mustache's `partial` method and render the result.
-      mustache.render(part, self)
+
+      # Get a template object for the partial and render the result.
+      template_for_partial(part).render(self)
+    end
+
+    def template_for_partial(partial)
+      @partial_template_cache[partial] ||= Template.new(partial)
     end
 
     #

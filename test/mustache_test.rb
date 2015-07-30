@@ -127,6 +127,14 @@ rendered
     assert_equal %Q'<p class="flash-notice" style="display: none;">', instance.render
   end
 
+  def test_sections_treat_empty_string_as_false
+    html = "Empty strings are {{#string}}Truthy{{/string}}{{^string}}Falsey{{/string}}"
+
+    instance = Mustache.new
+    instance.template = html
+    assert_equal "Empty strings are Falsey", instance.render(string: "")
+  end
+
   def test_simple
     assert_equal <<-end_simple, Simple.render
 Hello Chris

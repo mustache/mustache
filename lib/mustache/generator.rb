@@ -118,7 +118,7 @@ class Mustache
             p.compile(src)
           end
           t.render(ctx.dup)
-        else
+        elsif !v.nil? && !(v.respond_to?(:empty?) && v.empty?)
           # Shortcut when passed non-array
           v = [v] unless v.is_a?(Array) || v.is_a?(Mustache::Enumerable) || defined?(Enumerator) && v.is_a?(Enumerator)
 

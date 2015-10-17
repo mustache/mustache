@@ -97,7 +97,7 @@ class Mustache
     # Do we know about a particular key? In other words, will calling
     # `context[key]` give us a result that was set. Basically.
     def has_key?(key)
-      !!fetch(key, false)
+      fetch(key, false)
     rescue ContextMiss
       false
     end

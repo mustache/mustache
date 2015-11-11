@@ -110,9 +110,6 @@ class Mustache
     end
 
 
-    private
-
-
     # Simple recursive iterator for tokens
     def self.recursor(toks, section, &block)
       toks.map do |token|

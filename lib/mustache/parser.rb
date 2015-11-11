@@ -121,7 +121,7 @@ EOF
         scan_tags || scan_text
       end
 
-      if !@sections.empty?
+      unless @sections.empty?
         # We have parsed the whole file, but there's still opened sections.
         type, pos, _ = @sections.pop
         error "Unclosed section #{type.inspect}", pos

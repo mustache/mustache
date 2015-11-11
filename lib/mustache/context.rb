@@ -114,7 +114,7 @@ class Mustache
         next if frame == self
 
         value = find(frame, name, :__missing)
-        return value if value != :__missing
+        return value if :__missing != value
       end
 
       if default == :__raise || mustache_in_stack.raise_on_context_miss?

@@ -163,7 +163,11 @@ class Mustache
       return obj[key]      if obj.has_key?(key)
       return obj[key.to_s] if obj.has_key?(key.to_s)
 
-      obj.fetch(key, default)
+      if mustache_in_stack.raise_on_context_miss?
+        raise ContextMiss.new("Can't find #{key} in #{obj}")
+      else
+        obj.fetch(key, default)
+      end
     end
   end
 end

@@ -379,15 +379,15 @@ or IRC:
 * Home: <http://mustache.github.io>
 * Bugs: <https://github.com/mustache/mustache/issues>
 * List: <mustache@librelist.com>
-* Gems: <http://rubygems.org/gems/mustache>
+* Gems: <https://rubygems.org/gems/mustache>
 
-[1]: http://code.google.com/p/google-ctemplate/
+[1]: https://github.com/olafvdspek/ctemplate
 [2]: http://www.ivan.fomichev.name/2008/05/erlang-template-engine-prototype.html
 [3]: http://google-ctemplate.googlecode.com/svn/trunk/doc/howto.html
 [4]: https://github.com/brynary/rack-bug/
 [5]: http://img.skitch.com/20091027-n8pxwwx8r61tc318a15q1n6m14.png
-[fk]: http://help.github.com/forking/
-[is]: https://github.com/defunkt/mustache/issues
+[fk]: https://help.github.com/forking/
+[is]: https://github.com/mustache/mustache/issues
 [irc]: irc://irc.freenode.net/#{
 [vim]: https://github.com/mustache/vim-mustache-handlebars
 [emacs]: https://github.com/mustache/vim-mustache-handlebars

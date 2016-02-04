@@ -531,7 +531,7 @@ Benvolio is 15
 
   def test_liberal_tag_names_in_class
     assert_equal <<-end_liberal, Liberal.render
-kevin j sheurs
+kevin j sheurs 123 Somewhere St
 end_liberal
   end
 

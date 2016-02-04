@@ -14,6 +14,10 @@ class Liberal < Mustache
   def lastName?
     'sheurs'
   end
+
+  define_method :'street-address' do
+    '123 Somewhere St'
+  end
 end
 
 if $0 == __FILE__

@@ -138,8 +138,11 @@ class Mustache
     def find(obj, key, default = nil)
       return find_in_hash(obj.to_hash, key, default) if obj.respond_to?(:to_hash)
 
-      key = to_tag(key)
-      return default unless obj.respond_to?(key)
+      unless obj.respond_to?(key)
+        # no match for the key, but it may include a hyphen, so try again replacing hyphens with underscores.
+        key = key.to_s.tr('-', '_')
+        return default unless obj.respond_to?(key)
+      end
 
       meth = obj.method(key) rescue proc { obj.send(key) }
       meth.arity == 1 ? meth.to_proc : meth.call
@@ -151,12 +154,6 @@ class Mustache
 
 
     private
-
-
-    # If a class, we need to find tags (methods) per Parser::ALLOWED_CONTENT.
-    def to_tag key
-      key.to_s.include?('-') ? key.to_s.tr('-', '_') : key
-    end
 
     # Fetches a hash key if it exists, or returns the given default.
     def find_in_hash(obj, key, default)

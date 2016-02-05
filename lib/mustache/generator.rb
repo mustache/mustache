@@ -113,7 +113,7 @@ class Mustache
         elsif v.is_a?(Proc)
           t = Mustache::Template.new(v.call(#{raw.inspect}).to_s)
           def t.tokens(src=@source)
-            p = Parser.new
+            p = Mustache::Parser.new
             p.otag, p.ctag = #{delims.inspect}
             p.compile(src)
           end

@@ -362,7 +362,7 @@ data
       end
 
       def each *args, &block
-        @people.each *args, &block
+        @people.each(*args, &block)
       end
     end
 

@@ -279,7 +279,7 @@ class Mustache
   end
 
   def templateify(obj)
-    self.class.templateify(obj, @options.merge(:partial_resolver => self.method(:partial)))
+    self.class.templateify(obj, {:partial_resolver => self.method(:partial)}.merge(@options))
   end
 
   # Return the value of the configuration setting on the superclass, or return

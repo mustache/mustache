@@ -90,6 +90,11 @@ EOF
     # the future.
     def initialize(options = {})
       @options = {}
+      @option_inline_partials_at_compile_time = options[:inline_partials_at_compile_time]
+      if @option_inline_partials_at_compile_time
+        @partial_resolver = options[:partial_resolver]
+        raise ArgumentError.new "Missing or invalid partial_resolver" unless @partial_resolver.respond_to? :call
+      end
     end
 
     # The opening tag delimiter. This may be changed at runtime.
@@ -334,7 +339,11 @@ EOF
 
 
     def scan_tag_open_partial content, fetch, padding, pre_match_position
-      @result << [:mustache, :partial, content, offset, padding]
+      @result << if @option_inline_partials_at_compile_time
+        self.class.new(@options).compile @partial_resolver.call(content)
+      else
+        [:mustache, :partial, content, offset, padding]
+      end
     end
     alias_method :'scan_tag_<', :scan_tag_open_partial
     alias_method :'scan_tag_>', :scan_tag_open_partial

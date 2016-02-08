@@ -18,9 +18,10 @@ class Mustache
     attr_reader :source
 
     # Expects a Mustache template as a string along with a template
-    # path, which it uses to find partials.
-    def initialize(source)
+    # path, which it uses to find partials. Options may be passed.
+    def initialize(source, options = {})
       @source = source
+      @options = options
     end
 
     # Renders the `@source` Mustache template using the given
@@ -46,7 +47,7 @@ class Mustache
     # Does the dirty work of transforming a Mustache template into an
     # interpolation-friendly Ruby string.
     def compile(src = @source)
-      Generator.new.compile(tokens(src))
+      Generator.new(@options).compile(tokens(src))
     end
     alias_method :to_s, :compile
 
@@ -55,7 +56,7 @@ class Mustache
     # @return [Array] Array of tokens.
     #
     def tokens(src = @source)
-      Parser.new.compile(src)
+      Parser.new(@options).compile(src)
     end
 
     # Returns an array of tags.

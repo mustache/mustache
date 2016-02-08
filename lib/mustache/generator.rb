@@ -27,9 +27,10 @@ class Mustache
   #   $ mustache --compile test.mustache
   #   "Hi #{CGI.escapeHTML(ctx[:thing].to_s)}!\n"
   class Generator
-    # Options are unused for now but may become useful in the future.
+    # Options can be used to manipulate the resulting ruby code string behavior.
     def initialize(options = {})
       @options = options
+      @option_static_lambdas = options[:static_lambdas] == true
     end
 
     # Given an array of tokens, returns an interpolatable Ruby string.
@@ -104,13 +105,14 @@ class Mustache
       # string we can use.
       code = compile(content)
 
-      # Compile the Ruby for this section now that we know what's
-      # inside the section.
-      ev(<<-compiled)
-      if v = #{compile!(name)}
-        if v == true
-          #{code}
-        elsif v.is_a?(Proc)
+      # Lambda handling - default handling is to dynamically interpret
+      # the returned lambda result as mustache source
+      proc_handling = if @option_static_lambdas
+        <<-compiled
+          v.call(#{raw.inspect}).to_s
+        compiled
+      else
+        <<-compiled
           t = Mustache::Template.new(v.call(#{raw.inspect}).to_s)
           def t.tokens(src=@source)
             p = Mustache::Parser.new
@@ -118,6 +120,17 @@ class Mustache
             p.compile(src)
           end
           t.render(ctx.dup)
+        compiled
+      end
+
+      # Compile the Ruby for this section now that we know what's
+      # inside the section.
+      ev(<<-compiled)
+      if v = #{compile!(name)}
+        if v == true
+          #{code}
+        elsif v.is_a?(Proc)
+          #{proc_handling}
         else
           # Shortcut when passed non-array
           v = [v] unless v.is_a?(Array) || v.is_a?(Mustache::Enumerable) || defined?(Enumerator) && v.is_a?(Enumerator)
@@ -157,7 +170,7 @@ class Mustache
       ev(<<-compiled)
         v = #{compile!(name)}
         if v.is_a?(Proc)
-          v = Mustache::Template.new(v.call.to_s).render(ctx.dup)
+          v = #{@option_static_lambdas ? 'v.call.to_s' : 'Mustache::Template.new(v.call.to_s).render(ctx.dup)'}
         end
         v.to_s
       compiled
@@ -168,7 +181,7 @@ class Mustache
       ev(<<-compiled)
         v = #{compile!(name)}
         if v.is_a?(Proc)
-          v = Mustache::Template.new(v.call.to_s).render(ctx.dup)
+          v = #{@option_static_lambdas ? 'v.call.to_s' : 'Mustache::Template.new(v.call.to_s).render(ctx.dup)'}
         end
         ctx.escapeHTML(v.to_s)
       compiled

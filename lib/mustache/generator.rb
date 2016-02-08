@@ -109,7 +109,7 @@ class Mustache
       # the returned lambda result as mustache source
       proc_handling = if @option_static_lambdas
         <<-compiled
-          v.call(#{raw.inspect}).to_s
+          v.call(lambda {|v| #{code}}.call(v)).to_s
         compiled
       else
         <<-compiled

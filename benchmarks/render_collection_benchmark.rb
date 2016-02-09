@@ -56,16 +56,20 @@ data_1000 = {
   }
 end
 
+view = Mustache.new
+view.template = template
+view.render # Call render once so the template will be compiled
+
 Benchmark.ips do |x|
   x.report("render list of 10") do |times|
-    Mustache.render(template, data_10)
+    view.render(data_10)
   end
 
   x.report("render list of 100") do |times|
-    Mustache.render(template, data_100)
+    view.render(data_100)
   end
 
   x.report("render list of 1000") do |times|
-    Mustache.render(template, data_1000)
+    view.render(data_1000)
   end
 end

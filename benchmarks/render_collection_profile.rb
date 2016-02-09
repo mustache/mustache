@@ -37,10 +37,14 @@ end
 # Uncomment to measure object allocations. Requires ruby 2.0.0
 # RubyProf.measure_mode = RubyProf::ALLOCATIONS
 
+view = Mustache.new
+view.template = template
+view.render # Call render once so the template will be compiled
+
 RubyProf.start
 
 500.times do
-  Mustache.render(template, data)
+  view.render(data)
 end
 
 result = RubyProf.stop

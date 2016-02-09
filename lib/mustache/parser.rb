@@ -89,7 +89,7 @@ EOF
     # Accepts an options hash which does nothing but may be used in
     # the future.
     def initialize(options = {})
-      @options = {}
+      @options = options
       @option_inline_partials_at_compile_time = options[:inline_partials_at_compile_time]
       if @option_inline_partials_at_compile_time
         @partial_resolver = options[:partial_resolver]

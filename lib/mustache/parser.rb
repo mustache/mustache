@@ -340,7 +340,7 @@ EOF
 
     def scan_tag_open_partial content, fetch, padding, pre_match_position
       @result << if @option_inline_partials_at_compile_time
-        partial = @partial_resolver.call(content)
+        partial = @partial_resolver.call content
         partial.gsub!(/^/, padding) unless padding.empty?
         self.class.new(@options).compile partial
       else

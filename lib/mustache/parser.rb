@@ -84,7 +84,7 @@ EOF
     # the rest only allow ALLOWED_CONTENT.
     ANY_CONTENT = [ '!', '=' ].map(&:freeze)
 
-    attr_writer :otag, :ctag
+    attr_reader :otag, :ctag
 
     # Accepts an options hash which does nothing but may be used in
     # the future.
@@ -95,16 +95,23 @@ EOF
         @partial_resolver = options[:partial_resolver]
         raise ArgumentError.new "Missing or invalid partial_resolver" unless @partial_resolver.respond_to? :call
       end
+
+      # Initialize default tags
+      self.otag ||= '{{'
+      self.ctag ||= '}}'
     end
 
     # The opening tag delimiter. This may be changed at runtime.
-    def otag
-      @otag ||= '{{'
+    def otag=(value)
+      @otag_regex     = /([ \t]*)?#{regexp(value)}/
+      @otag_not_regex = /(^[ \t]*)?#{regexp(value)}/
+      @otag = value
     end
 
-    # The closing tag delimiter. This too may be changed at runtime.
-    def ctag
-      @ctag ||= '}}'
+    # The closing tag delimiter. This too may be changed at runtime.q
+    def ctag=(value)
+      @ctag_regex = regexp value
+      @ctag = value
     end
 
     # Given a string template, returns an array of tokens.
@@ -139,9 +146,9 @@ EOF
     private
 
 
-    def content_tags type, current_ctag
+    def content_tags type, current_ctag_regex
       if ANY_CONTENT.include?(type)
-        r = /\s*#{regexp(type)}?#{regexp(current_ctag)}/
+        r = /\s*#{regexp(type)}?#{current_ctag_regex}/
         scan_until_exclusive(r)
       else
         @scanner.scan(ALLOWED_CONTENT)
@@ -152,8 +159,8 @@ EOF
       send("scan_tag_#{type}", content, fetch, padding, pre_match_position)
     end
 
-    def find_closing_tag scanner, current_ctag
-      error "Unclosed tag" unless scanner.scan(regexp(current_ctag))
+    def find_closing_tag scanner, current_ctag_regex
+      error "Unclosed tag" unless scanner.scan(current_ctag_regex)
     end
 
     # Find {{mustaches}} and add them to the @result array.
@@ -163,7 +170,7 @@ EOF
       pre_match_position = @scanner.pos
       last_index = @result.length
 
-      return unless @scanner.scan(/([ \t]*)?#{Regexp.escape(otag)}/)
+      return unless @scanner.scan @otag_regex
       padding = @scanner[1] || ''
 
       # Don't touch the preceding whitespace unless we're matching the start
@@ -176,13 +183,13 @@ EOF
 
       # Since {{= rewrites ctag, we store the ctag which should be used
       # when parsing this specific tag.
-      current_ctag = self.ctag
+      current_ctag_regex = @ctag_regex
       type = @scanner.scan(self.class.valid_types)
       @scanner.skip(/\s*/)
 
       # ANY_CONTENT tags allow any character inside of them, while
       # other tags (such as variables) are more strict.
-      content = content_tags(type, current_ctag)
+      content = content_tags(type, current_ctag_regex)
 
       # We found {{ but we can't figure out what's going on inside.
       error "Illegal content in tag" if content.empty?
@@ -201,7 +208,7 @@ EOF
       @scanner.skip(/\s+/)
       @scanner.skip(regexp(type)) if type
 
-      find_closing_tag(@scanner, current_ctag)
+      find_closing_tag(@scanner, current_ctag_regex)
 
       # If this tag was the only non-whitespace content on this line, strip
       # the remaining whitespace.  If not, but we've been hanging on to padding
@@ -223,7 +230,7 @@ EOF
 
     # Try to find static text, e.g. raw HTML with no {{mustaches}}.
     def scan_text
-      text = scan_until_exclusive(/(^[ \t]*)?#{Regexp.escape(otag)}/)
+      text = scan_until_exclusive @otag_not_regex
 
       if text.nil?
         # Couldn't find any otag, which means the rest is just static text.
@@ -268,7 +275,7 @@ EOF
     # Used to quickly convert a string into a regular expression
     # usable by the string scanner.
     def regexp(thing)
-      /#{Regexp.escape(thing)}/
+      /#{Regexp.escape(thing)}/ if thing
     end
 
     # Raises a SyntaxError. The message should be the name of the

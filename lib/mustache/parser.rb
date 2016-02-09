@@ -103,8 +103,9 @@ EOF
 
     # The opening tag delimiter. This may be changed at runtime.
     def otag=(value)
-      @otag_regex     = /([ \t]*)?#{regexp(value)}/
-      @otag_not_regex = /(^[ \t]*)?#{regexp(value)}/
+      regex = regexp value
+      @otag_regex     = /([ \t]*)?#{regex}/
+      @otag_not_regex = /(^[ \t]*)?#{regex}/
       @otag = value
     end
 
@@ -275,7 +276,7 @@ EOF
     # Used to quickly convert a string into a regular expression
     # usable by the string scanner.
     def regexp(thing)
-      /#{Regexp.escape(thing)}/ if thing
+      Regexp.new Regexp.escape(thing) if thing
     end
 
     # Raises a SyntaxError. The message should be the name of the

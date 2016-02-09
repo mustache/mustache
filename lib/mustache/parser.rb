@@ -108,7 +108,7 @@ EOF
       @otag = value
     end
 
-    # The closing tag delimiter. This too may be changed at runtime.q
+    # The closing tag delimiter. This too may be changed at runtime.
     def ctag=(value)
       @ctag_regex = regexp value
       @ctag = value

@@ -126,17 +126,16 @@ class Mustache
       # Compile the Ruby for this section now that we know what's
       # inside the section.
       ev(<<-compiled)
-      if v = #{compile!(name)}
-        if v == true
-          #{code}
-        elsif v.is_a?(Proc)
-          #{proc_handling}
-        else
-          # Shortcut when passed non-array
-          v = [v] unless v.is_a?(Array) || v.is_a?(Mustache::Enumerable) || defined?(Enumerator) && v.is_a?(Enumerator)
-
-          v.map { |h| ctx.push(h); r = #{code}; ctx.pop; r }.join
-        end
+      case v = #{compile!(name)}
+      when NilClass, FalseClass
+      when TrueClass
+        #{code}
+      when Proc
+        #{proc_handling}
+      when Array, Enumerator, Mustache::Enumerable
+        v.map { |h| ctx.push(h); r = #{code}; ctx.pop; r }.join
+      else
+        ctx.push(v); r = #{code}; ctx.pop; r
       end
       compiled
     end
@@ -170,7 +169,7 @@ class Mustache
       ev(<<-compiled)
         v = #{compile!(name)}
         if v.is_a?(Proc)
-          v = #{@option_static_lambdas ? 'v.call.to_s' : 'Mustache::Template.new(v.call.to_s).render(ctx.dup)'}
+          v = #{@option_static_lambdas ? 'v.call' : 'Mustache::Template.new(v.call.to_s).render(ctx.dup)'}
         end
         v.to_s
       compiled
@@ -181,7 +180,7 @@ class Mustache
       ev(<<-compiled)
         v = #{compile!(name)}
         if v.is_a?(Proc)
-          v = #{@option_static_lambdas ? 'v.call.to_s' : 'Mustache::Template.new(v.call.to_s).render(ctx.dup)'}
+          v = #{@option_static_lambdas ? 'v.call' : 'Mustache::Template.new(v.call.to_s).render(ctx.dup)'}
         end
         ctx.escapeHTML(v.to_s)
       compiled
@@ -193,11 +192,15 @@ class Mustache
       names = names.map { |n| n.to_sym }
 
       initial, *rest = names
-      <<-compiled
-        #{rest.inspect}.reduce(ctx[#{initial.inspect}]) { |value, key|
-          value && ctx.find(value, key)
-        }
-      compiled
+      if rest.any?
+        <<-compiled
+          #{rest.inspect}.reduce(ctx[#{initial.inspect}]) { |value, key| value && ctx.find(value, key) }
+        compiled
+      else
+        <<-compiled
+          ctx[#{initial.inspect}]
+        compiled
+      end
     end
 
     # An interpolation-friendly version of a string, for use within a

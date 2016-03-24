@@ -91,7 +91,45 @@ EOF
         [:multi, [:static, "\t"]],
         "\t",
         %w[{{ }}]]]
-
     assert_equal expected, tokens
   end
+                          
+  def test_inheritance
+    lexer = Mustache::Parser.new
+    tokens = lexer.compile("{{$content}}test\tinheritance{{/content}}")
+
+    expected = [:multi, 
+                [:mustache, 
+		  :blockvar, 
+		      [:mustache, :fetch, ["content"]], [1, 9], 
+		      [:multi, 
+			  [:static, "test\tinheritance"]], 
+		      "test\tinheritance", 
+		      ["{{", "}}"]]]
+                          
+   
+    assert_equal expected, tokens
+  end
+
+  def test_inheritance2
+    lexer = Mustache::Parser.new
+    tokens = lexer.compile("{{<super}}{{$content}}This content will be replaced{{/content}}{{/super}}")
+    expected = [:multi, 
+		  [:mustache,
+                   :parent, 
+                   [:mustache, :fetch, ["super"]], 
+		   [1, 7], 
+                   [:multi, 
+		      [:mustache, 
+		       :blockvar, 
+                       [:mustache, :fetch, ["content"]], 
+		       [1, 19], 
+                       [:multi,
+                           [:static, "This content will be replaced"]], 
+                            "This content will be replaced", ["{{", "}}"]]], 
+                       "{{$content}}This content will be replaced{{/content}}", ["{{", "}}"]]]
+                          
+    assert_equal expected, tokens
+  end
+   
 end

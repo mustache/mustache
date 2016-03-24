@@ -152,6 +152,34 @@ class Mustache
       ev("ctx.partial(#{name.to_sym.inspect}, #{indentation.inspect})")
     end
 
+    # Fired when the compiler finds a inheritance. We want to return code
+    # which stores the block variables in this template and  
+    # calls the parent at runtime.
+    def on_parent(name, offset, content, raw, delims)
+      result = ""  
+      parent_name = name[2].first  
+      content.each do |x| 
+        if x != :multi && x[0] === :mustache && x[1] === :blockvar then
+              varname = x[2][2].first.to_s 
+              code = compile!(x[4])
+              result << "ctx[:#{varname}] = \"#{code}\"; "
+        end
+     end
+              
+     # load and process parent template
+     ev(<<-compiled)
+     #{result}
+     ctx.load_render(#{parent_name.to_sym.inspect})  
+     compiled
+    end        
+        
+    # Fired when the compiler finds a block variable. 
+    # The compiler tries to fetch the assigned block from context at runtime.
+    def on_blockvar(name, offset, content, raw, delims)
+       block_name = name[2].first 
+       ev("ctx[:#{block_name}]")
+       #ev(compile!(name))
+    end
     # An unescaped tag.
     def on_utag(name, offset)
       ev(<<-compiled)

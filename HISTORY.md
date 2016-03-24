@@ -1,3 +1,8 @@
+## 1.0.3 (2016-03-24)
+
+* Raise on deep context miss (#214)
+* Allow hyphens in tags (#218)
+
 ## 1.0.2 (2015-06-24)
 
 * Adds benchmarks (#197)

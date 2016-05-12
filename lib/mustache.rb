@@ -74,6 +74,12 @@ require 'mustache/utils'
 #
 class Mustache
 
+  # Initialize a new mustache instance.
+  # @param [Hash] options An options hash
+  def initialize(options = {})
+    @options = options
+  end
+
   # Instantiates an instance of this class and calls `render` with
   # the passed args.
   #
@@ -266,13 +272,14 @@ class Mustache
     Mustache::Utils::String.new(classified).underscore(view_namespace)
   end
 
-  # @param [Template,String] obj Turns `obj` into a template
-  def self.templateify(obj)
-    obj.is_a?(Template) ? obj : Template.new(obj)
+  # @param [Template,String] obj      Turns `obj` into a template
+  # @param [Hash]            options  Options for template creation
+  def self.templateify(obj, options = {})
+    obj.is_a?(Template) ? obj : Template.new(obj, options)
   end
 
   def templateify(obj)
-    self.class.templateify(obj)
+    self.class.templateify(obj, {:partial_resolver => self.method(:partial)}.merge(@options))
   end
 
   # Return the value of the configuration setting on the superclass, or return

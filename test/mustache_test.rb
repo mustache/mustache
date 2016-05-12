@@ -362,7 +362,7 @@ data
       end
 
       def each *args, &block
-        @people.each *args, &block
+        @people.each(*args, &block)
       end
     end
 
@@ -504,6 +504,24 @@ Benvolio is 15
 
     assert_equal "Hi Chris.\n\nHi {{name}}.", view.render.chomp
     assert_equal 1, view.calls
+  end
+
+  def test_sections_returning_lambdas_get_called_dynamically_with_text
+    view = Mustache.new
+    view.template       = '{{name}}'
+    view[:name]         = lambda { '{{dynamic_name}}' }
+    view[:dynamic_name] = 'Chris'
+
+    assert_equal "Chris", view.render.chomp
+  end
+
+  def test_sections_returning_lambdas_get_not_called_dynamically_with_text_if_static
+    view = Mustache.new :static_lambdas => true
+    view.template       = '{{name}}'
+    view[:name]         = lambda { '{{dynamic_name}}' }
+    view[:dynamic_name] = 'Chris'
+
+    assert_equal "{{dynamic_name}}", view.render.chomp
   end
 
   def test_sections_which_refer_to_unary_method_call_them_as_proc

@@ -724,6 +724,23 @@ text
     end
   end
 
+  def test_hash_default_proc
+    template = <<template
+{{greetings.Peter}}
+{{greetings.Paul}}
+{{greetings.Mary}}
+template
+    data = {
+      'greetings' => Hash.new { |hash, key| hash[key] = "Hello, #{key}!" }
+    }
+
+    assert_equal <<expected, Mustache.render(template, data)
+Hello, Peter!
+Hello, Paul!
+Hello, Mary!
+expected
+  end
+
   def test_array_of_arrays
     template = <<template
 {{#items}}

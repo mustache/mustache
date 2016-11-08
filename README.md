@@ -44,10 +44,12 @@ in my HTML, or putting JavaScript in my HTML.
 Install the gem locally with:
 
     $ gem install mustache
-    
-Or add it to your `gemspec`:
 
-    s.add_dependency "mustache", "~> 1.0"
+Or add it to your `Gemfile`:
+
+```ruby
+gem "mustache", "~> 1.0"
+```
 
 
 ## Usage
@@ -56,28 +58,30 @@ Quick example:
 
     >> require 'mustache'
     => true
-    >> Mustache.render("Hello {{planet}}", :planet => "World!")
+    >> Mustache.render("Hello {{planet}}", planet: "World!")
     => "Hello World!"
 
 We've got an `examples` folder but here's the canonical one:
 
-    class Simple < Mustache
-      def name
-        "Chris"
-      end
+```ruby
+class Simple < Mustache
+  def name
+    "Chris"
+  end
 
-      def value
-        10_000
-      end
+  def value
+    10_000
+  end
 
-      def taxed_value
-        value * 0.6
-      end
+  def taxed_value
+    value * 0.6
+  end
 
-      def in_ca
-        true
-      end
-    end
+  def in_ca
+    true
+  end
+end
+```
 
 We simply create a normal Ruby class and define methods. Some methods
 reference others, some return values, some return only booleans.
@@ -92,9 +96,9 @@ Now let's write the template:
 
 This template references our view methods. To bring it all together,
 here's the code to render actual HTML;
-
-    Simple.render
-
+```ruby
+Simple.render
+```
 Which returns the following:
 
     Hello Chris
@@ -114,7 +118,7 @@ the `mustache(5)` manpage or
 ## Escaping
 
 Mustache does escape all values when using the standard double
-Mustache syntax. Characters which will be escaped: `& \ " < >` (as 
+Mustache syntax. Characters which will be escaped: `& \ " < >` (as
 well as `'` in Ruby `>= 2.0`). To disable escaping, simply use triple
 mustaches like `{{{unescaped_variable}}}`.
 
@@ -136,11 +140,12 @@ Given this template (winner.mustache):
 
 We can fill in the values at will:
 
-    view = Winner.new
-    view[:name] = 'George'
-    view[:value] = 100
-    view.render
-
+```ruby
+view = Winner.new
+view[:name] = 'George'
+view[:value] = 100
+view.render
+```
 Which returns:
 
     Hello George
@@ -148,11 +153,10 @@ Which returns:
 
 We can re-use the same object, too:
 
-    view[:name] = 'Tony'
-    view.render
-    Hello Tony
-    You have just won 100 bucks!
-
+```ruby
+view[:name] = 'Tony'
+view.render # => Hello Tony\nYou have just won 100 bucks!
+```
 
 ## Templates
 
@@ -165,33 +169,38 @@ follows the classic Ruby naming convention.
 You can set the search path using `Mustache.template_path`. It can be set on a
 class by class basis:
 
-    class Simple < Mustache
-      self.template_path = File.dirname(__FILE__)
-      ... etc ...
-    end
-
+```ruby
+class Simple < Mustache
+  self.template_path = __dir__
+end
+```
 Now `Simple` will look for `simple.mustache` in the directory it resides
 in, no matter the cwd.
 
 If you want to just change what template is used you can set
 `Mustache.template_file` directly:
 
-    Simple.template_file = './blah.mustache'
-
+```ruby
+Simple.template_file = './blah.mustache'
+```
 Mustache also allows you to define the extension it'll use.
 
-    Simple.template_extension = 'xml'
-
+```ruby
+Simple.template_extension = 'xml'
+```
 Given all other defaults, the above line will cause Mustache to look
 for './blah.xml'
 
 Feel free to set the template directly:
 
-    Simple.template = 'Hi {{person}}!'
+```ruby
+Simple.template = 'Hi {{person}}!'
+```
 
 Or set a different template for a single instance:
-
-    Simple.new.template = 'Hi {{person}}!'
+```ruby
+Simple.new.template = 'Hi {{person}}!'
+```
 
 Whatever works.
 
@@ -211,46 +220,50 @@ you want to use in all your views? No problem.
 
 This is just Ruby, after all.
 
-    module ViewHelpers
-      def gravatar
-        gravatar_id = Digest::MD5.hexdigest(self[:email].to_s.strip.downcase)
-        gravatar_for_id(gravatar_id)
-      end
+```ruby
+module ViewHelpers
+  def gravatar
+    gravatar_id = Digest::MD5.hexdigest(self[:email].to_s.strip.downcase)
+    gravatar_for_id(gravatar_id)
+  end
 
-      def gravatar_for_id(gid, size = 30)
-        "#{gravatar_host}/avatar/#{gid}?s=#{size}"
-      end
+  def gravatar_for_id(gid, size = 30)
+    "#{gravatar_host}/avatar/#{gid}?s=#{size}"
+  end
 
-      def gravatar_host
-        @ssl ? 'https://secure.gravatar.com' : 'http://www.gravatar.com'
-      end
-    end
+  def gravatar_host
+    @ssl ? 'https://secure.gravatar.com' : 'http://www.gravatar.com'
+  end
+end
+```
 
 Then just include it:
 
-    class Simple < Mustache
-      include ViewHelpers
+```ruby
+class Simple < Mustache
+  include ViewHelpers
 
-      def name
-        "Chris"
-      end
+  def name
+    "Chris"
+  end
 
-      def value
-        10_000
-      end
+  def value
+    10_000
+  end
 
-      def taxed_value
-        value * 0.6
-      end
+  def taxed_value
+    value * 0.6
+  end
 
-      def in_ca
-        true
-      end
+  def in_ca
+    true
+  end
 
-      def users
-        User.all
-      end
-    end
+  def users
+    User.all
+  end
+end
+```
 
 Great, but what about that `@ssl` ivar in `gravatar_host`? There are
 many ways we can go about setting it.
@@ -259,19 +272,21 @@ Here's an example which illustrates a key feature of Mustache: you
 are free to use the `initialize` method just as you would in any
 normal class.
 
-    class Simple < Mustache
-      include ViewHelpers
+```ruby
+class Simple < Mustache
+  include ViewHelpers
 
-      def initialize(ssl = false)
-        @ssl = ssl
-      end
-
-      ... etc ...
-    end
+  def initialize(ssl = false)
+    @ssl = ssl
+  end
+end
+```
 
 Now:
 
-    Simple.new(request.ssl?).render
+```ruby
+Simple.new(request.ssl?).render
+```
 
 Finally, our template might look like this:
 
@@ -286,7 +301,7 @@ Finally, our template might look like this:
 
 ### Sinatra
 
-Sinatra integration is available with the 
+Sinatra integration is available with the
 [mustache-sinatra gem](https://github.com/mustache/mustache-sinatra).
 
 An example Sinatra application is also provided:
@@ -305,13 +320,17 @@ contained in a hash set using `set :mustache, hash`.
 Mustache also provides a `Rack::Bug` panel.
 First you have to install the `rack-bug-mustache_panel` gem, then in your `config.ru` add  the following code:
 
-    require 'rack/bug/panels/mustache_panel'
-    use Rack::Bug::MustachePanel
+```ruby
+require 'rack/bug/panels/mustache_panel'
+use Rack::Bug::MustachePanel
+```
 
 Using Rails? Add this to your initializer or environment file:
 
-    require 'rack/bug/panels/mustache_panel'
-    config.middleware.use "Rack::Bug::MustachePanel"
+```ruby
+require 'rack/bug/panels/mustache_panel'
+config.middleware.use "Rack::Bug::MustachePanel"
+```
 
 ![Rack::Bug][5]
 
@@ -390,6 +409,6 @@ or IRC:
 [is]: https://github.com/mustache/mustache/issues
 [irc]: irc://irc.freenode.net/#{
 [vim]: https://github.com/mustache/vim-mustache-handlebars
-[emacs]: https://github.com/mustache/vim-mustache-handlebars
+[emacs]: https://github.com/mustache/emacs
 [tmbundle]: https://github.com/defunkt/Mustache.tmbundle
 [diff]: https://gist.github.com/defunkt/345490

@@ -48,7 +48,7 @@ Now let's combine them.
       Hi {{name}}!
     {{/names}}
 
-    $ cat data.yml template.mustache | mustache
+    $ mustache data.yml template.mustache
     Hi chris!
     Hi mark!
     Hi scott!
@@ -70,7 +70,7 @@ For example:
     $ cat template.mustache
     Hi {{name}}!
 
-    $ cat data.yml template.mustache | mustache
+    $ mustache data.yml template.mustache
     Hi chris!
     Hi mark!
     Hi scott!

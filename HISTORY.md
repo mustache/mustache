@@ -1,3 +1,8 @@
+## 1.0.4 (2017-03-23)
+
+* Hashes with default_procs may lazily fetch values. (#223)
+* Relax dependency on Ruby (#232)
+
 ## 1.0.3 (2016-03-24)
 
 * Raise on deep context miss (#214)

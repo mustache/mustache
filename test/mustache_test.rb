@@ -815,7 +815,17 @@ template
     template = '%%{{title}}%%'
 
     assert_equal '%%title%%', Mustache.render(template, hashlike)
-
   end
 
+  def test_instance_with_initialize_render
+    klass = Class.new(Mustache) do
+      def initialize(name)
+        @name = name
+      end
+      attr_reader :name
+    end
+
+    klass.template = "Hi {{name}}!"
+    assert_equal "Hi Dougal!", klass.new("Dougal").render
+  end
 end

@@ -1,3 +1,7 @@
+## 1.0.5 (2017-03-23)
+
+* Fixes error introduced in v1.0.4. (#235)
+
 ## 1.0.4 (2017-03-23)
 
 * Hashes with default_procs may lazily fetch values. (#223)

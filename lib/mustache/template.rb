@@ -1,3 +1,4 @@
+require 'digest'
 require 'cgi'
 
 require 'mustache/parser'
@@ -16,6 +17,17 @@ class Mustache
   # >> Mustache.render(template, hash)
   class Template
     attr_reader :source
+
+    class << self
+      alias_method :uncached_new, :new
+      def new(source)
+        cache[Digest::SHA1.hexdigest(source)] ||= uncached_new(source)
+      end
+
+      def cache
+        @cache ||= {}
+      end
+    end
 
     # Expects a Mustache template as a string along with a template
     # path, which it uses to find partials. Options may be passed.

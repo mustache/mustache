@@ -9,7 +9,7 @@ class Mustache
   # The template path informs your Mustache view where to look for its
   # corresponding template. It is an array of paths, by default containing
   # one entry:  the current directory (".")
-  # When setting up from a string, use ':' delimiters to create a search path
+  # When setting up from a string, use path delimiters to create a search path
   # When the template_file is requested, a search is done to find the file in the
   # path, this is then stored as the name.
   #
@@ -17,7 +17,7 @@ class Mustache
   # for "app/templates/stat.mustache"
 
   def self.setup_path path
-    path = path.split(':') if path.is_a? String
+    path = path.split(File::PATH_SEPARATOR) if path.is_a? String
     path.map{|p| File.expand_path(p)}
   end
 

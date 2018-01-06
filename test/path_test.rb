@@ -11,7 +11,7 @@ class MustacheTest < Minitest::Test
 
   def test_set_multiple_paths
     old_path = Mustache.template_path
-    Mustache.template_path = "this:that"
+    Mustache.template_path = "this#{File::PATH_SEPARATOR}that"
     assert_instance_of Array, Mustache.template_path
     assert_equal 2, Mustache.template_path.size
     Mustache.template_path = old_path

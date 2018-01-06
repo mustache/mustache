@@ -166,7 +166,8 @@ follows the classic Ruby naming convention.
 
     TemplatePartial => ./template_partial.mustache
 
-You can set the search path using `Mustache.template_path`. It can be set on a
+You can set the search path using `Mustache.template_path`. Search multiple
+paths by delimiting them with colons. It can be set on a
 class by class basis:
 
 ```ruby

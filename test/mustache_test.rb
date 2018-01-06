@@ -726,14 +726,17 @@ text
     base = Class.new(Mustache)
     tmpl = Class.new(base)
 
-    {:template_path      => File.expand_path('./foo'),
-     :template_extension => 'stache',
+    {:template_extension => 'stache',
      :view_namespace     => TestNamespace,
      :view_path          => './foo'
      }.each do |attr, value|
       base.send("#{attr}=", value)
       assert_equal value, tmpl.send(attr)
     end
+    attr = :template_path
+    value = File.expand_path('./foo')
+    base.send("#{attr}=", value)
+    assert_equal value, tmpl.send(attr).first
   end
 
   def test_hash_default_proc

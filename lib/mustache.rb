@@ -78,6 +78,8 @@ class Mustache
   # @param [Hash] options An options hash
   def initialize(options = {})
     @options = options
+    
+    initialize_settings
   end
 
   # Instantiates an instance of this class and calls `render` with

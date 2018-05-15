@@ -820,6 +820,7 @@ template
   def test_instance_with_initialize_render
     klass = Class.new(Mustache) do
       def initialize(name)
+        super
         @name = name
       end
       attr_reader :name

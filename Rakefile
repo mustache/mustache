@@ -35,7 +35,7 @@ if command? :ronn
 
   desc "Build the manual"
   task "man:build" do
-    sh "ronn -br5 --organization=DEFUNKT --manual='Mustache Manual' man/*.ron"
+    sh "ronn -br5 --organization=DEFUNKT --manual='Mustache Manual' man/*.ronn"
   end
 end
 

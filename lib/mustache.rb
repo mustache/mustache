@@ -98,19 +98,18 @@ class Mustache
   # Parses our fancy pants template file and returns normal file with
   # all special {{tags}} and {{#sections}}replaced{{/sections}}.
   #
-  # Examples
+  # @example Render view
+  #   @view.render("Hi {{thing}}!", :thing => :world)
   #
-  #     @view.render("Hi {{thing}}!", :thing => :world)
-  #
-  #     View.template = "Hi {{thing}}!"
-  #     @view = View.new
-  #     @view.render(:thing => :world)
+  # @example Set view template and then render
+  #   View.template = "Hi {{thing}}!"
+  #   @view = View.new
+  #   @view.render(:thing => :world)
   #
   # @param [String,Hash] data A String template or a Hash context.
   #                           If a Hash is given, we'll try to figure
   #                           out the template from the class.
   # @param [Hash] ctx A Hash context if `data` is a String template.
-  #
   # @return [String] Returns a rendered version of a template.
   def render(data = template, ctx = {})
     case data
@@ -141,11 +140,11 @@ class Mustache
 
   # Context accessors.
   #
-  # Example:
-  #     view = Mustache.new
-  #     view[:name] = "Jon"
-  #     view.template = "Hi, {{name}}!"
-  #     view.render # => "Hi, Jon!"
+  # @example Context accessors
+  #   view = Mustache.new
+  #   view[:name] = "Jon"
+  #   view.template = "Hi, {{name}}!"
+  #   view.render # => "Hi, Jon!"
   def [](key)
     context[key.to_sym]
   end
@@ -213,8 +212,8 @@ class Mustache
   end
   
   # Override this to provide custom escaping.
-  # Example:
   #
+  # @example Overriding #escapeHTML
   #   class PersonView < Mustache
   #     def escapeHTML(str)
   #       my_html_escape_method(str)
@@ -227,7 +226,6 @@ class Mustache
   #   If your override logic is expecting a string, you will
   #   have to call to_s on it yourself.
   # @param [String] str String to escape.
-  #
   # @return [String] Escaped HTML.
   def escapeHTML(str)
     CGI.escapeHTML(str)
@@ -244,7 +242,8 @@ class Mustache
 
   # When given a symbol or string representing a class, will try to produce an
   # appropriate view class.
-  # e.g.
+  #
+  # @example
   #   Mustache.view_namespace = Hurl::Views
   #   Mustache.view_class(:Partial) # => Hurl::Views::Partial
   def self.view_class(name)
@@ -290,7 +289,7 @@ class Mustache
     Mustache::Utils::String.new(underscored).classify
   end
 
-  #   TemplatePartial => template_partial
+  # TemplatePartial => template_partial
   # Template::Partial => template/partial
   # Takes a string but defaults to using the current class' name.
   def self.underscore(classified = name)

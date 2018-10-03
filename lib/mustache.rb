@@ -74,8 +74,15 @@ require 'mustache/utils'
 #
 class Mustache
 
-  # Initialize a new mustache instance.
+  # Initialize a new Mustache instance.
+  #
   # @param [Hash] options An options hash
+  # @option options [String] template_path 
+  # @option options [String] template_extension
+  # @option options [String] template_file
+  # @option options [String] template
+  # @option options [String] view_namespace 
+  # @option options [String] view_path
   def initialize(options = {})
     @options = options
   end

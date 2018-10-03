@@ -323,12 +323,14 @@ EOF
 
     def scan_tag_close content, fetch, padding, pre_match_position
       section, pos, result = @sections.pop
+      if section.nil?
+        error "Closing unopened #{content.inspect}"
+      end
+
       raw = @scanner.pre_match[pos[3]...pre_match_position] + padding
       (@result = result).last << raw << [self.otag, self.ctag]
 
-      if section.nil?
-        error "Closing unopened #{content.inspect}"
-      elsif section != content
+      if section != content
         error "Unclosed section #{section.inspect}", pos
       end
     end

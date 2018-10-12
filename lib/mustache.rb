@@ -244,7 +244,7 @@ class Mustache
     file_name = underscore(name)
     file_path = "#{view_path}/#{file_name}.rb"
 
-    return Mustache unless File.exists?(file_path)
+    return Mustache unless File.exist?(file_path)
 
     require file_path.chomp('.rb')
     rescued_const_get(name)

@@ -133,7 +133,7 @@ class Mustache
       when Proc
         #{proc_handling}
       when Array, Enumerator, Mustache::Enumerable
-        v.map { |h| ctx.push(h); r = #{code}; ctx.pop; r }.join
+        v.map { |_| ctx.push(_); r = #{code}; ctx.pop; r }.join
       else
         ctx.push(v); r = #{code}; ctx.pop; r
       end

@@ -1,3 +1,13 @@
+## 1.1.0 (2018-10-13)
+
+* [feat] Introduces `Mustache#escape`.  
+  This method receives a non-stringified value to allow for
+  more flexibility in the escaping, like JSON. (#245)
+* [bug] Raise correct error when closing unopened section (#240)
+* [bug] Fix use of deprecated `File.exists?` (#241)
+* [bug] Fix variable shadowing warning (#241)
+
+
 ## 1.0.5 (2017-03-23)
 
 * Fixes error introduced in v1.0.4. (#235)

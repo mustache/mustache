@@ -51,12 +51,12 @@ class Mustache
 
     # Allows customization of how Mustache escapes things.
     #
-    # @param [String] str String to escape.
+    # @param [Object] value Value to escape.
     #
-    # @return [String] Escaped HTML string.
+    # @return [String] Escaped string.
     #
-    def escapeHTML(str)
-      mustache_in_stack.escapeHTML(str)
+    def escape(value)
+      mustache_in_stack.escape(value)
     end
 
     # Adds a new object to the context's internal stack.

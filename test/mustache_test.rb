@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 require_relative 'helper'
+require 'json'
 
 class MustacheTest < Minitest::Test
   def test_instance_render
@@ -659,7 +660,7 @@ template
     assert_equal('[ 0 1 2 3 4 5 6 7 8 9 10 ]', MethodMissing.render)
   end
 
-  def test_custom_escaping
+  def test_custom_html_escaping
     view = Class.new(Mustache) do
       def escapeHTML(str)
         "pong"
@@ -667,6 +668,17 @@ template
     end
 
     assert_equal 'pong', view.render("{{thing}}", :thing => "nothing")
+    assert_equal 'nothing', Mustache.render("{{thing}}", :thing => "nothing")
+  end
+
+  def test_custom_escaping
+    view = Class.new(Mustache) do
+      def escape(str)
+        JSON.dump(str)
+      end
+    end
+
+    assert_equal '{ "key": "a\"b" }', view.render('{ "key": {{thing}} }', :thing => 'a"b')
     assert_equal 'nothing', Mustache.render("{{thing}}", :thing => "nothing")
   end
 

@@ -190,7 +190,22 @@ class Mustache
   end
 
   # Override this to provide custom escaping.
+  # By default it uses `CGI.escapeHTML`.
   #
+  # @example Overriding #escape
+  #   class PersonView < Mustache
+  #     def escape(value)
+  #       my_html_escape_method(value.to_s)
+  #     end
+  #   end
+  #
+  # @param [Object] value Value to escape.
+  # @return [String] Escaped content.
+  def escape(value)
+    self.escapeHTML(value.to_s)
+  end
+  
+  # Override this to provide custom escaping.
   # Example:
   #
   #   class PersonView < Mustache
@@ -199,6 +214,11 @@ class Mustache
   #     end
   #   end
   #
+  # @deprecated Use {#escape} instead.
+  #
+  #   Note that {#escape} can receive any kind of object.
+  #   If your override logic is expecting a string, you will
+  #   have to call to_s on it yourself.
   # @param [String] str String to escape.
   #
   # @return [String] Escaped HTML.

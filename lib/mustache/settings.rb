@@ -2,6 +2,30 @@
 # view class, or a single Mustache instance.
 class Mustache
 
+  def initialize_settings
+    @template = nil
+    @template_path = nil
+    @template_extension = nil
+    @template_name = nil
+    @template_file = nil
+    @raise_on_context_miss = nil
+  end
+
+  def self.initialize_settings
+    @template = nil
+    @template_path = nil
+    @template_extension = nil
+    @template_name = nil
+    @template_file = nil
+    @raise_on_context_miss = nil
+  end
+
+  initialize_settings
+
+  def self.inherited(subclass)
+    subclass.initialize_settings
+  end
+
   #
   # Template Path
   #

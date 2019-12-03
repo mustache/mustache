@@ -85,6 +85,8 @@ class Mustache
   # @option options [String] view_path
   def initialize(options = {})
     @options = options
+    
+    initialize_settings
   end
 
   # Instantiates an instance of this class and calls `render` with

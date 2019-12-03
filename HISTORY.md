@@ -1,3 +1,8 @@
+## 1.1.1 (2019-12-03)
+
+* [improvement] Improve yardoc documentation (#247)
+* [bug] Fix warnings about instance variables (#246)
+
 ## 1.1.0 (2018-10-13)
 
 * [feat] Introduces `Mustache#escape`.  

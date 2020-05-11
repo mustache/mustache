@@ -4,6 +4,8 @@
 * {{#person}}{{hometown.city}}, {{hometown.state}}{{/person}}
 * {{#person}}{{#hometown}}{{city}}, {{state}}{{/hometown}}{{/person}}
 * {{#person.hometown}}{{city}}, {{state}}{{/person.hometown}}
+* {{#person}}{{#hometown.to_a}}{{first}}.{{last}};{{/hometown.to_a}}{{/person}}
+* {{#person.hometown.to_a}}{{first}}.{{last}};{{/person.hometown.to_a}}
 * {{normal}}
 
 * {{{person.name.first}}} {{&person.name.last}}

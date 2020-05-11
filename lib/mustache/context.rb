@@ -160,6 +160,7 @@ class Mustache
       return obj[key]      if obj.has_key?(key)
       return obj[key.to_s] if obj.has_key?(key.to_s)
       return obj[key]      if obj.respond_to?(:default_proc) && obj.default_proc && obj[key]
+      return obj.send(key) if obj.respond_to?(key) # eg. to_a, to_json
 
       # If default is :__missing then we are from #fetch which is hunting through the stack
       # If default is nil then we are reducing dot notation

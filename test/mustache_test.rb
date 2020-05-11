@@ -714,6 +714,8 @@ text
 * Cincinnati, OH
 * Cincinnati, OH
 * Cincinnati, OH
+* city.Cincinnati;state.OH;
+* city.Cincinnati;state.OH;
 * Normal
 
 * Chris Firescythe

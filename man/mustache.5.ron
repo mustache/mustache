@@ -120,7 +120,7 @@ Output:
 
 **Non-Empty Lists**
 
-If the `person` key exists and has a non-false value, the HTML between
+If the `repo` key exists and has a non-false value, the HTML between
 the pound and slash will be rendered and displayed one or more times.
 
 When the value is a non-empty list, the text in the block will be

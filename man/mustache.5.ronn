@@ -252,7 +252,7 @@ Partials begin with a greater than sign, like `{{> box}}`.
 Partials are rendered at runtime (as opposed to compile time), so
 recursive partials are possible. Just avoid infinite loops.
 
-They also inherit the calling context. Whereas in ERB you may have
+They also inherit the calling context. Whereas in [ERB](http://en.wikipedia.org/wiki/ERuby) you may have
 this:
 
     <%= partial :next_more, :start => start, :size => size %>

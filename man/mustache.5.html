@@ -111,6 +111,10 @@ clauses, or for loops. Instead there are only tags. Some tags are
 replaced with a value, some nothing, and others a series of
 values. This document explains the different types of Mustache tags.</p>
 
+<p>The Mustache language has a <a href="https://github.com/mustache/spec">formal specification</a>. The current manpage
+reflects version 1.1.3 of the specification, as well as the de facto
+established <a href="https://github.com/mustache/spec/pull/75">candidate extension for template inheritance</a>.</p>
+
 <h2 id="TAG-TYPES">TAG TYPES</h2>
 
 <p>Tags are indicated by the double mustaches. <code>{{person}}</code> is a tag, as
@@ -159,15 +163,121 @@ supports raising an exception in this situation, for instance.</p>
 * &lt;b&gt;GitHub&lt;/b&gt;
 </code></pre>
 
+<p><strong>Dotted Names</strong></p>
+
+<p>If the <code>name</code> contains dots, it is split on the dots to obtain multiple
+keys. The first key is looked up in the context as described above. If it
+is found, the next key is looked up within the previous result. This is
+repeated until a key is not found or until the last key is found. The
+final result is interpolated as above.</p>
+
+<p>Template:</p>
+
+<pre><code>* {{client.name}}
+* {{age}}
+* {{client.company.name}}
+* {{{company.name}}}
+</code></pre>
+
+<p>Hash:</p>
+
+<pre><code>{
+  "client": {
+    "name": "Chris &amp; Friends",
+    "age": 50
+  },
+  "company": {
+    "name": "&lt;b&gt;GitHub&lt;/b&gt;"
+  }
+}
+</code></pre>
+
+<p>Output:</p>
+
+<pre><code>* Chris &amp;amp; Friends
+*
+*
+* &lt;b&gt;GitHub&lt;/b&gt;
+</code></pre>
+
+<p><strong>Implicit Iterator</strong></p>
+
+<p>As a special case, if the <code>name</code> consists of only a dot and nothing else,
+the value that <strong>is</strong> the current context is interpolated as a whole. This
+is especially useful if the parent context is a list; see <strong>Sections</strong>
+below.</p>
+
+<p>Template:</p>
+
+<pre><code>* {{.}}
+</code></pre>
+
+<p>Current context:</p>
+
+<pre><code>"Hello!"
+</code></pre>
+
+<p>Output:</p>
+
+<pre><code>* Hello!
+</code></pre>
+
+<p><strong>Lambdas</strong></p>
+
+<p>If any value found during the lookup is a callable object, such as a
+function or lambda, this object will be invoked with zero arguments. The
+value that is returned is then used instead of the callable object itself.</p>
+
+<p>An <strong>optional</strong> part of the specification states that if the final key in
+the <code>name</code> is a lambda that returns a string, then that string should be
+rendered as a Mustache template before interpolation. It will be rendered
+using the default delimiters (see <strong>Set Delimiter</strong> below) against the
+current context.</p>
+
+<p>Template:</p>
+
+<pre><code>* {{time.hour}}
+* {{today}}
+</code></pre>
+
+<p>Hash:</p>
+
+<pre><code>{
+  "year": 1970,
+  "month": 1,
+  "day": 1,
+  "time": function() {
+    return {
+      "hour": 0,
+      "minute": 0,
+      "second": 0
+    }
+  },
+  "today": function() {
+    return "{{year}}-{{month}}-{{day}}"
+  }
+}
+</code></pre>
+
+<p>Output:</p>
+
+<pre><code>* 0
+* 1970-1-1
+</code></pre>
+
 <h3 id="Sections">Sections</h3>
 
 <p>Sections render blocks of text zero or more times, depending on the
 value of the key in the current context.</p>
 
+<p>Lookup of dotted names works in the same way as with variables, except for
+slightly different treatment of lambdas. More on this below.</p>
+
 <p>A section begins with a pound and ends with a slash. That is,
 <code>{{#person}}</code> begins a "person" section while <code>{{/person}}</code> ends it.</p>
 
-<p>The behavior of the section is determined by the value of the key.</p>
+<p>The behavior of the section is determined by the final value of the key
+lookup.</p>
 
 <p><strong>False Values or Empty Lists</strong></p>
 
@@ -224,34 +334,59 @@ loop over collections.</p>
 
 <p>Output:</p>
 
-<pre><code>&lt;b&gt;resque&lt;/b&gt;
-&lt;b&gt;hub&lt;/b&gt;
-&lt;b&gt;rip&lt;/b&gt;
+<pre><code>  &lt;b&gt;resque&lt;/b&gt;
+  &lt;b&gt;hub&lt;/b&gt;
+  &lt;b&gt;rip&lt;/b&gt;
+</code></pre>
+
+<p>The same effect as above can be obtained without nested objects, by using
+the implicit iterator (see <strong>Variables</strong> above).</p>
+
+<p>Template:</p>
+
+<pre><code>{{#repo}}
+  &lt;b&gt;{{.}}&lt;/b&gt;
+{{/repo}}
+</code></pre>
+
+<p>Hash:</p>
+
+<pre><code>{
+  "repo": ["resque", "hub", "rip"]
+}
+</code></pre>
+
+<p>Output:</p>
+
+<pre><code>  &lt;b&gt;resque&lt;/b&gt;
+  &lt;b&gt;hub&lt;/b&gt;
+  &lt;b&gt;rip&lt;/b&gt;
 </code></pre>
 
 <p><strong>Lambdas</strong></p>
 
-<p>When the value is a callable object, such as a function or lambda, the
-object will be invoked and passed the block of text. The text passed
-is the literal block, unrendered. <code>{{tags}}</code> will not have been expanded
-- the lambda should do that on its own. In this way you can implement
-filters or caching.</p>
+<p>When any value found during the lookup is a callable object, such as a
+function or lambda, the object will be invoked and passed the block of
+text. The text passed is the literal block, unrendered. <code>{{tags}}</code> will
+not have been expanded.</p>
+
+<p>An <strong>optional</strong> part of the specification states that if the final key in
+the <code>name</code> is a lambda that returns a string, then that string replaces
+the content of the section. It will be rendered using the same delimiters
+(see <strong>Set Delimiter</strong> below) as the original section content. In this way
+you can implement filters or caching.</p>
 
 <p>Template:</p>
 
-<pre><code>{{#wrapped}}
-  {{name}} is awesome.
-{{/wrapped}}
+<pre><code>{{#wrapped}}{{name}} is awesome.{{/wrapped}}
 </code></pre>
 
 <p>Hash:</p>
 
 <pre><code>{
   "name": "Willy",
-  "wrapped": function() {
-    return function(text, render) {
-      return "&lt;b&gt;" + render(text) + "&lt;/b&gt;"
-    }
+  "wrapped": function(text) {
+    return "&lt;b&gt;" + text + "&lt;/b&gt;"
   }
 }
 </code></pre>
@@ -282,7 +417,7 @@ context for a single rendering of the block.</p>
 
 <p>Output:</p>
 
-<pre><code>Hi Jon!
+<pre><code>  Hi Jon!
 </code></pre>
 
 <h3 id="Inverted-Sections">Inverted Sections</h3>
@@ -315,7 +450,7 @@ if the key doesn't exist, is false, or is an empty list.</p>
 
 <p>Output:</p>
 
-<pre><code>No repos :(
+<pre><code>  No repos :(
 </code></pre>
 
 <h3 id="Comments">Comments</h3>
@@ -376,6 +511,83 @@ user.mustache:
 {{/names}}
 </code></pre>
 
+<h3 id="Blocks">Blocks</h3>
+
+<p>A block begins with a dollar and ends with a slash. That is, <code>{{$title}}</code>
+begins a "title" block and <code>{{/title}}</code> ends it.</p>
+
+<p>Blocks mark parts of the template that may be overridden. This can be done
+with a block of the same name within a parent section in the calling
+template (see <strong>Parents</strong> below). If not overridden, the contents of a
+block render just as if the <code>{{$title}}</code> and <code>{{/title}}</code> tags weren't
+there.</p>
+
+<p>Blocks could be thought of as template parameters or as inline partials
+that may be passed to another template. They are part of the
+not-yet-official, optional <a href="https://github.com/mustache/spec/pull/75">inheritance specification</a>.</p>
+
+<p>Template <code>article.mustache</code>:</p>
+
+<pre><code>&lt;h1&gt;{{$title}}The News of Today{{/title}}&lt;/h1&gt;
+{{$body}}
+&lt;p&gt;Nothing special happened.&lt;/p&gt;
+{{/body}}
+</code></pre>
+
+<p>Output:</p>
+
+<pre><code>&lt;h1&gt;The News of Today&lt;/h1&gt;
+&lt;p&gt;Nothing special happened.&lt;/p&gt;
+</code></pre>
+
+<h3 id="Parents">Parents</h3>
+
+<p>A parent begins with a less than sign and ends with a slash. That is,
+<code>{{&lt;article}}</code> begins an "article" parent and <code>{{/article}}</code> ends it.</p>
+
+<p>Like an <code>{{&gt;article}}</code> partial, a parent lets you expand another template
+inside the current one. Unlike a partial, a parent also lets you override
+blocks of the other template.</p>
+
+<p>Blocks within a parent can again be overridden by another including
+template. Other content within a parent is ignored, like comments.</p>
+
+<p>Template:</p>
+
+<pre><code>{{&lt;article}}
+  Never shown
+  {{$body}}
+    {{#headlines}}
+    &lt;p>{{.}}&lt;/p&gt;
+    {{/headlines}}
+  {{/body}}
+{{/article}}
+
+{{&lt;article}}
+  {{$title}}Yesterday{{/title}}
+{{/article}}
+</code></pre>
+
+<p>Hash:</p>
+
+<pre><code>{
+  "headlines": [
+    "A pug's handler grew mustaches.",
+    "What an exciting day!"
+  ]
+}
+</code></pre>
+
+<p>Output, assuming the <code>article.mustache</code> from before:</p>
+
+<pre><code>&lt;h1&gt;The News of Today&lt;/h1&gt;
+&lt;p&gt;A pug's handler grew mustaches.&lt;/p&gt;
+&lt;p&gt;What an exciting day!&lt;/p&gt;
+
+&lt;h1&gt;Yesterday&lt;/h1&gt;
+&lt;p&gt;Nothing special happened.&lt;/p&gt;
+</code></pre>
+
 <h3 id="Set-Delimiter">Set Delimiter</h3>
 
 <p>Set Delimiter tags start with an equal sign and change the tag
@@ -395,7 +607,7 @@ tag style, the second uses erb style as defined by the Set Delimiter
 tag, and the third returns to the default style after yet another Set
 Delimiter declaration.</p>
 
-<p>According to <a href="http://google-ctemplate.googlecode.com/svn/trunk/doc/howto.html">ctemplates</a>, this "is useful for languages like TeX, where
+<p>According to <a href="http://goog-ctemplate.sourceforge.net/doc/howto.html">ctemplates</a>, this "is useful for languages like TeX, where
 double-braces may occur in the text and are awkward to use for
 markup."</p>
 
@@ -409,13 +621,13 @@ markup."</p>
 
 <h2 id="SEE-ALSO">SEE ALSO</h2>
 
-<p><a class="man-ref" href="mustache.1.ronn.html">mustache<span class="s">(1)</span></a>,
+<p><a class="man-ref" href="mustache.1.ron.html">mustache<span class="s">(1)</span></a>,
 <a href="http://mustache.github.io/" data-bare-link="true">http://mustache.github.io/</a></p>
 
 
   <ol class='man-decor man-foot man foot'>
     <li class='tl'>DEFUNKT</li>
-    <li class='tc'>November 2016</li>
+    <li class='tc'>April 2021</li>
     <li class='tr'>mustache(5)</li>
   </ol>
 

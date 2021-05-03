@@ -111,9 +111,9 @@ clauses, or for loops. Instead there are only tags. Some tags are
 replaced with a value, some nothing, and others a series of
 values. This document explains the different types of Mustache tags.</p>
 
-<p>The Mustache language has a <a href="https://github.com/mustache/spec">formal specification</a>. The current manpage
-reflects version 1.1.3 of the specification, as well as the de facto
-established <a href="https://github.com/mustache/spec/pull/75">candidate extension for template inheritance</a>.</p>
+<p>The Mustache language has a <a href="https://github.com/mustache/spec">formal specification</a>. The current
+manpage reflects version 1.2.1 of the specification, including the
+official-but-optional extensions for lambdas and inheritance.</p>
 
 <h2 id="TAG-TYPES">TAG TYPES</h2>
 
@@ -523,8 +523,8 @@ block render just as if the <code>{{$title}}</code> and <code>{{/title}}</code> 
 there.</p>
 
 <p>Blocks could be thought of as template parameters or as inline partials
-that may be passed to another template. They are part of the
-not-yet-official, optional <a href="https://github.com/mustache/spec/pull/75">inheritance specification</a>.</p>
+that may be passed to another template. They are part of the optional
+inheritance extension.</p>
 
 <p>Template <code>article.mustache</code>:</p>
 
@@ -627,7 +627,7 @@ markup."</p>
 
   <ol class='man-decor man-foot man foot'>
     <li class='tl'>DEFUNKT</li>
-    <li class='tc'>April 2021</li>
+    <li class='tc'>May 2021</li>
     <li class='tr'>mustache(5)</li>
   </ol>
 

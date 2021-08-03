@@ -128,7 +128,7 @@ Output:
 **Implicit Iterator**
 
 As a special case, if the `name` consists of only a dot and nothing else,
-the value that **is** the current context is interpolated as a whole. This
+the value that is the current context is interpolated as a whole. This
 is especially useful if the parent context is a list; see **Sections**
 below.
 

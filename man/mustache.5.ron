@@ -411,7 +411,7 @@ Can be thought of as a single, expanded template:
     {{/names}}
 
 
-### Dynamic Names
+**Dynamic Names**
 
 Dynamic Names are a special notation to dynamically determine a tag's content.
 

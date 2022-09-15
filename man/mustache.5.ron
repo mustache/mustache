@@ -520,7 +520,7 @@ Some mustache implementations may allow the use of Dynamic Names in
 parent tags, similar to dynamic names in partials. Here's an example of
 how Dynamic Names in parent tags work.
 
-Template:
+Templates:
 
     {{!normal.mustache}}
     {{$text}}Here goes nothing.{{/text}}

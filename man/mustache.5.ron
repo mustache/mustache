@@ -418,7 +418,7 @@ Partials can be loaded dynamically at runtime using Dynamic Names; an
 determine a tag's content at runtime.
 
 Dynamic Names consists of an asterisk, followed by a dotted name which follows
-the same notation and the same resolution as in an Interpolation tag. That is
+the same notation and the same resolution as in an variable tag. That is
 `{{>*dynamic}}`. It can be thought as the following **hypothetical** tag:
 `{{>{{dynamic}}}}`.
 

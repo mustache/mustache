@@ -516,11 +516,9 @@ Output, assuming the `article.mustache` from before:
 
 **Dynamic Names**
 
-Some mustache implementations may allow the use of Dynamic Names, an
-**optional** part of the Mustache specification which allows to dynamically
-determine a tag's content at runtime, into parent tags.
-
-Here's an example on how Dynamic Names in parent tags work.
+Some mustache implementations may allow the use of Dynamic Names in
+parent tags, similar to dynamic names in partials. Here's an example of
+how Dynamic Names in parent tags work.
 
 Template:
 

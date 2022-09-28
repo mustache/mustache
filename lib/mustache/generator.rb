@@ -151,7 +151,7 @@ class Mustache
       # what's inside.
       ev(<<-compiled)
       v = #{compile!(name)}
-      if v.nil? || v == false || v.respond_to?(:empty?) && v.empty?
+      if v.nil? || v == false || (v.class != String && v.respond_to?(:empty?) && v.empty?)
         #{code}
       end
       compiled

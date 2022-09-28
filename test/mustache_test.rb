@@ -66,6 +66,14 @@ end_complex
                  instance.render
   end
 
+  def test_empty_string_as_section_does_not_render_inverted
+    instance = Mustache.new
+    instance[:value] = ""
+    instance.template = "{{#value}}Value Found{{/value}}{{^value}}Value Not Found{{/value}}"
+
+    assert_equal "Value Found", instance.render
+  end
+
   def test_sassy_single_line_sections
     instance = Mustache.new
     instance[:full_time] = true

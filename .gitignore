@@ -12,3 +12,6 @@ doc/*
 benchmarks/*.html
 
 /coverage/
+
+vendor/bundle
+.bundle

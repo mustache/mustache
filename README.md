@@ -381,9 +381,9 @@ Once you've made your great commits:
 
 ~~To join the list simply send an email to <mustache@librelist.com>. This
 will subscribe you and send you information about your subscription,
-including unsubscribe information.
+including unsubscribe information.~~
 
-The archive can be found at <http://librelist.com/browser/mustache/>.~~
+~~The archive can be found at <http://librelist.com/browser/mustache/>.~~
 
 The mailing list hasn't been updated in quite a while, please join us on Gitter
 or IRC:

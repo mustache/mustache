@@ -7,6 +7,11 @@ class AutoloadingTest < Minitest::Test
     Mustache.view_path = File.dirname(__FILE__) + '/fixtures'
   end
 
+  # Restore `view_namespace` to the default value
+  def teardown
+    Mustache.view_namespace = Object
+  end
+
   def test_autoload
     klass = Mustache.view_class(:Comments)
     assert_equal Comments, klass

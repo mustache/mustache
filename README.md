@@ -1,7 +1,7 @@
 # Mustache
 
 [![Gem Version](https://badge.fury.io/rb/mustache.svg)](http://badge.fury.io/rb/mustache)
-[![Build Status](https://travis-ci.org/mustache/mustache.svg?branch=master)](https://travis-ci.org/mustache/mustache)
+[![Test](https://github.com/mustache/mustache/actions/workflows/test.yml/badge.svg)](https://github.com/mustache/mustache/actions/workflows/test.yml)
 
 Inspired by [ctemplate][1] and [et][2], Mustache is a
 framework-agnostic way to render logic-free views.

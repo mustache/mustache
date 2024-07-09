@@ -88,7 +88,7 @@ class Mustache
     def compile!(exp)
       case exp.first
       when :multi
-        exp[1..-1].reduce("") { |sum, e| sum << compile!(e) }
+        exp[1..-1].reduce(+"") { |sum, e| sum << compile!(e) }
       when :static
         str(exp[1])
       when :mustache

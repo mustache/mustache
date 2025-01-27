@@ -1,3 +1,4 @@
+# frozen_string_literal: false
 class Mustache
 
   # A ContextMiss is raised whenever a tag's target can not be found

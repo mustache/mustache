@@ -1,3 +1,4 @@
+# frozen_string_literal: false
 require 'mustache/context_miss'
 
 class Mustache

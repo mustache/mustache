@@ -1,3 +1,4 @@
+# frozen_string_literal: false
 class Mustache
   # The Generator is in charge of taking an array of Mustache tokens,
   # usually assembled by the Parser, and generating an interpolatable

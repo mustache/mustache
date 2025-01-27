@@ -1,3 +1,4 @@
+# frozen_string_literal: false
 # Settings which can be configured for all view classes, a single
 # view class, or a single Mustache instance.
 class Mustache

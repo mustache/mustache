@@ -1,3 +1,4 @@
+# frozen_string_literal: false
 class Mustache
   module Utils
     class String

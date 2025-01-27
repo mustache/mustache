@@ -1,3 +1,4 @@
+# frozen_string_literal: false
 require 'mustache/enumerable'
 require 'mustache/template'
 require 'mustache/context'

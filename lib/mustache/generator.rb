@@ -88,7 +88,7 @@ class Mustache
     def compile!(exp)
       case exp.first
       when :multi
-        exp[1..-1].reduce("") { |sum, e| sum << compile!(e) }
+        exp[1..-1].reduce("".dup) { |sum, e| sum << compile!(e) }
       when :static
         str(exp[1])
       when :mustache
@@ -151,7 +151,7 @@ class Mustache
       # what's inside.
       ev(<<-compiled)
       v = #{compile!(name)}
-      if v.nil? || v == false || v.respond_to?(:empty?) && v.empty?
+      if v.nil? || v == false || (v.class != String && v.respond_to?(:empty?) && v.empty?)
         #{code}
       end
       compiled

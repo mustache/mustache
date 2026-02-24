@@ -38,6 +38,12 @@ clauses, or for loops. Instead there are only tags. Some tags are
 replaced with a value, some nothing, and others a series of
 values. This document explains the different types of Mustache tags.
 
+The Mustache language has a [formal specification][spec]. The current
+manpage reflects version 1.3.0 of the specification, including the
+official-but-optional extensions for lambdas and inheritance.
+
+[spec]: https://github.com/mustache/spec
+
 
 ## TAG TYPES
 
@@ -85,16 +91,113 @@ Output:
     * &lt;b&gt;GitHub&lt;/b&gt;
     * <b>GitHub</b>
 
+**Dotted Names**
+
+If the `name` contains dots, it is split on the dots to obtain multiple
+keys. The first key is looked up in the context as described above. If it
+is found, the next key is looked up within the previous result. This is
+repeated until a key is not found or until the last key is found. The
+final result is interpolated as above.
+
+Template:
+
+    * {{client.name}}
+    * {{age}}
+    * {{client.company.name}}
+    * {{{company.name}}}
+
+Hash:
+
+    {
+      "client": {
+        "name": "Chris & Friends",
+        "age": 50
+      },
+      "company": {
+        "name": "<b>GitHub</b>"
+      }
+    }
+
+Output:
+
+    * Chris &amp; Friends
+    *
+    *
+    * <b>GitHub</b>
+
+**Implicit Iterator**
+
+As a special case, if the `name` consists of only a dot and nothing else,
+the value that is the current context is interpolated as a whole. This
+is especially useful if the parent context is a list; see **Sections**
+below.
+
+Template:
+
+    * {{.}}
+
+Current context:
+
+    "Hello!"
+
+Output:
+
+    * Hello!
+
+**Lambdas**
+
+If any value found during the lookup is a callable object, such as a
+function or lambda, this object will be invoked with zero arguments. The
+value that is returned is then used instead of the callable object itself.
+
+An **optional** part of the specification states that if the final key in
+the `name` is a lambda that returns a string, then that string should be
+rendered as a Mustache template before interpolation. It will be rendered
+using the default delimiters (see **Set Delimiter** below) against the
+current context.
+
+Template:
+
+    * {{time.hour}}
+    * {{today}}
+
+Hash:
+
+    {
+      "year": 1970,
+      "month": 1,
+      "day": 1,
+      "time": function() {
+        return {
+          "hour": 0,
+          "minute": 0,
+          "second": 0
+        }
+      },
+      "today": function() {
+        return "{{year}}-{{month}}-{{day}}"
+      }
+    }
+
+Output:
+
+    * 0
+    * 1970-1-1
+
 
 ### Sections
 
 Sections render blocks of text zero or more times, depending on the
 value of the key in the current context.
 
+Lookup of dotted names works in the same way as with variables, except for
+slightly different treatment of lambdas. More on this below.
+
 A section begins with a pound and ends with a slash. That is,
 `{{#person}}` begins a "person" section while `{{/person}}` ends it.
 
-The behavior of the section is determined by the value of the key.
+The behavior of the section is determined by the final value of the key
+lookup.
 
 **False Values or Empty Lists**
 
@@ -146,32 +249,54 @@ Hash:
 
 Output:
 
-    <b>resque</b>
-    <b>hub</b>
-    <b>rip</b>
+      <b>resque</b>
+      <b>hub</b>
+      <b>rip</b>
 
-**Lambdas**
-
-When the value is a callable object, such as a function or lambda, the
-object will be invoked and passed the block of text. The text passed
-is the literal block, unrendered. `{{tags}}` will not have been expanded
-- the lambda should do that on its own. In this way you can implement
-filters or caching.
+The same effect as above can be obtained without nested objects, by using
+the implicit iterator (see **Variables** above).
 
 Template:
 
-    {{#wrapped}}
-      {{name}} is awesome.
-    {{/wrapped}}
+    {{#repo}}
+      <b>{{.}}</b>
+    {{/repo}}
+
+Hash:
+
+    {
+      "repo": ["resque", "hub", "rip"]
+    }
+
+Output:
+
+      <b>resque</b>
+      <b>hub</b>
+      <b>rip</b>
+
+**Lambdas**
+
+When any value found during the lookup is a callable object, such as a
+function or lambda, the object will be invoked and passed the block of
+text. The text passed is the literal block, unrendered. `{{tags}}` will
+not have been expanded.
+
+An **optional** part of the specification states that if the final key in
+the `name` is a lambda that returns a string, then that string replaces
+the content of the section. It will be rendered using the same delimiters
+(see **Set Delimiter** below) as the original section content. In this way
+you can implement filters or caching.
+
+Template:
+
+    {{#wrapped}}{{name}} is awesome.{{/wrapped}}
 
 Hash:
 
     {
       "name": "Willy",
-      "wrapped": function() {
-        return function(text, render) {
-          return "<b>" + render(text) + "</b>"
-        }
+      "wrapped": function(text) {
+        return "<b>" + text + "</b>"
       }
     }
 
@@ -198,7 +323,7 @@ Hash:
 
 Output:
 
-    Hi Jon!
+      Hi Jon!
 
 
 ### Inverted Sections
@@ -229,7 +354,7 @@ Hash:
 
 Output:
 
-    No repos :(
+      No repos :(
 
 
 ### Comments
@@ -284,6 +409,139 @@ Can be thought of as a single, expanded template:
     {{#names}}
       <strong>{{name}}</strong>
     {{/names}}
+
+
+**Dynamic Names**
+
+Partials can be loaded dynamically at runtime using Dynamic Names; an
+**optional** part of the Mustache specification which allows to dynamically
+determine a tag's content at runtime.
+
+Dynamic Names consists of an asterisk, followed by a dotted name which follows
+the same notation and the same resolution as in an variable tag. That is
+`{{>*dynamic}}`. It can be thought as the following **hypothetical** tag
+(which is **not allowed**!): `{{>{{dynamic}}}}`.
+
+Templates:
+
+    main.mustache:
+    Hello {{>*dynamic}}
+    
+    world.template:
+    everyone!
+
+Hash:
+
+    {
+      "dynamic": "world"
+    }
+
+Output:
+
+    Hello everyone!
+
+
+### Blocks
+
+A block begins with a dollar and ends with a slash. That is, `{{$title}}`
+begins a "title" block and `{{/title}}` ends it.
+
+Blocks mark parts of the template that may be overridden. This can be done
+with a block of the same name within a parent section in the calling
+template (see **Parents** below). If not overridden, the contents of a
+block render just as if the `{{$title}}` and `{{/title}}` tags weren't
+there.
+
+Blocks could be thought of as template parameters or as inline partials
+that may be passed to another template. They are part of the optional
+inheritance extension.
+
+Template `article.mustache`:
+
+    <h1>{{$title}}The News of Today{{/title}}</h1>
+    {{$body}}
+    <p>Nothing special happened.</p>
+    {{/body}}
+
+Output:
+
+    <h1>The News of Today</h1>
+    <p>Nothing special happened.</p>
+
+
+### Parents
+
+A parent begins with a less than sign and ends with a slash. That is,
+`{{<article}}` begins an "article" parent and `{{/article}}` ends it.
+
+Like an `{{>article}}` partial, a parent lets you expand another template
+inside the current one. Unlike a partial, a parent also lets you override
+blocks of the other template.
+
+Blocks within a parent can again be overridden by another including
+template. Other content within a parent is ignored, like comments.
+
+Template:
+
+    {{<article}}
+      Never shown
+      {{$body}}
+        {{#headlines}}
+        <p>{{.}}</p>
+        {{/headlines}}
+      {{/body}}
+    {{/article}}
+
+    {{<article}}
+      {{$title}}Yesterday{{/title}}
+    {{/article}}
+
+Hash:
+
+    {
+      "headlines": [
+        "A pug's handler grew mustaches.",
+        "What an exciting day!"
+      ]
+    }
+
+Output, assuming the `article.mustache` from before:
+
+    <h1>The News of Today</h1>
+    <p>A pug's handler grew mustaches.</p>
+    <p>What an exciting day!</p>
+
+    <h1>Yesterday</h1>
+    <p>Nothing special happened.</p>
+
+**Dynamic Names**
+
+Some mustache implementations may allow the use of Dynamic Names in
+parent tags, similar to dynamic names in partials. Here's an example of
+how Dynamic Names in parent tags work.
+
+Templates:
+
+    {{!normal.mustache}}
+    {{$text}}Here goes nothing.{{/text}}
+
+    {{!bold.mustache}}
+    <b>{{$text}}Here also goes nothing but it's bold.{{/text}}</b>
+
+    {{!dynamic.mustache}}
+    {{<*dynamic}}
+      {{$text}}Hello World!{{/text}}
+    {{/*dynamic}}
+
+Hash:
+
+    {
+      "dynamic": "bold"
+    }
+
+Output:
+
+    <b>Hello World!</b>
 
 
 ### Set Delimiter

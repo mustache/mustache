@@ -187,14 +187,11 @@ class Mustache
   # reading templates from a database. It will be rendered by the
   # context, so all you need to do is return a string.
   def partial(name)
-    path = "#{template_path}/#{name}.#{template_extension}"
+    partialpath = template_path.map{|p| "#{p}/#{name}.#{template_extension}" }.find{|pf| File.readable? pf}
 
-    begin
-      File.read(path)
-    rescue
-      raise if raise_on_context_miss?
-      ""
-    end
+    raise RuntimeError.new("Can't find partial #{name}") if not partialpath and raise_on_context_miss?
+
+    partialpath ? File.read(partialpath) : ""
   end
 
   # Override this to provide custom escaping.

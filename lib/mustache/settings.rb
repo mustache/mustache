@@ -31,38 +31,43 @@ class Mustache
   #
 
   # The template path informs your Mustache view where to look for its
-  # corresponding template. By default it's the current directory (".")
+  # corresponding template. It is an array of paths, by default containing
+  # one entry:  the current directory (".")
+  # When setting up from a string, use path delimiters to create a search path
+  # When the template_file is requested, a search is done to find the file in the
+  # path, this is then stored as the name.
   #
   # A class named Stat with a template_path of "app/templates" will look
   # for "app/templates/stat.mustache"
 
+  def self.setup_path path
+    path = path.split(File::PATH_SEPARATOR) if path.is_a? String
+    path.map{|p| File.expand_path(p)}
+  end
+
   def self.template_path
-    @template_path ||= inheritable_config_for :template_path, '.'
+    @template_path ||= setup_path(inheritable_config_for(:template_path, '.'))
   end
 
   def self.template_path=(path)
-    @template_path = File.expand_path(path)
+    @template_path = setup_path(path)
     @template = nil
   end
 
   def template_path
     @template_path ||= self.class.template_path
   end
+
   alias_method :path, :template_path
 
   def template_path=(path)
-    @template_path = File.expand_path(path)
+    @template_path = self.class.setup_path(path)
     @template = nil
   end
 
-  # Alias for `template_path`
-  def self.path
-    template_path
-  end
-
-  # Alias for `template_path`
-  def self.path=(path)
-    self.template_path = path
+  class << self
+    alias_method :path, :template_path
+    alias_method :path=, :template_path=
   end
 
 
@@ -128,26 +133,25 @@ class Mustache
   # Template File
   #
 
-  # The template file is the absolute path of the file Mustache will
-  # use as its template. By default it's ./class_name.mustache
+  # The template file is the absolute path of the file Mustache will use as its template.
+  # By default it's ./class_name.mustache
+  #
 
   def self.template_file
-    @template_file || "#{path}/#{template_name}.#{template_extension}"
+    @template_file || path.map{|p| "#{p}/#{template_name}.#{template_extension}" }.find{|tf| File.readable? tf}
   end
 
-  def self.template_file=(template_file)
-    @template_file = template_file
+  def self.template_file=(tf)
+    @template_file = tf
     @template = nil
   end
 
-  # The template file is the absolute path of the file Mustache will
-  # use as its template. By default it's ./class_name.mustache
   def template_file
-    @template_file || "#{path}/#{template_name}.#{template_extension}"
+    @template_file || path.map{|p| "#{p}/#{template_name}.#{template_extension}" }.find{|tf| File.readable? tf}
   end
 
-  def template_file=(template_file)
-    @template_file = template_file
+  def template_file=(tf)
+    @template_file = tf
     @template = nil
   end
 

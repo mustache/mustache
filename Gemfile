@@ -17,7 +17,7 @@ gem "bundler"
 gem "minitest"
 gem "rake"
 gem "rdoc"
-gem "ronn" unless RubyVersion.rbx? || RubyVersion.jruby?
+gem "ronn-ng" unless RubyVersion.rbx? || RubyVersion.jruby?
 gem "ruby-prof" unless RubyVersion.rbx? || RubyVersion.jruby?
 
 group :test do

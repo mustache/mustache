@@ -22,7 +22,7 @@ class Mustache
           .split('::')
           .map do |part|
             part[0] = part[0].downcase
-            part.gsub(/[A-Z]/) { |s| "_" << s.downcase }
+            part.gsub(/[A-Z]/) { |s| '_'.dup << s.downcase }
           end
           .join('/')
       end

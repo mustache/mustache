@@ -852,4 +852,11 @@ template
     klass.template = "Hi {{name}}!"
     assert_equal "Hi Dougal!", klass.new("Dougal").render
   end
+
+  def test_variable_with_at_name
+    instance = Mustache.new
+    instance.template = "\t{{#list@home}}a{{/list@home}}"
+
+    assert_equal "\taa", instance.render(:"list@home" => [1, 2])
+  end
 end

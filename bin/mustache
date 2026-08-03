@@ -11,7 +11,7 @@ class Mustache
     # Return a structure describing the options.
     def self.parse_options(args)
       opts = OptionParser.new do |opts|
-        opts.banner = "Usage: mustache [-c] [-t] [-e] [-r library] FILE ..."
+        opts.banner = "Usage: mustache [-c] [-t] [-l level] [-e] [-r library] FILE ..."
 
         opts.separator " "
 
@@ -40,6 +40,11 @@ class Mustache
           require 'pp'
           pp Mustache::Template.new(File.read(file)).tokens
           exit
+        end
+
+        opts.on("-l", "--level",
+          "Provide a context access security level.") do |level|
+          Mustache.context_access_security_level = level.to_i
         end
 
         opts.on("-e", "--error",

@@ -136,12 +136,33 @@ class Mustache
     # @return [Object] The value of key in object if it is found, and default otherwise.
     #
     def find(obj, key, default = nil)
+
+      if mustache_in_stack.context_access_security_level == 5 and !obj.instance_of?(Hash)
+        # on level 5, object must be exactly Hash
+        raise ContextLevelViolation.new("Detected key access attempt for a non-Hash object using '#{key}'")
+      end
+
       return find_in_hash(obj.to_hash, key, default) if obj.respond_to?(:to_hash)
+
+      if mustache_in_stack.context_access_security_level >= 4
+        # on levels 4 and 5, method access is not allowed
+        raise ContextLevelViolation.new("Detected method access attempt using '#{key}'")
+      end
 
       unless obj.respond_to?(key)
         # no match for the key, but it may include a hyphen, so try again replacing hyphens with underscores.
         key = key.to_s.tr('-', '_')
         return default unless obj.respond_to?(key)
+      end
+
+      if mustache_in_stack.context_access_security_level >= 3 and !obj.class.instance_methods(false).include?(key.to_sym)
+        # on level 3, inherited methods are blocked
+        raise ContextLevelViolation.new("Detected inherited method '#{key}'")
+      end
+
+      if mustache_in_stack.context_access_security_level >= 2 and MethodBlacklist.include?(key.to_s)
+        # on levels 2 and 3, reflection-based methods are blacklisted
+        raise ContextLevelViolation.new("Detected blacklisted reflection-related key '#{key}'")
       end
 
       meth = obj.method(key) rescue proc { obj.send(key) }

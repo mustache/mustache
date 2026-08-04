@@ -20,7 +20,21 @@ class Mustache
   # By default it is only raised for blacklisted keys in objects.
   # See Mustache.context_access_security_level.
   #
-  class ContextLevelViolation < RuntimeError;  end
+  class ContextLevelViolation < ContextMiss;  end
+
+  class Context
+    # Raises ContextLevelViolation or returns default depending on raise_on_context_miss
+    #
+    # @param [String] message The error message if raise_on_context_miss is set
+    # @param [Object] default An optional default value, to return if the key is not found.
+    #
+    # @return [Object] The default value if errors are not raised
+    #
+    def context_level_violation(message, default = nil)
+      return default unless mustache_in_stack.raise_on_context_miss?
+      raise ContextLevelViolation.new(message)
+    end
+  end
 
 
   MethodBlacklist = ["allocate", "attached_object", "superclass", "subclasses", "new", "autoload?", "autoload",

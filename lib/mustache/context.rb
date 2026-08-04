@@ -139,14 +139,14 @@ class Mustache
 
       if mustache_in_stack.context_access_security_level == 5 and !obj.instance_of?(Hash)
         # on level 5, object must be exactly Hash
-        raise ContextLevelViolation.new("Detected key access attempt for a non-Hash object using '#{key}'")
+        return context_level_violation("Detected key access attempt for a non-Hash object using '#{key}'", default)
       end
 
       return find_in_hash(obj.to_hash, key, default) if obj.respond_to?(:to_hash)
 
       if mustache_in_stack.context_access_security_level >= 4
         # on levels 4 and 5, method access is not allowed
-        raise ContextLevelViolation.new("Detected method access attempt using '#{key}'")
+        return context_level_violation("Detected method access attempt using '#{key}'", default)
       end
 
       unless obj.respond_to?(key)
@@ -155,14 +155,14 @@ class Mustache
         return default unless obj.respond_to?(key)
       end
 
-      if mustache_in_stack.context_access_security_level >= 3 and !obj.class.instance_methods(false).include?(key.to_sym)
+      if mustache_in_stack.context_access_security_level >= 3 && !obj.class.instance_methods(false).include?(key.to_sym)
         # on level 3, inherited methods are blocked
-        raise ContextLevelViolation.new("Detected inherited method '#{key}'")
+        return context_level_violation("Detected inherited method '#{key}'", default)
       end
 
-      if mustache_in_stack.context_access_security_level >= 2 and MethodBlacklist.include?(key.to_s)
+      if mustache_in_stack.context_access_security_level >= 2 && MethodBlacklist.include?(key.to_s)
         # on levels 2 and 3, reflection-based methods are blacklisted
-        raise ContextLevelViolation.new("Detected blacklisted reflection-related key '#{key}'")
+        return context_level_violation("Detected blacklisted reflection-related key '#{key}'", default)
       end
 
       meth = obj.method(key) rescue proc { obj.send(key) }

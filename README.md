@@ -166,6 +166,14 @@ follows the classic Ruby naming convention.
 
     TemplatePartial => ./template_partial.mustache
 
+Template names are derived from the view class name using the underscore
+convention. Namespaced classes become paths: `MyModule::MyClass` looks for
+`my_module/my_class.mustache`, and `MyModule::MySubmodule::MyClass` looks for
+`my_module/my_submodule/my_class.mustache`. If Mustache is looking for a
+template such as `my_module_name/my_class.mustache`, that is simply the
+underscored (snake_case) form of your view's class name — make sure the
+template file on disk uses that same naming.
+
 You can set the search path using `Mustache.template_path`. Search multiple
 paths by delimiting them with your platform's 'path separator' (colon on Unix).
 It can be set on a class by class basis:

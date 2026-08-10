@@ -201,6 +201,11 @@ lookup.
 
 **False Values or Empty Lists**
 
+A "false value" is one of the following: the boolean `false`, the
+number `0`, a nullish value (`null` or `nil`), or the empty string
+`""`. Per the Mustache spec, an empty list is also treated as false
+for the purposes of section rendering.
+
 If the `person` key exists and has a value of false or an empty
 list, the HTML between the pound and slash will not be displayed.
 

@@ -43,8 +43,12 @@ class Mustache
   # for "app/templates/stat.mustache"
 
   def self.setup_path path
-    path = path.split(File::PATH_SEPARATOR) if path.is_a? String
-    path.map{|p| File.expand_path(p)}
+    paths = case path
+            when String then path.split(File::PATH_SEPARATOR)
+            when Array  then path
+            else [path]
+            end
+    paths.map{|p| File.expand_path(p)}
   end
 
   def self.template_path

@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 require_relative 'helper'
+require 'pathname'
 
 class MustacheTest < Minitest::Test
 
@@ -15,6 +16,33 @@ class MustacheTest < Minitest::Test
     assert_instance_of Array, Mustache.template_path
     assert_equal 2, Mustache.template_path.size
     Mustache.template_path = old_path
+  end
+
+  # A single path-like object that is neither a String nor an Array is one path, not a
+  # search path. Before 1.1.3 these worked, because the setter was just File.expand_path;
+  # Pathname in particular is what jazzy hands us.
+  def test_set_path_from_a_pathname
+    old_path = Mustache.template_path
+    begin
+      Mustache.template_path = Pathname.new(File.dirname(__FILE__))
+      assert_instance_of Array, Mustache.template_path
+      assert_equal [File.expand_path(File.dirname(__FILE__))], Mustache.template_path
+    ensure
+      Mustache.template_path = old_path
+    end
+  end
+
+  # A Pathname holding a File::PATH_SEPARATOR is still one path. Only a String is a
+  # search path, so this must not be split.
+  def test_a_pathname_is_never_split
+    old_path = Mustache.template_path
+    begin
+      dir = File.join(File.dirname(__FILE__), "a#{File::PATH_SEPARATOR}b")
+      Mustache.template_path = Pathname.new(dir)
+      assert_equal [File.expand_path(dir)], Mustache.template_path
+    ensure
+      Mustache.template_path = old_path
+    end
   end
 
   def test_override_found

@@ -1,3 +1,7 @@
+## 1.1.3 (2026-08-20)
+
+- [security] address [RCE in Mustache for Ruby using built-in method access](https://github.com/mustache/mustache/security/advisories/GHSA-5hrj-7fc3-cmx9) advisory
+
 ## 1.1.2 (2026-02-24)
 
 - [bug] Removes "warning: literal string will be frozen in the future" deprecation message (#285)

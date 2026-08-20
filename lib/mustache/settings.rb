@@ -9,6 +9,7 @@ class Mustache
     @template_name = nil
     @template_file = nil
     @raise_on_context_miss = nil
+    @context_access_security_level = 2
   end
 
   def self.initialize_settings
@@ -18,6 +19,7 @@ class Mustache
     @template_name = nil
     @template_file = nil
     @raise_on_context_miss = nil
+    @context_access_security_level = 2
   end
 
   initialize_settings
@@ -216,6 +218,37 @@ class Mustache
 
   def raise_on_context_miss=(boolean)
     @raise_on_context_miss = boolean
+  end
+
+  #
+  # Context access security level
+  #
+
+  # What object methods could be accessed from the template?
+  # This level determines the security restrictions for method access to protect against unsafe reflection
+  # Possible values are integers from 1 to 5:
+  #
+  # 1 - All methods allowed (use only with trusted templates)
+  # 2 - Reflection-related methods are blacklisted (default)
+  # 3 - All inherited or reflection-related methods are prohibited
+  # 4 - Access allowed only for Hash elements
+  # 5 - Access allowed only for Hash elements, only numbers, strings, hashes and functions allowed
+
+  def self.context_access_security_level
+    @context_access_security_level
+  end
+
+  def self.context_access_security_level=(integer)
+    @context_access_security_level = integer
+  end
+
+  # Instance level version of `Mustache.context_access_security_level`
+  def context_access_security_level
+    self.class.context_access_security_level || @context_access_security_level
+  end
+
+  def context_access_security_level=(integer)
+    @context_access_security_level = integer
   end
 
 

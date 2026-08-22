@@ -1,4 +1,8 @@
-require 'cgi'
+begin
+  require 'cgi/escape'
+rescue LoadError
+  require 'cgi/util'
+end
 
 require 'mustache/parser'
 require 'mustache/generator'

@@ -32,4 +32,12 @@ template.
 desc
 
   s.required_ruby_version = '>= 2.0'
+
+  s.metadata = {
+    "bug_tracker_uri" => "https://github.com/mustache/mustache/issues",
+    "changelog_uri" => "https://github.com/mustache/mustache/blob/master/HISTORY.md",
+    "documentation_uri" => "https://mustache.github.io/",
+    "homepage_uri" => "https://mustache.github.io/",
+    "source_code_uri" => "https://github.com/mustache/mustache"
+  }
 end

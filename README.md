@@ -1,16 +1,16 @@
 # Mustache
 
-[![Gem Version](https://badge.fury.io/rb/mustache.svg)](http://badge.fury.io/rb/mustache)
+[![Gem Version](https://badge.fury.io/rb/mustache.svg)](https://badge.fury.io/rb/mustache)
 [![Test](https://github.com/mustache/mustache/actions/workflows/test.yml/badge.svg)](https://github.com/mustache/mustache/actions/workflows/test.yml)
 
 Inspired by [ctemplate][1] and [et][2], Mustache is a
 framework-agnostic way to render logic-free views.
 
-As ctemplates says, "It emphasizes separating logic from presentation:
+As [ctemplates says][3], "It emphasizes separating logic from presentation:
 it is impossible to embed application logic in this template language."
 
 For a list of implementations (other than Ruby) and tips, see
-<http://mustache.github.io/>.
+<https://mustache.github.io/>.
 
 
 ## Overview
@@ -112,7 +112,7 @@ Simple.
 
 For a language-agnostic overview of Mustache's template syntax, see
 the `mustache(5)` manpage or
-<http://mustache.github.io/mustache.5.html>.
+<https://mustache.github.io/mustache.5.html>.
 
 
 ## Escaping
@@ -333,8 +333,6 @@ require 'rack/bug/panels/mustache_panel'
 config.middleware.use "Rack::Bug::MustachePanel"
 ```
 
-![Rack::Bug][5]
-
 
 ### Vim
 
@@ -354,7 +352,7 @@ See <https://gist.github.com/defunkt/323624> for installation instructions.
 
 ### Command Line
 
-See `mustache(1)` man page or <http://mustache.github.io/mustache.1.html>
+See `mustache(1)` man page or <https://mustache.github.io/mustache.1.html>
 for command line docs.
 
 
@@ -396,17 +394,16 @@ or IRC:
 ## Meta
 
 * Code: `git clone https://github.com/mustache/mustache.git`
-* Home: <http://mustache.github.io>
+* Home: <https://mustache.github.io>
 * Bugs: <https://github.com/mustache/mustache/issues>
 * List: <mustache@librelist.com>
 * Gems: <https://rubygems.org/gems/mustache>
 
 [1]: https://github.com/olafvdspek/ctemplate
-[2]: http://www.ivan.fomichev.name/2008/05/erlang-template-engine-prototype.html
-[3]: http://google-ctemplate.googlecode.com/svn/trunk/doc/howto.html
+[2]: https://www.ivan.fomichev.name/2008/05/erlang-template-engine-prototype.html
+[3]: https://github.com/OlafvdSpek/ctemplate/blob/master/doc/howto.html
 [4]: https://github.com/brynary/rack-bug/
-[5]: http://img.skitch.com/20091027-n8pxwwx8r61tc318a15q1n6m14.png
-[fk]: https://help.github.com/forking/
+[fk]: https://docs.github.com/en/pull-requests/how-tos/work-with-forks/fork-a-repo
 [is]: https://github.com/mustache/mustache/issues
 [irc]: irc://irc.freenode.net/#{
 [vim]: https://github.com/mustache/vim-mustache-handlebars
